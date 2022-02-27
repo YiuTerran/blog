@@ -1,7 +1,7 @@
 main:
   - name: 作者
-    url: /authors/tryao/
+    url: authors/tryao/
     weight: 1
   - name: 文章
-    url: /posts/
+    url: posts/
     weight: 2
