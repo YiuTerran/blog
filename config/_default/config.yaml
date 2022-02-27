@@ -1,5 +1,5 @@
 baseURL: /
-title: Eureka Demo
+title: 应许之地
 
 # Uncomment when not installing with Hugo Modules
 # theme: eureka
@@ -16,7 +16,7 @@ enableGitInfo: false
 summaryLength: 75
 
 defaultContentLanguage: en
-hasCJKLanguage: false # Set `true` for Chinese/Japanese/Korean.
+hasCJKLanguage: true # Set `true` for Chinese/Japanese/Korean.
 defaultContentLanguageInSubdir: false
 
 # Uncomment for google analytics
@@ -38,7 +38,6 @@ markup:
 taxonomies:
   category: categories
   tag: tags
-  series: series
   author: authors
 
 build:

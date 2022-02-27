@@ -1,6 +1,6 @@
 mainSections:
-  - posts
-description: Eureka is a elegant and powerful theme for Hugo.
+  - 博客列表
+description: 始于2022年初mbp2015归天之后...
 
 repoEditURL:
 
@@ -9,7 +9,7 @@ dateFormat:
 titleSeparator:
 
 # Options: auto, light and dark. Default is auto.
-colorScheme:
+colorScheme: auto
 
 # E.g. Person, Organization, LocalBusiness, Project, EducationalOrganization
 siteType: Person

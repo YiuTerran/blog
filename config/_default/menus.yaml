@@ -1,10 +1,7 @@
 main:
-  - name: About
-    url: '#about'
+  - name: 作者
+    url: /authors/tryao/
     weight: 1
-  - name: Posts
+  - name: 文章
     url: /posts/
     weight: 2
-  - name: Docs
-    url: /docs/
-    weight: 3
