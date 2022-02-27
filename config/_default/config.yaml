@@ -22,6 +22,7 @@ defaultContentLanguageInSubdir: false
 # Uncomment for google analytics
 # googleAnalytics: UA-123-45
 
+publishDir: docs
 markup:
   # Do not modify markup.highlight
   highlight:
