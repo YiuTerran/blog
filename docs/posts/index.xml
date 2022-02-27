@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on 应许之地</title>
-    <link>/posts/</link>
+    <link>https://yiuterran.github.io/blog/posts/</link>
     <description>Recent content in Posts on 应许之地</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>&amp;copy; 2021 &lt;a href=&#34;https://www.wangchucheng.com/&#34;&gt;WANG Chucheng&lt;/a&gt; and &lt;a href=&#34;https://www.ruiqima.com/&#34;&gt;MA Ruiqi&lt;/a&gt;
 </copyright>
-    <lastBuildDate>Sun, 27 Feb 2022 20:27:16 +0800</lastBuildDate><atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 27 Feb 2022 20:27:16 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>重新启程</title>
-      <link>/posts/first-post/</link>
+      <link>https://yiuterran.github.io/blog/posts/first-post/</link>
       <pubDate>Sun, 27 Feb 2022 20:27:16 +0800</pubDate>
       
-      <guid>/posts/first-post/</guid>
+      <guid>https://yiuterran.github.io/blog/posts/first-post/</guid>
       <description>MBP2015 Late显卡坏了，这件事我处理的不好导致原来的数据都丢了。 就上上周在公司，出去忙了一会儿回来之后发现mbp休眠了，但是敲击键盘却无法唤醒。重启之后可</description>
     </item>
     

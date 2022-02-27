@@ -1,5 +1,6 @@
-baseURL: /
+baseURL: "https://yiuterran.github.io/blog/"
 title: 应许之地
+canonifyurls: true
 
 # Uncomment when not installing with Hugo Modules
 # theme: eureka
