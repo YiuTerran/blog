@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Eureka Demo</title>
+    <link>/posts/</link>
+    <description>Recent content in Posts on Eureka Demo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>&amp;copy; 2021 &lt;a href=&#34;https://www.wangchucheng.com/&#34;&gt;WANG Chucheng&lt;/a&gt; and &lt;a href=&#34;https://www.ruiqima.com/&#34;&gt;MA Ruiqi&lt;/a&gt;
+</copyright>
+    <lastBuildDate>Sun, 27 Feb 2022 20:27:16 +0800</lastBuildDate><atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>重新启程</title>
+      <link>/posts/first-post/</link>
+      <pubDate>Sun, 27 Feb 2022 20:27:16 +0800</pubDate>
+      
+      <guid>/posts/first-post/</guid>
+      <description>MBP2015 Late显卡坏了，这件事我处理的不好导致原来的数据都丢了。
+就上上周在公司，出去忙了一会儿回来之后发现mbp休眠了，但是敲击键盘却无法唤醒。重启之后可以输入密码，但是没法进入桌面。
+试着开机按Command+R进入恢复模式，黑屏无法进入。于是我打客服电话需求帮助，对方建议使用Command+Shift+R进入网络恢复，结果还是进不去。
+最后用Command+Shift+Option+R进入了，这个模式下可以将系统还原成最初的版本。我还原了，还是进不去。此时没办法了，只好格盘重试，结果……还是进不去。
+但是最后可以进安全模式了……虽然没啥用。最终拿去维修才发现是显卡坏了。
+复盘一下，我忘了mbp2015顶配是有独立显卡的，所以一直没想到这回事。中间其实有很多征兆的，比如开机之后虽然进不了界面，但是微信会提示mac已登陆（自动的）。我只要再找个显示器连上去，甚至ssh上去都可以抢救一下资料的…
+哎，不说了。反正重要的东西云端都有备份，就是可怜我那几篇还没来得及发布的博客了。
+这次买了mba 2020 m1款，感觉挺好的。虽然新的air传说马上就要发布了，但是估计还是刘海屏，我顶不住，所以不等了，直接买新的算了。昨天装好环境之后发现大部分常用软件都已经原生适配，除了钉钉这个玩意儿。
+然后常用的服务器软件也已经适配，除了nacos这个玩意儿。阿里真是挫啊。
+试了一下，编译速度比之前的mbp快多了，内存16g基本够用（反正arm的windows虚拟机难用的一批）。将来公司发了台式机之后把家里的16G插上去，里面桥接一个Linux虚拟机，当windows主机+Linux虚拟机使用。主要最近在搞视频开发，海康的鬼插件不支持windows之外的环境，垃圾。
+这次还长了个记性，装好环境就用时间机器备份了。反正家里的nas硬盘用不完，放心大胆的用。</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Authors on Eureka Demo</title>
+    <link>/authors/</link>
+    <description>Recent content in Authors on Eureka Demo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>&amp;copy; 2021 &lt;a href=&#34;https://www.wangchucheng.com/&#34;&gt;WANG Chucheng&lt;/a&gt; and &lt;a href=&#34;https://www.ruiqima.com/&#34;&gt;MA Ruiqi&lt;/a&gt;
+</copyright><atom:link href="/authors/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>个人介绍</title>
+      <link>/authors/tryao/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/authors/tryao/</guid>
+      <description>Self Introduction 少时曾攻经史，长成却成码农。家有懒猫伏膝侧，键盘声中迷蒙。
+主页后端开发，大数据、流媒体、游戏后端之类的什么都懂一点。python/golang/java/C++都能写，rust/haskell总是学不会。
+不为无益之事，何遣有涯之生：活着就是折腾。</description>
+    </item>
+    
+  </channel>
+</rss>
