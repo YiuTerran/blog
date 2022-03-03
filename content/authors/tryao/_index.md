@@ -1,7 +1,6 @@
 ---
 title: 个人介绍
 role: admin
-avatar: images/icon.png
 bio: 兴趣使然的程序员，博而不精，乐学不倦
 organization:
   name: CSCEC
