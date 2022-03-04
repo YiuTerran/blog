@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>个人介绍 on 应许之地</title>
-    <link>https://yiuterran.github.io/blog/authors/tryao/</link>
-    <description>Recent content in 个人介绍 on 应许之地</description>
+    <title>wsl on 应许之地</title>
+    <link>https://yiuterran.github.io/blog/tags/wsl/</link>
+    <description>Recent content in wsl on 应许之地</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>&amp;copy; 2021 &lt;a href=&#34;https://www.wangchucheng.com/&#34;&gt;WANG Chucheng&lt;/a&gt; and &lt;a href=&#34;https://www.ruiqima.com/&#34;&gt;MA Ruiqi&lt;/a&gt;
 </copyright>
-    <lastBuildDate>Fri, 04 Mar 2022 20:54:01 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/authors/tryao/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 04 Mar 2022 20:54:01 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/tags/wsl/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Windows&#43;wsl2后端开发环境搭建</title>
       <link>https://yiuterran.github.io/blog/posts/windows&#43;wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</link>
@@ -16,15 +16,6 @@
       
       <guid>https://yiuterran.github.io/blog/posts/windows&#43;wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</guid>
       <description>就我个人而言，目前感觉最理想的后端开发环境还是Intel CPU的MacOS，基本所有常用的后端依赖都可以用homebrew安装，GUI和命令行的结合也</description>
-    </item>
-    
-    <item>
-      <title>Gb28181解析</title>
-      <link>https://yiuterran.github.io/blog/posts/gb28181%E8%A7%A3%E6%9E%90/</link>
-      <pubDate>Wed, 02 Mar 2022 09:46:50 +0800</pubDate>
-      
-      <guid>https://yiuterran.github.io/blog/posts/gb28181%E8%A7%A3%E6%9E%90/</guid>
-      <description>国标GB28181（以下简称国标）文档分析的文档我去年其实写过一版，但是由于原来的电脑炸了，文档还没来得及传上去就丢了（痛苦），所以还要重写一版做笔记</description>
     </item>
     
   </channel>
