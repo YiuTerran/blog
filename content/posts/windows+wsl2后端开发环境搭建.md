@@ -62,15 +62,7 @@ scoop install git 7zip aria2 python3 vscode typora vlc sumatrapdf
 
 ### 安装字体
 
-类似美化zsh的思路，先安装能显示复杂Unicode符号的字体：
-
-[MesloLGS NF Regular.ttf](https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS NF Regular.ttf)
-
-[MesloLGS NF Bold.ttf](https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS NF Bold.ttf)
-
-[MesloLGS NF Italic.ttf](https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS NF Italic.ttf)
-
-[MesloLGS NF Bold Italic.ttf](https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS NF Bold Italic.ttf)
+类似美化zsh的思路，先安装能显示复杂Unicode符号的字体，到[这里](https://github.com/romkatv/dotfiles-public/tree/master/.local/share/fonts/NerdFonts)下载所有的字体并安装到Windows.
 
 然后在window terminal里面设置字体，位置见下图 ：
 
@@ -176,7 +168,7 @@ wsl --set-default-version 2
 至于怎么配置Linux我就不写了，根据个人习惯来吧。几个点：
 
 * 先用`sudo visudo`取消sudo必须输入密码，不然能烦死你；
-* 用`zsh`替换掉bash，可以使用[`oh-my-zsh`](https://ohmyz.sh/)或者[`zi`](https://z-shell.pages.dev/)之类的进行配置管理；
+* 用`zsh`替换掉bash，可以使用[`oh-my-zsh`](https://ohmyz.sh/)或者[`zi`](https://z-shell.pages.dev/)之类的进行配置管理，如果要美化的话也要在linux里面安装字体；
 * 安装`lsd`, `ripgrep`, `fzf`, `trash-cli`,  `z.lua`等工具，做好`alias`；
 * 使用`screen`或者`tmux`进行进程管理；
 * zsh有个插件`extract`，使用`x`解压一切压缩包；

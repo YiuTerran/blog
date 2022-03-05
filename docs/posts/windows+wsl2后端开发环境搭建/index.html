@@ -87,7 +87,7 @@
     },
     "headline": "Windows\u002bwsl2后端开发环境搭建 | 应许之地","datePublished": "2022-03-04T20:54:01+08:00",
     "dateModified": "2022-03-04T20:54:01+08:00",
-    "wordCount":  6090 ,
+    "wordCount":  6112 ,
     "author": {
         "@type": "Person",
         "name": ["tryao"]
@@ -275,11 +275,7 @@ scoop update
 </code></pre>
 <p>国内有人把其他bucket综合成一个<a href="https://gitee.com/kkzzhizhou/scoop-apps">bucket</a>，也可以根据自己需求使用。</p>
 <h3 id="安装字体">安装字体</h3>
-<p>类似美化zsh的思路，先安装能显示复杂Unicode符号的字体：</p>
-<p>[MesloLGS NF Regular.ttf](<a href="https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS">https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS</a> NF Regular.ttf)</p>
-<p>[MesloLGS NF Bold.ttf](<a href="https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS">https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS</a> NF Bold.ttf)</p>
-<p>[MesloLGS NF Italic.ttf](<a href="https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS">https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS</a> NF Italic.ttf)</p>
-<p>[MesloLGS NF Bold Italic.ttf](<a href="https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS">https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS</a> NF Bold Italic.ttf)</p>
+<p>类似美化zsh的思路，先安装能显示复杂Unicode符号的字体，到<a href="https://github.com/romkatv/dotfiles-public/tree/master/.local/share/fonts/NerdFonts">这里</a>下载所有的字体并安装到Windows.</p>
 <p>然后在window terminal里面设置字体，位置见下图 ：</p>
 <p><img src="https://s2.loli.net/2022/03/04/fdsXjivpm18NEoJ.png" alt="image-20220304215714707"></p>
 <p>设为刚安装的字体就行。</p>
@@ -348,7 +344,7 @@ dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /nores
 <p>至于怎么配置Linux我就不写了，根据个人习惯来吧。几个点：</p>
 <ul>
 <li>先用<code>sudo visudo</code>取消sudo必须输入密码，不然能烦死你；</li>
-<li>用<code>zsh</code>替换掉bash，可以使用<a href="https://ohmyz.sh/"><code>oh-my-zsh</code></a>或者<a href="https://z-shell.pages.dev/"><code>zi</code></a>之类的进行配置管理；</li>
+<li>用<code>zsh</code>替换掉bash，可以使用<a href="https://ohmyz.sh/"><code>oh-my-zsh</code></a>或者<a href="https://z-shell.pages.dev/"><code>zi</code></a>之类的进行配置管理，如果要美化的话也要在linux里面安装字体；</li>
 <li>安装<code>lsd</code>, <code>ripgrep</code>, <code>fzf</code>, <code>trash-cli</code>,  <code>z.lua</code>等工具，做好<code>alias</code>；</li>
 <li>使用<code>screen</code>或者<code>tmux</code>进行进程管理；</li>
 <li>zsh有个插件<code>extract</code>，使用<code>x</code>解压一切压缩包；</li>
