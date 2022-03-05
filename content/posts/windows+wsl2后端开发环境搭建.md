@@ -186,6 +186,8 @@ wsl --set-default-version 2
 
 让所有服务跑在windows容器里，这个方案不会有下面systemd和Java访问wsl中服务问题的苦恼。但是要注意像MySQL这种有状态的服务需要绑定windows本地卷来持久化，不然关机之后数据就都丢了。
 
+使用这个方案，建议Java/Golang等编译环境直接装在Windows下面，Linux仅作为docker的backend使用。
+
 ### 解决Linux网络问题
 
 上面配置网络过程中会遇到一个头大无比的问题：linux系统里面的流量不走Windows的代理。
@@ -262,7 +264,11 @@ mixin:
 
 在wsl里面安装软件，监听`127.0.0.1`，在Windows里面可以直接用localhost访问，这是因为系统做了重定向。但是在java程序里配置localhost，会被强制解析为`127.0.0.1`，这样就导致无法访问。
 
-这个[问题](https://github.com/microsoft/WSL/issues/4150)目前没有特别好的解决方案，如果不想改成docker运行服务，那只能通过Windows防火墙进行处理。在Windows平台下建一个pwsh脚本，填入一下内容：
+这个[问题](https://github.com/microsoft/WSL/issues/4150)解决方案有三个：
+
+1. 改成docker运行服务，这样服务和代码都跑在Windows环境下；
+2. 全部使用wsl里面的程序，java也好，MySQL也好，都在Linux下就能正常访问了；idea和vscode都支持wsl了，推荐使用该方案；
+3. 如果jdk用的Windows版本，MySQL跑在Linux下面。只能通过Windows防火墙进行处理。在Windows平台下建一个pwsh脚本，填入一下内容：
 
 ```powershell
 $remoteport = bash.exe -c "ifconfig eth0 | grep 'inet '"
@@ -309,10 +315,9 @@ for( $i = 0; $i -lt $ports.length; $i++ ){
 
 1. wsl2和windows之间传输文件io性能很差，建议代码仓库还是放在windows这边，用windows的ide来开发；
 2. 如果依赖第三方库需要区分平台，那还是老老实实的用linux环境；
-3. 很多软件，比如java，可能在windows和Linux环境下要各装一套。linux的PATH会自动继承windows的path，不过Linux系统里同名的文件优先级更高；好消息是IDEA可以探测到WSL里面的JDK，所以仅装linux也是可行的；
+3. linux的PATH会自动继承windows的path，不过Linux系统里同名的文件优先级更高；所以像git这种软件到底装Windows还是装Linux要自己想清楚；全部在Linux下也可以，都装不是不行…就是要配置两遍；
 4. WSL的命令行可以直接调用windows PATH下的exe文件，如vscode，explore（资源管理器）；
 5. 在powershell里面可以用`start`命令打开文件，会自动调用关联的打开方式。类似macos的`open`命令，在wsl里面通过`alias`也可以调用（参考最后附录）；
-6. 
 
 ## 附：Windows Terminal配置参考
 

@@ -1,49 +1,79 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
   <url>
     <loc>https://yiuterran.github.io/blog/authors/</loc>
     <lastmod>2022-03-04T20:54:01+08:00</lastmod>
-  </url><url>
+  </url>
+  
+  <url>
     <loc>https://yiuterran.github.io/blog/categories/</loc>
     <lastmod>2022-03-04T20:54:01+08:00</lastmod>
-  </url><url>
+  </url>
+  
+  <url>
     <loc>https://yiuterran.github.io/blog/posts/</loc>
     <lastmod>2022-03-04T20:54:01+08:00</lastmod>
-  </url><url>
+  </url>
+  
+  <url>
     <loc>https://yiuterran.github.io/blog/tags/</loc>
     <lastmod>2022-03-04T20:54:01+08:00</lastmod>
-  </url><url>
+  </url>
+  
+  <url>
     <loc>https://yiuterran.github.io/blog/posts/windows&#43;wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</loc>
     <lastmod>2022-03-04T20:54:01+08:00</lastmod>
-  </url><url>
+  </url>
+  
+  <url>
     <loc>https://yiuterran.github.io/blog/tags/wsl/</loc>
     <lastmod>2022-03-04T20:54:01+08:00</lastmod>
-  </url><url>
+  </url>
+  
+  <url>
     <loc>https://yiuterran.github.io/blog/authors/tryao/</loc>
     <lastmod>2022-03-04T20:54:01+08:00</lastmod>
-  </url><url>
+  </url>
+  
+  <url>
     <loc>https://yiuterran.github.io/blog/</loc>
     <lastmod>2022-03-04T20:54:01+08:00</lastmod>
-  </url><url>
+  </url>
+  
+  <url>
     <loc>https://yiuterran.github.io/blog/categories/%E7%9E%8E%E6%8A%98%E8%85%BE/</loc>
     <lastmod>2022-03-04T20:54:01+08:00</lastmod>
-  </url><url>
+  </url>
+  
+  <url>
     <loc>https://yiuterran.github.io/blog/tags/gb28181/</loc>
     <lastmod>2022-03-02T09:46:50+08:00</lastmod>
-  </url><url>
+  </url>
+  
+  <url>
     <loc>https://yiuterran.github.io/blog/posts/gb28181%E8%A7%A3%E6%9E%90/</loc>
     <lastmod>2022-03-02T09:46:50+08:00</lastmod>
-  </url><url>
+  </url>
+  
+  <url>
     <loc>https://yiuterran.github.io/blog/tags/multimedia/</loc>
     <lastmod>2022-03-02T09:46:50+08:00</lastmod>
-  </url><url>
+  </url>
+  
+  <url>
     <loc>https://yiuterran.github.io/blog/categories/work/</loc>
     <lastmod>2022-03-02T09:46:50+08:00</lastmod>
-  </url><url>
+  </url>
+  
+  <url>
     <loc>https://yiuterran.github.io/blog/posts/first-post/</loc>
     <lastmod>2022-02-27T20:27:16+08:00</lastmod>
-  </url><url>
+  </url>
+  
+  <url>
     <loc>https://yiuterran.github.io/blog/docs/</loc>
   </url>
+  
 </urlset>

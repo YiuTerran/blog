@@ -54,8 +54,8 @@
   integrity="sha256-Zmpaaj&#43;GXFsPF5WdPArSrnW3b30dovldeKsW00xBVwE="  crossorigin></script>
 
 
-<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_2.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_2.png">
 
 <meta name="description"
   content="就我个人而言，目前感觉最理想的后端开发环境还是Intel CPU的MacOS，基本所有常用的后端依赖都可以用homebrew安装，GUI和命令行的结合也">
@@ -87,7 +87,7 @@
     },
     "headline": "Windows\u002bwsl2后端开发环境搭建 | 应许之地","datePublished": "2022-03-04T20:54:01+08:00",
     "dateModified": "2022-03-04T20:54:01+08:00",
-    "wordCount":  5824 ,
+    "wordCount":  5990 ,
     "author": {
         "@type": "Person",
         "name": ["tryao"]
@@ -362,6 +362,7 @@ dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /nores
 <h3 id="可选使用docker-desktop-for-windows">【可选】使用docker desktop for windows</h3>
 <p>在win平台下安装docker desktop，并打开wsl2 backend.</p>
 <p>让所有服务跑在windows容器里，这个方案不会有下面systemd和Java访问wsl中服务问题的苦恼。但是要注意像MySQL这种有状态的服务需要绑定windows本地卷来持久化，不然关机之后数据就都丢了。</p>
+<p>使用这个方案，建议Java/Golang等编译环境直接装在Windows下面，Linux仅作为docker的backend使用。</p>
 <h3 id="解决linux网络问题">解决Linux网络问题</h3>
 <p>上面配置网络过程中会遇到一个头大无比的问题：linux系统里面的流量不走Windows的代理。</p>
 <p>有几个解决方案仅供参考：</p>
@@ -432,7 +433,12 @@ ws.run &quot;wsl -d debian -u root /etc/init.wsl&quot;,0
 </ol>
 <h3 id="解决java代码里面的本地回环问题">解决Java代码里面的本地回环问题</h3>
 <p>在wsl里面安装软件，监听<code>127.0.0.1</code>，在Windows里面可以直接用localhost访问，这是因为系统做了重定向。但是在java程序里配置localhost，会被强制解析为<code>127.0.0.1</code>，这样就导致无法访问。</p>
-<p>这个<a href="https://github.com/microsoft/WSL/issues/4150">问题</a>目前没有特别好的解决方案，如果不想改成docker运行服务，那只能通过Windows防火墙进行处理。在Windows平台下建一个pwsh脚本，填入一下内容：</p>
+<p>这个<a href="https://github.com/microsoft/WSL/issues/4150">问题</a>解决方案有三个：</p>
+<ol>
+<li>改成docker运行服务，这样服务和代码都跑在Windows环境下；</li>
+<li>全部使用wsl里面的程序，java也好，MySQL也好，都在Linux下就能正常访问了；idea和vscode都支持wsl了，推荐使用该方案；</li>
+<li>如果jdk用的Windows版本，MySQL跑在Linux下面。只能通过Windows防火墙进行处理。在Windows平台下建一个pwsh脚本，填入一下内容：</li>
+</ol>
 <pre><code class="language-powershell">$remoteport = bash.exe -c &quot;ifconfig eth0 | grep 'inet '&quot;
 $found = $remoteport -match '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}';
 
@@ -474,10 +480,9 @@ for( $i = 0; $i -lt $ports.length; $i++ ){
 <ol>
 <li>wsl2和windows之间传输文件io性能很差，建议代码仓库还是放在windows这边，用windows的ide来开发；</li>
 <li>如果依赖第三方库需要区分平台，那还是老老实实的用linux环境；</li>
-<li>很多软件，比如java，可能在windows和Linux环境下要各装一套。linux的PATH会自动继承windows的path，不过Linux系统里同名的文件优先级更高；好消息是IDEA可以探测到WSL里面的JDK，所以仅装linux也是可行的；</li>
+<li>linux的PATH会自动继承windows的path，不过Linux系统里同名的文件优先级更高；所以像git这种软件到底装Windows还是装Linux要自己想清楚；全部在Linux下也可以，都装不是不行…就是要配置两遍；</li>
 <li>WSL的命令行可以直接调用windows PATH下的exe文件，如vscode，explore（资源管理器）；</li>
 <li>在powershell里面可以用<code>start</code>命令打开文件，会自动调用关联的打开方式。类似macos的<code>open</code>命令，在wsl里面通过<code>alias</code>也可以调用（参考最后附录）；</li>
-<li></li>
 </ol>
 <h2 id="附windows-terminal配置参考">附：Windows Terminal配置参考</h2>
 <pre><code class="language-json">{
