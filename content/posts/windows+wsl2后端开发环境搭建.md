@@ -14,7 +14,6 @@ draft: false
 ---
 
 就我个人而言，目前感觉最理想的后端开发环境还是Intel CPU的MacOS，基本所有常用的后端依赖都可以用homebrew安装，GUI和命令行的结合也是最方便的。不过Windows从10代之后添加了WSL/WSL2，将Linux命令行和Windows开发环境（不那么）完美的结合起来，目前来说可用性还算不错了。
-题外话是，我个人其实不太习惯Windows的快捷键，有时候还是在IDE里面用vim插件来解决这个问题…
 ## 准备工作
 ### 网络准备
 
@@ -22,11 +21,11 @@ draft: false
 
 ### win10特有部分
 
-win10之前，系统的命令行工具分裂为cmd和pwsh两种，界面都难看的很。所以首先安装[Windows Terminal](https://github.com/microsoft/terminal/releases)，整一个好看一点的终端用。对于天天用命令行的人来说，这个比啥都重要。
+win10之前，系统的命令行工具分裂为cmd和pwsh两种，界面都难看的很。所以首先安装[Windows Terminal](https://github.com/microsoft/terminal/releases)（以下简称wt），整一个好看一点的终端用。对于天天用命令行的人来说，这个比啥都重要。
 
 然后安装最新的powershell。下载地址在[这里](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.2)，目前最新版是powershell7.  pwsh7其实是开源的shell，在linux/macos上都能用，不过这玩意最大的问题是启动速度实在太慢，而且语法设计和bash差别太大。bash是把一切都看作文本，pwsh是把一切都看作对象……都是辣鸡设计，还是python好使。
 
-安装的时候请注意选中添加环境变量，`Open here`那个那个建议不要选中，terminal自带有这个功能。装完之后pwsh7会自动注册到wt里。
+安装的时候请注意选中添加环境变量，`Open here`那个那个建议不要选中，wt自带有这个功能。装完之后pwsh7会自动注册到wt里。
 
 ### 安装包管理器
 
@@ -65,12 +64,15 @@ scoop install git 7zip aria2 python3 vscode typora vlc sumatrapdf
 
 类似美化zsh的思路，先安装能显示复杂Unicode符号的字体：
 
-> - [MesloLGS NF Regular.ttf](https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS NF Regular.ttf)
-> - [MesloLGS NF Bold.ttf](https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS NF Bold.ttf)
-> - [MesloLGS NF Italic.ttf](https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS NF Italic.ttf)
-> - [MesloLGS NF Bold Italic.ttf](https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS NF Bold Italic.ttf)
+[MesloLGS NF Regular.ttf](https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS NF Regular.ttf)
 
-然后在window terminal里面设置字体，位置见下图：
+[MesloLGS NF Bold.ttf](https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS NF Bold.ttf)
+
+[MesloLGS NF Italic.ttf](https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS NF Italic.ttf)
+
+[MesloLGS NF Bold Italic.ttf](https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS NF Bold Italic.ttf)
+
+然后在window terminal里面设置字体，位置见下图 ：
 
 ![image-20220304215714707](https://s2.loli.net/2022/03/04/fdsXjivpm18NEoJ.png)
 
@@ -318,6 +320,9 @@ for( $i = 0; $i -lt $ports.length; $i++ ){
 3. linux的PATH会自动继承windows的path，不过Linux系统里同名的文件优先级更高；所以像git这种软件到底装Windows还是装Linux要自己想清楚；全部在Linux下也可以，都装不是不行…就是要配置两遍；
 4. WSL的命令行可以直接调用windows PATH下的exe文件，如vscode，explore（资源管理器）；
 5. 在powershell里面可以用`start`命令打开文件，会自动调用关联的打开方式。类似macos的`open`命令，在wsl里面通过`alias`也可以调用（参考最后附录）；
+5. macos用户可以使用quicklook实现空格预览，utools实现spotlight，并使用powertoys做快捷键映射：个人比较怀恋ctrl+a/ctrl+e映射到home和end的功能，然后把alt+a/c/v/s/w/r都映射成ctrl，alt+q映射成alt+f4，其他的其实都还好；
+
+![image-20220305130750860](https://s2.loli.net/2022/03/05/pAxJ2rEqY1S5jNm.png)
 
 ## 附：Windows Terminal配置参考
 

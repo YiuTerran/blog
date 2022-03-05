@@ -87,7 +87,7 @@
     },
     "headline": "Windows\u002bwsl2后端开发环境搭建 | 应许之地","datePublished": "2022-03-04T20:54:01+08:00",
     "dateModified": "2022-03-04T20:54:01+08:00",
-    "wordCount":  5990 ,
+    "wordCount":  6090 ,
     "author": {
         "@type": "Person",
         "name": ["tryao"]
@@ -229,7 +229,7 @@
     </div>
     <div class="me-6 my-2">
         <i class="fas fa-clock me-1"></i>
-        <span>12 min read</span>
+        <span>13 min read</span>
     </div>
     
     
@@ -248,15 +248,14 @@
         
 
         <div class="content">
-            <p>就我个人而言，目前感觉最理想的后端开发环境还是Intel CPU的MacOS，基本所有常用的后端依赖都可以用homebrew安装，GUI和命令行的结合也是最方便的。不过Windows从10代之后添加了WSL/WSL2，将Linux命令行和Windows开发环境（不那么）完美的结合起来，目前来说可用性还算不错了。
-题外话是，我个人其实不太习惯Windows的快捷键，有时候还是在IDE里面用vim插件来解决这个问题…</p>
+            <p>就我个人而言，目前感觉最理想的后端开发环境还是Intel CPU的MacOS，基本所有常用的后端依赖都可以用homebrew安装，GUI和命令行的结合也是最方便的。不过Windows从10代之后添加了WSL/WSL2，将Linux命令行和Windows开发环境（不那么）完美的结合起来，目前来说可用性还算不错了。</p>
 <h2 id="准备工作">准备工作</h2>
 <h3 id="网络准备">网络准备</h3>
 <p>由于下面会大量从GitHub下载软件，所以请自备梯子。建议使用Clash For windows，下文会说明原因…WSL2最大的坑点就是网络。</p>
 <h3 id="win10特有部分">win10特有部分</h3>
-<p>win10之前，系统的命令行工具分裂为cmd和pwsh两种，界面都难看的很。所以首先安装<a href="https://github.com/microsoft/terminal/releases">Windows Terminal</a>，整一个好看一点的终端用。对于天天用命令行的人来说，这个比啥都重要。</p>
+<p>win10之前，系统的命令行工具分裂为cmd和pwsh两种，界面都难看的很。所以首先安装<a href="https://github.com/microsoft/terminal/releases">Windows Terminal</a>（以下简称wt），整一个好看一点的终端用。对于天天用命令行的人来说，这个比啥都重要。</p>
 <p>然后安装最新的powershell。下载地址在<a href="https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.2">这里</a>，目前最新版是powershell7.  pwsh7其实是开源的shell，在linux/macos上都能用，不过这玩意最大的问题是启动速度实在太慢，而且语法设计和bash差别太大。bash是把一切都看作文本，pwsh是把一切都看作对象……都是辣鸡设计，还是python好使。</p>
-<p>安装的时候请注意选中添加环境变量，<code>Open here</code>那个那个建议不要选中，terminal自带有这个功能。装完之后pwsh7会自动注册到wt里。</p>
+<p>安装的时候请注意选中添加环境变量，<code>Open here</code>那个那个建议不要选中，wt自带有这个功能。装完之后pwsh7会自动注册到wt里。</p>
 <h3 id="安装包管理器">安装包管理器</h3>
 <p>先安装包管理器scoop（类似yum/apt），打开wt，输入<code>Set-ExecutionPolicy RemoteSigned -scope CurrentUser</code>打开安装权限。然后输入</p>
 <pre><code class="language-powershell">iwr -useb get.scoop.sh | iex
@@ -277,15 +276,11 @@ scoop update
 <p>国内有人把其他bucket综合成一个<a href="https://gitee.com/kkzzhizhou/scoop-apps">bucket</a>，也可以根据自己需求使用。</p>
 <h3 id="安装字体">安装字体</h3>
 <p>类似美化zsh的思路，先安装能显示复杂Unicode符号的字体：</p>
-<blockquote>
-<ul>
-<li>[MesloLGS NF Regular.ttf](<a href="https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS">https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS</a> NF Regular.ttf)</li>
-<li>[MesloLGS NF Bold.ttf](<a href="https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS">https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS</a> NF Bold.ttf)</li>
-<li>[MesloLGS NF Italic.ttf](<a href="https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS">https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS</a> NF Italic.ttf)</li>
-<li>[MesloLGS NF Bold Italic.ttf](<a href="https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS">https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS</a> NF Bold Italic.ttf)</li>
-</ul>
-</blockquote>
-<p>然后在window terminal里面设置字体，位置见下图：</p>
+<p>[MesloLGS NF Regular.ttf](<a href="https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS">https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS</a> NF Regular.ttf)</p>
+<p>[MesloLGS NF Bold.ttf](<a href="https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS">https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS</a> NF Bold.ttf)</p>
+<p>[MesloLGS NF Italic.ttf](<a href="https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS">https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS</a> NF Italic.ttf)</p>
+<p>[MesloLGS NF Bold Italic.ttf](<a href="https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS">https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS</a> NF Bold Italic.ttf)</p>
+<p>然后在window terminal里面设置字体，位置见下图 ：</p>
 <p><img src="https://s2.loli.net/2022/03/04/fdsXjivpm18NEoJ.png" alt="image-20220304215714707"></p>
 <p>设为刚安装的字体就行。</p>
 <h3 id="配置pwsh">配置pwsh</h3>
@@ -483,7 +478,9 @@ for( $i = 0; $i -lt $ports.length; $i++ ){
 <li>linux的PATH会自动继承windows的path，不过Linux系统里同名的文件优先级更高；所以像git这种软件到底装Windows还是装Linux要自己想清楚；全部在Linux下也可以，都装不是不行…就是要配置两遍；</li>
 <li>WSL的命令行可以直接调用windows PATH下的exe文件，如vscode，explore（资源管理器）；</li>
 <li>在powershell里面可以用<code>start</code>命令打开文件，会自动调用关联的打开方式。类似macos的<code>open</code>命令，在wsl里面通过<code>alias</code>也可以调用（参考最后附录）；</li>
+<li>macos用户可以使用quicklook实现空格预览，utools实现spotlight，并使用powertoys做快捷键映射：个人比较怀恋ctrl+a/ctrl+e映射到home和end的功能，然后把alt+a/c/v/s/w/r都映射成ctrl，alt+q映射成alt+f4，其他的其实都还好；</li>
 </ol>
+<p><img src="https://s2.loli.net/2022/03/05/pAxJ2rEqY1S5jNm.png" alt="image-20220305130750860"></p>
 <h2 id="附windows-terminal配置参考">附：Windows Terminal配置参考</h2>
 <pre><code class="language-json">{
     &quot;$help&quot;: &quot;https://aka.ms/terminal-documentation&quot;,
