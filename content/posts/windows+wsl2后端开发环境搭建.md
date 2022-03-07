@@ -217,8 +217,14 @@ wsl --set-default-version 2
 这个[问题](https://github.com/microsoft/WSL/issues/4150)解决方案有三个：
 
 1. 改成docker运行服务，这样服务和代码都跑在Windows环境下；
-2. 全部使用wsl里面的程序，java也好，MySQL也好，都在Linux下就能正常访问了；idea和vscode都支持wsl了，推荐使用该方案；
-3. 如果jdk用的Windows版本，MySQL跑在Linux下面。只能通过Windows防火墙进行处理。在Windows平台下建一个pwsh脚本，填入一下内容：
+2. 全部使用wsl里面的程序，java也好，MySQL也好，idea也好，都在Linux下就能正常访问了；使用该方案需要安装[wslg](https://github.com/microsoft/wslg)(仅win11支持);
+2. idea新版（2021.2之后）支持调用wsl里面的jdk，远程跑程序。**该方案比较简单，推荐使用**：
+
+![image-20220307102252002](https://s2.loli.net/2022/03/07/GJwdsXjLmZ72vBV.png)
+
+4. 通过Windows防火墙进行处理，将127.0.0.1的访问强行转到wsl里，方法如下：
+
+在Windows平台下建一个pwsh脚本，填入一下内容（linux下可能需要`sudo apt install net-tools`）：
 
 ```powershell
 $remoteport = bash.exe -c "ifconfig eth0 | grep 'inet '"
@@ -259,15 +265,16 @@ for( $i = 0; $i -lt $ports.length; $i++ ){
 
 在ports里面填入你想export到windows的服务端口，然后以管理员权限跑一下这个脚本。
 
-这个脚本同样需要设置为自启动，在刚才的vbs启动脚本里面加入：`ws.run "pwsh E:/codes/powershell/run.ps1",0`即可。
+这个脚本同样需要设置为自启动，在刚才的vbs启动脚本里面加入：`ws.run "pwsh D:/codes/powershell/run.ps1",0`即可（路径替换成自己的）。
 
 ## 注意事项
 
-1. wsl2和windows之间传输文件io性能很差，建议代码仓库还是放在windows这边，用windows的ide来开发；
-2. 如果依赖第三方库需要区分平台，那还是老老实实的用linux环境；
+1. wsl2和windows之间传输文件io性能很差；
+1. idea支持ssh远程开发，但目前还是beta，不好用；vscode还是比较流畅的；
 3. linux的PATH会自动继承windows的path，不过Linux系统里同名的文件优先级更高；所以像git这种软件到底装Windows还是装Linux要自己想清楚；全部在Linux下也可以，都装不是不行…就是要配置两遍；
 4. WSL的命令行可以直接调用windows PATH下的exe文件，如vscode，explore（资源管理器）；
 5. 在powershell里面可以用`start`命令打开文件，会自动调用关联的打开方式。类似macos的`open`命令，在wsl里面通过`alias`也可以调用（参考最后附录）；
+5. 在idea里面讲终端设置为：`"cmd.exe" /k "wsl.exe"`，就可以使用bash做终端了；
 5. macos用户可以使用quicklook实现空格预览，utools实现spotlight，并使用powertoys做快捷键映射：个人比较怀恋ctrl+a/ctrl+e映射到home和end的功能，然后把alt+a/c/v/s/w/r都映射成ctrl，alt+q映射成alt+f4，其他的其实都还好；
 
 ![image-20220305130750860](https://s2.loli.net/2022/03/05/pAxJ2rEqY1S5jNm.png)
