@@ -210,62 +210,20 @@ wsl --set-default-version 2
 
    这样在Windows启动之后，wsl就会以root权限运行以上脚本启动服务。
 
-### 解决Java代码里面的本地回环问题
+### 解决windows和wsl内服务通信问题
 
-在wsl里面安装软件，监听`127.0.0.1`，在Windows里面可以直接用localhost访问，这是因为系统做了重定向。但是在java程序里配置localhost，会被强制解析为`127.0.0.1`，这样就导致无法访问。
+在wsl里面安装软件，监听`127.0.0.1`，在Windows里面可以直接用localhost访问，这是因为系统做了重定向。但是我们的代码或者用的某些软件会强制使用127.0.0.1来解析localhost，这就导致无法连接。
 
-这个[问题](https://github.com/microsoft/WSL/issues/4150)解决方案有三个：
+这个[问题](https://github.com/microsoft/WSL/issues/4150)解决方案有以下几个：
 
 1. 改成docker运行服务，这样服务和代码都跑在Windows环境下；
 2. 全部使用wsl里面的程序，java也好，MySQL也好，idea也好，都在Linux下就能正常访问了；使用该方案需要安装[wslg](https://github.com/microsoft/wslg)(仅win11支持);
-2. idea新版（2021.2之后）支持调用wsl里面的jdk，远程跑程序。**该方案比较简单，推荐使用**：
+2. idea新版（2021.2之后）支持调用wsl里面的jdk，远程跑程序。其他工具使用用Linux下的命令行：
 
 ![image-20220307102252002](https://s2.loli.net/2022/03/07/GJwdsXjLmZ72vBV.png)
 
-4. 通过Windows防火墙进行处理，将127.0.0.1的访问强行转到wsl里，方法如下：
-
-在Windows平台下建一个pwsh脚本，填入一下内容（linux下可能需要`sudo apt install net-tools`）：
-
-```powershell
-$remoteport = bash.exe -c "ifconfig eth0 | grep 'inet '"
-$found = $remoteport -match '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}';
-
-if( $found ){
-  $remoteport = $matches[0];
-} else{
-  echo "The Script Exited, the ip address of WSL 2 cannot be found";
-  exit;
-}
-
-#[Ports]
-
-#All the ports you want to forward separated by coma
-$ports=@(80,443,6379,3306,8000,8001,8554,8848,8888,9092,9848,11883,8081,8083);
-
-
-#[Static ip]
-#You can change the addr to your ip config to listen to a specific address
-$addr='127.0.0.1';
-$ports_a = $ports -join ",";
-
-
-#Remove Firewall Exception Rules
-iex "Remove-NetFireWallRule -DisplayName 'WSL 2 Firewall Unlock' ";
-
-#adding Exception Rules for inbound and outbound Rules
-iex "New-NetFireWallRule -DisplayName 'WSL 2 Firewall Unlock' -Direction Outbound -LocalPort $ports_a -Action Allow -Protocol TCP";
-iex "New-NetFireWallRule -DisplayName 'WSL 2 Firewall Unlock' -Direction Inbound -LocalPort $ports_a -Action Allow -Protocol TCP";
-
-for( $i = 0; $i -lt $ports.length; $i++ ){
-  $port = $ports[$i];
-  iex "netsh interface portproxy delete v4tov4 listenport=$port listenaddress=$addr";
-  iex "netsh interface portproxy add v4tov4 listenport=$port listenaddress=$addr connectport=$port connectaddress=$remoteport";
-}
-```
-
-在ports里面填入你想export到windows的服务端口，然后以管理员权限跑一下这个脚本。
-
-这个脚本同样需要设置为自启动，在刚才的vbs启动脚本里面加入：`ws.run "pwsh D:/codes/powershell/run.ps1",0`即可（路径替换成自己的）。
+4. 【推荐】使用[这个工具](https://github.com/shayne/go-wsl2-host)每次启动系统时将wsl的ip地址写入hosts，然后使用本地域名访问（如`ubuntu2004.local`)；
+4. 类似4，可以通过事件查看器来触发，参考[这里](https://bytem.io/posts/wsl2-network-tricks/#%E4%B8%BB%E6%9C%BA%E8%AE%BF%E9%97%AE-WSL2)；
 
 ## 注意事项
 

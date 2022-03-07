@@ -87,7 +87,7 @@
     },
     "headline": "Windows\u002bwsl2后端开发环境搭建 | 应许之地","datePublished": "2022-03-04T20:54:01+08:00",
     "dateModified": "2022-03-04T20:54:01+08:00",
-    "wordCount":  4151 ,
+    "wordCount":  3862 ,
     "author": {
         "@type": "Person",
         "name": ["tryao"]
@@ -229,7 +229,7 @@
     </div>
     <div class="me-6 my-2">
         <i class="fas fa-clock me-1"></i>
-        <span>9 min read</span>
+        <span>8 min read</span>
     </div>
     
     
@@ -379,56 +379,19 @@ ws.run &quot;wsl -d ubuntu-20.04 -u root /etc/init.wsl&quot;,0
 <p>这样在Windows启动之后，wsl就会以root权限运行以上脚本启动服务。</p>
 </li>
 </ol>
-<h3 id="解决java代码里面的本地回环问题">解决Java代码里面的本地回环问题</h3>
-<p>在wsl里面安装软件，监听<code>127.0.0.1</code>，在Windows里面可以直接用localhost访问，这是因为系统做了重定向。但是在java程序里配置localhost，会被强制解析为<code>127.0.0.1</code>，这样就导致无法访问。</p>
-<p>这个<a href="https://github.com/microsoft/WSL/issues/4150">问题</a>解决方案有三个：</p>
+<h3 id="解决windows和wsl内服务通信问题">解决windows和wsl内服务通信问题</h3>
+<p>在wsl里面安装软件，监听<code>127.0.0.1</code>，在Windows里面可以直接用localhost访问，这是因为系统做了重定向。但是我们的代码或者用的某些软件会强制使用127.0.0.1来解析localhost，这就导致无法连接。</p>
+<p>这个<a href="https://github.com/microsoft/WSL/issues/4150">问题</a>解决方案有以下几个：</p>
 <ol>
 <li>改成docker运行服务，这样服务和代码都跑在Windows环境下；</li>
 <li>全部使用wsl里面的程序，java也好，MySQL也好，idea也好，都在Linux下就能正常访问了；使用该方案需要安装<a href="https://github.com/microsoft/wslg">wslg</a>(仅win11支持);</li>
-<li>idea新版（2021.2之后）支持调用wsl里面的jdk，远程跑程序。<strong>该方案比较简单，推荐使用</strong>：</li>
+<li>idea新版（2021.2之后）支持调用wsl里面的jdk，远程跑程序。其他工具使用用Linux下的命令行：</li>
 </ol>
 <p><img src="https://s2.loli.net/2022/03/07/GJwdsXjLmZ72vBV.png" alt="image-20220307102252002"></p>
 <ol start="4">
-<li>通过Windows防火墙进行处理，将127.0.0.1的访问强行转到wsl里，方法如下：</li>
+<li>【推荐】使用<a href="https://github.com/shayne/go-wsl2-host">这个工具</a>每次启动系统时将wsl的ip地址写入hosts，然后使用本地域名访问（如<code>ubuntu2004.local</code>)；</li>
+<li>类似4，可以通过事件查看器来触发，参考<a href="https://bytem.io/posts/wsl2-network-tricks/#%E4%B8%BB%E6%9C%BA%E8%AE%BF%E9%97%AE-WSL2">这里</a>；</li>
 </ol>
-<p>在Windows平台下建一个pwsh脚本，填入一下内容（linux下可能需要<code>sudo apt install net-tools</code>）：</p>
-<pre><code class="language-powershell">$remoteport = bash.exe -c &quot;ifconfig eth0 | grep 'inet '&quot;
-$found = $remoteport -match '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}';
-
-if( $found ){
-  $remoteport = $matches[0];
-} else{
-  echo &quot;The Script Exited, the ip address of WSL 2 cannot be found&quot;;
-  exit;
-}
-
-#[Ports]
-
-#All the ports you want to forward separated by coma
-$ports=@(80,443,6379,3306,8000,8001,8554,8848,8888,9092,9848,11883,8081,8083);
-
-
-#[Static ip]
-#You can change the addr to your ip config to listen to a specific address
-$addr='127.0.0.1';
-$ports_a = $ports -join &quot;,&quot;;
-
-
-#Remove Firewall Exception Rules
-iex &quot;Remove-NetFireWallRule -DisplayName 'WSL 2 Firewall Unlock' &quot;;
-
-#adding Exception Rules for inbound and outbound Rules
-iex &quot;New-NetFireWallRule -DisplayName 'WSL 2 Firewall Unlock' -Direction Outbound -LocalPort $ports_a -Action Allow -Protocol TCP&quot;;
-iex &quot;New-NetFireWallRule -DisplayName 'WSL 2 Firewall Unlock' -Direction Inbound -LocalPort $ports_a -Action Allow -Protocol TCP&quot;;
-
-for( $i = 0; $i -lt $ports.length; $i++ ){
-  $port = $ports[$i];
-  iex &quot;netsh interface portproxy delete v4tov4 listenport=$port listenaddress=$addr&quot;;
-  iex &quot;netsh interface portproxy add v4tov4 listenport=$port listenaddress=$addr connectport=$port connectaddress=$remoteport&quot;;
-}
-</code></pre>
-<p>在ports里面填入你想export到windows的服务端口，然后以管理员权限跑一下这个脚本。</p>
-<p>这个脚本同样需要设置为自启动，在刚才的vbs启动脚本里面加入：<code>ws.run &quot;pwsh D:/codes/powershell/run.ps1&quot;,0</code>即可（路径替换成自己的）。</p>
 <h2 id="注意事项">注意事项</h2>
 <ol>
 <li>wsl2和windows之间传输文件io性能很差；</li>
@@ -549,7 +512,7 @@ alias start=&quot;cmd.exe /C start&quot;
         <li><a href="#可选使用docker-desktop-for-windows">【可选】使用docker desktop for windows</a></li>
         <li><a href="#解决linux网络问题">解决Linux网络问题</a></li>
         <li><a href="#解决systemd不能用的问题">解决systemd不能用的问题</a></li>
-        <li><a href="#解决java代码里面的本地回环问题">解决Java代码里面的本地回环问题</a></li>
+        <li><a href="#解决windows和wsl内服务通信问题">解决windows和wsl内服务通信问题</a></li>
       </ul>
     </li>
     <li><a href="#注意事项">注意事项</a></li>
