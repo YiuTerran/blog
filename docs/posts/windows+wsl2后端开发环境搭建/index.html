@@ -54,8 +54,8 @@
   integrity="sha256-Zmpaaj&#43;GXFsPF5WdPArSrnW3b30dovldeKsW00xBVwE="  crossorigin></script>
 
 
-<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_2.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_2.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
 
 <meta name="description"
   content="就我个人而言，目前感觉最理想的后端开发环境还是Intel CPU的MacOS，基本所有常用的后端依赖都可以用homebrew安装，GUI和命令行的结合也">
@@ -87,7 +87,7 @@
     },
     "headline": "Windows\u002bwsl2后端开发环境搭建 | 应许之地","datePublished": "2022-03-04T20:54:01+08:00",
     "dateModified": "2022-03-04T20:54:01+08:00",
-    "wordCount":  6112 ,
+    "wordCount":  4026 ,
     "author": {
         "@type": "Person",
         "name": ["tryao"]
@@ -229,7 +229,7 @@
     </div>
     <div class="me-6 my-2">
         <i class="fas fa-clock me-1"></i>
-        <span>13 min read</span>
+        <span>9 min read</span>
     </div>
     
     
@@ -251,16 +251,17 @@
             <p>就我个人而言，目前感觉最理想的后端开发环境还是Intel CPU的MacOS，基本所有常用的后端依赖都可以用homebrew安装，GUI和命令行的结合也是最方便的。不过Windows从10代之后添加了WSL/WSL2，将Linux命令行和Windows开发环境（不那么）完美的结合起来，目前来说可用性还算不错了。</p>
 <h2 id="准备工作">准备工作</h2>
 <h3 id="网络准备">网络准备</h3>
-<p>由于下面会大量从GitHub下载软件，所以请自备梯子。建议使用Clash For windows，下文会说明原因…WSL2最大的坑点就是网络。</p>
-<h3 id="win10特有部分">win10特有部分</h3>
-<p>win10之前，系统的命令行工具分裂为cmd和pwsh两种，界面都难看的很。所以首先安装<a href="https://github.com/microsoft/terminal/releases">Windows Terminal</a>（以下简称wt），整一个好看一点的终端用。对于天天用命令行的人来说，这个比啥都重要。</p>
-<p>然后安装最新的powershell。下载地址在<a href="https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.2">这里</a>，目前最新版是powershell7.  pwsh7其实是开源的shell，在linux/macos上都能用，不过这玩意最大的问题是启动速度实在太慢，而且语法设计和bash差别太大。bash是把一切都看作文本，pwsh是把一切都看作对象……都是辣鸡设计，还是python好使。</p>
+<p>由于下面会大量从GitHub下载软件，所以请自备工具保证能够顺利下载。</p>
+<h3 id="windows命令行工具">windows命令行工具</h3>
+<p>win10之前，系统的命令行工具分裂为cmd和pwsh两种，界面都难看的很。所以首先安装<a href="https://github.com/microsoft/terminal/releases">Windows Terminal</a>（以下简称wt），整一个好看一点的终端用。对于天天用命令行的人来说，这个比啥都重要。如果是win11，系统自带了wt，但是版本较老，建议更新到最新版。</p>
+<p>然后安装最新的powershell，下载地址在<a href="https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.2">这里</a>，目前最新版是powershell7.  pwsh7其实是开源的shell，在linux/macos上都能用，不过这玩意最大的问题是启动速度实在太慢，而且语法设计和bash差别太大。bash是把一切都看作文本，pwsh是把一切都看作对象……都是辣鸡设计，还是python好使。</p>
 <p>安装的时候请注意选中添加环境变量，<code>Open here</code>那个那个建议不要选中，wt自带有这个功能。装完之后pwsh7会自动注册到wt里。</p>
 <h3 id="安装包管理器">安装包管理器</h3>
-<p>先安装包管理器scoop（类似yum/apt），打开wt，输入<code>Set-ExecutionPolicy RemoteSigned -scope CurrentUser</code>打开安装权限。然后输入</p>
+<p>linux下有apt/yum/pacman之类的包管理工具，mac也有homebrew/macport，windows下实际上也有对应的包管理工具，如scoop/Chocolatey或者官方的winget. 这里以scoop为例：</p>
+<p>打开wt，输入<code>Set-ExecutionPolicy RemoteSigned -scope CurrentUser</code>打开安装权限。然后输入</p>
 <pre><code class="language-powershell">iwr -useb get.scoop.sh | iex
 </code></pre>
-<p>安装即可。如果网络没准备好，也可以使用</p>
+<p>安装即可。如果网络不通，也可以使用</p>
 <pre><code class="language-powershell">iwr -useb https://gitee.com/glsnames/scoop-installer/raw/master/bin/install.ps1 | iex
 </code></pre>
 <p>来安装。</p>
@@ -273,7 +274,7 @@ scoop update
 <p>常用的软件可以使用scoop直接安装，如：</p>
 <pre><code class="language-powershell">scoop install git 7zip aria2 python3 vscode typora vlc sumatrapdf
 </code></pre>
-<p>国内有人把其他bucket综合成一个<a href="https://gitee.com/kkzzhizhou/scoop-apps">bucket</a>，也可以根据自己需求使用。</p>
+<p>国内有人把其他bucket综合成一个<a href="https://gitee.com/kkzzhizhou/scoop-apps">bucket</a>，也可以根据自己需求使用。scoop比上面说的另外两个包管理器可玩性更高一些，软件数量也相对更加丰富。</p>
 <h3 id="安装字体">安装字体</h3>
 <p>类似美化zsh的思路，先安装能显示复杂Unicode符号的字体，到<a href="https://github.com/romkatv/dotfiles-public/tree/master/.local/share/fonts/NerdFonts">这里</a>下载所有的字体并安装到Windows.</p>
 <p>然后在window terminal里面设置字体，位置见下图 ：</p>
@@ -321,33 +322,32 @@ Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
 
 Invoke-Expression (&amp; { (lua E:/codes/z.lua/z.lua --init powershell once fzf enhanced) -join &quot;`n&quot; })
 </code></pre>
-<p>注意最后一行是一个插件<code>z.lua</code>，用来做跳转的，如果有需要可以参考<a href="https://github.com/skywind3000/z.lua">这里</a>来安装。需要<code>scoop install lua5.4 fzf</code>先安装依赖。</p>
+<p>注意最后一行是一个插件<code>z.lua</code>，用来做跳转的，如果有需要可以参考<a href="https://github.com/skywind3000/z.lua">这里</a>来安装。需要<code>scoop install lua fzf</code>先安装依赖。</p>
 <p>配置完成后保存关闭，重启pwsh即可生效。</p>
 <h2 id="安装wsl2">安装wsl2</h2>
-<p>前面都是windows里面的准备工作，下面开始安装wsl2. 注意这里是官方推荐方案，如果你想从源头解决某些问题，请参考<a href="https://github.com/nullpo-head/wsl-distrod">这里</a>，使用社区的方案来安装，不过风险自负。</p>
+<p>前面都是windows里面的准备工作，下面开始安装wsl2. 注意这里写的是官方推荐方案，如果你想从源头解决某些问题，请参考<a href="https://github.com/nullpo-head/wsl-distrod">这里</a>，使用社区的方案来安装，不过风险自负。</p>
 <p>使用管理员权限打开pwsh（或者使用<a href="https://github.com/gerardog/gsudo">gsudo</a>），输入以下指令：</p>
 <pre><code class="language-powershell"># 开启linux子系统
 dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
 #开启虚拟机平台
 dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
 </code></pre>
-<p>之后windows会下载linux内核相关软件进行安装，然后需要重启。</p>
-<p>再次使用管理员权限打开pwsh，输入：</p>
+<p>然后需要<a href="https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi">下载</a>linux内核更新并安装，安装完成后建议重启。</p>
+<p>然后再次使用管理员权限打开pwsh，输入：</p>
 <pre><code class="language-powershell">wsl --set-default-version 2
 </code></pre>
-<p>将wsl版本设置为第二代。</p>
+<p>将wsl版本设置为默认第二代。</p>
 <p>下面安装需要的发行版就行，打开windows商店，直接搜linux。出来的发行版随便找一个喜欢的下载。</p>
-<p><strong>注意</strong>：没有centos哦，如果你是yum或者rpm的狂热爱好者，可以考虑安装openSuse.  或者到社区里面找非官方CentOS镜像（风险自负）。不过个人还是建议安装debian或者ubuntu20.04，毕竟容器化时代再玩centos其实已经不合时宜了，centos8本身就是个废品，再往后就只有stream了，滚动升级还不如玩<a href="https://github.com/yuk7/ArchWSL">ArchLinux</a>呢……总之，忘了红帽系吧。</p>
+<p><strong>注意</strong>：没有centos哦，如果你是yum或者rpm的狂热爱好者，可以考虑安装OpenSuse.  或者到社区里面找非官方CentOS镜像（风险自负）。不过个人还是建议安装debian或者ubuntu20.04（推荐），毕竟容器化时代再玩centos其实已经不合时宜了，centos8已经停止支持，再往后就只有滚动升级的stream了，不适合当服务器用。</p>
 <p>注意wsl2是可以安装gui的，如果有需要可以装窗口管理器甚至桌面来玩。对于没使用过linux桌面的人，可以玩一下Tiling WM，如i3，高手装b必备。老实人还是建议直接用windows的GUI，或者装个xfce体验一下。</p>
 <h3 id="配置linux">配置linux</h3>
 <p>打开Windows Terminal，安装的linux发行版入口应该会自动加到下拉选单里，选中后进入。</p>
 <p>至于怎么配置Linux我就不写了，根据个人习惯来吧。几个点：</p>
 <ul>
 <li>先用<code>sudo visudo</code>取消sudo必须输入密码，不然能烦死你；</li>
-<li>用<code>zsh</code>替换掉bash，可以使用<a href="https://ohmyz.sh/"><code>oh-my-zsh</code></a>或者<a href="https://z-shell.pages.dev/"><code>zi</code></a>之类的进行配置管理，如果要美化的话也要在linux里面安装字体；</li>
-<li>安装<code>lsd</code>, <code>ripgrep</code>, <code>fzf</code>, <code>trash-cli</code>,  <code>z.lua</code>等工具，做好<code>alias</code>；</li>
+<li>用<code>zsh</code>替换掉bash，可以使用<a href="https://ohmyz.sh/"><code>oh-my-zsh</code></a>或者<a href="https://z-shell.pages.dev/"><code>zi</code></a>之类的进行配置管理；</li>
+<li>安装<code>lsd</code>, <code>fd</code>, <code>ripgrep</code>, <code>fzf</code>, <code>trash-cli</code>,  <code>z.lua</code>等工具，做好<code>alias</code>；</li>
 <li>使用<code>screen</code>或者<code>tmux</code>进行进程管理；</li>
-<li>zsh有个插件<code>extract</code>，使用<code>x</code>解压一切压缩包；</li>
 <li>配置好vim</li>
 </ul>
 <h3 id="可选使用docker-desktop-for-windows">【可选】使用docker desktop for windows</h3>
@@ -359,51 +359,8 @@ dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /nores
 <p>有几个解决方案仅供参考：</p>
 <ol>
 <li>在Linux里面重新安装代理软件，反正ss/clash都有linux版，重新配置一下就行；</li>
-<li>打开clash for windows的tun模式，让windows的clash接管所有流量，在mixin里面作以下配置：</li>
+<li>打开clash for windows的tun模式，让windows的clash接管所有流量，具体方案自行搜索；</li>
 </ol>
-<pre><code class="language-yaml">mixin:
-   hosts:
-     'mtalk.google.com': 108.177.125.188
-     'services.googleapis.cn': 74.125.203.94
-     'raw.githubusercontent.com': 151.101.76.133
-   dns:
-     enable: true
-     default-nameserver:
-       - 223.5.5.5
-       - 1.0.0.1
-     ipv6: false
-     enhanced-mode: redir-host #fake-ip
-     nameserver:
-       - https://dns.rubyfish.cn/dns-query
-       - https://223.5.5.5/dns-query
-       - https://dns.pub/dns-query
-     fallback:
-       - https://1.0.0.1/dns-query
-       - https://public.dns.iij.jp/dns-query
-       - https://dns.twnic.tw/dns-query
-     fallback-filter:
-       geoip: true
-       ipcidr:
-         - 240.0.0.0/4
-         - 0.0.0.0/32
-         - 127.0.0.1/32
-       domain:
-         - +.google.com
-         - +.facebook.com
-         - +.twitter.com
-         - +.youtube.com
-         - +.xn--ngstr-lra8j.com
-         - +.google.cn
-         - +.googleapis.cn
-         - +.gvt1.com
-   tun:
-     enable: true
-     stack: gvisor
-     dns-hijack:
-       - 198.18.0.2:53
-     macOS-auto-route: true
-     macOS-auto-detect-interface: true # 自动检测出口网卡
-</code></pre>
 <h3 id="解决systemd不能用的问题">解决systemd不能用的问题</h3>
 <p>目前wsl2的systemd是无法正常运行的，有两个解决方案：</p>
 <ol>
@@ -417,7 +374,7 @@ dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /nores
 <li>在运行里面输入<code>shell:startup</code>打开自启动文件夹，然后在里面新建一个vbs文件，输入：</li>
 </ol>
 <pre><code class="language-vbscript">Set ws = WScript.CreateObject(&quot;WScript.Shell&quot;)        
-ws.run &quot;wsl -d debian -u root /etc/init.wsl&quot;,0
+ws.run &quot;wsl -d ubuntu-20.04 -u root /etc/init.wsl&quot;,0
 </code></pre>
 <p>这样在Windows启动之后，wsl就会以root权限运行以上脚本启动服务。</p>
 </li>
@@ -477,703 +434,11 @@ for( $i = 0; $i -lt $ports.length; $i++ ){
 <li>macos用户可以使用quicklook实现空格预览，utools实现spotlight，并使用powertoys做快捷键映射：个人比较怀恋ctrl+a/ctrl+e映射到home和end的功能，然后把alt+a/c/v/s/w/r都映射成ctrl，alt+q映射成alt+f4，其他的其实都还好；</li>
 </ol>
 <p><img src="https://s2.loli.net/2022/03/05/pAxJ2rEqY1S5jNm.png" alt="image-20220305130750860"></p>
-<h2 id="附windows-terminal配置参考">附：Windows Terminal配置参考</h2>
-<pre><code class="language-json">{
-    &quot;$help&quot;: &quot;https://aka.ms/terminal-documentation&quot;,
-    &quot;$schema&quot;: &quot;https://aka.ms/terminal-profiles-schema&quot;,
-    &quot;actions&quot;:
-    [
-        {
-            &quot;command&quot;:
-            {
-                &quot;action&quot;: &quot;copy&quot;,
-                &quot;singleLine&quot;: false
-            },
-            &quot;keys&quot;: &quot;ctrl+c&quot;
-        },
-        {
-            &quot;command&quot;:
-            {
-                &quot;action&quot;: &quot;splitPane&quot;,
-                &quot;split&quot;: &quot;right&quot;,
-                &quot;splitMode&quot;: &quot;duplicate&quot;
-            },
-            &quot;keys&quot;: &quot;alt+d&quot;
-        },
-        {
-            &quot;command&quot;: &quot;unbound&quot;,
-            &quot;keys&quot;: &quot;alt+enter&quot;
-        },
-        {
-            &quot;command&quot;: &quot;paste&quot;,
-            &quot;keys&quot;: &quot;ctrl+v&quot;
-        },
-        {
-            &quot;command&quot;: &quot;find&quot;,
-            &quot;keys&quot;: &quot;ctrl+f&quot;
-        },
-        {
-            &quot;command&quot;:
-            {
-                &quot;action&quot;: &quot;splitPane&quot;,
-                &quot;split&quot;: &quot;down&quot;,
-                &quot;splitMode&quot;: &quot;duplicate&quot;
-            },
-            &quot;keys&quot;: &quot;alt+s&quot;
-        },
-        {
-            &quot;command&quot;:
-            {
-                &quot;action&quot;: &quot;splitPane&quot;,
-                &quot;split&quot;: &quot;auto&quot;,
-                &quot;splitMode&quot;: &quot;duplicate&quot;
-            },
-            &quot;keys&quot;: &quot;alt+shift+d&quot;
-        }
-    ],
-    &quot;copyFormatting&quot;: &quot;none&quot;,
-    &quot;copyOnSelect&quot;: true,
-    &quot;defaultProfile&quot;: &quot;{58ad8b0c-3ef8-5f4d-bc6f-13e4c00f2530}&quot;,
-    &quot;profiles&quot;:
-    {
-        &quot;defaults&quot;:
-        {
-            &quot;antialiasingMode&quot;: &quot;cleartype&quot;,
-            &quot;closeOnExit&quot;: &quot;always&quot;,
-            &quot;colorScheme&quot;: &quot;Tango Dark&quot;,
-            &quot;font&quot;:
-            {
-                &quot;face&quot;: &quot;MesloLGS NF&quot;,
-                &quot;size&quot;: 11
-            }
-        },
-        &quot;list&quot;:
-        [
-            {
-                &quot;guid&quot;: &quot;{574e775e-4f2a-5b96-ac1e-a2962a402336}&quot;,
-                &quot;hidden&quot;: false,
-                &quot;name&quot;: &quot;PowerShell&quot;,
-                &quot;source&quot;: &quot;Windows.Terminal.PowershellCore&quot;,
-                &quot;startingDirectory&quot;: &quot;%USERPROFILE%&quot;
-            },
-            {
-                &quot;guid&quot;: &quot;{58ad8b0c-3ef8-5f4d-bc6f-13e4c00f2530}&quot;,
-                &quot;hidden&quot;: false,
-                &quot;name&quot;: &quot;Debian&quot;,
-                &quot;source&quot;: &quot;Windows.Terminal.Wsl&quot;
-            },
-            {
-                &quot;guid&quot;: &quot;{2ece5bfe-50ed-5f3a-ab87-5cd4baafed2b}&quot;,
-                &quot;hidden&quot;: false,
-                &quot;name&quot;: &quot;Git Bash&quot;,
-                &quot;source&quot;: &quot;Git&quot;,
-                &quot;startingDirectory&quot;: &quot;E:\\codes&quot;
-            }
-        ]
-    },
-    &quot;schemes&quot;:
-    [
-        {
-            &quot;background&quot;: &quot;#0C0C0C&quot;,
-            &quot;black&quot;: &quot;#0C0C0C&quot;,
-            &quot;blue&quot;: &quot;#0037DA&quot;,
-            &quot;brightBlack&quot;: &quot;#767676&quot;,
-            &quot;brightBlue&quot;: &quot;#3B78FF&quot;,
-            &quot;brightCyan&quot;: &quot;#61D6D6&quot;,
-            &quot;brightGreen&quot;: &quot;#16C60C&quot;,
-            &quot;brightPurple&quot;: &quot;#B4009E&quot;,
-            &quot;brightRed&quot;: &quot;#E74856&quot;,
-            &quot;brightWhite&quot;: &quot;#F2F2F2&quot;,
-            &quot;brightYellow&quot;: &quot;#F9F1A5&quot;,
-            &quot;cursorColor&quot;: &quot;#FFFFFF&quot;,
-            &quot;cyan&quot;: &quot;#3A96DD&quot;,
-            &quot;foreground&quot;: &quot;#CCCCCC&quot;,
-            &quot;green&quot;: &quot;#13A10E&quot;,
-            &quot;name&quot;: &quot;Campbell&quot;,
-            &quot;purple&quot;: &quot;#881798&quot;,
-            &quot;red&quot;: &quot;#C50F1F&quot;,
-            &quot;selectionBackground&quot;: &quot;#FFFFFF&quot;,
-            &quot;white&quot;: &quot;#CCCCCC&quot;,
-            &quot;yellow&quot;: &quot;#C19C00&quot;
-        },
-        {
-            &quot;background&quot;: &quot;#012456&quot;,
-            &quot;black&quot;: &quot;#0C0C0C&quot;,
-            &quot;blue&quot;: &quot;#0037DA&quot;,
-            &quot;brightBlack&quot;: &quot;#767676&quot;,
-            &quot;brightBlue&quot;: &quot;#3B78FF&quot;,
-            &quot;brightCyan&quot;: &quot;#61D6D6&quot;,
-            &quot;brightGreen&quot;: &quot;#16C60C&quot;,
-            &quot;brightPurple&quot;: &quot;#B4009E&quot;,
-            &quot;brightRed&quot;: &quot;#E74856&quot;,
-            &quot;brightWhite&quot;: &quot;#F2F2F2&quot;,
-            &quot;brightYellow&quot;: &quot;#F9F1A5&quot;,
-            &quot;cursorColor&quot;: &quot;#FFFFFF&quot;,
-            &quot;cyan&quot;: &quot;#3A96DD&quot;,
-            &quot;foreground&quot;: &quot;#CCCCCC&quot;,
-            &quot;green&quot;: &quot;#13A10E&quot;,
-            &quot;name&quot;: &quot;Campbell Powershell&quot;,
-            &quot;purple&quot;: &quot;#881798&quot;,
-            &quot;red&quot;: &quot;#C50F1F&quot;,
-            &quot;selectionBackground&quot;: &quot;#FFFFFF&quot;,
-            &quot;white&quot;: &quot;#CCCCCC&quot;,
-            &quot;yellow&quot;: &quot;#C19C00&quot;
-        },
-        {
-            &quot;background&quot;: &quot;#282C34&quot;,
-            &quot;black&quot;: &quot;#282C34&quot;,
-            &quot;blue&quot;: &quot;#61AFEF&quot;,
-            &quot;brightBlack&quot;: &quot;#5A6374&quot;,
-            &quot;brightBlue&quot;: &quot;#61AFEF&quot;,
-            &quot;brightCyan&quot;: &quot;#56B6C2&quot;,
-            &quot;brightGreen&quot;: &quot;#98C379&quot;,
-            &quot;brightPurple&quot;: &quot;#C678DD&quot;,
-            &quot;brightRed&quot;: &quot;#E06C75&quot;,
-            &quot;brightWhite&quot;: &quot;#DCDFE4&quot;,
-            &quot;brightYellow&quot;: &quot;#E5C07B&quot;,
-            &quot;cursorColor&quot;: &quot;#FFFFFF&quot;,
-            &quot;cyan&quot;: &quot;#56B6C2&quot;,
-            &quot;foreground&quot;: &quot;#DCDFE4&quot;,
-            &quot;green&quot;: &quot;#98C379&quot;,
-            &quot;name&quot;: &quot;One Half Dark&quot;,
-            &quot;purple&quot;: &quot;#C678DD&quot;,
-            &quot;red&quot;: &quot;#E06C75&quot;,
-            &quot;selectionBackground&quot;: &quot;#FFFFFF&quot;,
-            &quot;white&quot;: &quot;#DCDFE4&quot;,
-            &quot;yellow&quot;: &quot;#E5C07B&quot;
-        },
-        {
-            &quot;background&quot;: &quot;#FAFAFA&quot;,
-            &quot;black&quot;: &quot;#383A42&quot;,
-            &quot;blue&quot;: &quot;#0184BC&quot;,
-            &quot;brightBlack&quot;: &quot;#4F525D&quot;,
-            &quot;brightBlue&quot;: &quot;#61AFEF&quot;,
-            &quot;brightCyan&quot;: &quot;#56B5C1&quot;,
-            &quot;brightGreen&quot;: &quot;#98C379&quot;,
-            &quot;brightPurple&quot;: &quot;#C577DD&quot;,
-            &quot;brightRed&quot;: &quot;#DF6C75&quot;,
-            &quot;brightWhite&quot;: &quot;#FFFFFF&quot;,
-            &quot;brightYellow&quot;: &quot;#E4C07A&quot;,
-            &quot;cursorColor&quot;: &quot;#4F525D&quot;,
-            &quot;cyan&quot;: &quot;#0997B3&quot;,
-            &quot;foreground&quot;: &quot;#383A42&quot;,
-            &quot;green&quot;: &quot;#50A14F&quot;,
-            &quot;name&quot;: &quot;One Half Light&quot;,
-            &quot;purple&quot;: &quot;#A626A4&quot;,
-            &quot;red&quot;: &quot;#E45649&quot;,
-            &quot;selectionBackground&quot;: &quot;#FFFFFF&quot;,
-            &quot;white&quot;: &quot;#FAFAFA&quot;,
-            &quot;yellow&quot;: &quot;#C18301&quot;
-        },
-        {
-            &quot;background&quot;: &quot;#002B36&quot;,
-            &quot;black&quot;: &quot;#002B36&quot;,
-            &quot;blue&quot;: &quot;#268BD2&quot;,
-            &quot;brightBlack&quot;: &quot;#073642&quot;,
-            &quot;brightBlue&quot;: &quot;#839496&quot;,
-            &quot;brightCyan&quot;: &quot;#93A1A1&quot;,
-            &quot;brightGreen&quot;: &quot;#586E75&quot;,
-            &quot;brightPurple&quot;: &quot;#6C71C4&quot;,
-            &quot;brightRed&quot;: &quot;#CB4B16&quot;,
-            &quot;brightWhite&quot;: &quot;#FDF6E3&quot;,
-            &quot;brightYellow&quot;: &quot;#657B83&quot;,
-            &quot;cursorColor&quot;: &quot;#FFFFFF&quot;,
-            &quot;cyan&quot;: &quot;#2AA198&quot;,
-            &quot;foreground&quot;: &quot;#839496&quot;,
-            &quot;green&quot;: &quot;#859900&quot;,
-            &quot;name&quot;: &quot;Solarized Dark&quot;,
-            &quot;purple&quot;: &quot;#D33682&quot;,
-            &quot;red&quot;: &quot;#DC322F&quot;,
-            &quot;selectionBackground&quot;: &quot;#FFFFFF&quot;,
-            &quot;white&quot;: &quot;#EEE8D5&quot;,
-            &quot;yellow&quot;: &quot;#B58900&quot;
-        },
-        {
-            &quot;background&quot;: &quot;#FDF6E3&quot;,
-            &quot;black&quot;: &quot;#002B36&quot;,
-            &quot;blue&quot;: &quot;#268BD2&quot;,
-            &quot;brightBlack&quot;: &quot;#073642&quot;,
-            &quot;brightBlue&quot;: &quot;#839496&quot;,
-            &quot;brightCyan&quot;: &quot;#93A1A1&quot;,
-            &quot;brightGreen&quot;: &quot;#586E75&quot;,
-            &quot;brightPurple&quot;: &quot;#6C71C4&quot;,
-            &quot;brightRed&quot;: &quot;#CB4B16&quot;,
-            &quot;brightWhite&quot;: &quot;#FDF6E3&quot;,
-            &quot;brightYellow&quot;: &quot;#657B83&quot;,
-            &quot;cursorColor&quot;: &quot;#002B36&quot;,
-            &quot;cyan&quot;: &quot;#2AA198&quot;,
-            &quot;foreground&quot;: &quot;#657B83&quot;,
-            &quot;green&quot;: &quot;#859900&quot;,
-            &quot;name&quot;: &quot;Solarized Light&quot;,
-            &quot;purple&quot;: &quot;#D33682&quot;,
-            &quot;red&quot;: &quot;#DC322F&quot;,
-            &quot;selectionBackground&quot;: &quot;#FFFFFF&quot;,
-            &quot;white&quot;: &quot;#EEE8D5&quot;,
-            &quot;yellow&quot;: &quot;#B58900&quot;
-        },
-        {
-            &quot;background&quot;: &quot;#000000&quot;,
-            &quot;black&quot;: &quot;#000000&quot;,
-            &quot;blue&quot;: &quot;#3465A4&quot;,
-            &quot;brightBlack&quot;: &quot;#555753&quot;,
-            &quot;brightBlue&quot;: &quot;#729FCF&quot;,
-            &quot;brightCyan&quot;: &quot;#34E2E2&quot;,
-            &quot;brightGreen&quot;: &quot;#8AE234&quot;,
-            &quot;brightPurple&quot;: &quot;#AD7FA8&quot;,
-            &quot;brightRed&quot;: &quot;#EF2929&quot;,
-            &quot;brightWhite&quot;: &quot;#EEEEEC&quot;,
-            &quot;brightYellow&quot;: &quot;#FCE94F&quot;,
-            &quot;cursorColor&quot;: &quot;#FFFFFF&quot;,
-            &quot;cyan&quot;: &quot;#06989A&quot;,
-            &quot;foreground&quot;: &quot;#D3D7CF&quot;,
-            &quot;green&quot;: &quot;#4E9A06&quot;,
-            &quot;name&quot;: &quot;Tango Dark&quot;,
-            &quot;purple&quot;: &quot;#75507B&quot;,
-            &quot;red&quot;: &quot;#CC0000&quot;,
-            &quot;selectionBackground&quot;: &quot;#FFFFFF&quot;,
-            &quot;white&quot;: &quot;#D3D7CF&quot;,
-            &quot;yellow&quot;: &quot;#C4A000&quot;
-        },
-        {
-            &quot;background&quot;: &quot;#FFFFFF&quot;,
-            &quot;black&quot;: &quot;#000000&quot;,
-            &quot;blue&quot;: &quot;#3465A4&quot;,
-            &quot;brightBlack&quot;: &quot;#555753&quot;,
-            &quot;brightBlue&quot;: &quot;#729FCF&quot;,
-            &quot;brightCyan&quot;: &quot;#34E2E2&quot;,
-            &quot;brightGreen&quot;: &quot;#8AE234&quot;,
-            &quot;brightPurple&quot;: &quot;#AD7FA8&quot;,
-            &quot;brightRed&quot;: &quot;#EF2929&quot;,
-            &quot;brightWhite&quot;: &quot;#EEEEEC&quot;,
-            &quot;brightYellow&quot;: &quot;#FCE94F&quot;,
-            &quot;cursorColor&quot;: &quot;#000000&quot;,
-            &quot;cyan&quot;: &quot;#06989A&quot;,
-            &quot;foreground&quot;: &quot;#555753&quot;,
-            &quot;green&quot;: &quot;#4E9A06&quot;,
-            &quot;name&quot;: &quot;Tango Light&quot;,
-            &quot;purple&quot;: &quot;#75507B&quot;,
-            &quot;red&quot;: &quot;#CC0000&quot;,
-            &quot;selectionBackground&quot;: &quot;#FFFFFF&quot;,
-            &quot;white&quot;: &quot;#D3D7CF&quot;,
-            &quot;yellow&quot;: &quot;#C4A000&quot;
-        },
-        {
-            &quot;background&quot;: &quot;#000000&quot;,
-            &quot;black&quot;: &quot;#000000&quot;,
-            &quot;blue&quot;: &quot;#000080&quot;,
-            &quot;brightBlack&quot;: &quot;#808080&quot;,
-            &quot;brightBlue&quot;: &quot;#0000FF&quot;,
-            &quot;brightCyan&quot;: &quot;#00FFFF&quot;,
-            &quot;brightGreen&quot;: &quot;#00FF00&quot;,
-            &quot;brightPurple&quot;: &quot;#FF00FF&quot;,
-            &quot;brightRed&quot;: &quot;#FF0000&quot;,
-            &quot;brightWhite&quot;: &quot;#FFFFFF&quot;,
-            &quot;brightYellow&quot;: &quot;#FFFF00&quot;,
-            &quot;cursorColor&quot;: &quot;#FFFFFF&quot;,
-            &quot;cyan&quot;: &quot;#008080&quot;,
-            &quot;foreground&quot;: &quot;#C0C0C0&quot;,
-            &quot;green&quot;: &quot;#008000&quot;,
-            &quot;name&quot;: &quot;Vintage&quot;,
-            &quot;purple&quot;: &quot;#800080&quot;,
-            &quot;red&quot;: &quot;#800000&quot;,
-            &quot;selectionBackground&quot;: &quot;#FFFFFF&quot;,
-            &quot;white&quot;: &quot;#C0C0C0&quot;,
-            &quot;yellow&quot;: &quot;#808000&quot;
-        }
-    ],
-    &quot;trimBlockSelection&quot;: true
-}
-</code></pre>
-<h2 id="附mysql的启动脚本">附：Mysql的启动脚本</h2>
-<p>从源里面安装MySQL8的话，只会安装systemd，而没有service。所以要自己在<code>/etc/init.d</code>下面建一个可执行脚本，内容如下：</p>
-<pre><code class="language-bash">#!/bin/sh
-# Copyright Abandoned 1996 TCX DataKonsult AB &amp; Monty Program KB &amp; Detron HB
-# This file is public domain and comes with NO WARRANTY of any kind
-
-# MySQL daemon start/stop script.
-
-# Usually this is put in /etc/init.d (at least on machines SYSV R4 based
-# systems) and linked to /etc/rc3.d/S99mysql and /etc/rc0.d/K01mysql.
-# When this is done the mysql server will be started when the machine is
-# started and shut down when the systems goes down.
-
-# Comments to support chkconfig on RedHat Linux
-# chkconfig: 2345 64 36
-# description: A very fast and reliable SQL database engine.
-
-# Comments to support LSB init script conventions
-### BEGIN INIT INFO
-# Provides: mysql
-# Required-Start: $local_fs $network $remote_fs
-# Should-Start: ypbind nscd ldap ntpd xntpd
-# Required-Stop: $local_fs $network $remote_fs
-# Default-Start:  2 3 4 5
-# Default-Stop: 0 1 6
-# Short-Description: start and stop MySQL
-# Description: MySQL is a very fast and reliable SQL database engine.
-### END INIT INFO
- 
-# If you install MySQL on some other places than @prefix@, then you
-# have to do one of the following things for this script to work:
-#
-# - Run this script from within the MySQL installation directory
-# - Create a /etc/my.cnf file with the following information:
-#   [mysqld]
-#   basedir=&lt;path-to-mysql-installation-directory&gt;
-# - Add the above to any other configuration file (for example ~/.my.ini)
-#   and copy my_print_defaults to /usr/bin
-# - Add the path to the mysql-installation-directory to the basedir variable
-#   below.
-#
-# If you want to affect other MySQL variables, you should make your changes
-# in the /etc/my.cnf, ~/.my.cnf or other MySQL configuration files.
-
-# If you change base dir, you must also change datadir. These may get
-# overwritten by settings in the MySQL configuration files.
-
-basedir=/usr
-datadir=/var/lib/mysql
-
-# Default value, in seconds, afterwhich the script should timeout waiting
-# for server start. 
-# Value here is overriden by value in my.cnf. 
-# 0 means don't wait at all
-# Negative numbers mean to wait indefinitely
-service_startup_timeout=900
-
-# Lock directory for RedHat / SuSE.
-lockdir='/var/lock/subsys'
-lock_file_path=&quot;$lockdir/mysql&quot;
-
-# The following variables are only set for letting mysql.server find things.
-
-# Set some defaults
-mysqld_pid_file_path=
-if test -z &quot;$basedir&quot;
-then
-  basedir=@prefix@
-  bindir=@bindir@
-  if test -z &quot;$datadir&quot;
-  then
-    datadir=@localstatedir@
-  fi
-  sbindir=@sbindir@
-  libexecdir=@sbindir@
-else
-  bindir=&quot;$basedir/bin&quot;
-  if test -z &quot;$datadir&quot;
-  then
-    datadir=&quot;$basedir/data&quot;
-  fi
-  sbindir=&quot;$basedir/sbin&quot;
-  libexecdir=&quot;$basedir/libexec&quot;
-fi
-
-# datadir_set is used to determine if datadir was set (and so should be
-# *not* set inside of the --basedir= handler.)
-datadir_set=
-
-#
-# Use LSB init script functions for printing messages, if possible
-#
-lsb_functions=&quot;/lib/lsb/init-functions&quot;
-if test -f $lsb_functions ; then
-  . $lsb_functions
-else
-  log_success_msg()
-  {
-    echo &quot; SUCCESS! $@&quot;
-  }
-  log_failure_msg()
-  {
-    echo &quot; ERROR! $@&quot;
-  }
-fi
-
-PATH=&quot;/sbin:/usr/sbin:/bin:/usr/bin:$basedir/bin&quot;
-export PATH
-
-mode=$1    # start or stop
-
-[ $# -ge 1 ] &amp;&amp; shift
-
-
-other_args=&quot;$*&quot;   # uncommon, but needed when called from an RPM upgrade action
-           # Expected: &quot;--skip-networking --skip-grant-tables&quot;
-           # They are not checked here, intentionally, as it is the resposibility
-           # of the &quot;spec&quot; file author to give correct arguments only.
-
-case `echo &quot;testing\c&quot;`,`echo -n testing` in
-    *c*,-n*) echo_n=   echo_c=     ;;
-    *c*,*)   echo_n=-n echo_c=     ;;
-    *)       echo_n=   echo_c='\c' ;;
-esac
-
-parse_server_arguments() {
-  for arg do
-    case &quot;$arg&quot; in
-      --basedir=*)  basedir=`echo &quot;$arg&quot; | sed -e 's/^[^=]*=//'`
-                    bindir=&quot;$basedir/bin&quot;
-		    if test -z &quot;$datadir_set&quot;; then
-		      datadir=&quot;$basedir/data&quot;
-		    fi
-		    sbindir=&quot;$basedir/sbin&quot;
-		    libexecdir=&quot;$basedir/libexec&quot;
-        ;;
-      --datadir=*)  datadir=`echo &quot;$arg&quot; | sed -e 's/^[^=]*=//'`
-		    datadir_set=1
-	;;
-      --pid-file=*) mysqld_pid_file_path=`echo &quot;$arg&quot; | sed -e 's/^[^=]*=//'` ;;
-      --service-startup-timeout=*) service_startup_timeout=`echo &quot;$arg&quot; | sed -e 's/^[^=]*=//'` ;;
-    esac
-  done
-}
-
-wait_for_pid () {
-  verb=&quot;$1&quot;           # created | removed
-  pid=&quot;$2&quot;            # process ID of the program operating on the pid-file
-  pid_file_path=&quot;$3&quot; # path to the PID file.
-
-  i=0
-  avoid_race_condition=&quot;by checking again&quot;
-
-  while test $i -ne $service_startup_timeout ; do
-
-    case &quot;$verb&quot; in
-      'created')
-        # wait for a PID-file to pop into existence.
-        test -s &quot;$pid_file_path&quot; &amp;&amp; i='' &amp;&amp; break
-        ;;
-      'removed')
-        # wait for this PID-file to disappear
-        test ! -s &quot;$pid_file_path&quot; &amp;&amp; i='' &amp;&amp; break
-        ;;
-      *)
-        echo &quot;wait_for_pid () usage: wait_for_pid created|removed pid pid_file_path&quot;
-        exit 1
-        ;;
-    esac
-
-    # if server isn't running, then pid-file will never be updated
-    if test -n &quot;$pid&quot;; then
-      if kill -0 &quot;$pid&quot; 2&gt;/dev/null; then
-        :  # the server still runs
-      else
-        # The server may have exited between the last pid-file check and now.  
-        if test -n &quot;$avoid_race_condition&quot;; then
-          avoid_race_condition=&quot;&quot;
-          continue  # Check again.
-        fi
-
-        # there's nothing that will affect the file.
-        log_failure_msg &quot;The server quit without updating PID file ($pid_file_path).&quot;
-        return 1  # not waiting any more.
-      fi
-    fi
-
-    echo $echo_n &quot;.$echo_c&quot;
-    i=`expr $i + 1`
-    sleep 1
-
-  done
-
-  if test -z &quot;$i&quot; ; then
-    log_success_msg
-    return 0
-  else
-    log_failure_msg
-    return 1
-  fi
-}
-
-# Get arguments from the my.cnf file,
-# the only group, which is read from now on is [mysqld]
-if test -x &quot;$bindir/my_print_defaults&quot;;  then
-  print_defaults=&quot;$bindir/my_print_defaults&quot;
-else
-  # Try to find basedir in /etc/my.cnf
-  conf=/etc/my.cnf
-  print_defaults=
-  if test -r $conf
-  then
-    subpat='^[^=]*basedir[^=]*=\(.*\)$'
-    dirs=`sed -e &quot;/$subpat/!d&quot; -e 's//\1/' $conf`
-    for d in $dirs
-    do
-      d=`echo $d | sed -e 's/[ 	]//g'`
-      if test -x &quot;$d/bin/my_print_defaults&quot;
-      then
-        print_defaults=&quot;$d/bin/my_print_defaults&quot;
-        break
-      fi
-    done
-  fi
-
-  # Hope it's in the PATH ... but I doubt it
-  test -z &quot;$print_defaults&quot; &amp;&amp; print_defaults=&quot;my_print_defaults&quot;
-fi
-
-#
-# Read defaults file from 'basedir'.   If there is no defaults file there
-# check if it's in the old (depricated) place (datadir) and read it from there
-#
-
-extra_args=&quot;&quot;
-if test -r &quot;$basedir/my.cnf&quot;
-then
-  extra_args=&quot;-e $basedir/my.cnf&quot;
-fi
-
-parse_server_arguments `$print_defaults $extra_args mysqld server mysql_server mysql.server`
-
-#
-# Set pid file if not given
-#
-if test -z &quot;$mysqld_pid_file_path&quot;
-then
-  mysqld_pid_file_path=$datadir/`hostname`.pid
-else
-  case &quot;$mysqld_pid_file_path&quot; in
-    /* ) ;;
-    * )  mysqld_pid_file_path=&quot;$datadir/$mysqld_pid_file_path&quot; ;;
-  esac
-fi
-
-case &quot;$mode&quot; in
-  'start')
-    # Start daemon
-
-    # Safeguard (relative paths, core dumps..)
-    cd $basedir
-
-    echo $echo_n &quot;Starting MySQL&quot;
-    if test -x $bindir/mysqld_safe
-    then
-      # Give extra arguments to mysqld with the my.cnf file. This script
-      # may be overwritten at next upgrade.
-      $bindir/mysqld_safe --datadir=&quot;$datadir&quot; --pid-file=&quot;$mysqld_pid_file_path&quot; $other_args &gt;/dev/null &amp;
-      wait_for_pid created &quot;$!&quot; &quot;$mysqld_pid_file_path&quot;; return_value=$?
-
-      # Make lock for RedHat / SuSE
-      if test -w &quot;$lockdir&quot;
-      then
-        touch &quot;$lock_file_path&quot;
-      fi
-
-      exit $return_value
-    else
-      log_failure_msg &quot;Couldn't find MySQL server ($bindir/mysqld_safe)&quot;
-    fi
-    ;;
-
-  'stop')
-    # Stop daemon. We use a signal here to avoid having to know the
-    # root password.
-
-    if test -s &quot;$mysqld_pid_file_path&quot;
-    then
-      # signal mysqld_safe that it needs to stop
-      touch &quot;$mysqld_pid_file_path.shutdown&quot;
-
-      mysqld_pid=`cat &quot;$mysqld_pid_file_path&quot;`
-
-      if (kill -0 $mysqld_pid 2&gt;/dev/null)
-      then
-        echo $echo_n &quot;Shutting down MySQL&quot;
-        kill $mysqld_pid
-        # mysqld should remove the pid file when it exits, so wait for it.
-        wait_for_pid removed &quot;$mysqld_pid&quot; &quot;$mysqld_pid_file_path&quot;; return_value=$?
-      else
-        log_failure_msg &quot;MySQL server process #$mysqld_pid is not running!&quot;
-        rm &quot;$mysqld_pid_file_path&quot;
-      fi
-
-      # Delete lock for RedHat / SuSE
-      if test -f &quot;$lock_file_path&quot;
-      then
-        rm -f &quot;$lock_file_path&quot;
-      fi
-      exit $return_value
-    else
-      log_failure_msg &quot;MySQL server PID file could not be found!&quot;
-    fi
-    ;;
-
-  'restart')
-    # Stop the service and regardless of whether it was
-    # running or not, start it again.
-    if $0 stop  $other_args; then
-      $0 start $other_args
-    else
-      log_failure_msg &quot;Failed to stop running server, so refusing to try to start.&quot;
-      exit 1
-    fi
-    ;;
-
-  'reload'|'force-reload')
-    if test -s &quot;$mysqld_pid_file_path&quot; ; then
-      read mysqld_pid &lt;  &quot;$mysqld_pid_file_path&quot;
-      kill -HUP $mysqld_pid &amp;&amp; log_success_msg &quot;Reloading service MySQL&quot;
-      touch &quot;$mysqld_pid_file_path&quot;
-    else
-      log_failure_msg &quot;MySQL PID file could not be found!&quot;
-      exit 1
-    fi
-    ;;
-  'status')
-    # First, check to see if pid file exists
-    if test -s &quot;$mysqld_pid_file_path&quot; ; then 
-      read mysqld_pid &lt; &quot;$mysqld_pid_file_path&quot;
-      if kill -0 $mysqld_pid 2&gt;/dev/null ; then 
-        log_success_msg &quot;MySQL running ($mysqld_pid)&quot;
-        exit 0
-      else
-        log_failure_msg &quot;MySQL is not running, but PID file exists&quot;
-        exit 1
-      fi
-    else
-      # Try to find appropriate mysqld process
-      mysqld_pid=`@PIDOF@ $libexecdir/mysqld`
-
-      # test if multiple pids exist
-      pid_count=`echo $mysqld_pid | wc -w`
-      if test $pid_count -gt 1 ; then
-        log_failure_msg &quot;Multiple MySQL running but PID file could not be found ($mysqld_pid)&quot;
-        exit 5
-      elif test -z $mysqld_pid ; then 
-        if test -f &quot;$lock_file_path&quot; ; then 
-          log_failure_msg &quot;MySQL is not running, but lock file ($lock_file_path) exists&quot;
-          exit 2
-        fi 
-        log_failure_msg &quot;MySQL is not running&quot;
-        exit 3
-      else
-        log_failure_msg &quot;MySQL is running but PID file could not be found&quot;
-        exit 4
-      fi
-    fi
-    ;;
-    *)
-      # usage
-      basename=`basename &quot;$0&quot;`
-      echo &quot;Usage: $basename  {start|stop|restart|reload|force-reload|status}  [ MySQL server options ]&quot;
-      exit 1
-    ;;
-esac
-
-exit 0
-</code></pre>
-<p>主要注意<code>basedir</code>和<code>datadir</code>的位置。</p>
-<p>在wsl启动脚本里面需要加入：</p>
-<pre><code class="language-bash">mkdir -p /var/run/mysqld
-chown mysql:mysql /var/run/mysqld
-service mysql start
-</code></pre>
-<p>来启动服务。</p>
 <h2 id="附常用alias">附：常用alias</h2>
 <pre><code class="language-bash">alias ls=&quot;lsd&quot;
 alias rm=&quot;trash&quot;
 alias py=&quot;python3&quot;
+alias find=&quot;fd&quot;
 alias tailf=&quot;tail -F&quot;
 alias start=&quot;cmd.exe /C start&quot;
 </code></pre>
@@ -1266,7 +531,7 @@ alias start=&quot;cmd.exe /C start&quot;
     <li><a href="#准备工作">准备工作</a>
       <ul>
         <li><a href="#网络准备">网络准备</a></li>
-        <li><a href="#win10特有部分">win10特有部分</a></li>
+        <li><a href="#windows命令行工具">windows命令行工具</a></li>
         <li><a href="#安装包管理器">安装包管理器</a></li>
         <li><a href="#安装字体">安装字体</a></li>
         <li><a href="#配置pwsh">配置pwsh</a></li>
@@ -1282,8 +547,6 @@ alias start=&quot;cmd.exe /C start&quot;
       </ul>
     </li>
     <li><a href="#注意事项">注意事项</a></li>
-    <li><a href="#附windows-terminal配置参考">附：Windows Terminal配置参考</a></li>
-    <li><a href="#附mysql的启动脚本">附：Mysql的启动脚本</a></li>
     <li><a href="#附常用alias">附：常用alias</a></li>
   </ul>
 </nav>

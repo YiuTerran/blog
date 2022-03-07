@@ -205,7 +205,7 @@ wsl --set-default-version 2
 
    ```vbscript
    Set ws = WScript.CreateObject("WScript.Shell")        
-   ws.run "wsl -d debian -u root /etc/init.wsl",0
+   ws.run "wsl -d ubuntu-20.04 -u root /etc/init.wsl",0
    ```
 
    这样在Windows启动之后，wsl就会以root权限运行以上脚本启动服务。
