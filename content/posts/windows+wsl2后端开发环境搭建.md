@@ -223,7 +223,37 @@ wsl --set-default-version 2
 ![image-20220307102252002](https://s2.loli.net/2022/03/07/GJwdsXjLmZ72vBV.png)
 
 4. 【推荐】使用[这个工具](https://github.com/shayne/go-wsl2-host)每次启动系统时将wsl的ip地址写入hosts，然后使用本地域名访问（如`ubuntu2004.local`)；
-4. 类似4，可以通过事件查看器来触发，参考[这里](https://bytem.io/posts/wsl2-network-tricks/#%E4%B8%BB%E6%9C%BA%E8%AE%BF%E9%97%AE-WSL2)；
+4. 类似4，可以通过事件查看器来触发，参考[这里](https://bytem.io/posts/wsl2-network-tricks/#%E4%B8%BB%E6%9C%BA%E8%AE%BF%E9%97%AE-WSL2)，文中给出的脚本备份如下：
+
+```powershell
+# [Config]
+$wsl_hosts = "wsl.local"
+$win_hosts = "win.local"
+$HOSTS_PATH = "$env:windir\System32\drivers\etc\hosts"
+
+# [Start]
+$winip = (bash.exe -c "ip route | grep default | awk '{print `$3}'")
+$wslip = (bash.exe -c "hostname -I | awk '{print `$1}'")
+$found1 = $winip -match '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}';
+$found2 = $wslip -match '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}';
+
+if( !($found1 -and $found2) ){
+  echo "The Script Exited, the ip address of WSL 2 cannot be found";
+  exit;
+}
+
+# [Hosts]
+# Get hosts file Content
+$HOSTS_CONTENT = (Get-Content -Path $HOSTS_PATH) | ? {$_.trim() -ne "" } | Select-String -Pattern '# w(sl)|(in)_hosts' -NotMatch
+# add custom hosts into hosts content
+$HOSTS_CONTENT = $HOSTS_CONTENT + "`n$wslip $wsl_hosts # wsl_hosts`n$winip $win_hosts # win_hosts"
+# write file
+Out-File -FilePath $HOSTS_PATH -InputObject $HOSTS_CONTENT -Encoding ASCII
+
+ipconfig /flushdns | Out-Null
+```
+
+我在win11家庭版使用方案4/5时都遇到了计划任务权限不足的问题，最后用一个古老的应用`startup delayer`实现了自启动。
 
 ## 注意事项
 
@@ -233,7 +263,7 @@ wsl --set-default-version 2
 4. WSL的命令行可以直接调用windows PATH下的exe文件，如vscode，explore（资源管理器）；
 5. 在powershell里面可以用`start`命令打开文件，会自动调用关联的打开方式。类似macos的`open`命令，在wsl里面通过`alias`也可以调用（参考最后附录）；
 5. 在idea里面讲终端设置为：`"cmd.exe" /k "wsl.exe"`，就可以使用bash做终端了；
-5. macos用户可以使用quicklook实现空格预览，utools实现spotlight，并使用powertoys做快捷键映射：个人比较怀恋ctrl+a/ctrl+e映射到home和end的功能，然后把alt+a/c/v/s/w/r都映射成ctrl，alt+q映射成alt+f4，其他的其实都还好；
+5. macos用户可以使用quicklook实现空格预览，utools实现spotlight，并使用powertoys做快捷键映射：个人比较怀恋ctrl+a/ctrl+e映射到home和end的功能，然后把alt+a/c/v/s/w/r都映射成ctrl，alt+q映射成alt+f4，其他的其实都还好；不过离鼠标太远了还是不太方便，最后还是用ideavim插件来减少鼠标使用。
 
 ![image-20220305130750860](https://s2.loli.net/2022/03/05/pAxJ2rEqY1S5jNm.png)
 
