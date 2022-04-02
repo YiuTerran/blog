@@ -87,7 +87,7 @@
     },
     "headline": "Gb28181解析 | 应许之地","datePublished": "2022-03-02T09:46:50+08:00",
     "dateModified": "2022-03-02T09:46:50+08:00",
-    "wordCount":  6549 ,
+    "wordCount":  7455 ,
     "author": {
         "@type": "Person",
         "name": ["tryao"]
@@ -231,7 +231,7 @@
     </div>
     <div class="me-6 my-2">
         <i class="fas fa-clock me-1"></i>
-        <span>14 min read</span>
+        <span>15 min read</span>
     </div>
     
     
@@ -257,8 +257,25 @@
 <p>上图是直接从文档中截取的通信协议结构图。国标基于TCP/IP网络，主要分为两个传输通道，即一般会话通道和流媒体传输通道。前者基于SIP协议（图中<code>MANSCDP</code>和<code>MANSRTSP</code>是国标自行扩展的协议，仍然是基于SIP协议的），传输载体是SDP格式字符串；后者基于RTP/RTCP协议，传输载体主要是PS视频流和AAC等格式的音频数据。</p>
 <h2 id="sip协议">SIP协议</h2>
 <p>SIP协议初衷就是用于音视频通话，VOIP等技术大量用到该协议。</p>
-<p>RFC3261规定了SIP协议的基础内容，包括<code>Register</code>, <code>Invite</code>等一系列注册和通信机制。SIP协议的通信方式类似HTTP，是典型的请求-响应。</p>
-<h3 id="dialog-model">Dialog Model</h3>
+<p>RFC3261规定了SIP协议的基础内容，包括<code>Register</code>, <code>Invite</code>等一系列注册和通信机制。</p>
+<p>SIP协议某些设计非常类似HTTP1.1，比如消息格式，method、header的设计等。但是SIP协议远比HTTP要复杂的多：</p>
+<ol>
+<li>SIP协议的传输层是可选的，可以基于TCP/UDP/Websocket等进行通信；在UDP这种不可靠网络上的通信，需要考虑的问题要复杂很多；</li>
+<li>相比于HTTP的请求-应答模型，SIP是基于事务进行通信的，整个流程比较复杂；</li>
+<li>相比于HTTP的option/get/post/put/patch/delete/head等有限几个方法，SIP的方法要多得多。除了rfc3261规定的，还有一系列扩展协议（如info, publish, notify, subscribe等）；</li>
+<li>对于HTTP而言，代理基本是透明的，只负责转发，相当于SIP的无状态代理；SIP的有状态代理工作机制比较复杂；</li>
+</ol>
+<h3 id="基础概念">基础概念</h3>
+<ul>
+<li>UAC： 在事务中充当请求客户端的一方；</li>
+<li>UAS：在事务中充当请求服务端的一方；</li>
+<li>UA：同时充当UAC和UAS的逻辑实体；</li>
+</ul>
+<p>在实际运行中，一般节点都既是客户端又是服务器。谈到UAC和UAS时指的往往是在某个事务中的角色，比如INVITE时，呼叫方是UAC，接收方是UAS；但是在BYE的时候，就可能反过来了。</p>
+<h3 id="call">Call</h3>
+<p>一次呼叫由发起方和多个接收方组成。唯一标识是<code>Call-ID</code>，Call由多个Dialog组成。</p>
+<p>Call强调的是终端用户的对话，实际请求中，Call会经过很多代理服务器。</p>
+<h3 id="对话">对话</h3>
 <p><img src="https://s2.loli.net/2022/03/02/uSMXi4NVkYdC1Hn.png" alt=" SIP协议Session Model"></p>
 <p>主叫方A呼叫被叫方B：</p>
 <ul>
@@ -271,9 +288,14 @@
 <li>步骤18~20：会话结束后，任何参与者（A或B）都可以发送一个BYE请求来终止会话；</li>
 <li>步骤21~23：<code>主叫方A</code>发送200 OK响应来确认BYE，会话终止。</li>
 </ul>
-<p>以上的整个流程称之为一个<code>Dialog</code>，这个流程被称为<code>Session Model</code>通话模式。消息体负载大于1300字节时，一般采用该种通信模式。这也是RFC3261最初规定的一种通信方式。</p>
-<h3 id="pager-model">Pager Model</h3>
-<p>另外一种通信模式被称为<code>Pager Model</code>，适用于小流量通信。<strong>RFC3428</strong>扩展了SIP协议，增加了<code>MESSAGE</code>方法，类似UDP的设计思路，直接构造一条消息发过去即可（格式一般是SDP或者CPIM）。</p>
+<p>以上的整个流程称之为一个<code>Dialog</code>，或者<code>Session</code>，这个流程被称为<code>Session Model</code>通话模式。</p>
+<p>按着rfc3261的规定，仅当UAC发出<code>INVITE</code>请求，收到的2xx和1xx（除了100之外）的响应中<code>To</code>字段包含<code>tag</code>时，视为对话建立。</p>
+<p>Call-ID, From tag和To tag，共同构成本次会话的唯一ID，即dailog id.</p>
+<p>对话外的SIP消息最初发出的时候，发送端(UAC)会在<code>From</code>后面生成tag，但是To后面没有。消息接收端(UAS)会在回复的时候在<code>To</code>后面加上tag。有了这两个tag，才能保证一次呼叫只能建立一个会话(call)，但是可以建立多个dialog。实际使用中，呼叫可以是针对多个目标（会议），只是每个dialog的Request和Response的Call-ID必须一致。</p>
+<p><code>CSeq</code>头用于保证消息的顺序性，在同一个Dialog中标识及排序事务（transaction）以及区分新的请求与请求的重发。对于ACK而言，CSeq的序号必须与其所对应的request相同。对于CANCEL而言，CSeq的序号也必须与其cancel掉的request相同。其他情况下，Dialog里面每个新的Request，Cseq+1。需要注意的是：在同一个对话中的UAC和UAS分别维护自己的CSeq序号，他们发出请求的CSeq序号是不相关的。</p>
+<p><code>Via</code>中的<code>branch</code>是一个事务的id，这个branch参数的值必须用<strong>z9hG4bK</strong>打头。其它部分是对“To, From, Call-ID头域和Request-URI”按一定的算法加密后得到。</p>
+<h3 id="对话外消息">对话外消息</h3>
+<p>另外一种通信模式被称为<code>Pager Model</code>，适用于小流量通信。<strong>RFC3428</strong>扩展了SIP协议，增加了<code>MESSAGE</code>方法，类似UDP的设计思路，直接构造一条消息发过去即可（格式一般是SDP或者CPIM）。这是一种对话外通信。</p>
 <p><img src="https://s2.loli.net/2022/03/02/meZKJFOcr7MYw4T.png" alt="Pager Model"></p>
 <ul>
 <li>步骤1：<code>User1</code>发送<code>MESSAGE</code>请求到<code>代理服务器</code>；</li>
@@ -282,6 +304,9 @@
 <li>步骤7~9：<code>代理服务器</code>转发200 OK回复给<code>User1</code></li>
 </ul>
 <p>显然这个流程比较简单。</p>
+<h3 id="transaction">Transaction</h3>
+<p>事务=请求（UAC）+最终响应（相邻的UAS），SIP基于事务。所谓相邻就是说transaction存在于相邻的SIP实体，而不是存在于两个UA之间。</p>
+<p>一个事务中包含一个请求消息、0个或多个临时响应消息、1个或多个最终响应消息（2xx~6xx）。事务的区分通过Via字段栈顶的Branch的值来确定。对于请求消息，每经过一个有事务状态的Proxy的时候，该Proxy需要为这个事务创建一个服务器端事务和一个客户端事务，并且将自己的URI添加到Via的栈顶，并生成一个Global ID做为Branch的值，以此值来表示一个与之相对应的事务。SIP在事务层面定义了状态机和定时器来实现重传。</p>
 <h3 id="消息体格式">消息体格式</h3>
 <p>类似HTTP，SIP消息分为三个部分：</p>
 <ul>
@@ -511,11 +536,6 @@
 </tr>
 </tbody>
 </table>
-<p>对于Dialog，From tag, To tag, Call id三者，就形成了本次会话的唯一ID，既dailog id.</p>
-<p>在SIP消息最初发出的时候，发送端(UAC)会在<code>From</code>后面生成tag，但是To后面没有。消息接收端(UAS)会在回复的时候在<code>To</code>后面加上tag。</p>
-<p><code>CSeq</code>头用于保证消息的顺序性，在同一个Dialog中标识及排序事务（transaction）以及区分新的请求与请求的重发。对于ACK而言，CSeq的序号必须与其所对应的request相同。对于CANCEL而言，CSeq的序号也必须与其cancel掉的request相同。否则，Dialog里面每个新的Request，Cseq+1。需要注意的是：在同一个对话中的UAC和UAS分别维护自己的CSeq序号，他们发出请求的CSeq序号是不相关的。</p>
-<p>一次呼叫只能建立一个会话，但是可以建立多个dialog，因为呼叫可以是多个目标（会议），只是每个dialog的Request和Response的Call-ID必须一致。</p>
-<p><code>Via</code>中的<code>branch</code>是一个事务的id，这个branch参数的值必须用<strong>z9hG4bK</strong>打头。其它部分是对“To, From, Call-ID头域和Request-URI”按一定的算法加密后得到。</p>
 <h3 id="manscdp">MANSCDP</h3>
 <p>在国标附录A里面有描述，主要是一系列对设备的查询、控制等指令，并规定了请求/应答的数据结构。</p>
 <p>MANSCDP使用xml进行通信，作为SIP <code>MESSAGE</code>类型消息的负载，Content-Type为<code>Application/MANSCDP+xml</code>。</p>
@@ -621,7 +641,7 @@ Range:npt=now-
 <h2 id="rtp协议">RTP协议</h2>
 <p>类似RTSP协议栈，国标的媒体传输通过RTP(RFC 3550)进行，并辅以RTCP控制(RFC 3550)。国标允许RTP传输基于PS封装的视音频数据或视音频基本流数据。即PS流或者H264/H265裸流。</p>
 <p>需要注意的是2016版本的流封装里面还是没有H.265相关内容的，只有MPEG-4/H.264/SVAC这三种格式支持。</p>
-<p>RTP的流媒体封装参考RTC即可，这里不再赘述。</p>
+<p>RTP的流媒体封装参考RFC即可，这里不再赘述。</p>
 <h2 id="编码标准">编码标准</h2>
 <p>国标对各类设备的编码做了统一规定，需要保证全局唯一性。一般设备的国标编码是留空的，需要使用者自己设计。</p>
 <p>SIP的URI格式是<code>sip[s]:username@domain;uri-parameters</code>，名称一般就是国标编码，注意服务器一般也是使用国标编码命名的。RFC3261中对该格式进行详细规定。</p>
@@ -822,8 +842,11 @@ Range:npt=now-
     <li><a href="#协议结构">协议结构</a></li>
     <li><a href="#sip协议">SIP协议</a>
       <ul>
-        <li><a href="#dialog-model">Dialog Model</a></li>
-        <li><a href="#pager-model">Pager Model</a></li>
+        <li><a href="#基础概念">基础概念</a></li>
+        <li><a href="#call">Call</a></li>
+        <li><a href="#对话">对话</a></li>
+        <li><a href="#对话外消息">对话外消息</a></li>
+        <li><a href="#transaction">Transaction</a></li>
         <li><a href="#消息体格式">消息体格式</a>
           <ul>
             <li><a href="#请求行">请求行</a></li>
