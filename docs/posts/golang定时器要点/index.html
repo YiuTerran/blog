@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width">
 
 
-<title>multimedia | 应许之地</title>
+<title>Golang定时器要点 | 应许之地</title>
 
 <meta name="generator" content="Hugo Eureka 0.9.0" />
 <link rel="stylesheet" href="https://yiuterran.github.io/blog/css/eureka.min.css">
@@ -58,7 +58,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
 
 <meta name="description"
-  content="始于2022年初mbp2015归天之后...">
+  content="golang内置的定时器是基于多个四叉堆封装调度的，增删定时器的效率是O(lgn)，所以大量定时器本身可能成为性能瓶颈。可以考虑使用开源的时间轮算法实">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -66,46 +66,55 @@
   "itemListElement": [{
       "@type": "ListItem",
       "position": 1 ,
-      "name":"Tags",
-      "item":"https://yiuterran.github.io/blog/tags/"},{
+      "name":"Posts",
+      "item":"https://yiuterran.github.io/blog/posts/"},{
       "@type": "ListItem",
       "position": 2 ,
-      "name":"multimedia",
-      "item":"https://yiuterran.github.io/blog/tags/multimedia/"}]
+      "name":"Golang定时器要点",
+      "item":"https://yiuterran.github.io/blog/posts/golang%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A6%81%E7%82%B9/"}]
 }
 </script>
 
 
 
-
 <script type="application/ld+json">
 {
-    "@context":"https://schema.org",
-    "@type":"ItemList",
-    "itemListElement":[{
-            "@type":"ListItem",
-            "position":  1 ,
-            "name": "Gb28181解析",
-            "description": "国标GB28181（以下简称国标或者gb）文档分析的文档我去年其实写过一版，但是由于原来的电脑炸了，文档还没来得及传上去就丢了（痛苦），所以还要重写一",
-            "url": "https://yiuterran.github.io/blog/posts/gb28181%E8%A7%A3%E6%9E%90/"
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://yiuterran.github.io/blog/posts/golang%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A6%81%E7%82%B9/"
+    },
+    "headline": "Golang定时器要点 | 应许之地","datePublished": "2022-04-07T09:35:13+08:00",
+    "dateModified": "2022-04-07T09:35:13+08:00",
+    "wordCount":  600 ,
+    "author": {
+        "@type": "Person",
+        "name": ["tryao"]
+    },
+    "publisher": {
+        "@type": "Person",
+        "name": "C. Wang",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://yiuterran.github.io/blog/images/icon.png"
         }
-    ]
+        },
+    "description": "golang内置的定时器是基于多个四叉堆封装调度的，增删定时器的效率是O(lgn)，所以大量定时器本身可能成为性能瓶颈。可以考虑使用开源的时间轮算法实"
 }
-</script><meta property="og:title" content="multimedia | 应许之地" />
-<meta property="og:type" content="website" />
+</script><meta property="og:title" content="Golang定时器要点 | 应许之地" />
+<meta property="og:type" content="article" />
 
 
 <meta property="og:image" content="https://yiuterran.github.io/blog/images/icon.png">
 
 
-<meta property="og:url" content="https://yiuterran.github.io/blog/tags/multimedia/" />
+<meta property="og:url" content="https://yiuterran.github.io/blog/posts/golang%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A6%81%E7%82%B9/" />
 
 
 
 
-
-<meta property="og:description" content="始于2022年初mbp2015归天之后..." />
-
+<meta property="og:description" content="golang内置的定时器是基于多个四叉堆封装调度的，增删定时器的效率是O(lgn)，所以大量定时器本身可能成为性能瓶颈。可以考虑使用开源的时间轮算法实" />
 
 
 
@@ -122,14 +131,23 @@
 
 
 
-<meta property="og:updated_time" content="2022-03-02T09:46:50&#43;08:00" />
+<meta property="article:published_time" content="2022-04-07T09:35:13&#43;08:00" />
+
+
+<meta property="article:modified_time" content="2022-04-07T09:35:13&#43;08:00" />
 
 
 
-<meta property="article:section" content="tags" />
+<meta property="article:section" content="posts" />
 
 
-<link rel="alternate" type="application/rss+xml" href="https://yiuterran.github.io/blog/tags/multimedia/index.xml" title="应许之地" />
+<meta property="article:tag" content="golang" />
+
+<meta property="article:tag" content="timer" />
+
+
+
+
 
 <body class="flex flex-col min-h-screen">
   <header class="fixed flex items-center w-full min-h-16 ps-scrollbar z-50 bg-secondary-bg shadow-sm">
@@ -149,7 +167,7 @@
         class="hidden block md:flex md:grow md:justify-between md:items-center w-full md:w-auto text-primary-text z-20">
         <div class="md:flex md:h-16 text-sm md:grow pb-4 md:pb-0 border-b md:border-b-0">
             <a href="https://yiuterran.github.io/blog/authors/tryao/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  border-transparent  me-4">作者</a>
-            <a href="https://yiuterran.github.io/blog/posts/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  border-transparent  me-4">文章</a>
+            <a href="https://yiuterran.github.io/blog/posts/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  selected-menu-item  me-4">文章</a>
         </div>
 
         <div class="flex">
@@ -200,59 +218,163 @@
   <main class="grow pt-16">
     <div class="ps-scrollbar">
       <div class="w-full max-w-screen-xl lg:px-4 xl:px-8 mx-auto">
-<article class="mx-6 my-8">
-    <h1 class="font-bold text-3xl text-primary-text">multimedia</h1>
-    
-</article>
-<div class="bg-secondary-bg rounded px-6">
-    <div class="overflow-hidden divide-y">
-  
-  <div class="py-6">
-    <div class="flex flex-col-reverse lg:flex-row justify-between">
-  
-  <div class="w-full ">
-    <div class="mb-4">
-  <a href="https://yiuterran.github.io/blog/posts/gb28181%E8%A7%A3%E6%9E%90/" class="font-bold text-xl hover:text-eureka">Gb28181解析</a>
-</div>
-<div class="content">
-  
-    国标GB28181（以下简称国标或者gb）文档分析的文档我去年其实写过一版，但是由于原来的电脑炸了，文档还没来得及传上去就丢了（痛苦），所以还要重写一
-  
-</div>
 
-<div class="flex flex-wrap flex-row items-center mt-2 text-tertiary-text">
+
+<div class="grid grid-cols-2 lg:grid-cols-8 gap-4 lg:pt-12">
+    <div
+        class="col-span-2 lg:col-start-2 lg:col-span-6 bg-secondary-bg rounded px-6 py-8">
+        <h1 class="font-bold text-3xl text-primary-text">Golang定时器要点</h1>
+        <div class="flex flex-wrap flex-row items-center mt-2 text-tertiary-text">
     <div class="me-6 my-2">
         <i class="fas fa-calendar me-1"></i>
-        <span>2022-03-02</span>
+        <span>2022-04-07</span>
     </div>
     <div class="me-6 my-2">
         <i class="fas fa-clock me-1"></i>
-        <span>17 min read</span>
+        <span>2 min read</span>
     </div>
     
     
-    <div class="me-6 my-2">
-        <i class="fas fa-folder me-1"></i>
+
+    
+</div>
         
-        <a href="https://yiuterran.github.io/blog/categories/work/" class="hover:text-eureka">work</a>
         
+        
+
+        <div class="content">
+            <p>golang内置的定时器是基于多个四叉堆封装调度的，增删定时器的效率是O(lgn)，所以大量定时器本身可能成为性能瓶颈。可以考虑使用开源的时间轮算法实现方案进行替换。不过一般情况下不需要考虑该问题，如果时间轮真的万能的话，官方肯定就重构了。</p>
+<p>复用定时器技巧：</p>
+<pre><code class="language-go">for {
+    t = timer.NewTimer(5 * time.Second)
+    defer t.Stop()
+    select {
+    case b := &lt;- a:
+        fmt.Print(b)
+        break
+    case &lt;-t.C:
+        fmt.Print(&quot;timeout&quot;)
+        continue
+    }
+}
+</code></pre>
+<p>这种循环场景下回创建大量定时器，对性能有较大影响，所以应该通过Reset进行复用。即：</p>
+<pre><code class="language-go">t = timer.NewTimer()
+for{
+    t.Reset(5 * time.Second)
+    //...
+}
+</code></pre>
+<p><code>timer.Reset</code>的使用很容易出现各种问题，这主要是<code>timer.Stop</code>实际上并不会关闭<code>t.C</code>这个channel，因此需要：</p>
+<pre><code class="language-go">if !t.Stop(){
+    &lt;-t.C
+}
+</code></pre>
+<p>来判断t是expired还是stop成功，如果expired，需要将<code>t.C</code>里面的信号取出来抛弃掉。</p>
+<p>令人蛋疼的是，在Reset之前是否需要做这一步完全取决于<code>t.C</code>里面是否有数据。如果确认<code>t.C</code>里面的数据已经取出，就<strong>必须不能</strong>做这一步，否则会卡在<code>&lt;-t.C</code>这里。</p>
+<p>而看似万无一失的:</p>
+<pre><code class="language-go">if !t.Stop(){
+    select{
+    case &lt;-t.C:
+    default:
+    }
+}
+</code></pre>
+<p>一样有问题。由于go的timer源码里存在竞态条件，导致<code>t.Stop</code>和<code>&lt;-t.C</code>这两部之间存在时序问题，这么干了可能会导致后面用到<code>&lt;-t.C</code>的地方立刻触发。</p>
+<p>所以官方给出的解答是：</p>
+<ul>
+<li>程序始终在同一个 goroutine 中进行 Timer 的 Stop、Reset 和 receive/drain channel 操作</li>
+<li>程序需要维护一个状态变量，用于记录它是否已经从 channel 中接收过事件，进而作为 Stop 中 draining 操作的判断依据</li>
+</ul>
+<p>一定要小心谨慎地使用。</p>
+
+        </div>
+        
+        <div class="my-4">
+    
+    <a href="https://yiuterran.github.io/blog/tags/golang/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#golang</a>
+    
+    <a href="https://yiuterran.github.io/blog/tags/timer/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#timer</a>
+    
+</div>
+        
+        
+        
+
+
+        
+        
+        <div class="py-2">
+    
+    <div class="flex flex-col md:flex-row items-center my-8">
+        <a href="https://yiuterran.github.io/blog/authors/tryao/" class="w-24 h-24 md:me-4">
+            
+            
+            <i class="fas fa-user-circle fa-6x"></i>
+            
+        </a>
+        <div class="w-full md:w-auto mt-4 md:mt-0">
+            <a href="https://yiuterran.github.io/blog/authors/tryao/" class="block font-bold text-lg pb-1 mb-2 border-b">个人介绍</a>
+            <span class="block pb-2">兴趣使然的程序员，博而不精，乐学不倦</span>
+            
+            
+            
+            
+            
+            <a href="mailto:yaotairan@gmail.com" class="me-1">
+                <i class="fas fa-envelope"></i>
+            </a>
+            
+            
+            
+            
+            
+            <a href="https://twitter.com/TerranYiu" class="me-1">
+                <i class="fab fa-twitter"></i>
+            </a>
+            
+            
+            
+            
+            
+            <a href="https://github.com/YiuTerran" class="me-1">
+                <i class="fab fa-github"></i>
+            </a>
+            
+        </div>
+    </div>
+    
+</div>
+        
+        
+        
+<div class="flex flex-col md:flex-row md:justify-between -mx-2 mt-4 px-2 pt-4 border-t">
+    <div>
+        
+    </div>
+    <div class="md:text-right mt-4 md:mt-0">
+        
+        <span class="block font-bold">Next</span>
+        <a href="https://yiuterran.github.io/blog/posts/windows&#43;wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" class="block">Windows&#43;wsl2后端开发环境搭建</a>
+        
+    </div>
+</div>
+
+        
+
+
+
     </div>
     
 
     
+    
 </div>
-
-  </div>
-
-  
-</div>
-  </div>
-  
-</div>
-
-
-</div>
-
+<script>
+    document.addEventListener('DOMContentLoaded', ()=>{
+        hljs.initHighlightingOnLoad();
+    })
+</script>
 
       </div>
     </div>

@@ -87,7 +87,7 @@
     },
     "headline": "Gb28181解析 | 应许之地","datePublished": "2022-03-02T09:46:50+08:00",
     "dateModified": "2022-03-02T09:46:50+08:00",
-    "wordCount":  7455 ,
+    "wordCount":  8508 ,
     "author": {
         "@type": "Person",
         "name": ["tryao"]
@@ -231,7 +231,7 @@
     </div>
     <div class="me-6 my-2">
         <i class="fas fa-clock me-1"></i>
-        <span>15 min read</span>
+        <span>17 min read</span>
     </div>
     
     
@@ -275,7 +275,7 @@
 <h3 id="call">Call</h3>
 <p>一次呼叫由发起方和多个接收方组成。唯一标识是<code>Call-ID</code>，Call由多个Dialog组成。</p>
 <p>Call强调的是终端用户的对话，实际请求中，Call会经过很多代理服务器。</p>
-<h3 id="对话">对话</h3>
+<h3 id="对话dialog">对话(Dialog)</h3>
 <p><img src="https://s2.loli.net/2022/03/02/uSMXi4NVkYdC1Hn.png" alt=" SIP协议Session Model"></p>
 <p>主叫方A呼叫被叫方B：</p>
 <ul>
@@ -288,25 +288,28 @@
 <li>步骤18~20：会话结束后，任何参与者（A或B）都可以发送一个BYE请求来终止会话；</li>
 <li>步骤21~23：<code>主叫方A</code>发送200 OK响应来确认BYE，会话终止。</li>
 </ul>
-<p>以上的整个流程称之为一个<code>Dialog</code>，或者<code>Session</code>，这个流程被称为<code>Session Model</code>通话模式。</p>
-<p>按着rfc3261的规定，仅当UAC发出<code>INVITE</code>请求，收到的2xx和1xx（除了100之外）的响应中<code>To</code>字段包含<code>tag</code>时，视为对话建立。</p>
-<p>Call-ID, From tag和To tag，共同构成本次会话的唯一ID，即dailog id.</p>
-<p>对话外的SIP消息最初发出的时候，发送端(UAC)会在<code>From</code>后面生成tag，但是To后面没有。消息接收端(UAS)会在回复的时候在<code>To</code>后面加上tag。有了这两个tag，才能保证一次呼叫只能建立一个会话(call)，但是可以建立多个dialog。实际使用中，呼叫可以是针对多个目标（会议），只是每个dialog的Request和Response的Call-ID必须一致。</p>
-<p><code>CSeq</code>头用于保证消息的顺序性，在同一个Dialog中标识及排序事务（transaction）以及区分新的请求与请求的重发。对于ACK而言，CSeq的序号必须与其所对应的request相同。对于CANCEL而言，CSeq的序号也必须与其cancel掉的request相同。其他情况下，Dialog里面每个新的Request，Cseq+1。需要注意的是：在同一个对话中的UAC和UAS分别维护自己的CSeq序号，他们发出请求的CSeq序号是不相关的。</p>
-<p><code>Via</code>中的<code>branch</code>是一个事务的id，这个branch参数的值必须用<strong>z9hG4bK</strong>打头。其它部分是对“To, From, Call-ID头域和Request-URI”按一定的算法加密后得到。</p>
+<p>以上的整个流程称之为一个<code>Dialog</code>，其中流媒体传输的部分（媒体通道）称为<code>Session</code>。RFC3261里面仅定义了<code>invite</code>可以建立对话，在RFC 3265/6665里面额外添加了<code>Subscribe</code>方法创建对话的机制。</p>
+<p>对话其实比较容易理解，Message请求是单次请求-应答机制（类似HTTP），无法定义持续性行为。订阅就是典型的持续性行为：在取消订阅之前被订阅端需要持续NOTIFY新的事件，这就需要一个机制来定义这次订阅和相关的响应之间的关联关系，这就是对话。</p>
+<p>按着rfc3261的规定，当UAC发出<code>INVITE</code>请求，收到的2xx和1xx（除了100之外）的响应中<code>To</code>字段包含<code>tag</code>时，视为对话建立。<code>Call-ID</code>, <code>From tag</code>和<code>To tag</code>，共同构成本次会话的唯一ID，即<code>Dialog-ID</code>. 一次呼叫中可能存在多个对话，因此对话中的消息，如<code>BYE</code>, <code>ACK</code>显然需要明确的<code>Dialog-ID</code>才能明确操作的对象。</p>
+<p><strong>对话外</strong>的SIP消息最初发出的时候，发送端(UAC)会在<code>From</code>后面生成tag，但是To后面没有，消息接收端(UAS)会在回复的时候在<code>To</code>后面加上tag。对话中的所有消息同时携带<code>Dialog-ID</code>的所有组成元素，同一个对话内的消息这些元素必须保持不变。</p>
+<p>举例来说，对应于国标场景，前端通过HTTP请求一次打开多个IPC的某个时间段的历史流，UAC发送这些请求时可以共用同一个<code>call-ID</code>，但是每个请求的<code>from-tag</code>不一致，各相机返回的<code>to-tag</code>肯定也不一致，这就建立了多个<code>Dialog</code>。你可以在不结束这次请求的情况下，单独关掉或者暂停某个摄像头的流，而不影响其他摄像头继续播放。一个简单的设计是<code>call-id</code>使用请求的<code>ReqId</code>（前端请求时生成这个uuid），<code>from tag</code>使用设备id，设备端生成<code>to-tag</code>. 而流本身的标记可以用<code>DialogID</code>或其hash值。由于浏览器可以直接关掉，所以服务端需要设计流保活机制，当心跳停止后自动关闭Dialog.</p>
+<p>对话中的<code>CSeq</code>头用于保证消息的顺序性，在同一个Dialog中标识及排序事务（transaction）以及区分新的请求与请求的重发。对于ACK而言，CSeq的序号必须与其所对应的request相同。对于CANCEL而言，CSeq的序号也必须与其cancel掉的request相同。其他情况下，Dialog里面每个新的Request，Cseq+1。需要注意的是：在同一个对话中的UAC和UAS分别维护自己的CSeq序号，他们发出请求的CSeq序号是不相关的。</p>
 <h3 id="对话外消息">对话外消息</h3>
-<p>另外一种通信模式被称为<code>Pager Model</code>，适用于小流量通信。<strong>RFC3428</strong>扩展了SIP协议，增加了<code>MESSAGE</code>方法，类似UDP的设计思路，直接构造一条消息发过去即可（格式一般是SDP或者CPIM）。这是一种对话外通信。</p>
-<p><img src="https://s2.loli.net/2022/03/02/meZKJFOcr7MYw4T.png" alt="Pager Model"></p>
+<p>除了<code>Invite/Subscribe</code>消息建立的对话外，其他消息都是对话外消息。比如<code>Message</code>, <code>Register</code>, <code>Options</code>等。这种消息类似HTTP的单次请求应答机制：</p>
 <ul>
 <li>步骤1：<code>User1</code>发送<code>MESSAGE</code>请求到<code>代理服务器</code>；</li>
 <li>步骤2：<code>代理服务器</code>转发<code>User1</code>的MESSAGE请求给<code>USER2</code>；</li>
 <li>步骤3：<code>User2</code>收到<code>User1</code>的消息后，回复200 OK给<code>代理服务器</code>；</li>
 <li>步骤7~9：<code>代理服务器</code>转发200 OK回复给<code>User1</code></li>
 </ul>
-<p>显然这个流程比较简单。</p>
+<p>显然这个流程比较简单。对话外消息的<code>Call-ID</code>和<code>From-Tag</code>一般是随机生成的，且即用即抛。</p>
+<p>对话外消息的<code>CSeq</code>值可以随意使用，一般多次发送同一个请求会递增<code>CSeq</code>。响应的大部分header必须和请求一致(From/Call-ID/CSeq/Via/To)，如果请求的<code>To</code>没有tag，响应需要生成tag，并保证多次响应的tag一致（参考RFC3261 8.2.6节）。这个设计主要是为了请求可能有多次响应的场景，以及后续需要建立对话的需求，但是标准并没有明确的说明如何生成这个To-Tag.</p>
+<p>简单总结一下就是UAS如果发现To不带Tag，就要生成一个Tag，并且对于同样的call-id+from-tag，应该始终使用相同的to-tag。不过对于一次性的请求，这个To tag可以即用即抛。考虑视频/语音会议的场景，当一个人呼叫你的微信时，PC端微信和手机端微信都会收到呼叫，此时两者收到的INVITE拥有同样的call-ID和同样的From-Tag，但是PC端和手机端可以生成不同的<code>To-Tag</code>，这样就建立了多个对话（当然，实际上微信会直接挂掉另外一个终端）。</p>
 <h3 id="transaction">Transaction</h3>
 <p>事务=请求（UAC）+最终响应（相邻的UAS），SIP基于事务。所谓相邻就是说transaction存在于相邻的SIP实体，而不是存在于两个UA之间。</p>
-<p>一个事务中包含一个请求消息、0个或多个临时响应消息、1个或多个最终响应消息（2xx~6xx）。事务的区分通过Via字段栈顶的Branch的值来确定。对于请求消息，每经过一个有事务状态的Proxy的时候，该Proxy需要为这个事务创建一个服务器端事务和一个客户端事务，并且将自己的URI添加到Via的栈顶，并生成一个Global ID做为Branch的值，以此值来表示一个与之相对应的事务。SIP在事务层面定义了状态机和定时器来实现重传。</p>
+<p>一个事务中包含一个请求消息、0个或多个临时响应消息、1个或多个最终响应消息（2xx~6xx）。事务的区分通过Via字段栈顶的Branch的值来确定。对于请求消息，每经过一个有事务状态的Proxy的时候，该Proxy需要为这个事务创建一个服务器端事务和一个客户端事务，并且将自己的URI添加到Via的栈顶，并生成一个Global ID做为Branch的值，以此值来表示一个与之相对应的事务。<strong>SIP在事务层面定义了状态机和定时器来实现重传</strong>。</p>
+<p>事务中的请求是 INVITE（称为 INVITE 事务）时，只有最终响应不是 2xx 响应时这个事务才包括 ACK。如果最终响应是 2xx，那么不应将 ACK 视为事务的一部分。这是因为200的ACK是比较重要的响应，由UAS负责重传，所以可以视为一个单独的事务。</p>
+<p>从事务的定义可以看出，事务发生于一个请求和一组应答之间。所以事务是SIP核心层处理的，一般在业务层无须关心，当然如果手动生成响应的话，记得把request的branch copy过来。</p>
 <h3 id="消息体格式">消息体格式</h3>
 <p>类似HTTP，SIP消息分为三个部分：</p>
 <ul>
@@ -844,7 +847,7 @@ Range:npt=now-
       <ul>
         <li><a href="#基础概念">基础概念</a></li>
         <li><a href="#call">Call</a></li>
-        <li><a href="#对话">对话</a></li>
+        <li><a href="#对话dialog">对话(Dialog)</a></li>
         <li><a href="#对话外消息">对话外消息</a></li>
         <li><a href="#transaction">Transaction</a></li>
         <li><a href="#消息体格式">消息体格式</a>
