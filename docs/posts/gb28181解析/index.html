@@ -87,7 +87,7 @@
     },
     "headline": "Gb28181解析 | 应许之地","datePublished": "2022-03-02T09:46:50+08:00",
     "dateModified": "2022-03-02T09:46:50+08:00",
-    "wordCount":  8508 ,
+    "wordCount":  8580 ,
     "author": {
         "@type": "Person",
         "name": ["tryao"]
@@ -231,7 +231,7 @@
     </div>
     <div class="me-6 my-2">
         <i class="fas fa-clock me-1"></i>
-        <span>17 min read</span>
+        <span>18 min read</span>
     </div>
     
     
@@ -288,7 +288,7 @@
 <li>步骤18~20：会话结束后，任何参与者（A或B）都可以发送一个BYE请求来终止会话；</li>
 <li>步骤21~23：<code>主叫方A</code>发送200 OK响应来确认BYE，会话终止。</li>
 </ul>
-<p>以上的整个流程称之为一个<code>Dialog</code>，其中流媒体传输的部分（媒体通道）称为<code>Session</code>。RFC3261里面仅定义了<code>invite</code>可以建立对话，在RFC 3265/6665里面额外添加了<code>Subscribe</code>方法创建对话的机制。</p>
+<p>以上的整个流程称之为一个<code>Dialog</code>，其中流媒体传输的部分（媒体通道）称为<code>Session</code>。RFC3261里面仅定义了<code>invite</code>可以建立对话，在RFC 3265/6665里面额外添加了<code>Subscribe</code>方法创建对话的机制。<code>Info</code>消息可以对对话进行设置，<code>Bye</code>消息可以结束对话，这些都是对话内消息。ACK属于非对话内非会话消息，直接发出即可，也没有Response。</p>
 <p>对话其实比较容易理解，Message请求是单次请求-应答机制（类似HTTP），无法定义持续性行为。订阅就是典型的持续性行为：在取消订阅之前被订阅端需要持续NOTIFY新的事件，这就需要一个机制来定义这次订阅和相关的响应之间的关联关系，这就是对话。</p>
 <p>按着rfc3261的规定，当UAC发出<code>INVITE</code>请求，收到的2xx和1xx（除了100之外）的响应中<code>To</code>字段包含<code>tag</code>时，视为对话建立。<code>Call-ID</code>, <code>From tag</code>和<code>To tag</code>，共同构成本次会话的唯一ID，即<code>Dialog-ID</code>. 一次呼叫中可能存在多个对话，因此对话中的消息，如<code>BYE</code>, <code>ACK</code>显然需要明确的<code>Dialog-ID</code>才能明确操作的对象。</p>
 <p><strong>对话外</strong>的SIP消息最初发出的时候，发送端(UAC)会在<code>From</code>后面生成tag，但是To后面没有，消息接收端(UAS)会在回复的时候在<code>To</code>后面加上tag。对话中的所有消息同时携带<code>Dialog-ID</code>的所有组成元素，同一个对话内的消息这些元素必须保持不变。</p>
