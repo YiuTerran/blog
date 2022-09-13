@@ -76,9 +76,32 @@ tag和field的key是字符串，value默认为float，其他的的格式约定�
 
 如果measurement、tag_set和timestamp都相同，则视为同一个点位。此时field_set会尝试合并，如果新的key与旧的重复，则使用新的覆盖旧的。
 
+### series
+
+即同一个measurement+tag_set
+
 ## 数据结构
 
 `shard`是`influxdb`存储引擎`TSM`的具体实现。`TSM TREE`是专门为`influxdb`构建的数据存储格式。与现有的`B+ tree`或`LSM tree`实现相比，`TSM tree`具有更好的压缩和更高的读写吞吐量。
 
 `shard group`是存储`shard`的逻辑容器，每一个`shard group`都有一个不重叠的时间跨度，可根据保留策略`retention policy`的`duration`换算而得。数据根据不同的时间跨度存储在不同的`shard group`中。
 
+## 查询语言(InfluxQL)
+
+influxdb 2.0引入了`Flux`，采用类似JavaScript的查询语法。1.0中主要还是用SQL来查询，这里主要还是介绍SQL的用法。
+
+大部分查询语法和MySQL保持一致，有一些特殊的记录如下：
+
+* time默认是UTC时间，需要自行转换成需要的时区；
+
+* 默认按time升序排列；
+
+* 默认time为ns精度，可以写入时自行指认精度；
+
+* 不支持用`OR`+绝对时间查询；
+
+* 支持`SLIMIT`和`LIMIT`两种限制语句，对应`SOFFSET`和`OFFSET`，前者表示对`Series`的限制；
+
+* `GROUP BY`可以接`time(1m)`，后者的参数可以是各种时间尺度，并且可以用`fill()`填充缺口；
+
+  
