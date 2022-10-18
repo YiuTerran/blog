@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang='zh' dir='ltr' ><meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+<title>ES Stack可观测性落地 | 应许之地</title>
+
+<meta name="generator" content="Hugo Eureka 0.9.0" />
+<link rel="stylesheet" href="https://yiuterran.github.io/blog/css/eureka.min.css">
+<script defer src="https://yiuterran.github.io/blog/js/eureka.min.js"></script>
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload"
+  href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Noto+Serif+SC:wght@400;600;700&display=swap"
+  as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/styles/solarized-light.min.css"
+   media="print"
+  onload="this.media='all';this.onload=null" crossorigin>
+<script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/highlight.min.js"
+   crossorigin></script>
+
+  <script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/languages/dart.min.js"
+     crossorigin></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/js/all.min.js"
+   integrity="sha256-uNYoXefWRqv&#43;PsIF/OflNmwtKM4lStn9yrz2gVl6ymo="  crossorigin></script>
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+   integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3&#43;Aro6EYUG4&#43;cU&#43;KJWu/X"  media="print"
+  onload="this.media='all';this.onload=null" crossorigin>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js" 
+  integrity="sha384-g7c&#43;Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI&#43;sEnkvrMWph2EDg4"  crossorigin></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
+   integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC&#43;Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa"  crossorigin></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: "$$", right: "$$", display: true },
+        { left: "$", right: "$", display: false },
+        { left: "\\(", right: "\\)", display: false },
+        { left: "\\[", right: "\\]", display: true }
+      ],
+    });
+  });
+</script>
+
+
+<script defer src="https://cdn.jsdelivr.net/npm/mermaid@8.9.2/dist/mermaid.min.js" 
+  integrity="sha256-Zmpaaj&#43;GXFsPF5WdPArSrnW3b30dovldeKsW00xBVwE="  crossorigin></script>
+
+
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
+
+<meta name="description"
+  content="随着ES v8.4的发布，es对于可观测性三支柱（Metric/Trace/Log）都具有较为完备的支持，Alert功能也能满足一般需求，kibana的">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+      "@type": "ListItem",
+      "position": 1 ,
+      "name":"Posts",
+      "item":"https://yiuterran.github.io/blog/posts/"},{
+      "@type": "ListItem",
+      "position": 2 ,
+      "name":"ES Stack可观测性落地",
+      "item":"https://yiuterran.github.io/blog/posts/es-stack%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E8%90%BD%E5%9C%B0/"}]
+}
+</script>
+
+
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://yiuterran.github.io/blog/posts/es-stack%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E8%90%BD%E5%9C%B0/"
+    },
+    "headline": "ES Stack可观测性落地 | 应许之地","datePublished": "2022-10-12T17:52:42+08:00",
+    "dateModified": "2022-10-12T17:52:42+08:00",
+    "wordCount":  3858 ,
+    "publisher": {
+        "@type": "Person",
+        "name": "C. Wang",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://yiuterran.github.io/blog/images/icon.png"
+        }
+        },
+    "description": "随着ES v8.4的发布，es对于可观测性三支柱（Metric\/Trace\/Log）都具有较为完备的支持，Alert功能也能满足一般需求，kibana的"
+}
+</script><meta property="og:title" content="ES Stack可观测性落地 | 应许之地" />
+<meta property="og:type" content="article" />
+
+
+<meta property="og:image" content="https://yiuterran.github.io/blog/images/icon.png">
+
+
+<meta property="og:url" content="https://yiuterran.github.io/blog/posts/es-stack%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E8%90%BD%E5%9C%B0/" />
+
+
+
+
+<meta property="og:description" content="随着ES v8.4的发布，es对于可观测性三支柱（Metric/Trace/Log）都具有较为完备的支持，Alert功能也能满足一般需求，kibana的" />
+
+
+
+
+<meta property="og:locale" content="zh" />
+
+
+
+
+<meta property="og:site_name" content="应许之地" />
+
+
+
+
+
+
+<meta property="article:published_time" content="2022-10-12T17:52:42&#43;08:00" />
+
+
+<meta property="article:modified_time" content="2022-10-12T17:52:42&#43;08:00" />
+
+
+
+<meta property="article:section" content="posts" />
+
+
+
+
+<body class="flex flex-col min-h-screen">
+  <header class="fixed flex items-center w-full min-h-16 ps-scrollbar z-50 bg-secondary-bg shadow-sm">
+    <div class="w-full max-w-screen-xl mx-auto"><script>
+    let storageColorScheme = localStorage.getItem("lightDarkMode")
+    if (((storageColorScheme == 'Auto' || storageColorScheme == null) && window.matchMedia("(prefers-color-scheme: dark)").matches) || storageColorScheme == "Dark") {
+        document.getElementsByTagName('html')[0].classList.add('dark')
+    }
+</script>
+<nav class="flex items-center justify-between flex-wrap px-4 py-4 md:py-0">
+    <a href="https://yiuterran.github.io/blog/" class="me-6 text-primary-text text-xl font-bold">应许之地</a>
+    <button id="navbar-btn" class="md:hidden flex items-center px-3 py-2" aria-label="Open Navbar">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div id="target"
+        class="hidden block md:flex md:grow md:justify-between md:items-center w-full md:w-auto text-primary-text z-20">
+        <div class="md:flex md:h-16 text-sm md:grow pb-4 md:pb-0 border-b md:border-b-0">
+            <a href="https://yiuterran.github.io/blog/authors/tryao/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  border-transparent  me-4">作者</a>
+            <a href="https://yiuterran.github.io/blog/posts/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  selected-menu-item  me-4">文章</a>
+        </div>
+
+        <div class="flex">
+            <div class="relative pt-4 md:pt-0">
+                <div class="cursor-pointer hover:text-eureka" id="lightDarkMode">
+                    <i class="fas fa-adjust"></i>
+                </div>
+                <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-30" id="is-open">
+                </div>
+                <div class="absolute flex flex-col start-0 md:start-auto end-auto md:end-0 hidden bg-secondary-bg w-48 rounded py-2 border border-tertiary-bg cursor-pointer z-40"
+                    id='lightDarkOptions'>
+                    <span class="px-4 py-1 hover:text-eureka" name="Light">Light</span>
+                    <span class="px-4 py-1 hover:text-eureka" name="Dark">Dark</span>
+                    <span class="px-4 py-1 hover:text-eureka" name="Auto">Auto</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-0" id="is-open-mobile">
+    </div>
+
+</nav>
+<script>
+    
+    let element = document.getElementById('lightDarkMode')
+    if (storageColorScheme == null || storageColorScheme == 'Auto') {
+        document.addEventListener('DOMContentLoaded', () => {
+            window.matchMedia("(prefers-color-scheme: dark)").addEventListener('change', switchDarkMode)
+        })
+    } else if (storageColorScheme == "Light") {
+        element.firstElementChild.classList.remove('fa-adjust')
+        element.firstElementChild.setAttribute("data-icon", 'sun')
+        element.firstElementChild.classList.add('fa-sun')
+    } else if (storageColorScheme == "Dark") {
+        element.firstElementChild.classList.remove('fa-adjust')
+        element.firstElementChild.setAttribute("data-icon", 'moon')
+        element.firstElementChild.classList.add('fa-moon')
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        getcolorscheme();
+        switchBurger();
+    });
+</script>
+</div>
+  </header>
+  <main class="grow pt-16">
+    <div class="ps-scrollbar">
+      <div class="w-full max-w-screen-xl lg:px-4 xl:px-8 mx-auto">
+
+
+<div class="grid grid-cols-2 lg:grid-cols-8 gap-4 lg:pt-12">
+    <div
+        class="col-span-2  lg:col-span-6 bg-secondary-bg rounded px-6 py-8">
+        <h1 class="font-bold text-3xl text-primary-text">ES Stack可观测性落地</h1>
+        <div class="flex flex-wrap flex-row items-center mt-2 text-tertiary-text">
+    <div class="me-6 my-2">
+        <i class="fas fa-calendar me-1"></i>
+        <span>2022-10-12</span>
+    </div>
+    <div class="me-6 my-2">
+        <i class="fas fa-clock me-1"></i>
+        <span>8 min read</span>
+    </div>
+    
+    
+
+    
+</div>
+        
+        
+        
+
+        <div class="content">
+            <p>随着ES v8.4的发布，es对于可观测性三支柱（Metric/Trace/Log）都具有较为完备的支持，Alert功能也能满足一般需求，kibana的看板功能经过这么多年的迭代，可用性也比较好了。最重要的是，<strong>兼容OpenTelemetry的标准</strong>也保证如果用的不爽也可以用其他开源组件替换，所以项目组目前搭建监控平台，经过评估还是决定优先用这一套。</p>
+<h2 id="elasticsearch部分">ElasticSearch部分</h2>
+<h3 id="安装es">安装ES</h3>
+<p>目前公司用的还是CentOS，所以用RPM安装就行，官方指南<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/install-elasticsearch.html">地址</a>.</p>
+<p>另外ES已经支持k8s安装，有需要的话建议<a href="https://www.elastic.co/guide/en/cloud-on-k8s/current/index.html">使用</a>.</p>
+<pre><code class="language-sh">rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch
+
+cat&gt;/etc/yum.repos.d/elasticsearch.repo&lt;&lt;EOF
+[elasticsearch]
+name=Elasticsearch repository for 8.x packages
+baseurl=https://artifacts.elastic.co/packages/8.x/yum
+gpgcheck=1
+gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
+enabled=0
+autorefresh=1
+type=rpm-md
+EOF
+
+sudo yum install -y --enablerepo=elasticsearch elasticsearch 
+</code></pre>
+<p>es应该是有中国的CDN，所以下载很快。在安装过程中会自动生成超管密码：</p>
+<blockquote>
+<p>The generated password for the elastic built-in superuser is : <xxxx></p>
+</blockquote>
+<p>默认安装的es是单机模式，如果想要加入已有的集群，则在该集群任意节点生成token：</p>
+<pre><code class="language-bash">/usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token -s node
+</code></pre>
+<p>然后在这个新安装的节点上配置生成的token:</p>
+<pre><code class="language-bash">/usr/share/elasticsearch/bin/elasticsearch-reconfigure-node --enrollment-token &lt;enrollment-token&gt;
+</code></pre>
+<p>接着就可以启动服务了：</p>
+<pre><code class="language-bash">sudo systemctl daemon-reload
+sudo systemctl enable elasticsearch.service
+sudo systemctl start elasticsearch.service
+</code></pre>
+<p>可以用以下命令确认es运行状态：</p>
+<pre><code class="language-bash">curl --cacert /etc/elasticsearch/certs/http_ca.crt -u elastic https://localhost:9200 
+</code></pre>
+<p>这里就输入刚才自动生成的密码即可。</p>
+<p>如果是从旧版ES进行升级，ES只保证一个大版本的兼容性，所以从6.x只能先升级到7.x，然后再升级到8.x。甚至7.17之前的版本还要先升级到7.17才行。每个结点独立升级一般不影响服务可用性。特别注意的是大版本升级可能会影响Rest API的兼容性，所以一定要非常谨慎。</p>
+<h3 id="配置es">配置ES</h3>
+<p>所有配置集中在<code>/etc/elasticsearch</code>下面，该文件夹以及所有子文件的权限默认都是<code>root:elasticsearch</code>。JVM相关的配置在<code>/etc/sysconfig/elasticsearch</code>下，其他的配置则集中在<code>/etc/elasticsearch/elasticsearch.yml</code>中。二进制文件在<code>/usr/share/elasticsearch/bin</code>下，可以考虑加到PATH里。</p>
+<p>使用systemd启动的服务，则需要配置systemd的资源限制，打开<code>/usr/lib/systemd/system/elasticsearch.service</code>可以看到默认的资源限制。如果不满足需求，可以通过<code>sudo systemctl edit elasticsearch</code>来生成覆盖配置，完事之后通过<code>sudo systemctl daemon-reload</code>重新加载配置即可生效。</p>
+<p>es在安装时会自动生成CA证书，在<code>/etc/elasticsearch/certs</code>下，客户端所在的机器需要copy证书并信任，才能正常进行HTTPS通信。当然可以通过修改配置文件关掉集群间SSL通信，将<code>xpack.security.transport.ssl.enabled</code>改成false即可。</p>
+<p>密码可以使用<code>bin/elasticsearch-keystore</code>工具从加密文件中重新获取。</p>
+<p>ES可以通过<code>PUT /_cluster/settings</code>的API直接修改整个集群的配置，不必一台一台去改配置文件。只有一小部分需要通过手动修改配置文件指定（如集群的名字等）。es的配置项非常多，不过大部分保持默认即可，需要注意的主要是<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/important-settings.html">这里</a>.</p>
+<p>尤其注意，一旦打开集群模式，即将<code>network.host</code>配置打开，es启动时就会进行严格自检，如果有不满足的配置，则无法正常启动。需要注意的点包括：</p>
+<ul>
+<li>修改文件描述符限制；</li>
+<li>关闭swap；</li>
+<li>在<code>sysctl.conf</code>里面设置<code>vm.max_map_count=262144</code>；</li>
+<li>调整最大线程数限制；</li>
+<li>根据需求调整jvm dns设置，以及tcp重传超时设置；</li>
+<li>确认/tmp文件夹允许执行二进制文件；</li>
+</ul>
+<p>在配置完成之后，需要删除掉配置文件中的<code>cluster.initial_master_nodes</code>再重新启动。</p>
+<p>另外，如果是单机启动，可以加上<code>discovery.type: single-node</code>。</p>
+<p>可以通过设置</p>
+<pre><code class="language-yaml">xpack.security.http.ssl.enabled: false
+xpack.security.transport.ssl.enabled: false
+</code></pre>
+<p>关闭ssl加密通信，<strong>但是最好别这么做</strong>，因为下面的Fleet会强制使用SSL。</p>
+<p>重启之后使用curl命令重新测试一下，保证配置文件没改错。</p>
+<h3 id="集群管理">集群管理</h3>
+<p>这部分比较复杂，暂时先不管，后续追加笔记。默认情况下es安装后是开发模式，可以用来单节点做大部分测试了。</p>
+<p>特别需要注意的是：<strong>所有节点统一使用一套ssl证书，不要每个节点生成一个！</strong>，把第一个节点的<code>/etc/elasticsearch/certs</code>copy到其他结点，然后重启es即可。</p>
+<h2 id="kibana部分">Kibana部分</h2>
+<h3 id="安装kibana">安装kibana</h3>
+<p>kibana版本要和es一致，方法也差不多，这里还是用rpm安装：</p>
+<pre><code class="language-bash">yum install --enablerepo=elasticsearch kibana
+</code></pre>
+<p>repo的地址和es是一致的，我们这里在同一台设备上安装，所以直接安装就行。</p>
+<p>这里可以为kibana生成token，也可以生成用户名密码。推荐使用token。</p>
+<p>token生成：</p>
+<pre><code class="language-bash">/usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token -s kibana
+# 复制生成的token并
+/usr/share/kibana/bin/kibana-setup --enrollment-token &lt;token&gt;
+</code></pre>
+<p>设置<code>kibana_system</code>的密码：</p>
+<pre><code class="language-bash">bin/elasticsearch-reset-password interactive -u kibana_system
+</code></pre>
+<p>这里会生成一个随机密码。</p>
+<h3 id="配置kibana">配置kibana</h3>
+<p>配置文件在/etc/kibana下，需要配置的一般包括：</p>
+<pre><code class="language-yaml">server.port: 5601
+server.host: &quot;0.0.0.0&quot;
+server.name: &quot;your-system-name&quot;
+elasticsearch.hosts: []
+# 用户名和密码或者token设置一个就可以，推荐使用密码
+elasticsearch.username: &quot;kibana_system&quot;
+# 刚才生成的密码
+elasticsearch.password: &quot;xxxx&quot;
+# 刚才复制的token
+# elasticsearch.serviceAccountToken: &quot;&quot;
+i18n.locale: &quot;zh-CN&quot;
+# 外网访问地址，如果是有域名则配置域名，或者一般配置反代的地址
+server.publicBaseUrl: &quot;http://&lt;out-ip&gt;:5601&quot;
+</code></pre>
+<p>改好之后通过<code>systemctl start kibana</code>启动服务，通过<code>journalctl -u kibana</code>查看日志，如果看到<code>Kibana is now available</code>，那就是启动完成了。也可以通过netstat查看端口5601是否启动。</p>
+<p>通过浏览器访问该地址的5601端口，即可打开登录页。使用内置elastic账户+超管密码登陆即可进行后续操作。</p>
+<h2 id="安装fleet-server">安装Fleet Server</h2>
+<p>Fleet Server是接受Elastic Agent或者各种Beat发送过来的数据并存储到ES的服务。比较蛋疼的是，FleetServer是集成在ElasticAgent这个二进制文件里面的，所以agent体积巨大。</p>
+<p><img src="https://www.elastic.co/guide/en/fleet/8.4/images/fleet-server-on-prem-deployment.png" alt="Fleet Server on-premises deployment model"></p>
+<p>MetricBeat等beat工具则比较轻量一些，可以直接传输数据到ES，不过此类工具就无法通过kibana直接进行配置升级等管理了。</p>
+<p>这里还是先使用Agent+Fleet的方式安装：</p>
+<ol>
+<li>
+<p>先在kibana的<code>Management-Fleet-设置</code>里，设置安装fleet的主机。由于是无状态服务，所以可以有一个或者多个地址。我们这里都装一起，所以Fleet地址就是es这台机器的内网地址。注意这里<strong>只能用HTTPS</strong>；</p>
+</li>
+<li>
+<p>切到代理策略的tab中，创建一个代理策略，填好名称并同样收集这台设备本身的收集；</p>
+</li>
+<li>
+<p>创建之后，点“添加集成”，进去搜<code>FleetServer</code>，配置服务的Host和Port，可以配置一个最大流量。</p>
+</li>
+<li>
+<p>登陆ES所在的机器，通过</p>
+</li>
+</ol>
+<p><code>/usr/share/elasticsearch/bin/elasticsearch-keystore show xpack.security.http.ssl.keystore.secure_password</code></p>
+<p>可以看到<code>http.p12</code>的密码。</p>
+<ol start="5">
+<li>然后切到<code>/etc/elasticsearch/certs</code>下面，输入：</li>
+</ol>
+<p><code>openssl pkcs12 -in http.p12 -out http_cert.crt -clcerts -nokeys</code>，根据提示输入上面获得的密码，生成crt文件；</p>
+<ol start="6">
+<li><code>openssl pkcs12 -in http.p12 -out http.key -nocerts -nodes</code>，重复输入密码，生成key文件；</li>
+<li>这样我们就凑够了安装Fleet要的所有资料。切到代理的tab页，点击advanced，选择第2步创建的策略，部署模式选择生产，主机选择在第1步中创建的那个。然后选择主机平台，将对应的cli语句copy下来，并修改<code>&lt;&gt;</code>里的内容，最后的形式大概如下：</li>
+</ol>
+<pre><code class="language-bash">sudo ./elastic-agent install --url=https://10.20.121.2:8220 \
+  --fleet-server-es=https://10.20.121.2:9200 \
+  --fleet-server-service-token=AAEAAWVsYXN0aWMvZmxlZXQtc2VydmVyL3Rva2VuLTE2NjU3MzA1NzExMDg6Zmh6RzIyUTFTMnlHMGxwY2gtUkdvdw \
+  --fleet-server-policy=4e3a7e30-4b70-11ed-bea5-2fb24f0ee1fa \
+  --certificate-authorities=/etc/elasticsearch/certs/http_ca.crt \
+  --fleet-server-es-ca=/etc/elasticsearch/certs/http_ca.crt \
+  --fleet-server-cert=/etc/elasticsearch/certs/http_cert.crt \
+  --fleet-server-cert-key=/etc/elasticsearch/certs/http.key
+</code></pre>
+<p>这里的es和fleet用了同一个ca文件，官方建议是为每个fleet-server生成不同的ca以及key/cert，这太麻烦了，所以我们这里共用了同一套。</p>
+<p>如果害怕泄露，可以自行生成一套，生成方法是：</p>
+<pre><code class="language-bash">/usr/share/elasticsearch/bin/elasticsearch-certutil cert \
+  --name fleet-server \
+  --ca-cert /path/to/ca/ca.crt \
+  --ca-key /path/to/ca/ca.key \
+  --dns your.host.name.here \
+  --ip 192.0.2.1 \
+  --pem
+</code></pre>
+<p>把dns和ip换成fleet server所在的机器名和ip就行。</p>
+<h2 id="安装elastic-agent">安装Elastic Agent</h2>
+<p>由于FleetServer和ElasticAgent实际上是同一个二进制文件，所在FleetServer所在的机器就没必要再装agent了。这里另外找一台主机来安装agent.</p>
+<p>非k8s环境：</p>
+<ol>
+<li>登陆要安装agent的机器，先配置ca证书（适用于centos）：</li>
+</ol>
+<pre><code class="language-bash">yum install ca-certificates
+update-ca-trust enable
+# 把es生成的ca证书copy到agent所在的设备
+mv http_ca.crt /etc/pki/ca-trust/source/anchors/
+update-ca-trust extract
+</code></pre>
+<ol start="2">
+<li>切到代理策略页面，点击添加代理，选择在Fleet中注册，然后copy下面生成的命令行代码，到要监控的机器上执行；</li>
+<li>一切正常的话，主机就会显示在代理页面上；</li>
+</ol>
+<h2 id="安装metricbeat">安装Metricbeat</h2>
+<p>令人比较蛋疼的是，agent虽然好用，但是很多功能都还没集成进去。比如监控ElasticSearch自身，这个功能目前还只有MetricBeat支持，所以在ES这台机器上还要安装一个MetricBeat。</p>
+<p>MetricBeat就是完全单独安装了，通过rpm下载或者直接yum安装，然后打开<code>/etc/metricbeat/</code>下的配置文件修改如下配置：</p>
+<pre><code class="language-yaml">output.elasticsearch:
+  # Array of hosts to connect to.
+  hosts: [&quot;https://localhost:9200&quot;]
+
+  # Protocol - either `http` (default) or `https`.
+  protocol: &quot;https&quot;
+
+  # Authentication credentials - either API key or username/password.
+  #api_key: &quot;id:api_key&quot;
+  username: &quot;elastic&quot;
+  password: &quot;${ES_PWD}&quot;
+  ssl:
+    enabled: true
+    ca_trusted_fingerprint: &quot;${ES_PRINT}&quot;
+</code></pre>
+<p>es的密码最好不要明文写在配置文件里，通过</p>
+<pre><code class="language-bash">metricbeat keystore create
+metricbeat keystore add ES_PWD
+</code></pre>
+<p>将敏感信息保存在钥匙链里。其中ES_PRINT就是es那个ca证书的指纹，可以通过openssl重新获取。</p>
+<p>然后到kibana的堆栈管理（这里翻译有点问题…），安全-用户里面给MetricBeat创建一个用户，角色选<code>remote_monitoring_agent</code>。</p>
+<p>然后激活metricbeat的es采集功能：</p>
+<pre><code class="language-bash">metricbeat modules enable elasticsearch-xpack
+</code></pre>
+<p>配置`modules.d/</p>
+<h2 id="安装elastic-apm">安装Elastic APM</h2>
+<p>这里的APM其实指的是Trace系统，通过Fleet直接装就可以。</p>
+<p>由于应用还未做好准备，这里先不搞，后续再增补相关步骤。</p>
+<h2 id="prometheus-metric采集">Prometheus Metric采集</h2>
+<h2 id="日志采集">日志采集</h2>
+<h2 id="数据生命周期管理">数据生命周期管理</h2>
+<h2 id="告警配置">告警配置</h2>
+
+        </div>
+        
+        
+        
+
+
+        
+        
+        
+        
+<div class="flex flex-col md:flex-row md:justify-between -mx-2 mt-4 px-2 pt-4 border-t">
+    <div>
+        
+    </div>
+    <div class="md:text-right mt-4 md:mt-0">
+        
+        <span class="block font-bold">Next</span>
+        <a href="https://yiuterran.github.io/blog/posts/sre%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" class="block">SRE读书笔记</a>
+        
+    </div>
+</div>
+
+        
+
+
+
+    </div>
+    
+    <div class="col-span-2">
+        
+        
+        <div class="sticky top-16 z-10 hidden lg:block px-6 py-4  bg-primary-bg ">
+    <span class="text-lg font-semibold">On This Page</span>
+</div>
+<div class="sticky-toc hidden lg:block px-6 pb-6 ">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#elasticsearch部分">ElasticSearch部分</a>
+      <ul>
+        <li><a href="#安装es">安装ES</a></li>
+        <li><a href="#配置es">配置ES</a></li>
+        <li><a href="#集群管理">集群管理</a></li>
+      </ul>
+    </li>
+    <li><a href="#kibana部分">Kibana部分</a>
+      <ul>
+        <li><a href="#安装kibana">安装kibana</a></li>
+        <li><a href="#配置kibana">配置kibana</a></li>
+      </ul>
+    </li>
+    <li><a href="#安装fleet-server">安装Fleet Server</a></li>
+    <li><a href="#安装elastic-agent">安装Elastic Agent</a></li>
+    <li><a href="#安装metricbeat">安装Metricbeat</a></li>
+    <li><a href="#安装elastic-apm">安装Elastic APM</a></li>
+    <li><a href="#prometheus-metric采集">Prometheus Metric采集</a></li>
+    <li><a href="#日志采集">日志采集</a></li>
+    <li><a href="#数据生命周期管理">数据生命周期管理</a></li>
+    <li><a href="#告警配置">告警配置</a></li>
+  </ul>
+</nav>
+</div>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        enableStickyToc();
+    });
+</script>
+        
+    </div>
+    
+
+    
+    
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', ()=>{
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+
+      </div>
+    </div>
+    
+  </main>
+  <footer class="ps-scrollbar">
+    <div class="w-full max-w-screen-xl mx-auto"><div class="text-center p-6 pin-b">
+    <p class="text-sm text-tertiary-text">&copy; 2021 <a href="https://www.wangchucheng.com/">WANG Chucheng</a> and <a href="https://www.ruiqima.com/">MA Ruiqi</a>
+ &middot;  Powered by the <a href="https://github.com/wangchucheng/hugo-eureka" class="hover:text-eureka">Eureka</a> theme for <a href="https://gohugo.io" class="hover:text-eureka">Hugo</a></p>
+</div></div>
+  </footer>
+</body>
+
+</html>

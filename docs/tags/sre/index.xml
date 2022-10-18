@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>devops on 应许之地</title>
-    <link>https://yiuterran.github.io/blog/tags/devops/</link>
-    <description>Recent content in devops on 应许之地</description>
+    <title>sre on 应许之地</title>
+    <link>https://yiuterran.github.io/blog/tags/sre/</link>
+    <description>Recent content in sre on 应许之地</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>&amp;copy; 2021 &lt;a href=&#34;https://www.wangchucheng.com/&#34;&gt;WANG Chucheng&lt;/a&gt; and &lt;a href=&#34;https://www.ruiqima.com/&#34;&gt;MA Ruiqi&lt;/a&gt;
 </copyright>
-    <lastBuildDate>Thu, 22 Sep 2022 10:01:11 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/tags/devops/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 22 Sep 2022 10:01:11 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/tags/sre/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>SRE读书笔记</title>
       <link>https://yiuterran.github.io/blog/posts/sre%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/</link>
@@ -16,15 +16,6 @@
       
       <guid>https://yiuterran.github.io/blog/posts/sre%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/</guid>
       <description>SRE相关的书籍，截止目前google出了2本，分别是2016年的的《Site Reliability Engineering: How Google Runs Production Systems》和2020年的《The Site Reliability Workbook》</description>
-    </item>
-    
-    <item>
-      <title>Zabbix配置记录</title>
-      <link>https://yiuterran.github.io/blog/posts/zabbix%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/</link>
-      <pubDate>Wed, 13 Jul 2022 12:21:28 +0800</pubDate>
-      
-      <guid>https://yiuterran.github.io/blog/posts/zabbix%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/</guid>
-      <description>安装服务 这里演示的是物理机环境监控场景，容器场景还是更推荐k8s+prom来搞。 版本是zabbix6.0 LTS，官方已经不提供CentOS7的安装包了</description>
     </item>
     
   </channel>

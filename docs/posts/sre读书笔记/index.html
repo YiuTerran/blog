@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang='zh' dir='ltr' ><meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+<title>SRE读书笔记 | 应许之地</title>
+
+<meta name="generator" content="Hugo Eureka 0.9.0" />
+<link rel="stylesheet" href="https://yiuterran.github.io/blog/css/eureka.min.css">
+<script defer src="https://yiuterran.github.io/blog/js/eureka.min.js"></script>
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload"
+  href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Noto+Serif+SC:wght@400;600;700&display=swap"
+  as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/styles/solarized-light.min.css"
+   media="print"
+  onload="this.media='all';this.onload=null" crossorigin>
+<script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/highlight.min.js"
+   crossorigin></script>
+
+  <script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/languages/dart.min.js"
+     crossorigin></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/js/all.min.js"
+   integrity="sha256-uNYoXefWRqv&#43;PsIF/OflNmwtKM4lStn9yrz2gVl6ymo="  crossorigin></script>
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+   integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3&#43;Aro6EYUG4&#43;cU&#43;KJWu/X"  media="print"
+  onload="this.media='all';this.onload=null" crossorigin>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js" 
+  integrity="sha384-g7c&#43;Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI&#43;sEnkvrMWph2EDg4"  crossorigin></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
+   integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC&#43;Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa"  crossorigin></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: "$$", right: "$$", display: true },
+        { left: "$", right: "$", display: false },
+        { left: "\\(", right: "\\)", display: false },
+        { left: "\\[", right: "\\]", display: true }
+      ],
+    });
+  });
+</script>
+
+
+<script defer src="https://cdn.jsdelivr.net/npm/mermaid@8.9.2/dist/mermaid.min.js" 
+  integrity="sha256-Zmpaaj&#43;GXFsPF5WdPArSrnW3b30dovldeKsW00xBVwE="  crossorigin></script>
+
+
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
+
+<meta name="description"
+  content="SRE相关的书籍，截止目前google出了2本，分别是2016年的的《Site Reliability Engineering: How Google Runs Production Systems》和2020年的《The Site Reliability Workbook》">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+      "@type": "ListItem",
+      "position": 1 ,
+      "name":"Posts",
+      "item":"https://yiuterran.github.io/blog/posts/"},{
+      "@type": "ListItem",
+      "position": 2 ,
+      "name":"SRE读书笔记",
+      "item":"https://yiuterran.github.io/blog/posts/sre%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"}]
+}
+</script>
+
+
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://yiuterran.github.io/blog/posts/sre%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"
+    },
+    "headline": "SRE读书笔记 | 应许之地","datePublished": "2022-09-22T10:01:11+08:00",
+    "dateModified": "2022-09-22T10:01:11+08:00",
+    "wordCount":  5396 ,
+    "author": {
+        "@type": "Person",
+        "name": ["tryao"]
+    },
+    "publisher": {
+        "@type": "Person",
+        "name": "C. Wang",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://yiuterran.github.io/blog/images/icon.png"
+        }
+        },
+    "description": "SRE相关的书籍，截止目前google出了2本，分别是2016年的的《Site Reliability Engineering: How Google Runs Production Systems》和2020年的《The Site Reliability Workbook》"
+}
+</script><meta property="og:title" content="SRE读书笔记 | 应许之地" />
+<meta property="og:type" content="article" />
+
+
+<meta property="og:image" content="https://yiuterran.github.io/blog/images/icon.png">
+
+
+<meta property="og:url" content="https://yiuterran.github.io/blog/posts/sre%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" />
+
+
+
+
+<meta property="og:description" content="SRE相关的书籍，截止目前google出了2本，分别是2016年的的《Site Reliability Engineering: How Google Runs Production Systems》和2020年的《The Site Reliability Workbook》" />
+
+
+
+
+<meta property="og:locale" content="zh" />
+
+
+
+
+<meta property="og:site_name" content="应许之地" />
+
+
+
+
+
+
+<meta property="article:published_time" content="2022-09-22T10:01:11&#43;08:00" />
+
+
+<meta property="article:modified_time" content="2022-09-22T10:01:11&#43;08:00" />
+
+
+
+<meta property="article:section" content="posts" />
+
+
+<meta property="article:tag" content="sre" />
+
+<meta property="article:tag" content="devops" />
+
+
+
+
+
+<meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/zabbix%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/" />
+
+
+
+<body class="flex flex-col min-h-screen">
+  <header class="fixed flex items-center w-full min-h-16 ps-scrollbar z-50 bg-secondary-bg shadow-sm">
+    <div class="w-full max-w-screen-xl mx-auto"><script>
+    let storageColorScheme = localStorage.getItem("lightDarkMode")
+    if (((storageColorScheme == 'Auto' || storageColorScheme == null) && window.matchMedia("(prefers-color-scheme: dark)").matches) || storageColorScheme == "Dark") {
+        document.getElementsByTagName('html')[0].classList.add('dark')
+    }
+</script>
+<nav class="flex items-center justify-between flex-wrap px-4 py-4 md:py-0">
+    <a href="https://yiuterran.github.io/blog/" class="me-6 text-primary-text text-xl font-bold">应许之地</a>
+    <button id="navbar-btn" class="md:hidden flex items-center px-3 py-2" aria-label="Open Navbar">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div id="target"
+        class="hidden block md:flex md:grow md:justify-between md:items-center w-full md:w-auto text-primary-text z-20">
+        <div class="md:flex md:h-16 text-sm md:grow pb-4 md:pb-0 border-b md:border-b-0">
+            <a href="https://yiuterran.github.io/blog/authors/tryao/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  border-transparent  me-4">作者</a>
+            <a href="https://yiuterran.github.io/blog/posts/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  selected-menu-item  me-4">文章</a>
+        </div>
+
+        <div class="flex">
+            <div class="relative pt-4 md:pt-0">
+                <div class="cursor-pointer hover:text-eureka" id="lightDarkMode">
+                    <i class="fas fa-adjust"></i>
+                </div>
+                <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-30" id="is-open">
+                </div>
+                <div class="absolute flex flex-col start-0 md:start-auto end-auto md:end-0 hidden bg-secondary-bg w-48 rounded py-2 border border-tertiary-bg cursor-pointer z-40"
+                    id='lightDarkOptions'>
+                    <span class="px-4 py-1 hover:text-eureka" name="Light">Light</span>
+                    <span class="px-4 py-1 hover:text-eureka" name="Dark">Dark</span>
+                    <span class="px-4 py-1 hover:text-eureka" name="Auto">Auto</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-0" id="is-open-mobile">
+    </div>
+
+</nav>
+<script>
+    
+    let element = document.getElementById('lightDarkMode')
+    if (storageColorScheme == null || storageColorScheme == 'Auto') {
+        document.addEventListener('DOMContentLoaded', () => {
+            window.matchMedia("(prefers-color-scheme: dark)").addEventListener('change', switchDarkMode)
+        })
+    } else if (storageColorScheme == "Light") {
+        element.firstElementChild.classList.remove('fa-adjust')
+        element.firstElementChild.setAttribute("data-icon", 'sun')
+        element.firstElementChild.classList.add('fa-sun')
+    } else if (storageColorScheme == "Dark") {
+        element.firstElementChild.classList.remove('fa-adjust')
+        element.firstElementChild.setAttribute("data-icon", 'moon')
+        element.firstElementChild.classList.add('fa-moon')
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        getcolorscheme();
+        switchBurger();
+    });
+</script>
+</div>
+  </header>
+  <main class="grow pt-16">
+    <div class="ps-scrollbar">
+      <div class="w-full max-w-screen-xl lg:px-4 xl:px-8 mx-auto">
+
+
+<div class="grid grid-cols-2 lg:grid-cols-8 gap-4 lg:pt-12">
+    <div
+        class="col-span-2  lg:col-span-6 bg-secondary-bg rounded px-6 py-8">
+        <h1 class="font-bold text-3xl text-primary-text">SRE读书笔记</h1>
+        <div class="flex flex-wrap flex-row items-center mt-2 text-tertiary-text">
+    <div class="me-6 my-2">
+        <i class="fas fa-calendar me-1"></i>
+        <span>2022-09-22</span>
+    </div>
+    <div class="me-6 my-2">
+        <i class="fas fa-clock me-1"></i>
+        <span>11 min read</span>
+    </div>
+    
+    
+
+    
+</div>
+        
+        
+        
+
+        <div class="content">
+            <p>SRE相关的书籍，截止目前google出了2本，分别是2016年的的《Site Reliability Engineering: How Google Runs Production Systems》和2020年的《The Site Reliability Workbook》。这两本书是互补关系，需要先阅读第一本，然后再看第二本。</p>
+<p>第一本网上有免费的电子书，或者看中文也有扫描pdf。</p>
+<h2 id="概述">概述</h2>
+<ol>
+<li>
+<p>SRE团队必须将50%的精力花在真实的开发工作上；</p>
+</li>
+<li>
+<p>SRE团队的主要职责包括：</p>
+<ol>
+<li>可用性改进；</li>
+<li>延迟优化；</li>
+<li>性能优化；</li>
+<li>效率优化；</li>
+<li>变更管理；</li>
+<li>监控；</li>
+<li>紧急事务处理；</li>
+<li>容量规划与管理；</li>
+</ol>
+</li>
+<li>
+<p>SRE处理运维工作的一项准则是：在每8~12小时的on-call轮值期间最多只处理两个紧急事件；</p>
+</li>
+<li>
+<p>产品事故的事后总结包括：</p>
+<ol>
+<li>事故发生、发现、解决的全过程；</li>
+<li>事故的根本原因；</li>
+<li>预防或者优化的解决方案；</li>
+</ol>
+</li>
+<li>
+<p>SRE的目标不是<strong>0事故运行</strong>，而是有一定的错误预算。大部分服务不应该追求100%的可靠性；</p>
+</li>
+<li>
+<p>监控系统应该只包含三类输出：</p>
+<ul>
+<li>紧急警报</li>
+<li>工单</li>
+<li>日志</li>
+</ul>
+</li>
+<li>
+<p>事故平均恢复时间（MTTR）和平均失败时间（MTTF）是可靠性最重要的指标；</p>
+</li>
+<li>
+<p>应当尽可能自动化地恢复事故，并将相关经验记录在运维手册上，后者是SRE团队重点维护的文档；</p>
+</li>
+<li>
+<p>70%的生产事故是由某种部署的变更而触发，变更管理的最佳实践：</p>
+<ol>
+<li>渐进式发布（灰度）；</li>
+<li>迅速而准确地检测到问题的发生；</li>
+<li>当出现问题时，安全迅速地回退改动；</li>
+</ol>
+</li>
+<li>
+<p>需求预测和容量规划是对未来服务稳定性的预期，应当：</p>
+<ol>
+<li>有一个准确的自然增长需求预测模型，需求预测的时间应当超过资源获取的时间；</li>
+<li>应当有准确的非自然增长的需求来源的统计；</li>
+<li>周期性压力测试，以便准确地将系统原始资源信息与业务容量对应起来；</li>
+</ol>
+</li>
+<li>
+<p>高效地利用系统资源，简单来说就是在延迟目标允许范围内，通过合理配置，最大化提高系统资源利用率；</p>
+</li>
+</ol>
+<h2 id="google基础设施">Google基础设施</h2>
+<ol>
+<li>一般应建立N+2个服务实例，保证流量峰值满足需求；</li>
+<li>如果业务的生命周期尚未达到成熟/稳定运行阶段，应当执行<strong>更低</strong>的可用性目标；</li>
+<li>如果服务允许停机，那么计划内停机时间是允许；</li>
+<li>可用性是最基本的目标，其他业务指标需要根据业务特性来指定。如最大延迟时间等；</li>
+<li>基础设施组件由于需要服务多个用户，用户之间的需求可能恰好相反：
+<ul>
+<li>比较明确的解决方案是将服务做的尽可能好，不过这可能导致服务成本激增；</li>
+<li>另一个方案是将基础设施分割成多个服务，在多个独立的服务水平上提供该服务；</li>
+</ul>
+</li>
+<li>通过SLO预算来管理版本发布的速度，可以有效降低频繁发布造成的风险；</li>
+</ol>
+<h2 id="服务质量目标">服务质量目标</h2>
+<ol>
+<li>
+<p>几个术语：</p>
+<ul>
+<li>SLI，服务质量指标，可以量化的基础指标；如请求延迟、错误率、吞吐量等；</li>
+<li>SLO，服务质量目标，基础指标的预期值；</li>
+<li>SLA，服务质量协议，当基础指标不符合预期时的应对计划；</li>
+</ul>
+</li>
+<li>
+<p>SLI需要按着用户对于服务的期许来制订，常用指标包括：</p>
+<ul>
+<li>用户可见的服务系统：可用性、延迟以及吞吐量；</li>
+<li>存储系统：延迟、可用性和数据持久性；</li>
+<li>大数据系统：吞吐量和端到端延迟；</li>
+</ul>
+</li>
+<li>
+<p>指标的收集，一般利用某种监控系统+日志分析系统完成，有时候还要结合客户端数据的收集；</p>
+</li>
+<li>
+<p>SLO制定标准：</p>
+<ul>
+<li>大部分SLI指标应该以<strong>分布</strong>，而非平均值来定义。平均值会掩盖长尾延迟和其中的变化；</li>
+<li>一般使用百分位指标来分析指标的分布，一般SRE更关注高百分位的长尾数值；</li>
+<li>需要明确SLI汇总的间隔、汇总的范围和度量频率；</li>
+<li>SLO应该尽量简单、少量，基于系统长期运行目标来指定；</li>
+<li>对外SLO可以比内部SLO更低，以留下处理的余量；</li>
+<li>实际SLI不要过度超出SLO，可以使用主观可控模式减少过渡依赖；例如延迟类SLI可以通过手动增加延迟、限速的方式避免性能过快；</li>
+</ul>
+</li>
+</ol>
+<h2 id="减少琐事">减少琐事</h2>
+<ol>
+<li>这里的琐事指的是可自动化的、重复的、随着服务规模线性增长的非预期工作，一般此类工作没有持久价值；</li>
+<li>如前所述，SRE需要保留至少50%的时间用于开发；</li>
+</ol>
+<h2 id="分布式系统监控">分布式系统监控</h2>
+<ol>
+<li>监控系统主要解决两个问题：什么东西出故障了；为什么会出故障；</li>
+<li>黑盒监控是面向对象的，代表了目前正在发生的问题；白盒监控则通过对系统内部信息的分析，检测到即将发生的问题，或者业务系统由于重试导致的无法发现的问题；</li>
+<li>用户可见系统最重要的4个黄金指标：
+<ul>
+<li>延迟。需要区分成功和失败请求的延迟；</li>
+<li>流量。即吞吐量，HTTP服务器一般是QPS，音视频系统则使用网络IO速率或者并发会话数量来表示；</li>
+<li>错误。捕获所有失败的请求；</li>
+<li>饱和度。一般指某种资源的占用率，如内存、cpu、硬盘容量和i/o等；</li>
+</ul>
+</li>
+<li>监控频率与SLO的值密切相关，应当避免过渡频繁的检查；</li>
+<li>应当尽量避免告警的误报，需要谨慎设定报警的条件；</li>
+<li>需要区分系统的必要复杂度和意外复杂度；</li>
+<li>定期精简无用代码，增加代码膨胀检测；</li>
+<li>一般黑盒测试基于探针技术；白盒测试基于时序数据收集技术；</li>
+<li>系统最近的变更（上线、配置更改），一般与灾害的关联极大，需要相关日志记录；</li>
+<li>过于自动化的方案，有时候会做出过激的应对措施，以及自动化系统本身造成的bug可能是灾难性的；</li>
+</ol>
+<h2 id="on-call">on-call</h2>
+<ol>
+<li>对同一起事故，应当避免多次告警，合理的进行告警分组非常重要；</li>
+<li>低优先级告警应当尽量避免触发，告警策略需要和SLO目标一致；</li>
+<li>研发团队需要配合SRE团队on-call；</li>
+<li>需要保证一定的on-call强度，避免自信心问题；</li>
+<li>需要周期性的灾害演练；</li>
+<li>回滚也需要测试：并不是所有的回滚都会生效；</li>
+<li>don&rsquo;t panic. 大型问题优先需要做的永远是恢复系统，但尽量保留事故现场。</li>
+</ol>
+<h2 id="应急处理流程">应急处理流程</h2>
+<ol>
+<li>
+<p>角色分配：</p>
+<ol>
+<li>总控：负责组建事故处理团队，掌握事故的概要信息。与其他部门协调工作，对外联系；</li>
+<li>事故处理团队：应当有一个负责人，事故中唯一有权修改系统的团队；</li>
+<li>发言人：向相关人员发送事故相关通知，维护事故文档；</li>
+<li>后勤：填写bug报告记录系统，安排职责交接记录；</li>
+</ol>
+</li>
+<li>
+<p>最佳实践：</p>
+<ol>
+<li>划分优先级；</li>
+<li>事前准备；</li>
+<li>信任；</li>
+<li>反思；</li>
+<li>考虑替代方案；</li>
+<li>练习；</li>
+<li>换位思考；</li>
+</ol>
+</li>
+</ol>
+<h2 id="事后总结">事后总结</h2>
+<ol>
+<li>事后总结的目的确保实施有效的措施使得未来重现的几率和影响降低；</li>
+<li>并非所有的事故都需要事后总结，基本条件包括：
+<ul>
+<li>用户可见的宕机时间，或者服务质量降低达到一定程度；</li>
+<li>任何类型的数据丢失；</li>
+<li>on-call工程师需要人工介入的事故（包括回滚、切换用户流量等）；</li>
+<li>问题解决耗时超过一定限制；</li>
+<li>监控问题，即由人工发现的问题，而不是报警系统；</li>
+<li>收到事故影响的部门要求事后总结的场景；</li>
+</ul>
+</li>
+<li>对事不对人，客观分析；</li>
+<li>事后总结适宜使用在线文档协作系统，至少包括以下功能：
+<ul>
+<li>实时协作</li>
+<li>开放的评论系统</li>
+<li>邮件通知</li>
+</ul>
+</li>
+<li>事后总结还包括正式的评审和发布过程，评审条件包括：
+<ul>
+<li>关键的灾难数据是否已经被收集并保存起来了？</li>
+<li>本次事故的影响评估是否完整？</li>
+<li>造成事故的根源问题是否足够深入？</li>
+<li>文档中记录的任务优先级是否合理，能否及时解决根源问题？</li>
+<li>这次事故处理过程是否共享给了所有相关部门？</li>
+</ul>
+</li>
+<li>应当鼓励甚至奖励事后总结做得好的SRE团队人员；</li>
+<li>除了线上事故之外，其他任何严重问题都可以有事后总结，如公关危机或者产品吐槽过多；</li>
+</ol>
+<h2 id="故障跟踪">故障跟踪</h2>
+<ol>
+<li>尝试聚合同一个故障引起的所有告警；</li>
+<li>为告警信息加标签；</li>
+<li>分析历史故障，统计类似故障（根据标签）；</li>
+<li>允许手动创建告警；</li>
+</ol>
+<h2 id="应对过载">应对过载</h2>
+<ol>
+<li>运维一个可靠系统的一个根本需求，就是能够优雅处理过载；</li>
+<li>按着QPS来规划服务容量，或者是按着其他静态属性来估算，一般是错误的选择；</li>
+<li>更好的选择是直接以可用资源来衡量可用容量。大部分情况下，用CPU数量做资源配给的主要信号就足够了；</li>
+<li>高频请求的客户端应当根据回复实现自适应节流算法；</li>
+<li>需要划分服务/请求的优先级，保证重要请求得到回复；</li>
+<li>过载的一般处理方式是进行服务降级；</li>
+<li>过载会导致的可能问题：
+<ul>
+<li>资源耗尽：CPU、内存、文件描述符</li>
+<li>队列过长</li>
+<li>RPC超时</li>
+<li>CPU缓存效率下降</li>
+<li>OOM</li>
+</ul>
+</li>
+<li>优雅降级：返回计算量更小、返回速度更快的、不那么精确的结果；由于很少使用，所以需要谨慎测试保证覆盖率；</li>
+<li>重试：
+<ul>
+<li>一定要使用随机化的，指数型递增的重试周期；</li>
+<li>考虑使用一个全局重试预算；</li>
+<li>避免在多个层级重试导致的乘数效应；</li>
+<li>使用明确的返回代码，而不是所有的错误都重试；</li>
+<li>某些错误应当快速失败，而不是重试；</li>
+</ul>
+</li>
+<li>超时：
+<ul>
+<li>所有请求都应当设置一个恰当的超时时间；太长会导致工作线程耗尽，太短会导致重型请求总是失败；</li>
+<li>服务端应该在请求处理的各个阶段判断是否已经超过客户端超时时间，避免浪费资源做无用功；</li>
+<li>可以在入口层加上请求的绝对截止时间戳，这样请求在多个微服务间传递时，</li>
+<li>确定性的长时间响应，应当尽量异步化；</li>
+</ul>
+</li>
+<li>缓存：
+<ul>
+<li>区分延迟性缓存和容量型缓存，后者需要良好的可恢复设计；</li>
+<li>使用热缓存的系统，流量应该缓慢增加，等到缓存预热之后再逐步增大请求量；</li>
+<li>压力测试应当考虑到缓存的影响，测试逐渐升高和压力陡增两种流量场景；</li>
+</ul>
+</li>
+<li>服务间相互通信，环形通信可能导致分布式死锁，应当尽量避免；</li>
+<li>压力测试直到服务崩溃，并保证服务崩溃的情况下，不影响成功请求的速率；</li>
+<li>反向压测：逐步降低负载，看服务能不能自行恢复稳定，记录下相关数值；</li>
+<li>尽量使用<strong>最常用</strong>的客户端来做测试，而不是模拟的客户端；</li>
+<li>非关键性后端停止服务应当不影响主要功能的使用；</li>
+<li>如果一半的服务由于正在初始化还不能正常工作，另一半的服务由于过载无法正常工作，此时需要暂停健康检查功能；</li>
+<li>健康检查分为进程级别和服务级别两种，一般集群管理系统使用前者，负载均衡器使用后者；</li>
+<li>非流量型负载（如后端定时任务）可以在过载期间暂时关闭；</li>
+</ol>
+<h2 id="分布式共识">分布式共识</h2>
+<ol>
+<li>BASE：基本可用(basically avaiable)，软状态(soft state)和最终一致性(eventual consistency)；</li>
+<li>大多数支持BASE语义的系统都依赖多主复制机制，将写操作分布在多个进程中，然后通过复制达到最终一致性；</li>
+<li>分布式共识算法的几个概念：
+<ul>
+<li>分为崩溃不可恢复和崩溃可恢复两种，后者当然更有用；</li>
+<li>拜占庭式问题：某个进程由于某种原因发送错误消息的可能性；</li>
+<li>在不稳定的网络条件下，不存在任何一种分布式共识算法可以保证共识可达到；</li>
+<li>实践中，足够多的副本和良好的网络连接状态可以在大多数条件下保证共识可达；</li>
+<li>重试的连锁反应通过指数退避来规避；</li>
+<li>非拜占庭情况下，2f+1个副本组成的共识组可以同时承受f个副本失败而继续运行；</li>
+<li>拜占庭情况下，则需要3f+1个副本；</li>
+<li>生产系统中，分布式日志是分布式共识系统中最重要的一部分；</li>
+</ul>
+</li>
+<li>故障域：同时出问题的物理范围；</li>
+<li>向一个采取“大多数”法定仲裁过程系统中增加新的副本可能会降低系统的可用性；5个需要3个，6个需要4个，可用性从3/5下降到2/3；</li>
+<li>对共识系统本身也需要监控，频繁的变动leader，副本的lag程度等指标都需要考虑；</li>
+</ol>
+<h2 id="分布式调度系统">分布式调度系统</h2>
+<ol>
+<li>对于分布式调度系统而言，一般倾向于在最差情况下跳过某些任务，而不是去冒执行两次的风险；</li>
+<li>一个简单的分布式调度系统可以使用一主多从架构，使用paxos算法选举leader，后者是真正运行cron的进程实体；</li>
+<li>避免同一时间点的惊群问题；</li>
+<li>如果周期性的任务需要不断更新结果，此时使用cron方式调度并不合适，更好的方法是使用一个持续运行的流水线；</li>
+</ol>
+<h2 id="数据完整性">数据完整性</h2>
+<ol>
+<li>各团队需要为不同的失败场景定义一系列数据可用性SLO；</li>
+<li>各团队需要定期进行演练，以确保他们有能力满足这些SLO；</li>
+<li>事故类型：
+<ul>
+<li>根源问题：用户行为、管理员的错误、应用程序bug、基础设置bug、硬件故障以及部署事故；</li>
+<li>影响范围：大规模，还是一部分特定的数据；</li>
+<li>发生速度：一瞬间，还是缓慢持续的；</li>
+</ul>
+</li>
+<li>有效的数据恢复计划必须覆盖上述所有因子的组合；</li>
+<li>最常见的用户可见的数据丢失问题，是由于数据删除和软件bug引起的引用完整性（外键）问题；</li>
+<li>将全部相关数据恢复到某个时间点几乎是不可能的，因为这要求备份在一瞬间完成；</li>
+<li>备份的分级多样性是关键，无论如何，热备无法替代冷备，冷备也无法防止磁盘被破坏；备份是为了恢复；</li>
+<li>最常用的策略：软删除。值得注意的是，软删除的数据应该在一段时间之后真正的物理删除，而不能一直留在系统里；建议至少保留2个月；</li>
+<li>全量备份的成本和压力都比较大，因此比较常见的方案是在非峰值时段使用全量备份，繁忙时段进行增量备份；</li>
+<li>持续性对数据恢复流程进行测试，如果恢复无法完成则发出警报；</li>
+</ol>
+<h2 id="产品发布">产品发布</h2>
+<ol>
+<li>专门的发布团队，称作发布协调工程师（LCE)团队；</li>
+<li>checkList的必要性，主要是用在多个部门之间的协调工作；</li>
+<li>对每个产品，有必要维护一个常用的check question列表，并定期审核和更新；</li>
+<li>设计评审中需要确定服务正确地使用了已有的通用基础设施，并确保这些基础设施的负责人加入到发布流程中；</li>
+<li>需要进行容量规划的评审，首次发布一般有一个流量峰值，需要尽量考虑冗余度和弹性伸缩；</li>
+<li>需要进行故障行为的评审，保证系统不存在稳定性问题，以及拥有故障恢复的能力；</li>
+<li>需要进行安全性评审，包括恶意攻击和非恶意的客户端bug；</li>
+<li>需要对配置文件的更新进行评审，确定其版本兼容性；</li>
+<li>需要对外部依赖项进行评审；</li>
+</ol>
+<h2 id="最佳实践">最佳实践</h2>
+<p>以下摘自SRE workbook，即第二本SRE书籍。</p>
+<ol>
+<li>日志总是能比metric生成更详细的报告，基于日志来做报表，而不是Metric；</li>
+<li>基于Metric做告警，将日志分析导出成Metric；</li>
+<li>将配置看做代码，推荐使用jsonnet这种生成配置的封闭型语言，而不是直接用json/yaml，或者js/python这种脚本当做配置；</li>
+<li>要检查配置，防止配置错误导致的应用崩溃；</li>
+<li>服务的SLO与其依赖服务的SLO正相关；</li>
+<li>告警设定考量：
+<ul>
+<li>精确率：在所有检测到的事件中，确实是重大事件的比例是多少。告警在低流量时段可能会对非重大事件特别敏感；</li>
+<li>查全率：在所有客观存在的重大事件中，被告警系统检测到的比例；</li>
+<li>检测用时：发出告警通知距离事故发生的延迟时间；</li>
+<li>重置用时：在问题得到解决后，告警还会持续多少时间；</li>
+</ul>
+</li>
+<li>Google推荐使用4周的滚动窗口作为SLO时间窗口；并推荐使用多个时间窗口的SLO燃烧率作为告警阈值；</li>
+</ol>
+
+        </div>
+        
+        <div class="my-4">
+    
+    <a href="https://yiuterran.github.io/blog/tags/sre/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#sre</a>
+    
+    <a href="https://yiuterran.github.io/blog/tags/devops/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#devops</a>
+    
+</div>
+        
+        
+        
+
+
+        
+        
+        <div class="py-2">
+    
+    <div class="flex flex-col md:flex-row items-center my-8">
+        <a href="https://yiuterran.github.io/blog/authors/tryao/" class="w-24 h-24 md:me-4">
+            
+            
+            <i class="fas fa-user-circle fa-6x"></i>
+            
+        </a>
+        <div class="w-full md:w-auto mt-4 md:mt-0">
+            <a href="https://yiuterran.github.io/blog/authors/tryao/" class="block font-bold text-lg pb-1 mb-2 border-b">个人介绍</a>
+            <span class="block pb-2">兴趣使然的程序员，博而不精，乐学不倦</span>
+            
+            
+            
+            
+            
+            <a href="mailto:yaotairan@gmail.com" class="me-1">
+                <i class="fas fa-envelope"></i>
+            </a>
+            
+            
+            
+            
+            
+            <a href="https://twitter.com/TerranYiu" class="me-1">
+                <i class="fab fa-twitter"></i>
+            </a>
+            
+            
+            
+            
+            
+            <a href="https://github.com/YiuTerran" class="me-1">
+                <i class="fab fa-github"></i>
+            </a>
+            
+        </div>
+    </div>
+    
+</div>
+        
+        
+        
+<div class="flex flex-col md:flex-row md:justify-between -mx-2 mt-4 px-2 pt-4 border-t">
+    <div>
+        
+        <span class="block font-bold">Previous</span>
+        <a href="https://yiuterran.github.io/blog/posts/%E7%9B%91%E6%8E%A7%E5%B9%B3%E5%8F%B0%E8%B0%83%E7%A0%94%E6%8A%A5%E5%91%8A/" class="block">监控平台调研报告</a>
+        
+    </div>
+    <div class="md:text-right mt-4 md:mt-0">
+        
+        <span class="block font-bold">Next</span>
+        <a href="https://yiuterran.github.io/blog/posts/ginkgo%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/" class="block">Ginkgo使用笔记</a>
+        
+    </div>
+</div>
+
+        
+
+
+
+    </div>
+    
+    <div class="col-span-2">
+        
+        
+        <div class="sticky top-16 z-10 hidden lg:block px-6 py-4  bg-primary-bg ">
+    <span class="text-lg font-semibold">On This Page</span>
+</div>
+<div class="sticky-toc hidden lg:block px-6 pb-6 ">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#概述">概述</a></li>
+    <li><a href="#google基础设施">Google基础设施</a></li>
+    <li><a href="#服务质量目标">服务质量目标</a></li>
+    <li><a href="#减少琐事">减少琐事</a></li>
+    <li><a href="#分布式系统监控">分布式系统监控</a></li>
+    <li><a href="#on-call">on-call</a></li>
+    <li><a href="#应急处理流程">应急处理流程</a></li>
+    <li><a href="#事后总结">事后总结</a></li>
+    <li><a href="#故障跟踪">故障跟踪</a></li>
+    <li><a href="#应对过载">应对过载</a></li>
+    <li><a href="#分布式共识">分布式共识</a></li>
+    <li><a href="#分布式调度系统">分布式调度系统</a></li>
+    <li><a href="#数据完整性">数据完整性</a></li>
+    <li><a href="#产品发布">产品发布</a></li>
+    <li><a href="#最佳实践">最佳实践</a></li>
+  </ul>
+</nav>
+</div>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        enableStickyToc();
+    });
+</script>
+        
+    </div>
+    
+
+    
+    
+    <div
+        class="col-span-2  lg:col-span-6 bg-secondary-bg rounded p-6">
+        <h2 class="text-lg font-semibold mb-4">See Also</h2>
+        <div class="content">
+            
+            <a href="https://yiuterran.github.io/blog/posts/zabbix%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/">Zabbix配置记录</a>
+            <br />
+            
+        </div>
+    </div>
+    
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', ()=>{
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+
+      </div>
+    </div>
+    
+  </main>
+  <footer class="ps-scrollbar">
+    <div class="w-full max-w-screen-xl mx-auto"><div class="text-center p-6 pin-b">
+    <p class="text-sm text-tertiary-text">&copy; 2021 <a href="https://www.wangchucheng.com/">WANG Chucheng</a> and <a href="https://www.ruiqima.com/">MA Ruiqi</a>
+ &middot;  Powered by the <a href="https://github.com/wangchucheng/hugo-eureka" class="hover:text-eureka">Eureka</a> theme for <a href="https://gohugo.io" class="hover:text-eureka">Hugo</a></p>
+</div></div>
+  </footer>
+</body>
+
+</html>

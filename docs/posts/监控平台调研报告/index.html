@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang='zh' dir='ltr' ><meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+<title>监控平台调研报告 | 应许之地</title>
+
+<meta name="generator" content="Hugo Eureka 0.9.0" />
+<link rel="stylesheet" href="https://yiuterran.github.io/blog/css/eureka.min.css">
+<script defer src="https://yiuterran.github.io/blog/js/eureka.min.js"></script>
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload"
+  href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Noto+Serif+SC:wght@400;600;700&display=swap"
+  as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/styles/solarized-light.min.css"
+   media="print"
+  onload="this.media='all';this.onload=null" crossorigin>
+<script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/highlight.min.js"
+   crossorigin></script>
+
+  <script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/languages/dart.min.js"
+     crossorigin></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/js/all.min.js"
+   integrity="sha256-uNYoXefWRqv&#43;PsIF/OflNmwtKM4lStn9yrz2gVl6ymo="  crossorigin></script>
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+   integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3&#43;Aro6EYUG4&#43;cU&#43;KJWu/X"  media="print"
+  onload="this.media='all';this.onload=null" crossorigin>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js" 
+  integrity="sha384-g7c&#43;Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI&#43;sEnkvrMWph2EDg4"  crossorigin></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
+   integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC&#43;Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa"  crossorigin></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: "$$", right: "$$", display: true },
+        { left: "$", right: "$", display: false },
+        { left: "\\(", right: "\\)", display: false },
+        { left: "\\[", right: "\\]", display: true }
+      ],
+    });
+  });
+</script>
+
+
+<script defer src="https://cdn.jsdelivr.net/npm/mermaid@8.9.2/dist/mermaid.min.js" 
+  integrity="sha256-Zmpaaj&#43;GXFsPF5WdPArSrnW3b30dovldeKsW00xBVwE="  crossorigin></script>
+
+
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
+
+<meta name="description"
+  content="广义的监控又称为Application Performance Monitoring(APM)，即应用性能监控。其数据类型主要包括：指标数据（Metrics），日志文本（Lo">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+      "@type": "ListItem",
+      "position": 1 ,
+      "name":"Posts",
+      "item":"https://yiuterran.github.io/blog/posts/"},{
+      "@type": "ListItem",
+      "position": 2 ,
+      "name":"监控平台调研报告",
+      "item":"https://yiuterran.github.io/blog/posts/%E7%9B%91%E6%8E%A7%E5%B9%B3%E5%8F%B0%E8%B0%83%E7%A0%94%E6%8A%A5%E5%91%8A/"}]
+}
+</script>
+
+
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://yiuterran.github.io/blog/posts/%E7%9B%91%E6%8E%A7%E5%B9%B3%E5%8F%B0%E8%B0%83%E7%A0%94%E6%8A%A5%E5%91%8A/"
+    },
+    "headline": "监控平台调研报告 | 应许之地","datePublished": "2022-10-18T14:47:33+08:00",
+    "dateModified": "2022-10-18T14:47:33+08:00",
+    "wordCount":  6436 ,
+    "publisher": {
+        "@type": "Person",
+        "name": "C. Wang",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://yiuterran.github.io/blog/images/icon.png"
+        }
+        },
+    "description": "广义的监控又称为Application Performance Monitoring(APM)，即应用性能监控。其数据类型主要包括：指标数据（Metrics），日志文本（Lo"
+}
+</script><meta property="og:title" content="监控平台调研报告 | 应许之地" />
+<meta property="og:type" content="article" />
+
+
+<meta property="og:image" content="https://yiuterran.github.io/blog/images/icon.png">
+
+
+<meta property="og:url" content="https://yiuterran.github.io/blog/posts/%E7%9B%91%E6%8E%A7%E5%B9%B3%E5%8F%B0%E8%B0%83%E7%A0%94%E6%8A%A5%E5%91%8A/" />
+
+
+
+
+<meta property="og:description" content="广义的监控又称为Application Performance Monitoring(APM)，即应用性能监控。其数据类型主要包括：指标数据（Metrics），日志文本（Lo" />
+
+
+
+
+<meta property="og:locale" content="zh" />
+
+
+
+
+<meta property="og:site_name" content="应许之地" />
+
+
+
+
+
+
+<meta property="article:published_time" content="2022-10-18T14:47:33&#43;08:00" />
+
+
+<meta property="article:modified_time" content="2022-10-18T14:47:33&#43;08:00" />
+
+
+
+<meta property="article:section" content="posts" />
+
+
+
+
+<body class="flex flex-col min-h-screen">
+  <header class="fixed flex items-center w-full min-h-16 ps-scrollbar z-50 bg-secondary-bg shadow-sm">
+    <div class="w-full max-w-screen-xl mx-auto"><script>
+    let storageColorScheme = localStorage.getItem("lightDarkMode")
+    if (((storageColorScheme == 'Auto' || storageColorScheme == null) && window.matchMedia("(prefers-color-scheme: dark)").matches) || storageColorScheme == "Dark") {
+        document.getElementsByTagName('html')[0].classList.add('dark')
+    }
+</script>
+<nav class="flex items-center justify-between flex-wrap px-4 py-4 md:py-0">
+    <a href="https://yiuterran.github.io/blog/" class="me-6 text-primary-text text-xl font-bold">应许之地</a>
+    <button id="navbar-btn" class="md:hidden flex items-center px-3 py-2" aria-label="Open Navbar">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div id="target"
+        class="hidden block md:flex md:grow md:justify-between md:items-center w-full md:w-auto text-primary-text z-20">
+        <div class="md:flex md:h-16 text-sm md:grow pb-4 md:pb-0 border-b md:border-b-0">
+            <a href="https://yiuterran.github.io/blog/authors/tryao/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  border-transparent  me-4">作者</a>
+            <a href="https://yiuterran.github.io/blog/posts/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  selected-menu-item  me-4">文章</a>
+        </div>
+
+        <div class="flex">
+            <div class="relative pt-4 md:pt-0">
+                <div class="cursor-pointer hover:text-eureka" id="lightDarkMode">
+                    <i class="fas fa-adjust"></i>
+                </div>
+                <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-30" id="is-open">
+                </div>
+                <div class="absolute flex flex-col start-0 md:start-auto end-auto md:end-0 hidden bg-secondary-bg w-48 rounded py-2 border border-tertiary-bg cursor-pointer z-40"
+                    id='lightDarkOptions'>
+                    <span class="px-4 py-1 hover:text-eureka" name="Light">Light</span>
+                    <span class="px-4 py-1 hover:text-eureka" name="Dark">Dark</span>
+                    <span class="px-4 py-1 hover:text-eureka" name="Auto">Auto</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-0" id="is-open-mobile">
+    </div>
+
+</nav>
+<script>
+    
+    let element = document.getElementById('lightDarkMode')
+    if (storageColorScheme == null || storageColorScheme == 'Auto') {
+        document.addEventListener('DOMContentLoaded', () => {
+            window.matchMedia("(prefers-color-scheme: dark)").addEventListener('change', switchDarkMode)
+        })
+    } else if (storageColorScheme == "Light") {
+        element.firstElementChild.classList.remove('fa-adjust')
+        element.firstElementChild.setAttribute("data-icon", 'sun')
+        element.firstElementChild.classList.add('fa-sun')
+    } else if (storageColorScheme == "Dark") {
+        element.firstElementChild.classList.remove('fa-adjust')
+        element.firstElementChild.setAttribute("data-icon", 'moon')
+        element.firstElementChild.classList.add('fa-moon')
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        getcolorscheme();
+        switchBurger();
+    });
+</script>
+</div>
+  </header>
+  <main class="grow pt-16">
+    <div class="ps-scrollbar">
+      <div class="w-full max-w-screen-xl lg:px-4 xl:px-8 mx-auto">
+
+
+<div class="grid grid-cols-2 lg:grid-cols-8 gap-4 lg:pt-12">
+    <div
+        class="col-span-2  lg:col-span-6 bg-secondary-bg rounded px-6 py-8">
+        <h1 class="font-bold text-3xl text-primary-text">监控平台调研报告</h1>
+        <div class="flex flex-wrap flex-row items-center mt-2 text-tertiary-text">
+    <div class="me-6 my-2">
+        <i class="fas fa-calendar me-1"></i>
+        <span>2022-10-18</span>
+    </div>
+    <div class="me-6 my-2">
+        <i class="fas fa-clock me-1"></i>
+        <span>13 min read</span>
+    </div>
+    
+    
+
+    
+</div>
+        
+        
+        
+
+        <div class="content">
+            <p>广义的监控又称为Application Performance Monitoring(APM)，即应用性能监控。其数据类型主要包括：指标数据（Metrics），日志文本（Logs），分布式追踪（Traces），这又称为可观测性三支柱。</p>
+<p><img src="https://s2.loli.net/2022/10/11/bZ6wfGOpQXHdeUz.webp" alt="img"></p>
+<p>其中，Metric是监控系统的核心，其又可以细分为os/container/service/middleware的Metric，实现方式一般是周期性采样，并进行计算聚合；</p>
+<p>Trace一般用于调试和定位问题。Trace的重要性要稍微差一点，一方面可以通过Log实现简单的Trace，另一方面它会对应用的性能造成一定的影响。如果可以重放用户的请求，用Arthas这种线上诊断工具代替也勉强可以；</p>
+<p>Log则比较零散，可以包括各种信息，比如用来提取Metric，以及记录各种Event. 此外，客户端埋点上报的数据一般是用来统计用户行为的，也可以视为一种Log；</p>
+<p>服务质量的量化数据，一般简称<code>SLI</code>(Service Level Indicator)；而开发/运维人员对于系统稳定性的需求目标，一般称为<code>SLO</code>(Service Level Object)。对于某个服务监控体系而言，最重要的就是确定承诺的<code>SLO</code>，告警和统计都是基于SLO来制定的，即所谓<strong>面向SLO的监控平台</strong>。</p>
+<h2 id="四个黄金指标">四个黄金指标</h2>
+<p>所有的监控都是为了更好的用户服务质量，Google总结了所谓的Four Golden Signals，是监控系统各种Metric的重中之重：</p>
+<ul>
+<li>延迟：服务请求所需时间。重点是区分失败的请求和成功的请求，需要记录端到端的整体延迟，也要记录每一次IO调用造成的局部延迟；</li>
+<li>吞吐量：系统当前流量，用于资源估算。例如HTTP请求的QPS，或者音视频请求的bps；</li>
+<li>错误：各种错误，如HTTP 500，或者rpc报错等；一般关注错误的类型和错误发生的速率；</li>
+<li>饱和度：各种受限资源，如CPU、网络、IO、内存、磁盘的使用率；</li>
+</ul>
+<p>一般而言，服务的SLO都是围绕这四个黄金指标来制定的。</p>
+<h2 id="监控平台选型">监控平台选型</h2>
+<p>最核心的Metric平台，随着技术的发展，主要从200x年的zabbix all-in-one体系，逐渐进化到Google主导的云原生体系下的exporter（采集）+prometheus（存储）+alertmanager（告警）+grafana（展示）。后者解耦了监控的各个流程，但是也增加了监控系统的复杂度和轮子数量，由于MySQL、Redis等各种中间件的二进制exporter都需要单独部署，所以实际操作起来比较繁琐复杂。</p>
+<p>Log方面，除了EFK（filebeat+elasticsearch+kibana）的经典体系，也还有loki/splunk等可选；zabbix支持简单的日志统计功能，如果需求不高，也可以用google的<code>mtail</code>组件转换成prometheus的exporter；</p>
+<p>Trace一般认为起源于Google的Dapper，但是这个没开源。目前主流是CNCF主导的OpenTelemetry体系，兼容的开源实现包括Elastic APM/Jaeger/SigNoz 等；</p>
+<p>此外，由于我们使用了阿里云平台的商业组件，因此还要整合阿里云提供的监控数据；阿里云有对应Metric的openAPI；</p>
+<p>虽然Google提倡监控平台各个组件解耦独立化，但是考虑到人力成本，我们更倾向于使用类似zabbix这种all-in-one的监控平台以减少我们的工作量。当然zabbix确实太古老了，虽然6.x也尝试支持云原生体系，但是用起来还是很不方便，其内置的表达式体系也不如PromQL这么现代化，学习成本很高。目前视频云已有的一套zabbix系统也仅适合ECS服务使用。</p>
+<p>经过调研，一体化的集成平台主要包括：</p>
+<ul>
+<li><a href="https://opentelemetry.io/">OpenTelemetry</a>，CNCF主导，几乎必然是未来的标准。Trace方面比较成熟，多语言支持完善，可以考虑使用其客户端SDK/Agent接入兼容其标准的后端，Metric和Log大多还处于experiment状态。Metric规范会兼容<a href="https://github.com/OpenObservability/OpenMetrics/blob/main/specification/OpenMetrics.md">OpenMetric</a>，而后者则几乎100%兼容Prometheus的Metric规范。官方推荐使用prometheus作为Metric后端，Jaeger作为Trace后端；Log相关规范暂时还没有定下来；</li>
+<li><a href="https://skywalking.apache.org/">Apache SkyWalking</a>，国内个人开源（但是并没有中文文档），现在是Apache顶级项目。老本行是tracing，9.x已经支持Metrics/Logs收集（支持filebeat作为采集端）。Trace做的比较完善，java服务可以通过修改字节码完成无侵入式的追踪，其他语言支持一般；支持metric拉取，但是做的比较简单，通过修改静态配置文件完成；Alert功能也有，支持动态配置（可以集成nacos）；Log方面就是支持Filebeat传输，可以在trace时定位到上下文的log，方便调试问题；虽然号称兼容OpenTelemetry，但是官方文档中没看到;</li>
+<li>夜莺（<a href="https://n9e.github.io/">Nightingale</a>）平台，滴滴开源，有对应的商业平台。主打metrics，可以看做prometheus的商业版，集成了grafana和alertManager，并且有自己的<code>Categraf</code>采集器，未涉及Trace和Log相关采集。夜莺的商业版倒是支持all-in-one，不过需要购买。</li>
+<li><a href="https://www.elastic.co/guide/en/observability/current/observability-introduction.html">Elastic Observability</a>, ES关于可观测性推出的一体式方案。Filebeat的Log收集是老本行，通过MetricBeat收集Metric，并支持Elastic APM作为trace（兼容OpenTelemetry），并且支持JavaScript的Agent可以拿来做用户行为跟踪。使用kibana做看板，告警支持完善，整体成熟度比较高。</li>
+</ul>
+<p>我们可以考虑使用夜莺+Jaeger+EFK，或者夜莺+Skywalking，或者考虑直接用Elastic的all-in-one方案。考虑到OpenTelemetry必然是未来的规范，以及我们的多语言环境，可以考虑排除skywalking。</p>
+<h2 id="公司已有组件">公司已有组件</h2>
+<p>Metric：一般用prometheus配合discovery抓取，目前院内无部署；</p>
+<p>Logs： Plain Log目前统一使用filebeat抽取到es里，配合kibana使用，但是目前仅保留7天；结构化的JSON日志，目前各应用还未使用，需要进行应用改造；</p>
+<p>Traces：院内目前在k8s里布置了一套skywalking；</p>
+<h2 id="架构设计">架构设计</h2>
+<h3 id="夜莺jaegerefk">夜莺+Jaeger+EFK</h3>
+<p><img src="https://s2.loli.net/2022/10/11/CXp5N1PTbxHLif6.png" alt="image-20221011110835433"></p>
+<p>这是jaeger的架构，目前推荐使用OpenTelemetry的SDK。只有Trace功能，也是push模型。</p>
+<p><img src="https://s2.loli.net/2022/10/09/59ctoAJqfyvSPhR.png" alt="image-20221009092410380"></p>
+<p>这个是夜莺的架构图，它主要是代替Prometheus+AlertManager+Grafana，所以主要是pull模型，不过也支持Telegraf这种push模型。</p>
+<p>由于我们部分服务在k8s外面，所以push模型的server最好部署在k8s外（在k8s里面要开NodePort暴露到ECS内网），pull模型的则必须部署在k8s里。</p>
+<p><img src="https://s2.loli.net/2022/10/11/lIbVHTw7jLXO8WN.png" alt="image-20221011174746989"></p>
+<p>上图是IoT目前的服务生态，这里给出一种可能的架构：</p>
+<ol>
+<li>prometheus或者说Nightingale部署在k8s里：
+<ul>
+<li>自建的中间件通过agent（这里写的是categraf，用别的也可以）转为exporter，其中部署在k8s中的（主要是redis），需要通过sidecar模式部署；</li>
+<li>中间件如果支持水平扩容，也需要考虑discovery方案；</li>
+<li>购买的阿里云商业中间件，需要通过阿里云的API进行Metric采集；</li>
+<li>自建的服务目前都注册在nacos中，通过nacos的discovery获取ip，完成采集；</li>
+</ul>
+</li>
+<li>jaeger部署在物理机上（或者k8s暴露NodePort）：
+<ul>
+<li>由客户端生成TraceId，或者网关层（如Nginx）注入TraceId；</li>
+<li>请求在服务和MQ中流转，需要显式修改代码带上TraceId，当然可以通过AOP或者抽象成库等方式减少工作量；</li>
+<li>使用OpenTelemetry的sdk显式push trace，java服务可以无侵入；Go/C++服务必须修改代码，都有一些性能影响；</li>
+<li>使用EFK传递结构化日志；</li>
+<li>从日志中提取出Metric，例如组件延迟，请求错误率等因子，export给prometheus；</li>
+</ul>
+</li>
+<li>边缘端通过agent push：
+<ul>
+<li>边缘端环境比较复杂，而且无法应用pull模型，只能通过agent收集之后push到prometheus pushgateway上；</li>
+<li>边缘端可能需要自行开发一个统一的agent进行上报；</li>
+<li>边缘端还有一些windows场景，虽然已经逐渐废弃，支持力度需要考虑；</li>
+</ul>
+</li>
+<li>通过AlertManager或者其他服务告警：
+<ul>
+<li>错误和延迟相关的告警，可以通过TraceId来消除<strong>部分</strong>重复告警；</li>
+<li>饱和率和吞吐量相关的告警，应尽量自愈；</li>
+<li>错误需要细分，代码bug导致的异常抛出应当立即告警，服务间通信超时这种则一般通过百分位设定阈值；</li>
+<li>理想情况下，可以通过点击告警中的TraceId跳转到对应Trace，并看到上下文日志（需要二次开发整合）；</li>
+<li>告警的设计本身需要仔细考量，一般使用promQL来做告警条件；</li>
+</ul>
+</li>
+</ol>
+<h3 id="使用elastic-observability">使用Elastic Observability</h3>
+<p>ES可观测性方案基于ES做了全链路可观测，集成度非常高。</p>
+<p><img src="https://s2.loli.net/2022/10/11/7f1p3lhEQ4bBMWK.png" alt="image-20221011180610698"></p>
+<p>Filebeat和Metricbeat都是push模型，所以类似zabbix，将ElasticSearch、kibana和Elastic APM部署在ECS上。在k8s集群/边缘侧部署MetricBeat作为采集器，将信息推送到ES即可。另外，值得一提的是MetricBeat支持windows事件日志采集。</p>
+<p>考虑到人力成本，这里推荐使用Elastic Stack技术栈，下面按该技术栈进行分析。</p>
+<h2 id="告警自愈">告警自愈</h2>
+<p>Google在SRE中推荐大部分告警应当自动化处理，需要人工处理的case应尽量减少。</p>
+<p>但是告警自愈本身是有一定风险性的，所以这套自动化系统本身也需要监控和测试。</p>
+<h3 id="服务回滚">服务回滚</h3>
+<p>当服务上线后短期内出现大量故障告警，且持续时间较长（考虑可用性SLO占比），应当考虑自动回滚机制。</p>
+<p>但是自动回滚可能会比较复杂，例如涉及数据库结构的更改、客户端版本的撤回等等，所以还需要配合备份来使用。</p>
+<p>一般不建议自动回滚，而是需要手动操作。</p>
+<p>当然更理想的解决方案是通过灰度发布来缓慢上线，避免线上服务雪崩。</p>
+<h3 id="弹性扩容">弹性扩容</h3>
+<p>如果饱和率和吞吐量到达阈值，弹性扩容是最简单的解决办法。</p>
+<p>当然弹性也不能无限的弹，如果是bug导致的，最终会耗尽宿主机资源。k8s可以在HPA里设置min/max replicas控制pod的数量。</p>
+<p>商业资源，如阿里云的SLB，弹性扩容比较困难，还是需要人工处理。</p>
+<p>延迟的问题，如MQ的offset过大，一般也可以通过弹性扩容来解决。</p>
+<p>弹性扩容整体需要依赖k8s的HPA机制，结合prometheus指定custom metrics，目前我们的k8s集群中是没有部署的，需要我们自行解决。并且，需要解决权限问题。</p>
+<p>此外，扩容之外也要考虑缩容的需求，一般扩容比较激进，而缩容需要稍微谨慎一些。整体而言，需要在基本冗余的基础上，保证一定的资源饱和度。</p>
+<h3 id="服务降级">服务降级</h3>
+<p>当自动扩容达到<strong>极限</strong>，仍然无法解决饱和率问题，就要考虑服务降级了。</p>
+<p>服务降级只能从应用层面设计，暂时熔断非关键服务，如在接入层直接返回500，以此保证核心业务能正常work。甚至可以给客户端回复特殊状态码，让客户端自行限流，这样可以从根本减少接入层流量。</p>
+<p>服务降级可以设计成一个简单的开关，也可以设计成多层降级，直至饱和率回到正常。总之这里需要业务层自己实现相关逻辑，并经过实测演练保证降级效果。</p>
+<h3 id="创建工单">创建工单</h3>
+<p>各种bug导致的告警，肯定是无法自愈的，应当打通云效创建工单；</p>
+<p>即使是自愈的case，理论上也要创建工单，记录下自动处理措施并抄送给服务相关人员；</p>
+<p>需要人工接入的，必须创建<strong>事故单</strong>，记录下详细的处理流程以供后续参考，并可以根据处理步骤来考虑逐步自动化处理；</p>
+<h2 id="二次开发">二次开发</h2>
+<p>主要考虑一下工作项：</p>
+<ol>
+<li>告警自愈的webhook开发；</li>
+<li>打通工单系统；</li>
+<li>为阿里云PaaS组件撰写exporter；</li>
+</ol>
+<h2 id="应用改造">应用改造</h2>
+<h3 id="重试逻辑修正">重试逻辑修正</h3>
+<p>一些常用的最佳实践：</p>
+<ol>
+<li>Retry需要指数避退+随机扰动，无论是RPC还是REST调用；</li>
+<li>细分错误码，确定哪些错误需要retry，哪些不需要；不同的错误码对于制定SLO也大有裨益；</li>
+</ol>
+<h3 id="fast-fail">Fast-Fail</h3>
+<ol>
+<li>服务器时钟同步，在入口层注入时间戳；</li>
+<li>在请求流转的过程中，首先判断用户层是否已经超时，如果是则应当放弃处理；</li>
+<li>当然更理想的应当是将耗时请求异步化设计；</li>
+</ol>
+<h3 id="trace适配">Trace适配</h3>
+<p>这个工作量较大，理论上在跨协程/线程/进程的流程中，需要手动加入TraceId/SpanId的流转。尤其是非Java类语言，需要改造的工作量不小。前端的用户行为跟踪主要针对墨斗平台，目前可以不考虑。</p>
+<p>当然可以使用改造基础库的方法隐式注入，但是目前公司的基础库并未统一。组内基础库也没覆盖各种私有协议，总之还是要排查修改。</p>
+<p>另外就是重要Trace建议通过JSON格式的日志记录，plain text只能通过正则处理，效率太低。</p>
+<h3 id="接口设计改造">接口设计改造</h3>
+<p>泛用型接口，比如给设备发送命令的<code>cmd/send</code>，根据物模型的不同，实际上延迟差距非常大。</p>
+<p>对于这种接口，一个思路是将cmd写到url里，即<code>cmd/send/&lt;CMD_XXX&gt;</code>，这样可以从网关层统计端到端延迟。</p>
+<p>还有一种思路就是使用Trace/Log，显式记录不同cmd的延迟，并借此设计API的SLO.</p>
+<h3 id="配置文件">配置文件</h3>
+<p>Google推荐使用Jsonnet这种封闭式语言生成配置文件，并将生成脚本放在代码仓库里，在编译时顺便生成配置文件。通过配合Json Schema，可以在编译时就检测配置文件的有效性，避免因为配置出现问题导致的线上bug。</p>
+<h3 id="灰度发布">灰度发布</h3>
+<p>目前没有灰度的实施流程，全链路灰度实施难度实际上比较大，需要与运维协商。</p>
+<p>另外，灰度的Log、Metric与稳定版本需要区分开来，SLI的看板也要独立出来，这样才能迅速定位到版本的问题。</p>
+<h3 id="自动化测试">自动化测试</h3>
+<p>需要进一步完善自动化测试系统，这样通过测试环境的监控就可以尽可能解决各种错误。通过定期的压力测试，也可以保证告警自愈机制的可靠性。</p>
+<h2 id="iot平台的slo">IoT平台的SLO</h2>
+<p>SLO需要从用户使用体验出发，根据用户的需求来制定。不同服务的SLI需要仔细讨论后商定，这里只是举几个例子。</p>
+<p>对于IoT平台而言，用户可见的SLI分为两类：对设备侧和对用户侧。</p>
+<p>设备侧的数据可以分为以下几类：</p>
+<ol>
+<li>周期性采集数据，如各种传感器。量大，关注实时性，允许丢失甚至故意丢失；此时主要SLI应当是端到端的延迟；</li>
+<li>触发性数据，如用户经过闸机的考勤记录，量不大，但是关注一致性，不允许丢失（设备会有重试）；此时主要SLI应当是数据的到达率；</li>
+<li>流媒体数据，主要是各种音视频数据，量特别大，带宽消耗巨大，关注实时性，允许丢包；此时SLI就比较复杂，对于视频监控，理论上追求的是在带宽受限的情况下，用户观看到视频的及时性和画质满意度，这个SLI的计算方法就需要权衡；</li>
+</ol>
+<p>设备侧的错误需要区分是本身的问题（比如上报数据没按协议来），还是服务的问题。由于设备使用各种私有二进制协议，因此在Trace跟踪这里相对麻烦。</p>
+<p>用户侧就与一般的服务类似了，根据API的不同，一般追求端到端的延迟百分位，低错误率等。</p>
+<p>高性能服务还要考虑饱和度与吞吐量之间的比例关系，这个适合作为内部SLO，无须对外。</p>
+<p>SLO需要一个时间窗口，根据业务性质的不同，也可以指定自然月，甚至季度作为时间窗口。Google推荐按4周的滚动周期作为时间窗口：比如最近4周hermes HTTP API的成功率（非5xx）在99.9%. 那么系统允许有0.1%的错误，这被称为错误预算。理想情况下，如果系统的流量均匀，那么每天的错误响应不高于0.1%，就不应该触发告警。但是实际情况往往非常复杂，Google推荐设置基于SLO的多个时间窗口、多个燃烧率阈值作为告警的条件，可以参考<a href="https://juejin.cn/post/7048830093698793480">这里</a>。</p>
+<p>此外，告警需要区分等级，很多时候大问题是从小问题开始的，但是小问题不一定引起大问题。下面是99.9%SLO的推荐报警设置：</p>
+<p><img src="https://s2.loli.net/2022/10/10/aA3Wqf4kQTyXYzN.webp" alt="image-20220103122300705"></p>
+
+        </div>
+        
+        
+        
+
+
+        
+        
+        
+        
+<div class="flex flex-col md:flex-row md:justify-between -mx-2 mt-4 px-2 pt-4 border-t">
+    <div>
+        
+    </div>
+    <div class="md:text-right mt-4 md:mt-0">
+        
+        <span class="block font-bold">Next</span>
+        <a href="https://yiuterran.github.io/blog/posts/sre%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" class="block">SRE读书笔记</a>
+        
+    </div>
+</div>
+
+        
+
+
+
+    </div>
+    
+    <div class="col-span-2">
+        
+        
+        <div class="sticky top-16 z-10 hidden lg:block px-6 py-4  bg-primary-bg ">
+    <span class="text-lg font-semibold">On This Page</span>
+</div>
+<div class="sticky-toc hidden lg:block px-6 pb-6 ">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#四个黄金指标">四个黄金指标</a></li>
+    <li><a href="#监控平台选型">监控平台选型</a></li>
+    <li><a href="#公司已有组件">公司已有组件</a></li>
+    <li><a href="#架构设计">架构设计</a>
+      <ul>
+        <li><a href="#夜莺jaegerefk">夜莺+Jaeger+EFK</a></li>
+        <li><a href="#使用elastic-observability">使用Elastic Observability</a></li>
+      </ul>
+    </li>
+    <li><a href="#告警自愈">告警自愈</a>
+      <ul>
+        <li><a href="#服务回滚">服务回滚</a></li>
+        <li><a href="#弹性扩容">弹性扩容</a></li>
+        <li><a href="#服务降级">服务降级</a></li>
+        <li><a href="#创建工单">创建工单</a></li>
+      </ul>
+    </li>
+    <li><a href="#二次开发">二次开发</a></li>
+    <li><a href="#应用改造">应用改造</a>
+      <ul>
+        <li><a href="#重试逻辑修正">重试逻辑修正</a></li>
+        <li><a href="#fast-fail">Fast-Fail</a></li>
+        <li><a href="#trace适配">Trace适配</a></li>
+        <li><a href="#接口设计改造">接口设计改造</a></li>
+        <li><a href="#配置文件">配置文件</a></li>
+        <li><a href="#灰度发布">灰度发布</a></li>
+        <li><a href="#自动化测试">自动化测试</a></li>
+      </ul>
+    </li>
+    <li><a href="#iot平台的slo">IoT平台的SLO</a></li>
+  </ul>
+</nav>
+</div>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        enableStickyToc();
+    });
+</script>
+        
+    </div>
+    
+
+    
+    
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', ()=>{
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+
+      </div>
+    </div>
+    
+  </main>
+  <footer class="ps-scrollbar">
+    <div class="w-full max-w-screen-xl mx-auto"><div class="text-center p-6 pin-b">
+    <p class="text-sm text-tertiary-text">&copy; 2021 <a href="https://www.wangchucheng.com/">WANG Chucheng</a> and <a href="https://www.ruiqima.com/">MA Ruiqi</a>
+ &middot;  Powered by the <a href="https://github.com/wangchucheng/hugo-eureka" class="hover:text-eureka">Eureka</a> theme for <a href="https://gohugo.io" class="hover:text-eureka">Hugo</a></p>
+</div></div>
+  </footer>
+</body>
+
+</html>
