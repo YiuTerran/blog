@@ -10,7 +10,7 @@ date: 2022-10-12T17:52:42+08:00
 lastmod: 2022-10-12T17:52:42+08:00
 featuredVideo:
 featuredImage:
-draft: true
+draft: false
 ---
 
 随着ES v8.4的发布，es对于可观测性三支柱（Metric/Trace/Log）都具有较为完备的支持，Alert功能也能满足一般需求，kibana的看板功能经过这么多年的迭代，可用性也比较好了。最重要的是，**兼容OpenTelemetry的标准**也保证如果用的不爽也可以用其他开源组件替换，所以项目组目前搭建监控平台，经过评估还是决定优先用这一套。
@@ -37,7 +37,7 @@ autorefresh=1
 type=rpm-md
 EOF
 
-sudo yum install -y --enablerepo=elasticsearch elasticsearch 
+sudo yum install -y --enablerepo=elasticsearch elasticsearch
 ```
 
 es应该是有中国的CDN，所以下载很快。在安装过程中会自动生成超管密码：

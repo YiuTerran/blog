@@ -19,6 +19,15 @@
     </item>
     
     <item>
+      <title>Elastic Observability系统搭建</title>
+      <link>https://yiuterran.github.io/blog/posts/es-stack%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E8%90%BD%E5%9C%B0/</link>
+      <pubDate>Wed, 12 Oct 2022 17:52:42 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/posts/es-stack%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E8%90%BD%E5%9C%B0/</guid>
+      <description>随着ES v8.4的发布，es对于可观测性三支柱（Metric/Trace/Log）都具有较为完备的支持，Alert功能也能满足一般需求，kibana的</description>
+    </item>
+    
+    <item>
       <title>SRE读书笔记</title>
       <link>https://yiuterran.github.io/blog/posts/sre%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/</link>
       <pubDate>Thu, 22 Sep 2022 10:01:11 +0800</pubDate>
