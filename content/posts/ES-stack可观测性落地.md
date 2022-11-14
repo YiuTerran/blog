@@ -632,7 +632,11 @@ Elastic Agent已经集成了Prometheus Metric采集功能（还是beta），当�
 
 我们需要将上面的grok转换后的格式关联一个索引模板。
 
-先创建一个组件模板以供复用，到`Stack Management`-`索引管理`下面，点击**组件模板**tab页下**创建**相关按钮，填入名称（如custom-logs@mapping），在mapping页面做好映射：
+先创建一个组件模板以供复用，到`Stack Management`-`索引管理`下面，点击**组件模板**tab页下**创建**相关按钮，填入名称（如custom-logs@mapping），在**映射**页面配置字段映射：
+
+![image-20221102111708534](https://s2.loli.net/2022/11/02/iOIGgqcJyrnQf1P.png)
+
+对应的json配置如下：
 
 ```json
 {
