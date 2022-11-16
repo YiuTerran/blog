@@ -254,6 +254,8 @@ six==1.16.0
 
 我们主要关注的是消息路由以及集群组成方式两部分的逻辑，以及插件系统（机器人的依赖）的工作原理。
 
+可以先读一下[api.md](https://github.com/tinode/chat/blob/master/docs/API.md#how-it-works)，也可以直接看代码。由于架构比较简单，所以代码并不复杂。
+
 打开main.go文件，可以看到除了静态文件，`mux`一共托管了如下几个API：
 
 ```go
@@ -338,4 +340,108 @@ type Subscription struct {
 ```
 
 两个协程进行读写循环。这里很明显一个问题是这两个协程没有做生命周期控制。
+
+#### readLoop
+
+websocket的ping/pong相当于应用层心跳，这里给了55s的超时。
+
+一个死循环获取消息直到EOF，然后将消息分发到`s.dispatch`，分发逻辑是同步处理的。
+
+注意这里的`pluginFirehose`是触发插件处理的逻辑，一会儿再看。
+
+客户端过来的消息被映射成json的kv对，通过判断field是不是nil来判断消息类型（protobuf里这里使用`oneof`定义的）。
+
+这里可以看到：
+
+```go
+	if globals.cluster.isPartitioned() {
+		// The cluster is partitioned due to network or other failure and this node is a part of the smaller partition.
+		// In order to avoid data inconsistency across the cluster we must reject all requests.
+		s.queueOut(ErrClusterUnreachableReply(msg, msg.Timestamp))
+		return
+	}
+```
+
+分区容忍度判断方式是`(len(c.nodes)+1)/2 >= len(c.fo.activeNodes)`，避免节点死亡过多。
+
+真正的消息处理逻辑是通过`checkVers`返回的handler函数来进行的，核心逻辑则是通过`s.publish`, `s.subscribe`等处理器来完成的。特别需要注意的是，所有的处理逻辑都是同步的，直到最后`s.queueOut`将回复消息塞进session的`send`管道。
+
+#### writeLoop
+
+写循环显然就是从`send`管道里面读出数据，写给目标。这里也定义了一个定时器用来定时向客户端发送ping。
+
+### 集群原理
+
+显然im的主要逻辑就是接收一个人的消息，然后找到接收者对应的socket，将消息写过去。
+
+难的地方是如何保证消息不多不少不乱，同时延迟尽可能低。
+
+所以核心的逻辑在如何处理pub和sub的关系。如果用mqtt的话，实际上最难的这一步emqx这种broker已经帮你做了，因为后者本来就是pub/sub模型，且支持QoS.
+
+回到`publish`函数，这里就是找到topic的订阅者集合，将消息写到broadcast队列里。跟踪这个变量的使用，最终可以看到`Topic`的`clientMsg`管道。
+
+跟踪Topic，可以看到创建的地方在`Hub.run`这个成员函数。这里有一大段注释：
+
+```go
+		case join := <-h.join:
+			// Handle a subscription request:
+			// 1. Init topic
+			// 1.1 If a new topic is requested, create it
+			// 1.2 If a new subscription to an existing topic is requested:
+			// 1.2.1 check if topic is already loaded
+			// 1.2.2 if not, load it
+			// 1.2.3 if it cannot be loaded (not found), fail
+			// 2. Check access rights and reject, if appropriate
+			// 3. Attach session to the topic
+			// Is the topic already loaded?
+			t := h.topicGet(join.RcptTo)
+```
+
+注意后面的`isProxy`成员，这里也有一大段注释：
+
+```go
+	// If isProxy == true, the actual topic is hosted by another cluster member.
+	// The topic should:
+	// 1. forward all messages to master
+	// 2. route replies from the master to sessions.
+	// 3. disconnect sessions at master's request.
+	// 4. shut down the topic at master's request.
+	// 5. aggregate access permissions on behalf of attached sessions.
+```
+
+到这里已经可以猜出集群的大致原理：
+
+1. 消息系统的核心是topic；
+2. topic在集群上某个节点上（初次被订阅的时候）创建为master节点，集群的其他结点则是该topic的proxy节点；
+3. proxy节点会将所有发往该topic的消息路由到master节点，所有的消息处理逻辑在master节点进行；
+4. 如果是事务类消息，master会将处理结果发回proxy节点；
+5. 如果是pub消息，master节点会广播到其他结点；
+
+其实核心逻辑就在`runLocal`和`runLocal`这两个函数里。
+
+其中master节点pub类消息的处理逻辑在`Topic.handlePubBroadcast`里，追踪可达`Topic.saveAndBroadcastMessage`这里。
+
+这里可以看到`PluginMessage`调用了插件来回调。真正的写入就是简单的`sess.queueOut`，后者判断`s.multi`，如果是proxy的session，则会通过`clusterWriteLoop`将数据通过rpc写入session所在的真正节点。
+
+那么proxy的session是怎么连接到master的topic上的呢，查看s.proto的赋值，可以看到和PROXY或者MULTIPLEX的赋值都在`TopicMaster`里。这个函数没有被直接调用，而是通过反射的方式，在`ClusterNode.proxyToMaster`里调用。
+
+一路追寻可以看到`Cluster.start`函数，这里定义了节点之间相互连接的处理流程。实际上大部分逻辑还是在`TopicMaster`里，proxy节点订阅会在这里创建一个copy的session，其proto定义为PROXY.所以proxy节点对topic的每个订阅session，在master节点上都有一个副本。这个设计显然称不上很妙，理论上master节点只需要知道哪个proxy节点对topic有订阅即可（类似路由表的设计），session的副本实在是没有必要，非常浪费内存。
+
+另外查看`ClusterNode.reconnect`，可以看到大大的**FIXME**，这里消息可能丢失。
+
+### chatbot
+
+上面有两个plugin的调用，显然是供插件系统的生命周期回调。
+
+先看bot的使用。
+
+## 设计缺陷
+
+通过上面的解析可以看到一些很明显的缺陷：
+
+1. 没有QoS设计，消息是可能丢失的；
+2. 没看到消息时序的设计，消息的顺序完全依赖达到服务端的顺序；
+3. 集群通信的效率不太高；
+
+
 
