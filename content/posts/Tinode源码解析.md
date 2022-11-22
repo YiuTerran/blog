@@ -10,7 +10,7 @@ date: 2022-11-14T19:21:38+08:00
 lastmod: 2022-11-14T19:21:38+08:00
 featuredVideo:
 featuredImage:
-draft: true
+draft: false
 ---
 
 ## 概述
@@ -33,165 +33,7 @@ draft: true
 
 在server文件夹下建立static文件夹，将`https://github.com/tinode/webapp/archive/master.zip`解压到static文件夹下。
 
-修改build-all.sh，这个脚本bug挺多的，推测是有go mod之前用的，修改后仅保留windows和linux的两个二进制文件，mac可以自己加上darwin+amd64/arm64的配置，大致如下：
-
-```bash
-#!/bin/bash
-
-# Supported OSs: mac (darwin), windows, linux.
-goplat=(windows linux)
-
-# CPUs architectures: amd64 and arm64. The same order as OSs.
-goarc=(amd64 amd64)
-
-# Number of platform+architectures.
-buildCount=${#goplat[@]}
-
-# Supported database tags
-dbtags=(mysql)
-
-for line in "$@"; do
-  eval "$line"
-done
-
-version=$1
-
-if [ -z "$version" ]; then
-  # Get last git tag as release version. Tag looks like 'v1.2.3', so strip 'v'.
-  version=$(git describe --tags)
-  version=${version#?}
-fi
-
-echo "Releasing $version"
-
-GOSRC=$(dirname "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)")
-
-pushd "${GOSRC}"/chat >/dev/null || exit
-
-# Prepare directory for the new release
-rm -fR ./releases/"${version}"
-mkdir -p ./releases/"${version}"
-
-# Tar on Mac is inflexible about directories. Let's just copy release files to
-# one directory.
-rm -fR ./releases/tmp
-mkdir -p ./releases/tmp/templ
-
-# Copy templates and database initialization files
-cp ./server/tinode.json5 ./releases/tmp
-cp ./server/templ/*.templ ./releases/tmp/templ
-cp ./tinode-db/data.json ./releases/tmp
-cp ./tinode-db/*.jpg ./releases/tmp
-cp ./tinode-db/credentials.sh ./releases/tmp
-
-# Create directories for and copy TinodeWeb files.
-if [[ -d ./server/static ]]; then
-  mkdir -p ./releases/tmp/static/img
-  mkdir ./releases/tmp/static/css
-  mkdir ./releases/tmp/static/audio
-  mkdir ./releases/tmp/static/src
-  mkdir ./releases/tmp/static/umd
-
-  cp ./server/static/img/*.png ./releases/tmp/static/img
-  cp ./server/static/img/*.svg ./releases/tmp/static/img
-  cp ./server/static/img/*.jpeg ./releases/tmp/static/img
-  cp ./server/static/audio/*.m4a ./releases/tmp/static/audio
-  cp ./server/static/css/*.css ./releases/tmp/static/css
-  cp ./server/static/index.html ./releases/tmp/static
-  cp ./server/static/index-dev.html ./releases/tmp/static
-  cp ./server/static/version.js ./releases/tmp/static
-  cp ./server/static/umd/*.js ./releases/tmp/static/umd
-  cp ./server/static/manifest.json ./releases/tmp/static
-  cp ./server/static/service-worker.js ./releases/tmp/static
-  # Create empty FCM client-side config.
-  touch ./releases/tmp/static/firebase-init.js
-else
-  echo "TinodeWeb not found, skipping"
-fi
-
-for ((i = 0; i < buildCount; i++)); do
-  plat="${goplat[$i]}"
-  arc="${goarc[$i]}"
-
-  suffix=''
-  if [ "$plat" = "windows" ]; then
-    suffix='.exe'
-  fi
-  # Remove possibly existing keygen.
-  rm -f ./releases/tmp/keygen*
-
-  # Keygen is database-independent
-  env GOOS="${plat}" GOARCH="${arc}" go build -ldflags "-s -w" -o ./releases/tmp/keygen"${suffix}" ./keygen >/dev/null
-
-  for dbtag in "${dbtags[@]}"; do
-    echo "Building ${dbtag}-${plat}/${arc}..."
-
-    # Remove possibly existing binaries from earlier builds.
-    rm -f ./releases/tmp/tinode.exe
-    rm -f ./releases/tmp/tinode
-    rm -f ./releases/tmp/init-db*
-    
-    env GOOS="${plat}" GOARCH="${arc}" go build \
-      -ldflags "-s -w -X main.buildstamp=$(git describe --tags)" -tags "${dbtag}" \
-      -o ./releases/tmp/tinode"${suffix}" ./server >/dev/null
-    env GOOS="${plat}" GOARCH="${arc}" go build \
-      -ldflags "-s -w" -tags "${dbtag}" -o ./releases/tmp/init-db"${suffix}" ./tinode-db >/dev/null
-    
-    # Build archive. All platforms but Windows use tar for archiving. Windows uses zip.
-    if [ "$plat" = "windows" ]; then
-      # Remove possibly existing archive.
-      rm -f ./releases/"${version}/tinode-${dbtag}.${plat}-${arc}".zip
-      # Generate a new one
-      pushd ./releases/tmp >/dev/null || exit
-      zip -q -r ../"${version}/tinode-${dbtag}.${plat}-${arc}".zip ./*
-      popd >/dev/null || exit
-    else
-      # Remove possibly existing archive.
-      rm -f ./releases/"${version}/tinode-${dbtag}.${plat}-${arc}".tar.gz
-      # Generate a new one
-      tar -C ./releases/tmp -zcf ./releases/"${version}/tinode-${dbtag}.${plat}-${arc}".tar.gz .
-    fi
-  done
-done
-
-# Build chatbot release
-echo "Building python code..."
-
-./build-py-grpc.sh
-
-# Release chatbot
-echo "Packaging chatbot.py..."
-rm -fR ./releases/tmp
-mkdir -p ./releases/tmp
-
-cp "${GOSRC}"/chat/chatbot/python/chatbot.py ./releases/tmp
-cp "${GOSRC}"/chat/chatbot/python/quotes.txt ./releases/tmp
-cp "${GOSRC}"/chat/chatbot/python/requirements.txt ./releases/tmp
-
-tar -C "${GOSRC}"/chat/releases/tmp -zcf ./releases/"${version}"/py-chatbot.tar.gz .
-pushd ./releases/tmp >/dev/null || exit
-zip -q -r ../"${version}"/py-chatbot.zip ./*
-popd >/dev/null || exit
-
-# Release tn-cli
-echo "Packaging tn-cli..."
-
-rm -fR ./releases/tmp
-mkdir -p ./releases/tmp
-
-cp "${GOSRC}"/chat/tn-cli/*.py ./releases/tmp
-cp "${GOSRC}"/chat/tn-cli/*.txt ./releases/tmp
-
-tar -C "${GOSRC}"/chat/releases/tmp -zcf ./releases/"${version}"/tn-cli.tar.gz .
-pushd ./releases/tmp >/dev/null || exit
-zip -q -r ../"${version}"/tn-cli.zip ./*
-popd >/dev/null || exit
-
-# Clean up temporary files
-rm -fR ./releases/tmp
-
-popd >/dev/null || exit
-```
+修改build-all.sh，仅保留windows和linux的两个二进制文件，mac可以自己加上darwin+amd64/arm64的配置. 第一次使用的时候发现脚本还是有不少bug，不过维护者很快就修理了，现在应该可以正常使用了。
 
 在平台上安装grpc相关依赖，包括protoc的二进制，以及：
 
@@ -431,9 +273,49 @@ websocket的ping/pong相当于应用层心跳，这里给了55s的超时。
 
 ### chatbot
 
-上面有两个plugin的调用，显然是供插件系统的生命周期回调。
+上面有两个plugin的调用，显然是供插件系统的生命周期回调。在`chatbot/python`文件夹下面有一个Python机器人的示例。虽然我有点奇怪他这明明是golang的项目，机器人要用Python来写。可能是为了突出机器人的语言无关性？
 
-先看bot的使用。
+实际上就是使用grpc通信，从`readme.md`中可以看到具体使用方法，对应的protobuf文件在`pbx`文件夹下，主要接口包括：
+
+```protobuf
+// This is the single method that needs to be implemented by a gRPC client.
+service Node {
+	// Client sends a stream of ClientMsg, server responds with a stream of ServerMsg
+  	rpc MessageLoop(stream ClientMsg) returns (stream ServerMsg) {}
+}
+
+// Plugin interface.
+service Plugin {
+	// This plugin method is called by Tinode server for every message received from the clients. The
+	// method returns a ServerCtrl message. Non-zero ServerCtrl.code indicates that no further
+	// processing is needed. The Tinode server will generate a {ctrl} message from the returned ServerCtrl
+	// and forward it to the client session.
+	// ServerCtrl.code equals to 0 instructs the server to continue with default processing of the client message.
+	rpc FireHose(ClientReq) returns (ServerResp) {}
+
+	// An alteranative user and topic discovery mechanism.
+	// A search request issued on a 'fnd' topic. This method is called to generate an alternative result set.
+	rpc Find(SearchQuery) returns (SearchFound) {}
+
+	// The following methods are for the Tinode server to report individual events.
+
+	// Account created, updated or deleted
+	rpc Account(AccountEvent) returns (Unused) {}
+
+	// Topic created, updated [or deleted -- not supported yet]
+	rpc Topic(TopicEvent) returns (Unused) {}
+
+	// Subscription created, updated or deleted
+	rpc Subscription(SubscriptionEvent) returns (Unused) {}
+
+	// Message published or deleted
+	rpc Message(MessageEvent) returns (Unused) {}
+}
+```
+
+一般客户端实际上只需要实现`MessageLoop`这个消息循环，不停的给服务端发送ClientMsg即可，它的功能和上面的websocket通信其实是一致的。
+
+插件显然需要实现Plugin的server，chat的主程序作为plugin的客户端，调用插件提供的服务，而插件需要通过配置文件进行激活，详见`plugins`部分（在最后）。整体逻辑不难理解，就是客户端行为的回调。
 
 ## 设计缺陷
 
