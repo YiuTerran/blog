@@ -1,9 +1,8 @@
-en:
+zh:
   languageCode: zh
   languageName: 简体中文
   # Uncomment for multilingual sites, and move the default content into corresponding sub-folder.
   # contentDir: content/en
-
 # Uncomment for multilingual sites, and customize the following config.
 # zh:
 #   languageCode: zh

@@ -8,7 +8,7 @@ canonifyurls: true
 theme: wangchucheng.com/hugo-eureka
 # If you cannot access the Github mirror, you can also use the Gitee mirror: gitee.com/wangchucheng/hugo-eureka
 
-paginate: 3
+paginate: 10
 copyright: >
   &copy; 2021 <a href="https://www.wangchucheng.com/">WANG Chucheng</a> and <a
   href="https://www.ruiqima.com/">MA Ruiqi</a>
@@ -16,12 +16,12 @@ enableEmoji: true
 enableGitInfo: false
 summaryLength: 75
 
-defaultContentLanguage: en
+defaultContentLanguage: zh
 hasCJKLanguage: true # Set `true` for Chinese/Japanese/Korean.
 defaultContentLanguageInSubdir: false
 
 # Uncomment for google analytics
-# googleAnalytics: UA-123-45
+googleAnalytics: G-C0R8DENDJ0
 
 publishDir: docs
 markup:
@@ -45,5 +45,4 @@ taxonomies:
 build:
   useResourceCacheWhen: fallback
 
-module:
-  proxy="direct"
+module: proxy="direct"

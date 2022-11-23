@@ -1,5 +1,5 @@
 ---
-title: Pages
+title: 文章
 draft: false
 # Section you want to display
 section: posts
@@ -30,5 +30,5 @@ widget:
     # Options: center, top, right, bottom, left.
     position:
     # Options: fixed, local, scroll.
-    attachment: 
+    attachment:
 ---

@@ -41,29 +41,13 @@ math:
 
 comment:
   # Options: disqus, commento, valine and utterances.
-  handler:
-
-  # disqus:
-  #   shortname:
-
+  handler: utterances
   utterances:
     # Browse https://utteranc.es/ to see the options available.
     # If you want the color scheme of utterances to follow eureka's, you can set `theme: eureka`.
     repo: YiuTerran/blog-comment
-    issue-term: "pathname"
-    theme: "eureka"
-
-  # commento:
-  #   # If self-hosting, please enter the url (e.g. https://commento.example.com) here. Otherwise leave empty.
-  #   url:
-
-  # valine:
-  #   # Browse https://valine.js.org/en/configuration.html to see the options available.
-  #   # You can list the key and value you want as below.
-  #   # Because Hugo's config params are case-insensitive, you need to add `-` or `_` before the uppercase letters.
-  #   # For example, `appId` should be written as `app-Id` or other acceptable formats.
-  #   app-Id:
-  #   app-Key:
+    issue-term: pathname
+    theme: eureka
 
 diagram:
   handler: mermaid
@@ -73,6 +57,6 @@ diagram:
   #   # You can list the key and value you want as below.
   #   # Because Hugo's config params are case-insensitive, you need to add `-` or `_` before the uppercase letters.
   #   # For example, `diagramPadding` should be written as `diagram-Padding` or other acceptable formats.
-  #   theme: 
+  #   theme:
   #   flowchart:
   #     diagram-padding:

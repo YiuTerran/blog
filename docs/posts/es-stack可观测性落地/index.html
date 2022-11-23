@@ -52,6 +52,14 @@
 
 <script defer src="https://cdn.jsdelivr.net/npm/mermaid@8.9.2/dist/mermaid.min.js" 
   integrity="sha256-Zmpaaj&#43;GXFsPF5WdPArSrnW3b30dovldeKsW00xBVwE="  crossorigin></script>
+<link rel="preconnect" href="https://www.google-analytics.com" crossorigin>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-C0R8DENDJ0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-C0R8DENDJ0');
+</script>
 
 
 <link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
@@ -169,9 +177,9 @@
                 </div>
                 <div class="absolute flex flex-col start-0 md:start-auto end-auto md:end-0 hidden bg-secondary-bg w-48 rounded py-2 border border-tertiary-bg cursor-pointer z-40"
                     id='lightDarkOptions'>
-                    <span class="px-4 py-1 hover:text-eureka" name="Light">Light</span>
-                    <span class="px-4 py-1 hover:text-eureka" name="Dark">Dark</span>
-                    <span class="px-4 py-1 hover:text-eureka" name="Auto">Auto</span>
+                    <span class="px-4 py-1 hover:text-eureka" name="Light">浅色</span>
+                    <span class="px-4 py-1 hover:text-eureka" name="Dark">深色</span>
+                    <span class="px-4 py-1 hover:text-eureka" name="Auto">自动</span>
                 </div>
             </div>
         </div>
@@ -221,7 +229,7 @@
     </div>
     <div class="me-6 my-2">
         <i class="fas fa-clock me-1"></i>
-        <span>28 min read</span>
+        <span>28分钟阅读时长</span>
     </div>
     
     
@@ -871,13 +879,13 @@ systemctl start filebeat
 <div class="flex flex-col md:flex-row md:justify-between -mx-2 mt-4 px-2 pt-4 border-t">
     <div>
         
-        <span class="block font-bold">Previous</span>
+        <span class="block font-bold">上一页</span>
         <a href="https://yiuterran.github.io/blog/posts/%E7%9B%91%E6%8E%A7%E5%B9%B3%E5%8F%B0%E8%B0%83%E7%A0%94%E6%8A%A5%E5%91%8A/" class="block">监控平台调研报告</a>
         
     </div>
     <div class="md:text-right mt-4 md:mt-0">
         
-        <span class="block font-bold">Next</span>
+        <span class="block font-bold">下一页</span>
         <a href="https://yiuterran.github.io/blog/posts/sre%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" class="block">SRE读书笔记</a>
         
     </div>
@@ -887,13 +895,28 @@ systemctl start filebeat
 
 
 
+  <script id="utterances" src="https://utteranc.es/client.js"
+            issue-term=pathname
+            repo=YiuTerran/blog-comment
+              theme=preferred-color-scheme
+        crossorigin="anonymous"
+        async>
+</script>
+<script>
+    if (storageColorScheme == "Light") {
+      document.getElementById('utterances').setAttribute('theme', 'github-light')
+    } else if (storageColorScheme == "Dark") {
+      document.getElementById('utterances').setAttribute('theme', 'github-dark')
+    }
+</script>
+
     </div>
     
     <div class="col-span-2">
         
         
         <div class="sticky top-16 z-10 hidden lg:block px-6 py-4  bg-primary-bg ">
-    <span class="text-lg font-semibold">On This Page</span>
+    <span class="text-lg font-semibold">本页内容</span>
 </div>
 <div class="sticky-toc hidden lg:block px-6 pb-6 ">
     <nav id="TableOfContents">
