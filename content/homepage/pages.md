@@ -1,5 +1,5 @@
 ---
-title: 文章
+title: 近期发布
 draft: false
 # Section you want to display
 section: posts
