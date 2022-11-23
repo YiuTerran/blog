@@ -8,10 +8,9 @@ canonifyurls: true
 theme: wangchucheng.com/hugo-eureka
 # If you cannot access the Github mirror, you can also use the Gitee mirror: gitee.com/wangchucheng/hugo-eureka
 
-paginate: 10
+paginate: 5
 copyright: >
-  &copy; 2021 <a href="https://www.wangchucheng.com/">WANG Chucheng</a> and <a
-  href="https://www.ruiqima.com/">MA Ruiqi</a>
+  &copy; 2021 <a href="https://github.com/YiuTerran">tryao</a>
 enableEmoji: true
 enableGitInfo: false
 summaryLength: 75
