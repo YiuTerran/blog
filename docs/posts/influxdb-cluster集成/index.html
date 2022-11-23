@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width">
 
 
-<title>Ginkgo使用笔记 | 应许之地</title>
+<title>Influxdb Cluster集成 | 应许之地</title>
 
 <meta name="generator" content="Hugo Eureka 0.9.0" />
 <link rel="stylesheet" href="https://yiuterran.github.io/blog/css/eureka.min.css">
@@ -66,7 +66,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
 
 <meta name="description"
-  content="go自带的单元测试比较适合测一个小函数，如果要做一系列的流程测试，则显得较为繁琐。 推荐使用ginkgo来做流程测试，BDD风格写出来的测试代码非常容易">
+  content="本文记录在golang项目中集成influxdb-cluster需要的知识储备。 术语 database 和MySQL中一致 batch \n分割的多行数据，用来批量写入。 influ">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -78,8 +78,8 @@
       "item":"https://yiuterran.github.io/blog/posts/"},{
       "@type": "ListItem",
       "position": 2 ,
-      "name":"Ginkgo使用笔记",
-      "item":"https://yiuterran.github.io/blog/posts/ginkgo%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/"}]
+      "name":"Influxdb Cluster集成",
+      "item":"https://yiuterran.github.io/blog/posts/influxdb-cluster%E9%9B%86%E6%88%90/"}]
 }
 </script>
 
@@ -91,11 +91,11 @@
     "@type": "Article",
     "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": "https://yiuterran.github.io/blog/posts/ginkgo%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/"
+        "@id": "https://yiuterran.github.io/blog/posts/influxdb-cluster%E9%9B%86%E6%88%90/"
     },
-    "headline": "Ginkgo使用笔记 | 应许之地","datePublished": "2022-09-05T18:10:06+08:00",
-    "dateModified": "2022-09-05T18:10:06+08:00",
-    "wordCount":  925 ,
+    "headline": "Influxdb Cluster集成 | 应许之地","datePublished": "2022-09-01T15:47:56+08:00",
+    "dateModified": "2022-09-01T15:47:56+08:00",
+    "wordCount":  1103 ,
     "author": {
         "@type": "Person",
         "name": ["tryao"]
@@ -108,21 +108,21 @@
             "url": "https://yiuterran.github.io/blog/images/icon.png"
         }
         },
-    "description": "go自带的单元测试比较适合测一个小函数，如果要做一系列的流程测试，则显得较为繁琐。 推荐使用ginkgo来做流程测试，BDD风格写出来的测试代码非常容易"
+    "description": "本文记录在golang项目中集成influxdb-cluster需要的知识储备。 术语 database 和MySQL中一致 batch \\n分割的多行数据，用来批量写入。 influ"
 }
-</script><meta property="og:title" content="Ginkgo使用笔记 | 应许之地" />
+</script><meta property="og:title" content="Influxdb Cluster集成 | 应许之地" />
 <meta property="og:type" content="article" />
 
 
 <meta property="og:image" content="https://yiuterran.github.io/blog/images/icon.png">
 
 
-<meta property="og:url" content="https://yiuterran.github.io/blog/posts/ginkgo%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/" />
+<meta property="og:url" content="https://yiuterran.github.io/blog/posts/influxdb-cluster%E9%9B%86%E6%88%90/" />
 
 
 
 
-<meta property="og:description" content="go自带的单元测试比较适合测一个小函数，如果要做一系列的流程测试，则显得较为繁琐。 推荐使用ginkgo来做流程测试，BDD风格写出来的测试代码非常容易" />
+<meta property="og:description" content="本文记录在golang项目中集成influxdb-cluster需要的知识储备。 术语 database 和MySQL中一致 batch \n分割的多行数据，用来批量写入。 influ" />
 
 
 
@@ -139,25 +139,25 @@
 
 
 
-<meta property="article:published_time" content="2022-09-05T18:10:06&#43;08:00" />
+<meta property="article:published_time" content="2022-09-01T15:47:56&#43;08:00" />
 
 
-<meta property="article:modified_time" content="2022-09-05T18:10:06&#43;08:00" />
+<meta property="article:modified_time" content="2022-09-01T15:47:56&#43;08:00" />
 
 
 
 <meta property="article:section" content="posts" />
 
 
+<meta property="article:tag" content="influxdb" />
+
+<meta property="article:tag" content="tsdb" />
+
 <meta property="article:tag" content="golang" />
 
-<meta property="article:tag" content="test" />
 
 
 
-
-
-<meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/influxdb-cluster%E9%9B%86%E6%88%90/" />
 
 <meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/golang%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A6%81%E7%82%B9/" />
 
@@ -237,15 +237,15 @@
 <div class="grid grid-cols-2 lg:grid-cols-8 gap-4 lg:pt-12">
     <div
         class="col-span-2  lg:col-span-6 bg-secondary-bg rounded px-6 py-8">
-        <h1 class="font-bold text-3xl text-primary-text">Ginkgo使用笔记</h1>
+        <h1 class="font-bold text-3xl text-primary-text">Influxdb Cluster集成</h1>
         <div class="flex flex-wrap flex-row items-center mt-2 text-tertiary-text">
     <div class="me-6 my-2">
         <i class="fas fa-calendar me-1"></i>
-        <span>2022-09-05</span>
+        <span>2022-09-01</span>
     </div>
     <div class="me-6 my-2">
         <i class="fas fa-clock me-1"></i>
-        <span>2分钟阅读时长</span>
+        <span>3分钟阅读时长</span>
     </div>
     
     
@@ -257,79 +257,97 @@
         
 
         <div class="content">
-            <p>go自带的单元测试比较适合测一个小函数，如果要做一系列的流程测试，则显得较为繁琐。</p>
-<p>推荐使用<code>ginkgo</code>来做流程测试，BDD风格写出来的测试代码非常容易读懂和维护。</p>
-<h2 id="安装">安装</h2>
-<p>这里使用v2版本进行测试，首先安装二进制文件</p>
-<pre><code class="language-bash">go install github.com/onsi/ginkgo/v2/ginkgo@latest
+            <p>本文记录在golang项目中集成<code>influxdb-cluster</code>需要的知识储备。</p>
+<h2 id="术语">术语</h2>
+<h3 id="database">database</h3>
+<p>和MySQL中一致</p>
+<h3 id="batch">batch</h3>
+<p><code>\n</code>分割的多行数据，用来批量写入。</p>
+<p>influxDB推荐5000~10000个点批量写入以提高性能。</p>
+<h3 id="bucket">bucket</h3>
+<p>database+RP</p>
+<h3 id="cq">CQ</h3>
+<p>连续查询，可以理解为一个物化视图，当数据更新时自动执行的select语句。不过这里要求必须带上<code>GROUP BY time()</code></p>
+<h3 id="duration">duration</h3>
+<p>数据保存时间，自动滚动删除</p>
+<h3 id="field">field</h3>
+<p>没加索引的额外字段，kv pair</p>
+<h3 id="data-point">data point</h3>
+<p>即点位，可以理解为表中的一行数据。</p>
+<h3 id="line-protocol">line protocol</h3>
+<p>写入数据时，数据的格式：</p>
+<blockquote>
+<pre><code>weather,location=us-midwest temperature=82 1465839830100400200
+ |    -------------------- --------------  |
+ |             |             |             |
+ |             |             |             |
++-----------+--------+-+---------+-+---------+
+|measurement|,tag_set| |field_set| |timestamp|
++-----------+--------+-+---------+-+---------+
 </code></pre>
-<p>在待测试的项目中运行：</p>
-<pre><code class="language-go">go get github.com/onsi/gomega
-</code></pre>
-<h2 id="生成">生成</h2>
-<p>在待测试的package下面跑</p>
-<pre><code class="language-bash">ginkgo bootstrap
-</code></pre>
-<p>生成suit_test文件。</p>
-<p>然后对单个文件跑</p>
-<pre><code class="language-bash">ginkgo generate xxx
-</code></pre>
-<p>xxx是待测试文件的名字。</p>
-<h2 id="语法">语法</h2>
-<p>这个生成的<code>xxx_test.go</code>被称为一个spec. spec分为三类结点：</p>
+</blockquote>
+<p>注意分隔符，时间戳在最后，默认时间精确到纳秒</p>
+<p>tag和field的key是字符串，value默认为float，其他的的格式约定如下：</p>
 <ul>
-<li>容器节点，如<code>Describe</code>、<code>Context</code>和<code>It</code>，可以理解为前端的<code>div</code>，就是用来组织代码的；一般用来说明测试的场景；</li>
-<li>setup结点，如<code>BeforeEach</code>，用来初始化数据；</li>
-<li>主题结点，一般用<code>gomega</code>里面的各种断言，形如<code>Except(xxx).To()</code>，后面会详细解释；</li>
-</ul>
-<h3 id="justbeforeeach">JustBeforeEach</h3>
-<p>该节点运行在<code>BeforeEach</code>之后，主题节点之前，可以用来做统一初始化；</p>
-<h3 id="beforeeach">BeforeEach</h3>
-<p>运行所有主题节点之前都要跑的函数</p>
-<h3 id="aftereach">AfterEach</h3>
-<p>在主题节点结束之后运行</p>
-<h3 id="justaftereach">JustAfterEach</h3>
-<p>在主题节点结束之后，AfterEach节点运行之前</p>
-<h3 id="defercleanup">DeferCleanUp</h3>
-<p>可以在BeforeEach里面写的闭包，代替AfterEach清理，代码更为简单</p>
-<h3 id="beforesuite和aftersuite">BeforeSuite和AfterSuite</h3>
-<p>在整个测试集开始之前和结束之后运行的代码，通过全局变量写在<code>suite_test</code>文件里；</p>
-<h3 id="describetable与entry">DescribeTable与Entry</h3>
-<p>可以配合用来测试多个case，避免重复代码</p>
-<h2 id="生命周期">生命周期</h2>
-<p>Ginkgo默认支持并行测试，所以必须知道整个测试树的生命周期。</p>
-<ol>
-<li>测试树构建阶段：
-<ol>
-<li>遍历顶层容器（Describe），并调用其匿名函数；</li>
-<li>定义在顶层容器中的闭包变量被初始化；</li>
-<li>注册BeforeEach，并传递内嵌的匿名函数（不会执行）；</li>
-<li>注册It，并传递内嵌的匿名函数（不会执行）；</li>
-<li>注册Context，并传递内嵌的匿名函数（立即执行）；</li>
-<li>递归构建Context中的内容；</li>
-</ol>
-</li>
-<li>测试树调用阶段：
-<ol>
-<li>将BeforeEach和It关联起来，依次运行这些函数；</li>
-</ol>
-</li>
-</ol>
-<p>所以需要注意：</p>
+<li>整数，在数字后面加<code>i</code>;</li>
+<li>字符串，加双引号<code>&quot;&quot;</code>；</li>
+<li><code>t</code>, <code>T</code>, <code>true</code>,<code>True</code>和<code>TRUE</code>，都是真；相对应的false也存在；</li>
+<li>以下需要使用<code>\</code>转义：
 <ul>
-<li>2阶段中不能包含1阶段定义的函数，即It中不能再包含Context等；</li>
-<li>2阶段不会重新初始化1阶段匿名函数中的变量，所以小心测试污染；</li>
-<li>不要在1阶段容器中使用断言；</li>
-<li>BeforeSuite在<strong>测试树调用阶段</strong>只运行一次；</li>
+<li>逗号<code>,</code></li>
+<li>等于号<code>=</code></li>
+<li>空格<code> </code></li>
+<li>双引号<code>&quot;&quot;</code></li>
 </ul>
+</li>
+</ul>
+<p>如果measurement、tag_set和timestamp都相同，则视为同一个点位。此时field_set会尝试合并，如果新的key与旧的重复，则使用新的覆盖旧的。</p>
+<h3 id="series">series</h3>
+<p>即同一个measurement+tag_set</p>
+<h2 id="数据结构">数据结构</h2>
+<p><code>shard</code>是<code>influxdb</code>存储引擎<code>TSM</code>的具体实现。<code>TSM TREE</code>是专门为<code>influxdb</code>构建的数据存储格式。与现有的<code>B+ tree</code>或<code>LSM tree</code>实现相比，<code>TSM tree</code>具有更好的压缩和更高的读写吞吐量。</p>
+<p><code>shard group</code>是存储<code>shard</code>的逻辑容器，每一个<code>shard group</code>都有一个不重叠的时间跨度，可根据保留策略<code>retention policy</code>的<code>duration</code>换算而得。数据根据不同的时间跨度存储在不同的<code>shard group</code>中。</p>
+<h2 id="查询语言influxql">查询语言(InfluxQL)</h2>
+<p>influxdb 2.0引入了<code>Flux</code>，采用类似JavaScript的查询语法。1.0中主要还是用SQL来查询，这里主要还是介绍SQL的用法。</p>
+<p>大部分查询语法和MySQL保持一致，有一些特殊的记录如下：</p>
+<ul>
+<li>
+<p>time默认是UTC时间，需要自行转换成需要的时区；</p>
+</li>
+<li>
+<p>默认按time升序排列；</p>
+</li>
+<li>
+<p>默认time为ns精度，可以写入时自行指认精度；</p>
+</li>
+<li>
+<p>不支持用<code>OR</code>+绝对时间查询；</p>
+</li>
+<li>
+<p>支持<code>SLIMIT</code>和<code>LIMIT</code>两种限制语句，对应<code>SOFFSET</code>和<code>OFFSET</code>，前者表示对<code>Series</code>的限制；</p>
+</li>
+<li>
+<p><code>GROUP BY</code>可以接<code>time(1m)</code>，后者的参数可以是各种时间尺度，并且可以用<code>fill()</code>填充缺口；</p>
+</li>
+</ul>
+<h2 id="使用">使用</h2>
+<p>httpie语法：</p>
+<pre><code class="language-bash">http -f -a root:123456 http://localhost:8086/query pretty==true db=videodb epoch=s q=&quot;select * from record where sip_id='34020000001310000003@42100000462007000103' and time&gt;1667750400s limit 10&quot;
+</code></pre>
+<p>curl语法：</p>
+<pre><code class="language-bash">curl -GET http://localhost:7076/query?pretty=true -u 'root:123456' --data-urlencode &quot;db=videodb_test&quot; --data-urlencode &quot;q=SELECT * from record WHERE sip_id='34020000001310000008@42100000462007000145' AND time&gt;=1667266200000ms&quot;
+</code></pre>
+<p>epoch表示返回time的精度，不设置的话默认返回的是人类友好的字符串格式。</p>
 
         </div>
         
         <div class="my-4">
     
-    <a href="https://yiuterran.github.io/blog/tags/golang/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#golang</a>
+    <a href="https://yiuterran.github.io/blog/tags/influxdb/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#influxdb</a>
     
-    <a href="https://yiuterran.github.io/blog/tags/test/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#test</a>
+    <a href="https://yiuterran.github.io/blog/tags/tsdb/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#tsdb</a>
+    
+    <a href="https://yiuterran.github.io/blog/tags/golang/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#golang</a>
     
 </div>
         
@@ -379,13 +397,13 @@
     <div>
         
         <span class="block font-bold">上一页</span>
-        <a href="https://yiuterran.github.io/blog/posts/sre%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" class="block">SRE读书笔记</a>
+        <a href="https://yiuterran.github.io/blog/posts/ginkgo%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/" class="block">Ginkgo使用笔记</a>
         
     </div>
     <div class="md:text-right mt-4 md:mt-0">
         
         <span class="block font-bold">下一页</span>
-        <a href="https://yiuterran.github.io/blog/posts/influxdb-cluster%E9%9B%86%E6%88%90/" class="block">Influxdb Cluster集成</a>
+        <a href="https://yiuterran.github.io/blog/posts/zabbix%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/" class="block">Zabbix配置记录</a>
         
     </div>
 </div>
@@ -420,20 +438,22 @@
 <div class="sticky-toc hidden lg:block px-6 pb-6 ">
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#安装">安装</a></li>
-    <li><a href="#生成">生成</a></li>
-    <li><a href="#语法">语法</a>
+    <li><a href="#术语">术语</a>
       <ul>
-        <li><a href="#justbeforeeach">JustBeforeEach</a></li>
-        <li><a href="#beforeeach">BeforeEach</a></li>
-        <li><a href="#aftereach">AfterEach</a></li>
-        <li><a href="#justaftereach">JustAfterEach</a></li>
-        <li><a href="#defercleanup">DeferCleanUp</a></li>
-        <li><a href="#beforesuite和aftersuite">BeforeSuite和AfterSuite</a></li>
-        <li><a href="#describetable与entry">DescribeTable与Entry</a></li>
+        <li><a href="#database">database</a></li>
+        <li><a href="#batch">batch</a></li>
+        <li><a href="#bucket">bucket</a></li>
+        <li><a href="#cq">CQ</a></li>
+        <li><a href="#duration">duration</a></li>
+        <li><a href="#field">field</a></li>
+        <li><a href="#data-point">data point</a></li>
+        <li><a href="#line-protocol">line protocol</a></li>
+        <li><a href="#series">series</a></li>
       </ul>
     </li>
-    <li><a href="#生命周期">生命周期</a></li>
+    <li><a href="#数据结构">数据结构</a></li>
+    <li><a href="#查询语言influxql">查询语言(InfluxQL)</a></li>
+    <li><a href="#使用">使用</a></li>
   </ul>
 </nav>
 </div>
@@ -452,9 +472,6 @@
         class="col-span-2  lg:col-span-6 bg-secondary-bg rounded p-6">
         <h2 class="text-lg font-semibold mb-4">相关</h2>
         <div class="content">
-            
-            <a href="https://yiuterran.github.io/blog/posts/influxdb-cluster%E9%9B%86%E6%88%90/">Influxdb Cluster集成</a>
-            <br />
             
             <a href="https://yiuterran.github.io/blog/posts/golang%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A6%81%E7%82%B9/">Golang定时器要点</a>
             <br />

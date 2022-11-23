@@ -10,7 +10,7 @@ date: 2022-09-01T15:47:56+08:00
 lastmod: 2022-09-01T15:47:56+08:00
 featuredVideo:
 featuredImage:
-draft: true
+draft: false
 ---
 
 本文记录在golang项目中集成`influxdb-cluster`需要的知识储备。
@@ -104,4 +104,19 @@ influxdb 2.0引入了`Flux`，采用类似JavaScript的查询语法。1.0中主�
 
 * `GROUP BY`可以接`time(1m)`，后者的参数可以是各种时间尺度，并且可以用`fill()`填充缺口；
 
-  
+
+## 使用
+
+httpie语法：
+
+```bash
+http -f -a root:123456 http://localhost:8086/query pretty==true db=videodb epoch=s q="select * from record where sip_id='34020000001310000003@42100000462007000103' and time>1667750400s limit 10"
+```
+
+curl语法：
+
+```bash
+curl -GET http://localhost:7076/query?pretty=true -u 'root:123456' --data-urlencode "db=videodb_test" --data-urlencode "q=SELECT * from record WHERE sip_id='34020000001310000008@42100000462007000145' AND time>=1667266200000ms"
+```
+
+epoch表示返回time的精度，不设置的话默认返回的是人类友好的字符串格式。
