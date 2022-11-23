@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang='zh' dir='ltr' ><meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+<title>Tinode源码解析 | 应许之地</title>
+
+<meta name="generator" content="Hugo Eureka 0.9.0" />
+<link rel="stylesheet" href="https://yiuterran.github.io/blog/css/eureka.min.css">
+<script defer src="https://yiuterran.github.io/blog/js/eureka.min.js"></script>
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload"
+  href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Noto+Serif+SC:wght@400;600;700&display=swap"
+  as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/styles/solarized-light.min.css"
+   media="print"
+  onload="this.media='all';this.onload=null" crossorigin>
+<script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/highlight.min.js"
+   crossorigin></script>
+
+  <script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/languages/dart.min.js"
+     crossorigin></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/js/all.min.js"
+   integrity="sha256-uNYoXefWRqv&#43;PsIF/OflNmwtKM4lStn9yrz2gVl6ymo="  crossorigin></script>
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+   integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3&#43;Aro6EYUG4&#43;cU&#43;KJWu/X"  media="print"
+  onload="this.media='all';this.onload=null" crossorigin>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js" 
+  integrity="sha384-g7c&#43;Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI&#43;sEnkvrMWph2EDg4"  crossorigin></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
+   integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC&#43;Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa"  crossorigin></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: "$$", right: "$$", display: true },
+        { left: "$", right: "$", display: false },
+        { left: "\\(", right: "\\)", display: false },
+        { left: "\\[", right: "\\]", display: true }
+      ],
+    });
+  });
+</script>
+
+
+<script defer src="https://cdn.jsdelivr.net/npm/mermaid@8.9.2/dist/mermaid.min.js" 
+  integrity="sha256-Zmpaaj&#43;GXFsPF5WdPArSrnW3b30dovldeKsW00xBVwE="  crossorigin></script>
+
+
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
+
+<meta name="description"
+  content="概述 有朋友需要做一个im，简单做了一下技术调研，流行的开源框架包括： Tinode/chat: 即本文主角，golang编写，架构比较简单，有MySQL就能跑，轻量级方案。支持">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+      "@type": "ListItem",
+      "position": 1 ,
+      "name":"Posts",
+      "item":"https://yiuterran.github.io/blog/posts/"},{
+      "@type": "ListItem",
+      "position": 2 ,
+      "name":"Tinode源码解析",
+      "item":"https://yiuterran.github.io/blog/posts/tinode%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/"}]
+}
+</script>
+
+
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://yiuterran.github.io/blog/posts/tinode%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/"
+    },
+    "headline": "Tinode源码解析 | 应许之地","datePublished": "2022-11-14T19:21:38+08:00",
+    "dateModified": "2022-11-14T19:21:38+08:00",
+    "wordCount":  5351 ,
+    "author": {
+        "@type": "Person",
+        "name": ["tryao"]
+    },
+    "publisher": {
+        "@type": "Person",
+        "name": "C. Wang",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://yiuterran.github.io/blog/images/icon.png"
+        }
+        },
+    "description": "概述 有朋友需要做一个im，简单做了一下技术调研，流行的开源框架包括： Tinode\/chat: 即本文主角，golang编写，架构比较简单，有MySQL就能跑，轻量级方案。支持"
+}
+</script><meta property="og:title" content="Tinode源码解析 | 应许之地" />
+<meta property="og:type" content="article" />
+
+
+<meta property="og:image" content="https://yiuterran.github.io/blog/images/icon.png">
+
+
+<meta property="og:url" content="https://yiuterran.github.io/blog/posts/tinode%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" />
+
+
+
+
+<meta property="og:description" content="概述 有朋友需要做一个im，简单做了一下技术调研，流行的开源框架包括： Tinode/chat: 即本文主角，golang编写，架构比较简单，有MySQL就能跑，轻量级方案。支持" />
+
+
+
+
+<meta property="og:locale" content="zh" />
+
+
+
+
+<meta property="og:site_name" content="应许之地" />
+
+
+
+
+
+
+<meta property="article:published_time" content="2022-11-14T19:21:38&#43;08:00" />
+
+
+<meta property="article:modified_time" content="2022-11-14T19:21:38&#43;08:00" />
+
+
+
+<meta property="article:section" content="posts" />
+
+
+<meta property="article:tag" content="golang" />
+
+<meta property="article:tag" content="im" />
+
+<meta property="article:tag" content="tinode" />
+
+
+
+
+
+<meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/ginkgo%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/" />
+
+<meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/golang%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A6%81%E7%82%B9/" />
+
+
+
+<body class="flex flex-col min-h-screen">
+  <header class="fixed flex items-center w-full min-h-16 ps-scrollbar z-50 bg-secondary-bg shadow-sm">
+    <div class="w-full max-w-screen-xl mx-auto"><script>
+    let storageColorScheme = localStorage.getItem("lightDarkMode")
+    if (((storageColorScheme == 'Auto' || storageColorScheme == null) && window.matchMedia("(prefers-color-scheme: dark)").matches) || storageColorScheme == "Dark") {
+        document.getElementsByTagName('html')[0].classList.add('dark')
+    }
+</script>
+<nav class="flex items-center justify-between flex-wrap px-4 py-4 md:py-0">
+    <a href="https://yiuterran.github.io/blog/" class="me-6 text-primary-text text-xl font-bold">应许之地</a>
+    <button id="navbar-btn" class="md:hidden flex items-center px-3 py-2" aria-label="Open Navbar">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div id="target"
+        class="hidden block md:flex md:grow md:justify-between md:items-center w-full md:w-auto text-primary-text z-20">
+        <div class="md:flex md:h-16 text-sm md:grow pb-4 md:pb-0 border-b md:border-b-0">
+            <a href="https://yiuterran.github.io/blog/authors/tryao/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  border-transparent  me-4">作者</a>
+            <a href="https://yiuterran.github.io/blog/posts/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  selected-menu-item  me-4">文章</a>
+        </div>
+
+        <div class="flex">
+            <div class="relative pt-4 md:pt-0">
+                <div class="cursor-pointer hover:text-eureka" id="lightDarkMode">
+                    <i class="fas fa-adjust"></i>
+                </div>
+                <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-30" id="is-open">
+                </div>
+                <div class="absolute flex flex-col start-0 md:start-auto end-auto md:end-0 hidden bg-secondary-bg w-48 rounded py-2 border border-tertiary-bg cursor-pointer z-40"
+                    id='lightDarkOptions'>
+                    <span class="px-4 py-1 hover:text-eureka" name="Light">Light</span>
+                    <span class="px-4 py-1 hover:text-eureka" name="Dark">Dark</span>
+                    <span class="px-4 py-1 hover:text-eureka" name="Auto">Auto</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-0" id="is-open-mobile">
+    </div>
+
+</nav>
+<script>
+    
+    let element = document.getElementById('lightDarkMode')
+    if (storageColorScheme == null || storageColorScheme == 'Auto') {
+        document.addEventListener('DOMContentLoaded', () => {
+            window.matchMedia("(prefers-color-scheme: dark)").addEventListener('change', switchDarkMode)
+        })
+    } else if (storageColorScheme == "Light") {
+        element.firstElementChild.classList.remove('fa-adjust')
+        element.firstElementChild.setAttribute("data-icon", 'sun')
+        element.firstElementChild.classList.add('fa-sun')
+    } else if (storageColorScheme == "Dark") {
+        element.firstElementChild.classList.remove('fa-adjust')
+        element.firstElementChild.setAttribute("data-icon", 'moon')
+        element.firstElementChild.classList.add('fa-moon')
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        getcolorscheme();
+        switchBurger();
+    });
+</script>
+</div>
+  </header>
+  <main class="grow pt-16">
+    <div class="ps-scrollbar">
+      <div class="w-full max-w-screen-xl lg:px-4 xl:px-8 mx-auto">
+
+
+<div class="grid grid-cols-2 lg:grid-cols-8 gap-4 lg:pt-12">
+    <div
+        class="col-span-2  lg:col-span-6 bg-secondary-bg rounded px-6 py-8">
+        <h1 class="font-bold text-3xl text-primary-text">Tinode源码解析</h1>
+        <div class="flex flex-wrap flex-row items-center mt-2 text-tertiary-text">
+    <div class="me-6 my-2">
+        <i class="fas fa-calendar me-1"></i>
+        <span>2022-11-14</span>
+    </div>
+    <div class="me-6 my-2">
+        <i class="fas fa-clock me-1"></i>
+        <span>11 min read</span>
+    </div>
+    
+    
+
+    
+</div>
+        
+        
+        
+
+        <div class="content">
+            <h2 id="概述">概述</h2>
+<p>有朋友需要做一个im，简单做了一下技术调研，流行的开源框架包括：</p>
+<ul>
+<li>Tinode/chat: 即本文主角，golang编写，架构比较简单，有MySQL就能跑，轻量级方案。支持web/ios/android，界面长得比较像telegram；支持chatbot. 国内用有点水土不服，主要是推送等组件依赖国外大厂的服务(S3, Firebase等），国内根本连不上，需要自己改成个推之类的方案。由于方案比较轻量，消息可靠性上有一些缺陷，内置了chatbot支持（可以用Python写）；</li>
+<li>Open-IM-Server：据说是某个腾讯核心人员离职后自己开源的。服务端golang，架构基于微服务，有商业产品，自己试了一下目前版本大概有16个微服务，依赖kafka&amp;zk、mysql、etcd、redis、miniIO和MongoDB。架构比较合理，早期是写扩散模型，v2.3之后群聊改为读扩散模型。主要问题是架构比较重，文档写的烂，需要自己分析代码，小团队维护比较吃力；且无chat bot相关设计；</li>
+<li>turms-im/turms：java写的，读扩散模型。maintainer比较有自信，号称开源界最先进的方案，文档确实写的不错，很详细的技术分析。不过star数不多，实际使用者估计也寥寥。而且作者喜欢自研，Log/注册中心/配置中心这些都是自研的…有种自嗨过了头的感觉。整体来讲架构比较中庸，技术细节把控的比较好。java团队可以考虑，代码还比较易读，而且没有商业版，作者没有恰饭需求；</li>
+<li>wildfirechat/im-server：也是java做的，主要卖商业版。亮点是基于protobuf+MQTT做的，协议设计上比较先进。由于主要卖商业版，所以开源生态一般般，愿意买商业版的可以考虑，好像价格还比较划算；</li>
+<li>Rocket.chat：应该是github上star数最多的IM软件了，基于nodeJS编写。面向B端，类似钉钉/Slack这种IM，有复杂B端需求的团队建议优先考虑。性能上就不要太指望了…毕竟nodejs比Python也快不到哪里去。主打的是丰富的功能和生态。</li>
+</ul>
+<p>这几个项目是客户端生态做的最好的了，基本能开箱即用。其他一些如goim之类的，没有客户端只有服务器，那还不如用mqtt自己写一个，毕竟有emqx这种高性能broker，写一个im真不算啥难事。聊天存储用influxdb或者MongoDB，元数据存MySQL。设计好推拉模型，读写扩散，消息时序，topic规则，一个基本的im软件还是能很快成型的。</p>
+<p>由于这次的需求是小团队，少量用户(&lt;1w)聊天场景，需要机器人支持，目前就先用tinode试水。</p>
+<h2 id="安装">安装</h2>
+<p>在github上fork一下chat项目，clone下来。install.md里面的安装指南也是错的，不用看，要跑起来准备一个MySQL5.7+的版本即可。MongoDB不支持集群，因此这里用MongoDB没啥优势，MySQL可以换成tidb.</p>
+<p>在server文件夹下建立static文件夹，将<code>https://github.com/tinode/webapp/archive/master.zip</code>解压到static文件夹下。</p>
+<p>修改build-all.sh，仅保留windows和linux的两个二进制文件，mac可以自己加上darwin+amd64/arm64的配置. 第一次使用的时候发现脚本还是有不少bug，不过维护者很快就修理了，现在应该可以正常使用了。</p>
+<p>在平台上安装grpc相关依赖，包括protoc的二进制，以及：</p>
+<pre><code class="language-go">go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28
+go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2
+go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+</code></pre>
+<p>另外安装Python3环境，并pip安装如下依赖：</p>
+<pre><code>tinode-grpc&gt;=0.20.0b3
+grpcio==1.50.0
+grpcio-tools==1.50.0
+protobuf==4.21.9
+six==1.16.0
+</code></pre>
+<p>这是给chatbot以及py_grpc这个包用的。</p>
+<p>然后，在linux下运行build-all.sh即可，会在release文件夹下生成打包文件。其中zip结尾的是windows下的，tar.gz结尾的是linux下的。</p>
+<h2 id="配置">配置</h2>
+<p>主要有3个包：</p>
+<ul>
+<li>tinode开头的是主程序</li>
+<li>chatbot顾名思义是聊天机器人</li>
+<li>cli是命令行客户端主要用来调试</li>
+</ul>
+<p>解开tinode开头的压缩包，里面有三个二进制文件：</p>
+<ul>
+<li>keygen 这是密钥生成器，用于配置文件</li>
+<li>tinode 这是主程序</li>
+<li>init-db 这是初始化数据库的二进制文件</li>
+</ul>
+<p>配置文件就是<code>tinode.conf</code>，这是一个<code>json with comments</code>格式，或者说<code>json5</code>格式，也可以用<code>hcl</code>来解析（用viper的话）。可以把后缀改成<code>jsonc</code>或者<code>json5</code>，一般的编辑器就可以语法高亮了。</p>
+<p>配置文件的注释非常详尽，按着配置来就行，如果为了测试，必须修改的就只有MySQL的用户名密码和地址。见store_config部分，修改：</p>
+<pre><code class="language-json">{
+    &quot;use_adapter&quot;: &quot;mysql&quot;,
+    &quot;mysql&quot;:{
+        &quot;Addr&quot;: &quot;&quot;,
+        &quot;User&quot;: &quot;&quot;,
+        &quot;Passwd&quot;: &quot;&quot;
+    }
+}
+</code></pre>
+<p>这几个参数。</p>
+<p>然后直接运行<code>tinode</code>，没意外的话程序可以正常启动。进入浏览器输入<code>localhost:6060</code>即可看到web版本登陆界面。</p>
+<p>这个半自动化脚本其实挺蛋疼的，但是看文档这个项目前后端没分离，虽然前端是react写的，但是必须通过golang服务来提供。所以就算前端有一个nginx，也不能直接托管静态文件。</p>
+<h2 id="解析">解析</h2>
+<p>我们主要关注的是消息路由以及集群组成方式两部分的逻辑，以及插件系统（机器人的依赖）的工作原理。</p>
+<p>可以先读一下<a href="https://github.com/tinode/chat/blob/master/docs/API.md#how-it-works">api.md</a>，也可以直接看代码。由于架构比较简单，所以代码并不复杂。</p>
+<p>打开main.go文件，可以看到除了静态文件，<code>mux</code>一共托管了如下几个API：</p>
+<pre><code class="language-go">	// Handle websocket clients.
+	mux.HandleFunc(config.ApiPath+&quot;v0/channels&quot;, serveWebSocket)
+	// Handle long polling clients. Enable compression.
+	mux.Handle(config.ApiPath+&quot;v0/channels/lp&quot;, gh.CompressHandler(http.HandlerFunc(serveLongPoll)))
+	if config.Media != nil {
+		// Handle uploads of large files.
+		mux.Handle(config.ApiPath+&quot;v0/file/u/&quot;, gh.CompressHandler(http.HandlerFunc(largeFileReceive)))
+		// Serve large files.
+		mux.Handle(config.ApiPath+&quot;v0/file/s/&quot;, gh.CompressHandler(http.HandlerFunc(largeFileServe)))
+		logs.Info.Println(&quot;Large media handling enabled&quot;, config.Media.UseHandler)
+	}
+</code></pre>
+<p>longpolling是兼容旧式浏览器的，基本不用看，主要逻辑就在websocket里，其他两个是二进制文件的上传下载。</p>
+<p>另外，grpc是可选的：</p>
+<pre><code class="language-go">	if globals.grpcServer, err = serveGrpc(*listenGrpc, config.GrpcKeepalive, tlsConfig); err != nil {
+		logs.Err.Fatal(err)
+	}
+</code></pre>
+<h3 id="websocket">websocket</h3>
+<p>这里仍然用的经典的<code>github.com/gorilla/websocket</code>这个ws库，不过由于maintainer想退休了，所以gorilla系列的库实际上已经停止维护了，新建项目不再推荐使用，参考<a href="https://github.com/gorilla/mux/issues/659">这里</a>和<a href="https://github.com/gorilla/websocket/issues/370">这里</a>。当然这个库还是比较稳定的，只要没有致命漏洞倒也没必要迁移。</p>
+<p>在<code>serveWebSocket</code>里面可以看到，经过鉴权之后，session被存入<code>globals.sessionStore</code>这个全局变量。session本身存储了用户相关的大部分上下文，可以看到session中含有</p>
+<pre><code class="language-go">	// Outbound mesages, buffered.
+	// The content must be serialized in format suitable for the session.
+	send chan interface{}
+
+	// Channel for shutting down the session, buffer 1.
+	// Content in the same format as for 'send'
+	stop chan interface{}
+
+	// detach - channel for detaching session from topic, buffered.
+	// Content is topic name to detach from.
+	detach chan string
+
+	// Map of topic subscriptions, indexed by topic name.
+	// Don't access directly. Use getters/setters.
+	subs map[string]*Subscription
+	// Mutex for subs access: both topic go routines and network go routines access
+	// subs concurrently.
+</code></pre>
+<p>以及</p>
+<pre><code class="language-go">// Subscription is a mapper of sessions to topics.
+type Subscription struct {
+	// Channel to communicate with the topic, copy of Topic.clientMsg
+	broadcast chan&lt;- *ClientComMessage
+
+	// Session sends a signal to Topic when this session is unsubscribed
+	// This is a copy of Topic.unreg
+	done chan&lt;- *ClientComMessage
+
+	// Channel to send {meta} requests, copy of Topic.meta
+	meta chan&lt;- *ClientComMessage
+
+	// Channel to ping topic with session's updates, copy of Topic.supd
+	supd chan&lt;- *sessionUpdate
+}
+</code></pre>
+<p>可以看出用户通信是直接通过golang的channel来进行缓冲的（所以消息有可能丢失）。此外一个用户可以有多个session（多端登录）。</p>
+<p>最后，对每个session打开</p>
+<pre><code class="language-go">	// Do work in goroutines to return from serveWebSocket() to release file pointers.
+	// Otherwise &quot;too many open files&quot; will happen.
+	go sess.writeLoop()
+	go sess.readLoop()
+</code></pre>
+<p>两个协程进行读写循环。这里很明显一个问题是这两个协程没有做生命周期控制。</p>
+<h4 id="readloop">readLoop</h4>
+<p>websocket的ping/pong相当于应用层心跳，这里给了55s的超时。</p>
+<p>一个死循环获取消息直到EOF，然后将消息分发到<code>s.dispatch</code>，分发逻辑是同步处理的。</p>
+<p>注意这里的<code>pluginFirehose</code>是触发插件处理的逻辑，一会儿再看。</p>
+<p>客户端过来的消息被映射成json的kv对，通过判断field是不是nil来判断消息类型（protobuf里这里使用<code>oneof</code>定义的）。</p>
+<p>这里可以看到：</p>
+<pre><code class="language-go">	if globals.cluster.isPartitioned() {
+		// The cluster is partitioned due to network or other failure and this node is a part of the smaller partition.
+		// In order to avoid data inconsistency across the cluster we must reject all requests.
+		s.queueOut(ErrClusterUnreachableReply(msg, msg.Timestamp))
+		return
+	}
+</code></pre>
+<p>分区容忍度判断方式是<code>(len(c.nodes)+1)/2 &gt;= len(c.fo.activeNodes)</code>，避免节点死亡过多。</p>
+<p>真正的消息处理逻辑是通过<code>checkVers</code>返回的handler函数来进行的，核心逻辑则是通过<code>s.publish</code>, <code>s.subscribe</code>等处理器来完成的。特别需要注意的是，所有的处理逻辑都是同步的，直到最后<code>s.queueOut</code>将回复消息塞进session的<code>send</code>管道。</p>
+<h4 id="writeloop">writeLoop</h4>
+<p>写循环显然就是从<code>send</code>管道里面读出数据，写给目标。这里也定义了一个定时器用来定时向客户端发送ping。</p>
+<h3 id="集群原理">集群原理</h3>
+<p>显然im的主要逻辑就是接收一个人的消息，然后找到接收者对应的socket，将消息写过去。</p>
+<p>难的地方是如何保证消息不多不少不乱，同时延迟尽可能低。</p>
+<p>所以核心的逻辑在如何处理pub和sub的关系。如果用mqtt的话，实际上最难的这一步emqx这种broker已经帮你做了，因为后者本来就是pub/sub模型，且支持QoS.</p>
+<p>回到<code>publish</code>函数，这里就是找到topic的订阅者集合，将消息写到broadcast队列里。跟踪这个变量的使用，最终可以看到<code>Topic</code>的<code>clientMsg</code>管道。</p>
+<p>跟踪Topic，可以看到创建的地方在<code>Hub.run</code>这个成员函数。这里有一大段注释：</p>
+<pre><code class="language-go">		case join := &lt;-h.join:
+			// Handle a subscription request:
+			// 1. Init topic
+			// 1.1 If a new topic is requested, create it
+			// 1.2 If a new subscription to an existing topic is requested:
+			// 1.2.1 check if topic is already loaded
+			// 1.2.2 if not, load it
+			// 1.2.3 if it cannot be loaded (not found), fail
+			// 2. Check access rights and reject, if appropriate
+			// 3. Attach session to the topic
+			// Is the topic already loaded?
+			t := h.topicGet(join.RcptTo)
+</code></pre>
+<p>注意后面的<code>isProxy</code>成员，这里也有一大段注释：</p>
+<pre><code class="language-go">	// If isProxy == true, the actual topic is hosted by another cluster member.
+	// The topic should:
+	// 1. forward all messages to master
+	// 2. route replies from the master to sessions.
+	// 3. disconnect sessions at master's request.
+	// 4. shut down the topic at master's request.
+	// 5. aggregate access permissions on behalf of attached sessions.
+</code></pre>
+<p>到这里已经可以猜出集群的大致原理：</p>
+<ol>
+<li>消息系统的核心是topic；</li>
+<li>topic在集群上某个节点上（初次被订阅的时候）创建为master节点，集群的其他结点则是该topic的proxy节点；</li>
+<li>proxy节点会将所有发往该topic的消息路由到master节点，所有的消息处理逻辑在master节点进行；</li>
+<li>如果是事务类消息，master会将处理结果发回proxy节点；</li>
+<li>如果是pub消息，master节点会广播到其他结点；</li>
+</ol>
+<p>其实核心逻辑就在<code>runLocal</code>和<code>runLocal</code>这两个函数里。</p>
+<p>其中master节点pub类消息的处理逻辑在<code>Topic.handlePubBroadcast</code>里，追踪可达<code>Topic.saveAndBroadcastMessage</code>这里。</p>
+<p>这里可以看到<code>PluginMessage</code>调用了插件来回调。真正的写入就是简单的<code>sess.queueOut</code>，后者判断<code>s.multi</code>，如果是proxy的session，则会通过<code>clusterWriteLoop</code>将数据通过rpc写入session所在的真正节点。</p>
+<p>那么proxy的session是怎么连接到master的topic上的呢，查看s.proto的赋值，可以看到和PROXY或者MULTIPLEX的赋值都在<code>TopicMaster</code>里。这个函数没有被直接调用，而是通过反射的方式，在<code>ClusterNode.proxyToMaster</code>里调用。</p>
+<p>一路追寻可以看到<code>Cluster.start</code>函数，这里定义了节点之间相互连接的处理流程。实际上大部分逻辑还是在<code>TopicMaster</code>里，proxy节点订阅会在这里创建一个copy的session，其proto定义为PROXY.所以proxy节点对topic的每个订阅session，在master节点上都有一个副本。这个设计显然称不上很妙，理论上master节点只需要知道哪个proxy节点对topic有订阅即可（类似路由表的设计），session的副本实在是没有必要，非常浪费内存。</p>
+<p>另外查看<code>ClusterNode.reconnect</code>，可以看到大大的<strong>FIXME</strong>，这里消息可能丢失。</p>
+<h3 id="chatbot">chatbot</h3>
+<p>上面有两个plugin的调用，显然是供插件系统的生命周期回调。在<code>chatbot/python</code>文件夹下面有一个Python机器人的示例。虽然我有点奇怪他这明明是golang的项目，机器人要用Python来写。可能是为了突出机器人的语言无关性？</p>
+<p>实际上就是使用grpc通信，从<code>readme.md</code>中可以看到具体使用方法，对应的protobuf文件在<code>pbx</code>文件夹下，主要接口包括：</p>
+<pre><code class="language-protobuf">// This is the single method that needs to be implemented by a gRPC client.
+service Node {
+	// Client sends a stream of ClientMsg, server responds with a stream of ServerMsg
+  	rpc MessageLoop(stream ClientMsg) returns (stream ServerMsg) {}
+}
+
+// Plugin interface.
+service Plugin {
+	// This plugin method is called by Tinode server for every message received from the clients. The
+	// method returns a ServerCtrl message. Non-zero ServerCtrl.code indicates that no further
+	// processing is needed. The Tinode server will generate a {ctrl} message from the returned ServerCtrl
+	// and forward it to the client session.
+	// ServerCtrl.code equals to 0 instructs the server to continue with default processing of the client message.
+	rpc FireHose(ClientReq) returns (ServerResp) {}
+
+	// An alteranative user and topic discovery mechanism.
+	// A search request issued on a 'fnd' topic. This method is called to generate an alternative result set.
+	rpc Find(SearchQuery) returns (SearchFound) {}
+
+	// The following methods are for the Tinode server to report individual events.
+
+	// Account created, updated or deleted
+	rpc Account(AccountEvent) returns (Unused) {}
+
+	// Topic created, updated [or deleted -- not supported yet]
+	rpc Topic(TopicEvent) returns (Unused) {}
+
+	// Subscription created, updated or deleted
+	rpc Subscription(SubscriptionEvent) returns (Unused) {}
+
+	// Message published or deleted
+	rpc Message(MessageEvent) returns (Unused) {}
+}
+</code></pre>
+<p>一般客户端实际上只需要实现<code>MessageLoop</code>这个消息循环，不停的给服务端发送ClientMsg即可，它的功能和上面的websocket通信其实是一致的。</p>
+<p>插件显然需要实现Plugin的server，chat的主程序作为plugin的客户端，调用插件提供的服务，而插件需要通过配置文件进行激活，详见<code>plugins</code>部分（在最后）。整体逻辑不难理解，就是客户端行为的回调。</p>
+<h2 id="设计缺陷">设计缺陷</h2>
+<p>通过上面的解析可以看到一些很明显的缺陷：</p>
+<ol>
+<li>没有QoS设计，消息是可能丢失的；</li>
+<li>没看到消息时序的设计，消息的顺序完全依赖达到服务端的顺序；</li>
+<li>集群通信的效率不太高；</li>
+</ol>
+
+        </div>
+        
+        <div class="my-4">
+    
+    <a href="https://yiuterran.github.io/blog/tags/golang/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#golang</a>
+    
+    <a href="https://yiuterran.github.io/blog/tags/im/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#im</a>
+    
+    <a href="https://yiuterran.github.io/blog/tags/tinode/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#tinode</a>
+    
+</div>
+        
+        
+        
+
+
+        
+        
+        <div class="py-2">
+    
+    <div class="flex flex-col md:flex-row items-center my-8">
+        <a href="https://yiuterran.github.io/blog/authors/tryao/" class="w-24 h-24 md:me-4">
+            
+            
+            <i class="fas fa-user-circle fa-6x"></i>
+            
+        </a>
+        <div class="w-full md:w-auto mt-4 md:mt-0">
+            <a href="https://yiuterran.github.io/blog/authors/tryao/" class="block font-bold text-lg pb-1 mb-2 border-b">个人介绍</a>
+            <span class="block pb-2">兴趣使然的程序员，博而不精，乐学不倦</span>
+            
+            
+            
+            
+            
+            <a href="mailto:yaotairan@gmail.com" class="me-1">
+                <i class="fas fa-envelope"></i>
+            </a>
+            
+            
+            
+            
+            
+            <a href="https://twitter.com/TerranYiu" class="me-1">
+                <i class="fab fa-twitter"></i>
+            </a>
+            
+            
+            
+            
+            
+            <a href="https://github.com/YiuTerran" class="me-1">
+                <i class="fab fa-github"></i>
+            </a>
+            
+        </div>
+    </div>
+    
+</div>
+        
+        
+        
+<div class="flex flex-col md:flex-row md:justify-between -mx-2 mt-4 px-2 pt-4 border-t">
+    <div>
+        
+    </div>
+    <div class="md:text-right mt-4 md:mt-0">
+        
+        <span class="block font-bold">Next</span>
+        <a href="https://yiuterran.github.io/blog/posts/%E7%9B%91%E6%8E%A7%E5%B9%B3%E5%8F%B0%E8%B0%83%E7%A0%94%E6%8A%A5%E5%91%8A/" class="block">监控平台调研报告</a>
+        
+    </div>
+</div>
+
+        
+
+
+
+    </div>
+    
+    <div class="col-span-2">
+        
+        
+        <div class="sticky top-16 z-10 hidden lg:block px-6 py-4  bg-primary-bg ">
+    <span class="text-lg font-semibold">On This Page</span>
+</div>
+<div class="sticky-toc hidden lg:block px-6 pb-6 ">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#概述">概述</a></li>
+    <li><a href="#安装">安装</a></li>
+    <li><a href="#配置">配置</a></li>
+    <li><a href="#解析">解析</a>
+      <ul>
+        <li><a href="#websocket">websocket</a>
+          <ul>
+            <li><a href="#readloop">readLoop</a></li>
+            <li><a href="#writeloop">writeLoop</a></li>
+          </ul>
+        </li>
+        <li><a href="#集群原理">集群原理</a></li>
+        <li><a href="#chatbot">chatbot</a></li>
+      </ul>
+    </li>
+    <li><a href="#设计缺陷">设计缺陷</a></li>
+  </ul>
+</nav>
+</div>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        enableStickyToc();
+    });
+</script>
+        
+    </div>
+    
+
+    
+    
+    <div
+        class="col-span-2  lg:col-span-6 bg-secondary-bg rounded p-6">
+        <h2 class="text-lg font-semibold mb-4">See Also</h2>
+        <div class="content">
+            
+            <a href="https://yiuterran.github.io/blog/posts/ginkgo%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/">Ginkgo使用笔记</a>
+            <br />
+            
+            <a href="https://yiuterran.github.io/blog/posts/golang%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A6%81%E7%82%B9/">Golang定时器要点</a>
+            <br />
+            
+        </div>
+    </div>
+    
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', ()=>{
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+
+      </div>
+    </div>
+    
+  </main>
+  <footer class="ps-scrollbar">
+    <div class="w-full max-w-screen-xl mx-auto"><div class="text-center p-6 pin-b">
+    <p class="text-sm text-tertiary-text">&copy; 2021 <a href="https://www.wangchucheng.com/">WANG Chucheng</a> and <a href="https://www.ruiqima.com/">MA Ruiqi</a>
+ &middot;  Powered by the <a href="https://github.com/wangchucheng/hugo-eureka" class="hover:text-eureka">Eureka</a> theme for <a href="https://gohugo.io" class="hover:text-eureka">Hugo</a></p>
+</div></div>
+  </footer>
+</body>
+
+</html>

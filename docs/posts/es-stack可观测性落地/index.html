@@ -87,7 +87,7 @@
     },
     "headline": "Elastic Observability系统搭建 | 应许之地","datePublished": "2022-10-12T17:52:42+08:00",
     "dateModified": "2022-10-12T17:52:42+08:00",
-    "wordCount":  13649 ,
+    "wordCount":  13658 ,
     "publisher": {
         "@type": "Person",
         "name": "C. Wang",
@@ -694,7 +694,9 @@ systemctl start filebeat
 <p>一般同一种语言使用相同的日志格式，这里假设添加管道的名字为<code>golang-common-log-parser</code>，并创建一个<code>common-logs-policy</code>的策略，对所有应用日志生命周期进行统一管理。</p>
 <h3 id="配置索引模板">配置索引模板</h3>
 <p>我们需要将上面的grok转换后的格式关联一个索引模板。</p>
-<p>先创建一个组件模板以供复用，到<code>Stack Management</code>-<code>索引管理</code>下面，点击<strong>组件模板</strong>tab页下<strong>创建</strong>相关按钮，填入名称（如custom-logs@mapping），在mapping页面做好映射：</p>
+<p>先创建一个组件模板以供复用，到<code>Stack Management</code>-<code>索引管理</code>下面，点击<strong>组件模板</strong>tab页下<strong>创建</strong>相关按钮，填入名称（如custom-logs@mapping），在<strong>映射</strong>页面配置字段映射：</p>
+<p><img src="https://s2.loli.net/2022/11/02/iOIGgqcJyrnQf1P.png" alt="image-20221102111708534"></p>
+<p>对应的json配置如下：</p>
 <pre><code class="language-json">{
   &quot;@timestamp&quot;: &quot;Date&quot;,
   &quot;log&quot;: {
