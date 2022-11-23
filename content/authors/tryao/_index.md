@@ -2,6 +2,7 @@
 title: 个人介绍
 role: admin
 bio: 兴趣使然的程序员，博而不精，乐学不倦
+avatar: images/avatar.png
 organization:
   name: CSCEC
   url: https://www.cscec.com/
@@ -9,9 +10,6 @@ social:
   - icon: envelope
     iconPack: fas
     url: mailto:yaotairan@gmail.com
-  - icon: twitter
-    iconPack: fab
-    url: https://twitter.com/TerranYiu
   - icon: github
     iconPack: fab
     url: https://github.com/YiuTerran
