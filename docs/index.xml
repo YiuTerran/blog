@@ -8,7 +8,16 @@
     <language>zh</language>
     <copyright>&amp;copy; 2021 &lt;a href=&#34;https://github.com/YiuTerran&#34;&gt;tryao&lt;/a&gt;
 </copyright>
-    <lastBuildDate>Mon, 14 Nov 2022 19:21:38 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 05 Dec 2022 11:12:41 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Golang服务接入OpenTelemetry</title>
+      <link>https://yiuterran.github.io/blog/posts/golang%E6%9C%8D%E5%8A%A1%E6%8E%A5%E5%85%A5opentelemetry/</link>
+      <pubDate>Mon, 05 Dec 2022 11:12:41 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/posts/golang%E6%9C%8D%E5%8A%A1%E6%8E%A5%E5%85%A5opentelemetry/</guid>
+      <description>三大支柱中，Log是最简单的，metric也不难。对于golang而言，最麻烦的是trace，这时候就分外羡慕java这种可以自动注入的语言了。 基本设</description>
+    </item>
+    
     <item>
       <title>Tinode源码解析</title>
       <link>https://yiuterran.github.io/blog/posts/tinode%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</link>

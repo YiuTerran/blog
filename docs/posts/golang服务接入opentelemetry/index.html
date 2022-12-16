@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang='zh' dir='ltr' ><meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+<title>Golang服务接入OpenTelemetry | 应许之地</title>
+
+<meta name="generator" content="Hugo Eureka 0.9.0" />
+<link rel="stylesheet" href="https://yiuterran.github.io/blog/css/eureka.min.css">
+<script defer src="https://yiuterran.github.io/blog/js/eureka.min.js"></script>
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload"
+  href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Noto+Serif+SC:wght@400;600;700&display=swap"
+  as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/styles/solarized-light.min.css"
+   media="print"
+  onload="this.media='all';this.onload=null" crossorigin>
+<script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/highlight.min.js"
+   crossorigin></script>
+
+  <script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/languages/dart.min.js"
+     crossorigin></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/js/all.min.js"
+   integrity="sha256-uNYoXefWRqv&#43;PsIF/OflNmwtKM4lStn9yrz2gVl6ymo="  crossorigin></script>
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+   integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3&#43;Aro6EYUG4&#43;cU&#43;KJWu/X"  media="print"
+  onload="this.media='all';this.onload=null" crossorigin>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js" 
+  integrity="sha384-g7c&#43;Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI&#43;sEnkvrMWph2EDg4"  crossorigin></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
+   integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC&#43;Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa"  crossorigin></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: "$$", right: "$$", display: true },
+        { left: "$", right: "$", display: false },
+        { left: "\\(", right: "\\)", display: false },
+        { left: "\\[", right: "\\]", display: true }
+      ],
+    });
+  });
+</script>
+
+
+<script defer src="https://cdn.jsdelivr.net/npm/mermaid@8.9.2/dist/mermaid.min.js" 
+  integrity="sha256-Zmpaaj&#43;GXFsPF5WdPArSrnW3b30dovldeKsW00xBVwE="  crossorigin></script>
+<link rel="preconnect" href="https://www.google-analytics.com" crossorigin>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-C0R8DENDJ0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-C0R8DENDJ0');
+</script>
+
+
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
+
+<meta name="description"
+  content="三大支柱中，Log是最简单的，metric也不难。对于golang而言，最麻烦的是trace，这时候就分外羡慕java这种可以自动注入的语言了。 基本设">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+      "@type": "ListItem",
+      "position": 1 ,
+      "name":"文章列表",
+      "item":"https://yiuterran.github.io/blog/posts/"},{
+      "@type": "ListItem",
+      "position": 2 ,
+      "name":"Golang服务接入OpenTelemetry",
+      "item":"https://yiuterran.github.io/blog/posts/golang%E6%9C%8D%E5%8A%A1%E6%8E%A5%E5%85%A5opentelemetry/"}]
+}
+</script>
+
+
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://yiuterran.github.io/blog/posts/golang%E6%9C%8D%E5%8A%A1%E6%8E%A5%E5%85%A5opentelemetry/"
+    },
+    "headline": "Golang服务接入OpenTelemetry | 应许之地","datePublished": "2022-12-05T11:12:41+08:00",
+    "dateModified": "2022-12-05T11:12:41+08:00",
+    "wordCount":  3627 ,
+    "publisher": {
+        "@type": "Person",
+        "name": "C. Wang",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://yiuterran.github.io/blog/images/icon.png"
+        }
+        },
+    "description": "三大支柱中，Log是最简单的，metric也不难。对于golang而言，最麻烦的是trace，这时候就分外羡慕java这种可以自动注入的语言了。 基本设"
+}
+</script><meta property="og:title" content="Golang服务接入OpenTelemetry | 应许之地" />
+<meta property="og:type" content="article" />
+
+
+<meta property="og:image" content="https://yiuterran.github.io/blog/images/icon.png">
+
+
+<meta property="og:url" content="https://yiuterran.github.io/blog/posts/golang%E6%9C%8D%E5%8A%A1%E6%8E%A5%E5%85%A5opentelemetry/" />
+
+
+
+
+<meta property="og:description" content="三大支柱中，Log是最简单的，metric也不难。对于golang而言，最麻烦的是trace，这时候就分外羡慕java这种可以自动注入的语言了。 基本设" />
+
+
+
+
+<meta property="og:locale" content="zh" />
+
+
+
+
+<meta property="og:site_name" content="应许之地" />
+
+
+
+
+
+
+<meta property="article:published_time" content="2022-12-05T11:12:41&#43;08:00" />
+
+
+<meta property="article:modified_time" content="2022-12-05T11:12:41&#43;08:00" />
+
+
+
+<meta property="article:section" content="posts" />
+
+
+
+
+<body class="flex flex-col min-h-screen">
+  <header class="fixed flex items-center w-full min-h-16 ps-scrollbar z-50 bg-secondary-bg shadow-sm">
+    <div class="w-full max-w-screen-xl mx-auto"><script>
+    let storageColorScheme = localStorage.getItem("lightDarkMode")
+    if (((storageColorScheme == 'Auto' || storageColorScheme == null) && window.matchMedia("(prefers-color-scheme: dark)").matches) || storageColorScheme == "Dark") {
+        document.getElementsByTagName('html')[0].classList.add('dark')
+    }
+</script>
+<nav class="flex items-center justify-between flex-wrap px-4 py-4 md:py-0">
+    <a href="https://yiuterran.github.io/blog/" class="me-6 text-primary-text text-xl font-bold">应许之地</a>
+    <button id="navbar-btn" class="md:hidden flex items-center px-3 py-2" aria-label="Open Navbar">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div id="target"
+        class="hidden block md:flex md:grow md:justify-between md:items-center w-full md:w-auto text-primary-text z-20">
+        <div class="md:flex md:h-16 text-sm md:grow pb-4 md:pb-0 border-b md:border-b-0">
+            <a href="https://yiuterran.github.io/blog/authors/tryao/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  border-transparent  me-4">作者</a>
+            <a href="https://yiuterran.github.io/blog/posts/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  selected-menu-item  me-4">文章</a>
+        </div>
+
+        <div class="flex">
+            <div class="relative pt-4 md:pt-0">
+                <div class="cursor-pointer hover:text-eureka" id="lightDarkMode">
+                    <i class="fas fa-adjust"></i>
+                </div>
+                <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-30" id="is-open">
+                </div>
+                <div class="absolute flex flex-col start-0 md:start-auto end-auto md:end-0 hidden bg-secondary-bg w-48 rounded py-2 border border-tertiary-bg cursor-pointer z-40"
+                    id='lightDarkOptions'>
+                    <span class="px-4 py-1 hover:text-eureka" name="Light">浅色</span>
+                    <span class="px-4 py-1 hover:text-eureka" name="Dark">深色</span>
+                    <span class="px-4 py-1 hover:text-eureka" name="Auto">自动</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-0" id="is-open-mobile">
+    </div>
+
+</nav>
+<script>
+    
+    let element = document.getElementById('lightDarkMode')
+    if (storageColorScheme == null || storageColorScheme == 'Auto') {
+        document.addEventListener('DOMContentLoaded', () => {
+            window.matchMedia("(prefers-color-scheme: dark)").addEventListener('change', switchDarkMode)
+        })
+    } else if (storageColorScheme == "Light") {
+        element.firstElementChild.classList.remove('fa-adjust')
+        element.firstElementChild.setAttribute("data-icon", 'sun')
+        element.firstElementChild.classList.add('fa-sun')
+    } else if (storageColorScheme == "Dark") {
+        element.firstElementChild.classList.remove('fa-adjust')
+        element.firstElementChild.setAttribute("data-icon", 'moon')
+        element.firstElementChild.classList.add('fa-moon')
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        getcolorscheme();
+        switchBurger();
+    });
+</script>
+</div>
+  </header>
+  <main class="grow pt-16">
+    <div class="ps-scrollbar">
+      <div class="w-full max-w-screen-xl lg:px-4 xl:px-8 mx-auto">
+
+
+<div class="grid grid-cols-2 lg:grid-cols-8 gap-4 lg:pt-12">
+    <div
+        class="col-span-2  lg:col-span-6 bg-secondary-bg rounded px-6 py-8">
+        <h1 class="font-bold text-3xl text-primary-text">Golang服务接入OpenTelemetry</h1>
+        <div class="flex flex-wrap flex-row items-center mt-2 text-tertiary-text">
+    <div class="me-6 my-2">
+        <i class="fas fa-calendar me-1"></i>
+        <span>2022-12-05</span>
+    </div>
+    <div class="me-6 my-2">
+        <i class="fas fa-clock me-1"></i>
+        <span>8分钟阅读时长</span>
+    </div>
+    
+    
+
+    
+</div>
+        
+        
+        
+
+        <div class="content">
+            <p>三大支柱中，Log是最简单的，metric也不难。对于golang而言，最麻烦的是trace，这时候就分外羡慕java这种可以自动注入的语言了。</p>
+<h2 id="基本设计">基本设计</h2>
+<p>首先是一个Trace Provider，用来实例化Tracer。某些语言里Provider和Tracer都是全局预创建好的。</p>
+<p>Trace Exporter，类似metric，但是是push到collector，而非pull.</p>
+<p>Trace Context，即上下文。Tracer 创建span，将attribute注入其中，后续的span可以通过connect by trace id的方法将新的上下文注入其中，并通过parent span id进行排序。</p>
+<p>所以核心的概念就是trace（标识请求）和span（标识一个上下文），两者分别有一个id. 默认情况下trace id是16字节，span id是8字节。</p>
+<p>一个span的例子：</p>
+<pre><code class="language-json">{
+  &quot;trace_id&quot;: &quot;7bba9f33312b3dbb8b2c2c62bb7abe2d&quot;,
+  &quot;parent_id&quot;: &quot;&quot;,
+  &quot;span_id&quot;: &quot;086e83747d0e381e&quot;,
+  &quot;name&quot;: &quot;/v1/sys/health&quot;,
+  &quot;start_time&quot;: &quot;2021-10-22 16:04:01.209458162 +0000 UTC&quot;,
+  &quot;end_time&quot;: &quot;2021-10-22 16:04:01.209514132 +0000 UTC&quot;,
+  &quot;status_code&quot;: &quot;STATUS_CODE_OK&quot;,
+  &quot;status_message&quot;: &quot;&quot;,
+  &quot;attributes&quot;: {
+    &quot;net.transport&quot;: &quot;IP.TCP&quot;,
+    &quot;net.peer.ip&quot;: &quot;172.17.0.1&quot;,
+    &quot;net.peer.port&quot;: &quot;51820&quot;,
+    &quot;net.host.ip&quot;: &quot;10.177.2.152&quot;,
+    &quot;net.host.port&quot;: &quot;26040&quot;,
+    &quot;http.method&quot;: &quot;GET&quot;,
+    &quot;http.target&quot;: &quot;/v1/sys/health&quot;,
+    &quot;http.server_name&quot;: &quot;mortar-gateway&quot;,
+    &quot;http.route&quot;: &quot;/v1/sys/health&quot;,
+    &quot;http.user_agent&quot;: &quot;Consul Health Check&quot;,
+    &quot;http.scheme&quot;: &quot;http&quot;,
+    &quot;http.host&quot;: &quot;10.177.2.152:26040&quot;,
+    &quot;http.flavor&quot;: &quot;1.1&quot;
+  },
+  &quot;events&quot;: [
+    {
+      &quot;name&quot;: &quot;&quot;,
+      &quot;message&quot;: &quot;OK&quot;,
+      &quot;timestamp&quot;: &quot;2021-10-22 16:04:01.209512872 +0000 UTC&quot;
+    }
+  ]
+}
+</code></pre>
+<p>Log和Metric的概念比较容易理解，这里不再赘述，除此之外，还有一个概念：<code>Baggage</code>。假设某个span的上下文里有个变量需要分享给其他span，可以使用Baggage机制来进行分享。需要注意的是Baggage中的变量并不会自动加到attributes。</p>
+<h2 id="常用trace字段">常用Trace字段</h2>
+<p>OpenTelemetry约定了一系列常用的Trace字段，应对不同的场景，参考<a href="https://opentelemetry.io/docs/reference/specification/trace/semantic_conventions/">这里</a>，截止目前还是Experimental状态，所以后面还会有新的变动。 建议脑子里有个大致的概念就行，需要的时候再按图索骥，东西有点多。</p>
+<p>可以使用<code>go.opentelemetry.io/otel/semconv/v1.12.0</code>在代码中使用下面这些常量。</p>
+<h3 id="网络请求一般字段">网络请求一般字段</h3>
+<pre><code class="language-js">{
+    net:{
+        transport: ip_tcp, //or ip_udp, pipe, inproc, other
+        app:{
+            protocol:{
+                name: &quot;http&quot;,
+                version: &quot;2.0&quot;
+            },
+        },
+        sock:{
+            peer:{
+                name: &quot;www.xxx.com&quot;,
+                addr: &quot;127.0.0.1&quot;,
+                port: 23333,
+            },
+            family: &quot;inet&quot;, //or inet6, unix
+            host:{
+                addr: &quot;192.168.0.1&quot;,
+                port: 35555,
+                connection:{
+                    type: &quot;wifi&quot;, //wired, cell, unavailable, unknown
+                    subtype: &quot;LTE&quot; //gprs, edge, umts, cdma, evdo_0, evdo_a, cdma2000_1xrtt, hsdpa, hsupa, hspa, iden, evdo_b, ehrpd, hspap, gsm, td_scdma, iwlan, nr, nrnas, lte_ca
+                },
+                carrier:{
+                    name: &quot;sprint&quot;,
+                    mcc: &quot;310&quot;,
+                    mnc: &quot;001&quot;,
+                    icc: &quot;DE&quot;
+                }
+            }
+        },
+        peer:{
+            name: &quot;xxx.com&quot;,
+            port: 80,
+        },
+        host:{
+            name: &quot;localhost&quot;,
+            port: 8080,
+        },
+        
+    }
+}
+</code></pre>
+<p>需要注意<code>net.sock.peer</code>/<code>net.sock.host</code>和<code>net.peer</code>/<code>net.host</code>的区别。后者是逻辑上的本端和对端，如果两者相同，则应该优先设置<code>net.sock.*</code>。 简单来说，如果是tcp/udp的底层通信协议，则应该只设置<code>net.sock.*</code>；如果使用mqtt/http这些高层协议，则应当设置<code>net.*</code>，同时尽量设置可以拿到的<code>net.sock.*</code>.</p>
+<p>此外，当通过代理进行通信时，<code>net.*</code>应当设置为目的地址，<code>net.socket.*</code>应当设置为代理地址。</p>
+<h3 id="远程请求一般字段">远程请求一般字段</h3>
+<pre><code class="language-json">{
+    peer:{
+        service: &quot;&quot;
+    }
+}
+</code></pre>
+<p>即对端服务名称，可以随意命名，业务上根据自己需求来。</p>
+<h3 id="一般身份字段">一般身份字段</h3>
+<pre><code class="language-js">{
+    enduser:{
+        id: &quot;&quot;, //终端用户身份id，或者用户名
+        role: &quot;&quot;, //角色，如admin
+        scope: &quot;&quot;, //作用域权限，如read:message, write:files
+    }
+}
+</code></pre>
+<h3 id="一般线程字段">一般线程字段</h3>
+<pre><code class="language-js">{
+    thread:{
+        id: &quot;&quot;, //线程id
+        name: &quot;&quot;,//线程名称
+    }
+}
+</code></pre>
+<h3 id="源码相关字段">源码相关字段</h3>
+<pre><code class="language-js">{
+    code:{
+        &quot;function&quot;: &quot;&quot;, //函数名称
+        &quot;namespace&quot;: &quot;&quot;, //包名之类的，有些语言有命名空间
+        &quot;filepath&quot;: &quot;&quot;// 源码路径
+        &quot;lineno&quot;: 100, //源码行数
+    }
+}
+</code></pre>
+<p>这块一般在日志里。</p>
+<h3 id="http请求常用字段">HTTP请求常用字段</h3>
+<p>影响span本身的字段：</p>
+<p>name：虽然一般用url，但是也可以自定义</p>
+<p>status：一般是http响应状态</p>
+<p>通用属性字段：</p>
+<pre><code class="language-js">{
+    http:{
+        method: &quot;POST&quot;,
+        status_code: &quot;&quot;,
+        flavor: &quot;1.0&quot;, //也可以是SPDY/QUIC等
+        user_agent: &quot;&quot;, //UA
+        request_content_length: 3495, //请求体字节数
+        response_content_length: 3000, //响应体字节数
+    }
+}
+</code></pre>
+<p>以及一部分<code>net.sock.*</code>的属性。</p>
+<p>header可以通过<code>http.request.header.&lt;key&gt;</code>以及<code>http.response.header.&lt;key&gt;</code>来注入header字段。</p>
+<p>客户端专用字段：</p>
+<pre><code class="language-js">{
+    http:{
+        url: &quot;&quot;, //不能包含basic auth的认证信息
+        resend_count: 1,
+    }
+}
+</code></pre>
+<p>以及net.peer.*相关字段。</p>
+<p>服务端专用字段：</p>
+<pre><code class="language-js">{
+    http:{
+        scheme: &quot;https&quot;,
+        target: &quot;/path/1234&quot;,
+        route: &quot;/usrs/:usrId&quot;, //如果有的话
+        client_ip: &quot;&quot;, //原始地址，并非代理地址       
+    }
+}
+</code></pre>
+<p>以及net.host和net.sock.host相关字段。</p>
+<h3 id="数据库客户端常用字段">数据库客户端常用字段</h3>
+<p>数据库本身：</p>
+<pre><code class="language-js">{
+    db:{
+        system: &quot;mysql&quot;,
+        connection_string: &quot;&quot;, //连接地址，移除认证数据部分
+        user: &quot;root&quot;,
+    }
+}
+</code></pre>
+<p>以及net相关的字段。</p>
+<p>语言或者具体数据相关的字段：</p>
+<pre><code class="language-js">{
+    db:{
+        jdbc.driver_classname: &quot;&quot;, //only for java
+        mssql:{
+            instance_name: &quot;&quot;, //sql server的示例名
+        }
+    }
+}
+</code></pre>
+<p>请求相关：</p>
+<pre><code class="language-js">{
+    db:{
+        name: &quot;&quot;, //库名
+        statement: &quot;&quot;, //请求语句
+        operation: &quot;SELECT&quot;, //操作类型，动词
+    }
+}
+</code></pre>
+<p>具体数据相关的请求上下文：</p>
+<pre><code class="language-js">{
+    db:{
+        &quot;redis.database_index&quot;: 0, //redis库
+        &quot;mongodb.collection&quot;: &quot;customers&quot;, //mongo的表名
+        &quot;sql.table&quot;: &quot;customers&quot;, //dbms的表名
+    }
+}
+</code></pre>
+<p>某些字段需要根据具体的数据库来决定。</p>
+<h3 id="rpc相关字段">RPC相关字段</h3>
+<p>span名称<strong>必须</strong>是远程调用的全名：<code>$package.$service/$method</code>，其他常用字段：</p>
+<pre><code class="language-js">{
+    rpc:{
+        system: &quot;grpc&quot;, //apache_dubbo, java_rmi, dotnet_wcf
+        service: &quot;&quot;, //含有包名
+        method: &quot;&quot;, //方法名
+    }
+}
+</code></pre>
+<p>消息相关：</p>
+<pre><code class="language-js">{
+    message:{
+        type: &quot;SENT&quot;, //RECEIVED
+        id: 1, //消息唯一标识
+        compressed_size: 2000, //压缩后字节数
+        uncompressed_size: 3200, //原始字节数
+    }
+}
+</code></pre>
+<p>grpc专用：</p>
+<pre><code class="language-js">{
+    rpc:{
+        grpc:{
+            status_code: int, //grpc有一系列预定于的状态码，从0开始
+        },
+        request_metadata:{
+            key1: &quot;&quot;,
+            key2: &quot;&quot;
+        },
+        response_metadata:{
+            key1: &quot;&quot;,
+            key2: &quot;&quot;
+        }
+    }
+}
+</code></pre>
+<p>json rpc专用：略，现在一般不怎么用了。</p>
+<h3 id="mq等消息系统">MQ等消息系统</h3>
+<p>MQ一般被抽象为生产者、中间代理和消费者三个部分。</p>
+<p>span name的一般格式为：<code>&lt;dest name&gt; &lt;op name&gt;</code>， 例如<code>shop.orders send</code>, <code>shop.orders receive</code>和<code>shop.orders process</code>.</p>
+<p>消息属性：</p>
+<pre><code class="language-js">{
+    messaging:{
+        system: &quot;kafka&quot;, //MQ名称
+        destination: &quot;topic-name&quot;,
+        destination_kind: &quot;queue&quot;, //or topic
+        temp_destination: true, //是否临时目的地
+        protocol: &quot;MQTT&quot;, //AMQP等
+        protocol_version: &quot;0.9.1&quot;, //协议版本
+        url: &quot;&quot;, //MQ的连接字符串
+        message_id:&quot;&quot;, //消息id
+        conversation_id: &quot;&quot; //会话id
+        message_payload_size_bytes: 2738, //未压缩的原始字节数
+        message_payload_compressed_size_bytes: 1730, //压缩后的字节数
+    }
+}
+</code></pre>
+<p>对于消息接收者的额外属性：</p>
+<pre><code class="language-js">{
+    messaging:{
+        operation: &quot;receive&quot;, //或者process
+        consumer_id: &quot;&quot;, //对于kafka，设置为`messaging.kafka.consumer_group`-`messaging.kafka.client_id`; 其他的一般clint_id就够了
+    }
+}
+</code></pre>
+<p>特定mq属性字段：</p>
+<pre><code class="language-js">{
+    messaging:{
+        &quot;rabbitmq.routing_key&quot;: &quot;&quot;,
+        kafka:{
+            message_key: &quot;&quot;, //非空才设置
+            consumer_group: &quot;&quot;, //消费组, only for consumer
+            client_id: &quot;&quot;,
+            partition: 1, //消息发送的分区
+            tombstone: true, //如果一条消息的key不为null，但其value为null，那么此消息就是墓碑消息，       用于清理日志
+        },
+        rocketmq:{
+            namespace: &quot;&quot;,
+            client_group: &quot;&quot;,
+            client_id: &quot;&quot;,
+            delivery_timestamp: 1665987217045, //毫秒级时间戳
+            delay_time_level: 3, //延迟级别
+            message_group: &quot;&quot;, //FIFO消息需要
+            message_type: &quot;normal&quot;, //fifo, delay, transaction
+            message_tag: &quot;&quot;,
+            message_keys: [],
+            consumption_model: &quot;clusering&quot;, //broadcasting
+        }
+    }
+}
+</code></pre>
+<h3 id="faas调用">FaaS调用</h3>
+<p>即Serverless的lambda函数，这里从略，因为用的不多。</p>
+<h3 id="异常相关字段">异常相关字段</h3>
+<p>异常不能记录在event域，必须记录在exception域。</p>
+<pre><code class="language-js">{
+    exception:{
+        escaped: true,
+        message: &quot;&quot;, //消息
+        stacktrace: &quot;&quot;, //堆栈
+        type: &quot;OSError&quot;, //异常类
+        
+    },
+}
+</code></pre>
+<h2 id="使用范例">使用范例</h2>
+<p>在已经完成的golang程序里引入如下两个包：</p>
+<pre><code class="language-bash">go get go.opentelemetry.io/otel \
+       go.opentelemetry.io/otel/trace
+</code></pre>
+<p>go里面的trace系统主要依赖context包，通过</p>
+<pre><code class="language-go">newCtx, span := otel.Tracer(name).Start(ctx, &quot;Run&quot;)
+</code></pre>
+<p>通过name创建一个Tracer，然后创建一个名为<code>Run</code>的新span。然后将这个newCtx当做参数向下传递，在函数逻辑完成之前调用<code>span.End()</code>结束逻辑。</p>
+<p>而将trace导出以供查看，需要初始化<code>Exporter</code>，配置Collector的地址等属性，如果只是为了调试，也可以输出到console上。</p>
+<p>对Service本身的标记（微服务的名称、实例ip等），使用<code>Resource</code>来初始化。</p>
+<p>如果想降低性能影响，不需要采样所有的trace，可以使用<code>sdktrace.WithSampler</code>来选择采样方案。</p>
+<p>最后，使用TracerProvider将这些配置相关联，使用<code>otel.SetTracerProvider</code>初始化tracer：</p>
+<pre><code class="language-go">exp, err := newExporter(f)	
+tp := trace.NewTracerProvider(
+		trace.WithBatcher(exp),
+		trace.WithResource(newResource()),
+	)
+defer func() {
+    if err := tp.Shutdown(context.Background()); err != nil {
+        l.Fatal(err)
+    }
+}()
+otel.SetTracerProvider(tp)
+</code></pre>
+<p>这相当于设置了一个全局的traceProvider，也可以在创建tracer的时候手动指定provider。如果使用sdk的话，对应的包是sdktrace.</p>
+<p>常用golang基础库都有社区提供的trace版，其包格式一般为：</p>
+<pre><code class="language-bash">go get go.opentelemetry.io/contrib/instrumentation/{import-path}/otel{package-name}
+</code></pre>
+<h2 id="elastic-apm使用">Elastic APM使用</h2>
+<p>其实就是在Fleet里面安装一个apm server充当collector，然后在go这边配置对接就行。</p>
+<p>elastic apm对接openTelemetry还有一些bug，不过总体是可用的。</p>
+<p>elastic自己的sdk只对接了很少一部分第三方库，用起来并不是很方便。</p>
+<p>es的apm server支持<a href="https://www.elastic.co/guide/en/apm/guide/current/sampling.html#tail-based-sampling">尾采样</a>，可以更有效的采样异常数据，推荐使用。</p>
+<p>需要注意的是，es在kafka等MQ使用场景中注入的是二进制的header，而不是text版本，需要自己写代码进行解析：</p>
+<pre><code class="language-go">// ExtractW3CBinaryTraceParent 从w3c trace-context-binary 格式中解析trace parent
+// [link](https://github.com/w3c/trace-context-binary/blob/571cafae56360d99c1f233e7df7d0009b44201fe/spec/20-binary-format.md)
+func ExtractW3CBinaryTraceParent(bs []byte) (spanCxt trace.SpanContext, err error) {
+	if len(bs) &lt; 29 {
+		err = fmt.Errorf(&quot;trace parent length error&quot;)
+		return
+	}
+	version := bs[0]
+	switch version {
+	case 0:
+		if bs[1] != 0 || bs[18] != 1 || bs[27] != 2 {
+			return spanCxt, fmt.Errorf(&quot;format error&quot;)
+		}
+		spanCxt = spanCxt.WithTraceID(*(*[16]byte)(bs[2:18])).
+			WithSpanID(*(*[8]byte)(bs[19:27])).
+			WithTraceFlags(trace.TraceFlags(bs[28]))
+		return spanCxt, err
+	default:
+		return spanCxt, fmt.Errorf(&quot;unknown trace version&quot;)
+	}
+}
+
+// ExtractW3CBinaryTraceState 从w3c trace-context-binary 格式中解析trace state
+// 对应的字符串格式是k1=v1,k2=k2
+func ExtractW3CBinaryTraceState(bs []byte) (state trace.TraceState, err error) {
+	if len(bs) &lt;= 2 {
+		return state, nil
+	}
+	idx := 0
+	kvs := make([]string, 0)
+	for {
+		if idx &gt;= len(bs) {
+			break
+		}
+		if bs[idx] != 0 {
+			return state, fmt.Errorf(&quot;format error&quot;)
+		}
+		keyLen := int(bs[idx+1])
+		if keyLen == 0 {
+			break
+		}
+		key := string(bs[idx+2 : idx+2+keyLen])
+		valueLen := int(bs[idx+2+keyLen])
+		value := string(bs[idx+keyLen+3 : idx+keyLen+3+valueLen])
+		kvs = append(kvs, fmt.Sprintf(&quot;%s=%s&quot;, key, value))
+		idx = idx + keyLen + 3 + valueLen
+	}
+	return trace.ParseTraceState(strings.Join(kvs, &quot;,&quot;))
+}
+
+// ToW3CBinary 序列化成w3c二进制
+func ToW3CBinary(sxt trace.SpanContext) (traceParent, traceState []byte) {
+	traceParent = make([]byte, 29)
+	traceParent[18] = 1
+	traceParent[27] = 2
+	traceId := [16]byte(sxt.TraceID())
+	copy(traceParent[2:18], traceId[:])
+	if sxt.SpanID().IsValid() {
+		spanId := [8]byte(sxt.SpanID())
+		copy(traceParent[19:27], spanId[:])
+	}
+	traceParent[28] = byte(sxt.TraceFlags())
+	if sxt.TraceState().Len() &gt; 0 {
+		s := sxt.TraceState().String()
+		pairs := strings.Split(s, &quot;,&quot;)
+		for _, pair := range pairs {
+			kv := strings.Split(pair, &quot;=&quot;)
+			if len(kv) != 2 {
+				continue
+			}
+			traceState = append(traceState, 0, byte(len(kv[0])))
+			traceState = append(traceState, []byte(kv[0])...)
+			traceState = append(traceState, byte(len(kv[1])))
+			traceState = append(traceState, []byte(kv[1])...)
+		}
+	} else {
+		traceState = []byte{0, 0}
+	}
+	return
+}
+</code></pre>
+
+        </div>
+        
+        
+        
+
+
+        
+        
+        
+        
+<div class="flex flex-col md:flex-row md:justify-between -mx-2 mt-4 px-2 pt-4 border-t">
+    <div>
+        
+    </div>
+    <div class="md:text-right mt-4 md:mt-0">
+        
+        <span class="block font-bold">下一页</span>
+        <a href="https://yiuterran.github.io/blog/posts/tinode%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="block">Tinode源码解析</a>
+        
+    </div>
+</div>
+
+        
+
+
+
+  <script id="utterances" src="https://utteranc.es/client.js"
+            issue-term=title
+            repo=YiuTerran/blog-comment
+              theme=preferred-color-scheme
+        crossorigin="anonymous"
+        async>
+</script>
+<script>
+    if (storageColorScheme == "Light") {
+      document.getElementById('utterances').setAttribute('theme', 'github-light')
+    } else if (storageColorScheme == "Dark") {
+      document.getElementById('utterances').setAttribute('theme', 'github-dark')
+    }
+</script>
+
+    </div>
+    
+    <div class="col-span-2">
+        
+        
+        <div class="sticky top-16 z-10 hidden lg:block px-6 py-4  bg-primary-bg ">
+    <span class="text-lg font-semibold">本页内容</span>
+</div>
+<div class="sticky-toc hidden lg:block px-6 pb-6 ">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#基本设计">基本设计</a></li>
+    <li><a href="#常用trace字段">常用Trace字段</a>
+      <ul>
+        <li><a href="#网络请求一般字段">网络请求一般字段</a></li>
+        <li><a href="#远程请求一般字段">远程请求一般字段</a></li>
+        <li><a href="#一般身份字段">一般身份字段</a></li>
+        <li><a href="#一般线程字段">一般线程字段</a></li>
+        <li><a href="#源码相关字段">源码相关字段</a></li>
+        <li><a href="#http请求常用字段">HTTP请求常用字段</a></li>
+        <li><a href="#数据库客户端常用字段">数据库客户端常用字段</a></li>
+        <li><a href="#rpc相关字段">RPC相关字段</a></li>
+        <li><a href="#mq等消息系统">MQ等消息系统</a></li>
+        <li><a href="#faas调用">FaaS调用</a></li>
+        <li><a href="#异常相关字段">异常相关字段</a></li>
+      </ul>
+    </li>
+    <li><a href="#使用范例">使用范例</a></li>
+    <li><a href="#elastic-apm使用">Elastic APM使用</a></li>
+  </ul>
+</nav>
+</div>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        enableStickyToc();
+    });
+</script>
+        
+    </div>
+    
+
+    
+    
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', ()=>{
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+
+      </div>
+    </div>
+    
+  </main>
+  <footer class="ps-scrollbar">
+    <div class="w-full max-w-screen-xl mx-auto"><div class="text-center p-6 pin-b">
+    <p class="text-sm text-tertiary-text">&copy; 2021 <a href="https://github.com/YiuTerran">tryao</a>
+ &middot;  Powered by the <a href="https://github.com/wangchucheng/hugo-eureka" class="hover:text-eureka">Eureka</a> theme for <a href="https://gohugo.io" class="hover:text-eureka">Hugo</a></p>
+</div></div>
+  </footer>
+</body>
+
+</html>
