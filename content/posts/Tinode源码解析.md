@@ -15,13 +15,14 @@ draft: false
 
 ## 概述
 
-有朋友需要做一个im，简单做了一下技术调研，流行的开源框架包括：
+有朋友需要做一个im，简单做了一下技术调研，[开源的实现](https://github.com/haiiiiiyun/awesome-selfhosted-cn#%E9%80%9A%E8%AE%AF%E7%B3%BB%E7%BB%9F)其实蛮多的，这里挑几个说一下：
 
+* Synapse/dendrite，matrix系，客户端比较多，比较推荐的应该是element.io. 稳定版本是python写的，性能很一般，golang/rust的服务端还没有stable，不建议使用；
 * Tinode/chat: 即本文主角，golang编写，架构比较简单，有MySQL就能跑，轻量级方案。支持web/ios/android，界面长得比较像telegram；支持chatbot. 国内用有点水土不服，主要是推送等组件依赖国外大厂的服务(S3, Firebase等），国内根本连不上，需要自己改成个推之类的方案。由于方案比较轻量，消息可靠性上有一些缺陷，内置了chatbot支持（可以用Python写）；
-* Open-IM-Server：据说是某个腾讯核心人员离职后自己开源的。服务端golang，架构基于微服务，有商业产品，自己试了一下目前版本大概有16个微服务，依赖kafka&zk、mysql、etcd、redis、miniIO和MongoDB。架构比较合理，早期是写扩散模型，v2.3之后群聊改为读扩散模型。主要问题是架构比较重，文档写的烂，需要自己分析代码，小团队维护比较吃力；且无chat bot相关设计；
-* turms-im/turms：java写的，读扩散模型。maintainer比较有自信，号称开源界最先进的方案，文档确实写的不错，很详细的技术分析。不过star数不多，实际使用者估计也寥寥。而且作者喜欢自研，Log/注册中心/配置中心这些都是自研的…有种自嗨过了头的感觉。整体来讲架构比较中庸，技术细节把控的比较好。java团队可以考虑，代码还比较易读，而且没有商业版，作者没有恰饭需求；
-* wildfirechat/im-server：也是java做的，主要卖商业版。亮点是基于protobuf+MQTT做的，协议设计上比较先进。由于主要卖商业版，所以开源生态一般般，愿意买商业版的可以考虑，好像价格还比较划算；
-* Rocket.chat：应该是github上star数最多的IM软件了，基于nodeJS编写。面向B端，类似钉钉/Slack这种IM，有复杂B端需求的团队建议优先考虑。性能上就不要太指望了…毕竟nodejs比Python也快不到哪里去。主打的是丰富的功能和生态。
+* Open-IM-Server：据说是某个腾讯核心人员离职后自己开源的。服务端golang，架构基于微服务，有商业产品，自己试了一下目前版本大概有16个微服务，依赖kafka&zk、mysql、etcd、redis、miniIO和MongoDB。架构比较合理，早期是写扩散模型，v2.3之后群聊改为读扩散模型。主要问题是架构比较重，文档写的烂，需要自己分析代码，小团队维护比较吃力；另外客户端开源的只是demo，bug满天飞，不能直接拿来用。
+* turms-im/turms：java写的，读扩散模型。maintainer比较有自信，号称开源界最先进的方案，文档确实写的不错，很详细的技术分析。不过star数不多，实际使用者估计也寥寥。而且作者喜欢自研，Log/注册中心/配置中心这些都是自研的…有种自嗨过了头的感觉。整体来讲架构比较中庸，技术细节把控的比较好。java团队可以考虑，代码还比较易读，而且没有商业版，作者没有恰饭需求；客户端没有开源产品，只有sdk；
+* wildfirechat/im-server：也是java做的，主要卖商业版，开源的功能做的很全了，和国内生态也结合的蛮好。开源版强行指定了使用七牛云做文件夹存储，然后服务端端口强行指定了80/1883，另外开源版不支持集群模式；国内的小规模内部使用推荐使用该项目（<10w人）；
+* Rocket.chat/mattermost：面向B端，类似zulip/Slack这种IM，有复杂B端需求的团队建议优先考虑。界面不太符合普通人使用im(qq/微信/钉钉)的习惯，办公人士用比较合适；
 
 这几个项目是客户端生态做的最好的了，基本能开箱即用。其他一些如goim之类的，没有客户端只有服务器，那还不如用mqtt自己写一个，毕竟有emqx这种高性能broker，写一个im真不算啥难事。聊天存储用influxdb或者MongoDB，元数据存MySQL。设计好推拉模型，读写扩散，消息时序，topic规则，一个基本的im软件还是能很快成型的。
 
@@ -33,9 +34,9 @@ draft: false
 
 在server文件夹下建立static文件夹，将`https://github.com/tinode/webapp/archive/master.zip`解压到static文件夹下。
 
-修改build-all.sh，仅保留windows和linux的两个二进制文件，mac可以自己加上darwin+amd64/arm64的配置. 第一次使用的时候发现脚本还是有不少bug，不过维护者很快就修理了，现在应该可以正常使用了。
+修改build-all.sh，仅保留windows和linux的两个二进制文件，mac可以自己加上darwin+amd64/arm64的配置，数据库仅保留mysql即可。将GOSRC改成`..`，使其不再依赖GOPATH.
 
-在平台上安装grpc相关依赖，包括protoc的二进制，以及：
+在平台上安装grpc相关依赖(apt install protobuf-compiler)，以及：
 
 ```go
 go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28
@@ -73,7 +74,7 @@ six==1.16.0
 
 配置文件就是`tinode.conf`，这是一个`json with comments`格式，或者说`json5`格式，也可以用`hcl`来解析（用viper的话）。可以把后缀改成`jsonc`或者`json5`，一般的编辑器就可以语法高亮了。
 
-配置文件的注释非常详尽，按着配置来就行，如果为了测试，必须修改的就只有MySQL的用户名密码和地址。见store_config部分，修改：
+配置文件的注释非常详尽，按着配置来就行，如果为了测试，必须修改的就只有MySQL的用户名密码和地址（生产的话，有几个IMPORTANT的地方必须修改以提高安全性）。见store_config部分，修改：
 
 ```json
 {
@@ -86,11 +87,13 @@ six==1.16.0
 }
 ```
 
-这几个参数。
+这几个参数。MySQL密码可能默认是空的，可以用`ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '123456'`加一个密码。使用`init-db`初始化数据库
 
 然后直接运行`tinode`，没意外的话程序可以正常启动。进入浏览器输入`localhost:6060`即可看到web版本登陆界面。
 
 这个半自动化脚本其实挺蛋疼的，但是看文档这个项目前后端没分离，虽然前端是react写的，但是必须通过golang服务来提供。所以就算前端有一个nginx，也不能直接托管静态文件。
+
+conf文件中，默认情况下推送是没打开的，需要自己配置Google FCM的参数和firebase-init.js（在前端）。文件默认存储在本地（可以用juiceFS扩展成分布式文件夹存储），也可以配置s3.
 
 ## 解析
 
@@ -313,9 +316,53 @@ service Plugin {
 }
 ```
 
-一般客户端实际上只需要实现`MessageLoop`这个消息循环，不停的给服务端发送ClientMsg即可，它的功能和上面的websocket通信其实是一致的。
+一般客户端实际上只需要实现`MessageLoop`这个消息循环，处理服务端转发给它的消息（用户发给他的），然后进行处理即可。
 
 插件显然需要实现Plugin的server，chat的主程序作为plugin的客户端，调用插件提供的服务，而插件需要通过配置文件进行激活，详见`plugins`部分（在最后）。整体逻辑不难理解，就是客户端行为的回调。
+
+包里面示例的就是一个聊天机器人，主要实现了`MessageLoop`部分的随机应答。
+
+如果要写一个插件的话，主要需要实现`FireHose`部分。
+
+#### FireHose
+
+这里的文档比较缺，需要看源码（源码的注释还有点问题），主要在`plugins.go`这个文件里。
+
+在`tinode.conf`的最下面，有个`plugins`的配置，这里激活插件系统：
+
+```js
+	"plugins": [
+		{
+			// Enable or disable this plugin.
+			"enabled": true,
+
+			// Name of the plugin, must be unique.
+			"name": "python_chat_bot",
+
+			// Timeout in microseconds.
+			"timeout": 20000,
+
+			// Events to send to the plugin.
+			"filters": {
+				// Account creation events.
+				"fire_hose": "pub,sub,del;grp,new;"
+			},
+
+			// Error code to use in case plugin has failed; 0 means to ignore the failures.
+			"failure_code": 0,
+
+			// Text of an error message to report in case of plugin failure.
+			"failure_text": null,
+
+			// Address of the plugin.
+			"service_addr": "tcp://localhost:40051"
+		}
+	]
+```
+
+filters这里配置需要回调的消息类型，我这里拦截了新建群组、订阅群组、在群中发送消息/删除消息等.
+
+特别需要注意的是，用户的id在数据库里是长整型，但是显示在界面上是字符串，所以需要转换一次。
 
 ## 设计缺陷
 
