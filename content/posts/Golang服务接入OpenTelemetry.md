@@ -65,9 +65,265 @@ Trace Context，即上下文。Tracer 创建span，将attribute注入其中，�
 
 Log和Metric的概念比较容易理解，这里不再赘述，除此之外，还有一个概念：`Baggage`。假设某个span的上下文里有个变量需要分享给其他span，可以使用Baggage机制来进行分享。需要注意的是Baggage中的变量并不会自动加到attributes。
 
-## 常用Trace字段
+## 使用范例
 
-OpenTelemetry约定了一系列常用的Trace字段，应对不同的场景，参考[这里](https://opentelemetry.io/docs/reference/specification/trace/semantic_conventions/)，截止目前还是Experimental状态，所以后面还会有新的变动。 建议脑子里有个大致的概念就行，需要的时候再按图索骥，东西有点多。
+在已经完成的golang程序里引入如下两个包：
+
+```bash
+go get go.opentelemetry.io/otel \
+       go.opentelemetry.io/otel/trace
+```
+
+go里面的trace系统主要依赖context包，通过
+
+```go
+newCtx, span := otel.Tracer(name).Start(ctx, "Run")
+```
+
+通过name创建一个Tracer，然后创建一个名为`Run`的新span。然后将这个newCtx当做参数向下传递，在函数逻辑完成之前调用`span.End()`结束逻辑。
+
+而将trace导出以供查看，需要初始化`Exporter`，配置Collector的地址等属性，如果只是为了调试，也可以输出到console上。
+
+对Service本身的标记（微服务的名称、实例ip等），使用`Resource`来初始化。
+
+
+
+如果想降低性能影响，不需要采样所有的trace，可以使用`sdktrace.WithSampler`来选择采样方案。
+
+最后，使用TracerProvider将这些配置相关联，使用`otel.SetTracerProvider`初始化tracer，完整的初始化流程如下：
+
+```go
+import (
+	"context"
+	"crypto/tls"
+	"fmt"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
+	"go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
+	"go.opentelemetry.io/otel/propagation"
+	"go.opentelemetry.io/otel/sdk/resource"
+	sdktrace "go.opentelemetry.io/otel/sdk/trace"
+	semconv "go.opentelemetry.io/otel/semconv/v1.12.0"
+	"go.opentelemetry.io/otel/trace"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/credentials/insecure"
+	"os"
+	"strings"
+	"time"
+)
+
+type TraceParam struct {
+	ServiceName     string  // 服务名称
+	ServiceVersion  string  // 版本号，避免服务版本不一致问题
+	ServiceInstance string  // 示例标识，pod id或者ip:port之类的
+	Environment     string  // dev, test, prod之类
+	Endpoint        string  // host:port
+	Authorization   string  // basic auth或者api key
+	Protocol        string  // http或者grpc
+	EnableTLS       bool    //是否使用ssl
+	CertFile        string  //证书路径，使用tls时才需要配置
+	SampleRate      float64 //默认为1
+}
+// InitProvider 初始化并返回provider
+func InitProvider(param TraceParam, asGlobal bool) (*sdktrace.TracerProvider, error) {
+	if param.ServiceName == "" || param.ServiceVersion == "" {
+		return nil, fmt.Errorf("invalid service param to init tracer")
+	}
+	//默认是生产环境
+	if param.Environment == "" {
+		param.Environment = "prod"
+	}
+	ctx := context.Background()
+	res, err := resource.New(ctx,
+		resource.WithAttributes(
+			semconv.ServiceNameKey.String(param.ServiceName),
+			semconv.ServiceVersionKey.String(param.ServiceVersion),
+			semconv.ServiceInstanceIDKey.String(param.ServiceInstance),
+			semconv.DeploymentEnvironmentKey.String(param.Environment),
+		),
+		resource.WithHost(),
+		resource.WithProcess(),
+		resource.WithTelemetrySDK(),
+		resource.WithSchemaURL(semconv.SchemaURL),
+	)
+	if err != nil {
+		return nil, fmt.Errorf("fail to create resource:%w", err)
+	}
+	var exporter sdktrace.SpanExporter
+	if param.Endpoint == "" {
+		//兜底策略，控制台输出
+		exporter, err = stdouttrace.New(
+			stdouttrace.WithWriter(os.Stdout),
+			stdouttrace.WithPrettyPrint(),
+		)
+	} else if param.Protocol == ProtocolGRPC {
+		//连接collector超时时间
+		ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+		defer cancel()
+		opts := []grpc.DialOption{grpc.WithBlock()}
+		if !param.EnableTLS {
+			opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
+		} else {
+			//tls证书
+			var creds credentials.TransportCredentials
+			if param.CertFile != "" {
+				creds, err = credentials.NewClientTLSFromFile(param.CertFile, "")
+				if err != nil {
+					return nil, fmt.Errorf("init grpc conn to apm server err:%s", err)
+				}
+			} else {
+				return nil, fmt.Errorf("you should specific CertFile when enable tls with grpc")
+			}
+			opts = append(opts, grpc.WithTransportCredentials(creds))
+		}
+		conn, err := grpc.DialContext(ctx, param.Endpoint, opts...)
+		if err != nil {
+			log.Fatal("fail to init grpc conn to apm server:%s", err)
+		}
+		exporter, err = otlptracegrpc.New(ctx, otlptracegrpc.WithGRPCConn(conn))
+		if err != nil {
+			return nil, fmt.Errorf("fail to create trace exporter:%w", err)
+		}
+	} else {
+		var tlsConf otlptracehttp.Option
+		if param.EnableTLS {
+			tlsConf = otlptracehttp.WithTLSClientConfig(&tls.Config{InsecureSkipVerify: true})
+		} else {
+			tlsConf = otlptracehttp.WithInsecure()
+		}
+		exporter, err = otlptracehttp.New(context.Background(),
+			otlptracehttp.WithEndpoint(param.Endpoint),
+			tlsConf,
+		)
+		if err != nil {
+			return nil, fmt.Errorf("fail to create http exporter:%w", err)
+		}
+	}
+	bsp := sdktrace.NewBatchSpanProcessor(exporter)
+	traceProvider := sdktrace.NewTracerProvider(
+		sdktrace.WithSampler(
+			sdktrace.ParentBased(sdktrace.TraceIDRatioBased(param.SampleRate)),
+		),
+		sdktrace.WithResource(res),
+		sdktrace.WithSpanProcessor(bsp),
+	)
+	if asGlobal {
+		otel.SetTracerProvider(traceProvider)
+	}
+	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(
+		propagation.TraceContext{}, propagation.Baggage{}))
+	return traceProvider, nil
+}
+```
+
+这相当于设置了一个全局的traceProvider，也可以在创建tracer的时候手动指定provider。如果使用sdk的话，对应的包是sdktrace.
+
+常用golang基础库都有社区提供的trace版，其包格式一般为：
+
+```bash
+go get go.opentelemetry.io/contrib/instrumentation/{import-path}/otel{package-name}
+```
+
+## Elastic APM使用
+
+其实就是在Fleet里面安装一个apm server充当collector，然后在go这边配置对接就行。
+
+elastic apm对接openTelemetry还有一些bug，不过总体是可用的。
+
+elastic自己的sdk只对接了很少一部分第三方库，用起来并不是很方便。
+
+es的apm server支持[尾采样](https://www.elastic.co/guide/en/apm/guide/current/sampling.html#tail-based-sampling)，可以更有效的采样异常数据，推荐使用。
+
+需要注意的是，es在kafka等MQ使用场景中注入的是二进制的header，而不是text版本，需要自己写代码进行解析：
+
+```go
+// ExtractW3CBinaryTraceParent 从w3c trace-context-binary 格式中解析trace parent
+// [link](https://github.com/w3c/trace-context-binary/blob/571cafae56360d99c1f233e7df7d0009b44201fe/spec/20-binary-format.md)
+func ExtractW3CBinaryTraceParent(bs []byte) (spanCxt trace.SpanContext, err error) {
+	if len(bs) < 29 {
+		err = fmt.Errorf("trace parent length error")
+		return
+	}
+	version := bs[0]
+	switch version {
+	case 0:
+		if bs[1] != 0 || bs[18] != 1 || bs[27] != 2 {
+			return spanCxt, fmt.Errorf("format error")
+		}
+		spanCxt = spanCxt.WithTraceID(*(*[16]byte)(bs[2:18])).
+			WithSpanID(*(*[8]byte)(bs[19:27])).
+			WithTraceFlags(trace.TraceFlags(bs[28]))
+		return spanCxt, err
+	default:
+		return spanCxt, fmt.Errorf("unknown trace version")
+	}
+}
+
+// ExtractW3CBinaryTraceState 从w3c trace-context-binary 格式中解析trace state
+// 对应的字符串格式是k1=v1,k2=k2
+func ExtractW3CBinaryTraceState(bs []byte) (state trace.TraceState, err error) {
+	if len(bs) <= 2 {
+		return state, nil
+	}
+	idx := 0
+	kvs := make([]string, 0)
+	for {
+		if idx >= len(bs) {
+			break
+		}
+		if bs[idx] != 0 {
+			return state, fmt.Errorf("format error")
+		}
+		keyLen := int(bs[idx+1])
+		if keyLen == 0 {
+			break
+		}
+		key := string(bs[idx+2 : idx+2+keyLen])
+		valueLen := int(bs[idx+2+keyLen])
+		value := string(bs[idx+keyLen+3 : idx+keyLen+3+valueLen])
+		kvs = append(kvs, fmt.Sprintf("%s=%s", key, value))
+		idx = idx + keyLen + 3 + valueLen
+	}
+	return trace.ParseTraceState(strings.Join(kvs, ","))
+}
+
+// ToW3CBinary 序列化成w3c二进制
+func ToW3CBinary(sxt trace.SpanContext) (traceParent, traceState []byte) {
+	traceParent = make([]byte, 29)
+	traceParent[18] = 1
+	traceParent[27] = 2
+	traceId := [16]byte(sxt.TraceID())
+	copy(traceParent[2:18], traceId[:])
+	if sxt.SpanID().IsValid() {
+		spanId := [8]byte(sxt.SpanID())
+		copy(traceParent[19:27], spanId[:])
+	}
+	traceParent[28] = byte(sxt.TraceFlags())
+	if sxt.TraceState().Len() > 0 {
+		s := sxt.TraceState().String()
+		pairs := strings.Split(s, ",")
+		for _, pair := range pairs {
+			kv := strings.Split(pair, "=")
+			if len(kv) != 2 {
+				continue
+			}
+			traceState = append(traceState, 0, byte(len(kv[0])))
+			traceState = append(traceState, []byte(kv[0])...)
+			traceState = append(traceState, byte(len(kv[1])))
+			traceState = append(traceState, []byte(kv[1])...)
+		}
+	} else {
+		traceState = []byte{0, 0}
+	}
+	return
+}
+```
+
+## 附：常用Trace字段
+
+OpenTelemetry约定了一系列常用的Trace字段，应对不同的场景，参考[这里](https://opentelemetry.io/docs/reference/specification/trace/semantic_conventions/)，截止目前还是Experimental状态，所以后面还会有新的变动。 建议脑子里有个大致的概念就行，需要的时候再按图索骥，东西有点多。大部分基础库都内置了相关机制，只需要传入context即可。
 
 可以使用`go.opentelemetry.io/otel/semconv/v1.12.0`在代码中使用下面这些常量。
 
@@ -417,147 +673,4 @@ span name的一般格式为：`<dest name> <op name>`， 例如`shop.orders send
 }
 ```
 
-## 使用范例
-
-在已经完成的golang程序里引入如下两个包：
-
-```bash
-go get go.opentelemetry.io/otel \
-       go.opentelemetry.io/otel/trace
-```
-
-go里面的trace系统主要依赖context包，通过
-
-```go
-newCtx, span := otel.Tracer(name).Start(ctx, "Run")
-```
-
-通过name创建一个Tracer，然后创建一个名为`Run`的新span。然后将这个newCtx当做参数向下传递，在函数逻辑完成之前调用`span.End()`结束逻辑。
-
-而将trace导出以供查看，需要初始化`Exporter`，配置Collector的地址等属性，如果只是为了调试，也可以输出到console上。
-
-对Service本身的标记（微服务的名称、实例ip等），使用`Resource`来初始化。
-
-
-
-如果想降低性能影响，不需要采样所有的trace，可以使用`sdktrace.WithSampler`来选择采样方案。
-
-最后，使用TracerProvider将这些配置相关联，使用`otel.SetTracerProvider`初始化tracer：
-
-```go
-exp, err := newExporter(f)	
-tp := trace.NewTracerProvider(
-		trace.WithBatcher(exp),
-		trace.WithResource(newResource()),
-	)
-defer func() {
-    if err := tp.Shutdown(context.Background()); err != nil {
-        l.Fatal(err)
-    }
-}()
-otel.SetTracerProvider(tp)
-```
-
-这相当于设置了一个全局的traceProvider，也可以在创建tracer的时候手动指定provider。如果使用sdk的话，对应的包是sdktrace.
-
-常用golang基础库都有社区提供的trace版，其包格式一般为：
-
-```bash
-go get go.opentelemetry.io/contrib/instrumentation/{import-path}/otel{package-name}
-```
-
-## Elastic APM使用
-
-其实就是在Fleet里面安装一个apm server充当collector，然后在go这边配置对接就行。
-
-elastic apm对接openTelemetry还有一些bug，不过总体是可用的。
-
-elastic自己的sdk只对接了很少一部分第三方库，用起来并不是很方便。
-
-es的apm server支持[尾采样](https://www.elastic.co/guide/en/apm/guide/current/sampling.html#tail-based-sampling)，可以更有效的采样异常数据，推荐使用。
-
-需要注意的是，es在kafka等MQ使用场景中注入的是二进制的header，而不是text版本，需要自己写代码进行解析：
-
-```go
-// ExtractW3CBinaryTraceParent 从w3c trace-context-binary 格式中解析trace parent
-// [link](https://github.com/w3c/trace-context-binary/blob/571cafae56360d99c1f233e7df7d0009b44201fe/spec/20-binary-format.md)
-func ExtractW3CBinaryTraceParent(bs []byte) (spanCxt trace.SpanContext, err error) {
-	if len(bs) < 29 {
-		err = fmt.Errorf("trace parent length error")
-		return
-	}
-	version := bs[0]
-	switch version {
-	case 0:
-		if bs[1] != 0 || bs[18] != 1 || bs[27] != 2 {
-			return spanCxt, fmt.Errorf("format error")
-		}
-		spanCxt = spanCxt.WithTraceID(*(*[16]byte)(bs[2:18])).
-			WithSpanID(*(*[8]byte)(bs[19:27])).
-			WithTraceFlags(trace.TraceFlags(bs[28]))
-		return spanCxt, err
-	default:
-		return spanCxt, fmt.Errorf("unknown trace version")
-	}
-}
-
-// ExtractW3CBinaryTraceState 从w3c trace-context-binary 格式中解析trace state
-// 对应的字符串格式是k1=v1,k2=k2
-func ExtractW3CBinaryTraceState(bs []byte) (state trace.TraceState, err error) {
-	if len(bs) <= 2 {
-		return state, nil
-	}
-	idx := 0
-	kvs := make([]string, 0)
-	for {
-		if idx >= len(bs) {
-			break
-		}
-		if bs[idx] != 0 {
-			return state, fmt.Errorf("format error")
-		}
-		keyLen := int(bs[idx+1])
-		if keyLen == 0 {
-			break
-		}
-		key := string(bs[idx+2 : idx+2+keyLen])
-		valueLen := int(bs[idx+2+keyLen])
-		value := string(bs[idx+keyLen+3 : idx+keyLen+3+valueLen])
-		kvs = append(kvs, fmt.Sprintf("%s=%s", key, value))
-		idx = idx + keyLen + 3 + valueLen
-	}
-	return trace.ParseTraceState(strings.Join(kvs, ","))
-}
-
-// ToW3CBinary 序列化成w3c二进制
-func ToW3CBinary(sxt trace.SpanContext) (traceParent, traceState []byte) {
-	traceParent = make([]byte, 29)
-	traceParent[18] = 1
-	traceParent[27] = 2
-	traceId := [16]byte(sxt.TraceID())
-	copy(traceParent[2:18], traceId[:])
-	if sxt.SpanID().IsValid() {
-		spanId := [8]byte(sxt.SpanID())
-		copy(traceParent[19:27], spanId[:])
-	}
-	traceParent[28] = byte(sxt.TraceFlags())
-	if sxt.TraceState().Len() > 0 {
-		s := sxt.TraceState().String()
-		pairs := strings.Split(s, ",")
-		for _, pair := range pairs {
-			kv := strings.Split(pair, "=")
-			if len(kv) != 2 {
-				continue
-			}
-			traceState = append(traceState, 0, byte(len(kv[0])))
-			traceState = append(traceState, []byte(kv[0])...)
-			traceState = append(traceState, byte(len(kv[1])))
-			traceState = append(traceState, []byte(kv[1])...)
-		}
-	} else {
-		traceState = []byte{0, 0}
-	}
-	return
-}
-```
-
+## 
