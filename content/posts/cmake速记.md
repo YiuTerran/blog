@@ -412,6 +412,8 @@ $<expression:arg1,arg2>
 
 即`add_executable`和`add_library`，需要手动指定文件列表。这个很麻烦，但是目前并没有好的解决方案。
 
+`add_custom_target`用于执行特殊指令，并不一定会生成目标文件。例如通过protoc生成protobuf对应的语言文件等。
+
 `target_include_directories`用来给预处理器解析`#include<>`或`#include ""`中指定的header；有一个system参数用来标记文件夹是否标准的系统目录。
 
 `target_compile_definitions`用来定义预编译，即C中的`#define DEF 8`等价于：
@@ -429,3 +431,30 @@ target_compile_definitions(defined PRIVATE ABC "DEF=${VAR}")
 
 链接的配置其实只有`target_link_libraries`。
 
+编译生成的ELF文件是独立的，需要通过链接器进行整合，从而重定位.data, .text等区段。有三种类型的库：
+
+* 静态库(.lib/.a)，最简单的，使用`add_library(<name> STATIC [<sources> …])`来添加目标；
+* 动态库(.so/.dll)，将上面的`STATIC`替换成`SHARED`即可；
+* 模块库，一种特殊的动态库，可以通过在代码中使用`LoadLibrary`或者`dlopen/dlsym`动态加载的库，将上面的`STATIC`替换成`MODULE`即可；
+
+特别注意，所有依赖动态库或者模块库的，在链接的配置里要加上位置无关代码标志：
+
+```cmake
+set_target_properties(dependency_target
+    PROPERTIES POSITION_INDEPENDENT_CODE
+    ON)
+```
+
+否则在运行时会出现一些问题。
+
+命名冲突问题：
+
+在链接二进制文件或者静态库时，命名经常会冲突，此时链接器会直接报错，简单的处理办法是使用C++的命名空间。
+
+如果链接器提示未定义符号，多半是链接依赖的顺序错了。
+
+如果有循环依赖，可以在链接时重复添加库。
+
+### 管理依赖
+
+主要介绍find_package指令的使用。
