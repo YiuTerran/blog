@@ -15,6 +15,8 @@ draft: false
 
 主要参考书籍《Modern CMake for C++》，以及《CMake Best Practices》，使用CMake版本3.25.
 
+建议先看第一本，再看第二本。
+
 ## 使用
 
 一般而言，cmake的使用方式非常简单。在命令行下使用
@@ -370,7 +372,7 @@ include(<file|module> [OPTIONAL] [RESULT_VAR <var>])
 设置C++标准：
 
 ```cmake
-set_property(TARGET <target> PROPERTY CXX_STANDARD <standard>) #设置标准版本
+set_property(TARGET <target> PROPERTY CXX_STANDARD <standard>) #设置标准版本，也可以用target_compile_features配置
 set(CMAKE_CXX_STANDARD_REQUIRED ON) # 强制打开标准检测
 set(CMAKE_CXX_EXTENSIONS OFF) # 关闭非标特性
 ```
@@ -394,48 +396,39 @@ $<expression:arg1,arg2>
 
 ### 编译配置
 
-常用指令：
+首先是目标：
 
-• target_compile_features(): 需要具有特定功能的编译器来编译此目标。
+* add_executable: 创建可执行文件
+* add_library：创建库，包括三种不同的库，如果不设置的话，需要在cmake运行时传入`BUILD_SHARED_LIBS`参数；注意库名称需要全局唯一；
+* add_custom_target: 自定义目标，执行脚本之类的任务
 
-• target_sources(): 向已定义的目标添加源。
+目标配置常用指令：
 
-• target_include_directories(): 设置预处理器的包含路径。
+* target_compile_features(): 需要具有特定功能的编译器来编译此目标，例如`cxx_std_17`表示17标准，修饰符PUBLIC/INTERFACE适用于头文件也需要新标准特性的场景；
 
-• target_compile_definitions(): 设置预处理定义。
+* target_sources(): 向已定义的目标添加源，只能手动添加文件列表，没有特别方便的办法；
+* target_include_directories(): 设置预处理器的包含路径，用来给预处理器解析`#include<>`或`#include ""`中指定的header；有一个system参数用来标记文件夹是否标准的系统目录；
+* target_compile_definitions(): 设置预处理定义，即C中的`#define`定义，可以通过cmake脚本注入数据；也可以通过`configure_file`将配置文件生成为头文件；
+* target_compile_options(): 特定于编译器的选项，一般是打开各种优化配置；默认的有debug和release模式；
+* target_precompile_headers(): 预编译头文件；
+* set_target_properties()：配置目标属性；
 
-• target_compile_options(): 特定于编译器的选项。
+`target_sources`在添加源文件时，一般使用`PRIVATE`修饰符；`PUBLIC`/`INTERFACE`一般给库目标使用。前者会把源文件附加到依赖当前库的目标上（一般不需要，相当于对外暴露实现，一般只需要暴露头文件）；后者更特殊，一般原来添加纯头文件库；
 
-• target_precompile_headers(): 预编译头文件。
+对应的，`target_include_directories`一般使用`PUBLIC`修饰符，除非是纯粹的头文件才使用INTERFACE；
 
-管理目标源：
 
-即`add_executable`和`add_library`，需要手动指定文件列表。这个很麻烦，但是目前并没有好的解决方案。
-
-`add_custom_target`用于执行特殊指令，并不一定会生成目标文件。例如通过protoc生成protobuf对应的语言文件等。
-
-`target_include_directories`用来给预处理器解析`#include<>`或`#include ""`中指定的header；有一个system参数用来标记文件夹是否标准的系统目录。
-
-`target_compile_definitions`用来定义预编译，即C中的`#define DEF 8`等价于：
-
-```cmake
-set(VAR 8)
-target_compile_definitions(defined PRIVATE ABC "DEF=${VAR}")
-```
-
-可以指定一个配置文件作为生成模板，使用`configure_file`指令让cmake填充相关变量并生成头文件，这适用于编译选项比较多的情况。
-
-`target_compile_options`用于打开各种优化选项，常用的就是release和debug开关，前者对应O3优化。
 
 ### 链接配置
 
 链接的配置其实只有`target_link_libraries`。
 
-编译生成的ELF文件是独立的，需要通过链接器进行整合，从而重定位.data, .text等区段。有三种类型的库：
+编译生成的ELF文件是独立的，需要通过链接器进行整合，从而重定位.data, .text等区段。有以下几种类型的库：
 
 * 静态库(.lib/.a)，最简单的，使用`add_library(<name> STATIC [<sources> …])`来添加目标；
 * 动态库(.so/.dll)，将上面的`STATIC`替换成`SHARED`即可；
 * 模块库，一种特殊的动态库，可以通过在代码中使用`LoadLibrary`或者`dlopen/dlsym`动态加载的库，将上面的`STATIC`替换成`MODULE`即可；
+* 对象库，关键字替换为`OBJECT`即可，这种库不会生成真正的库，仅用来分离代码模块。因此不会进行链接，仅有编译过程；
 
 特别注意，所有依赖动态库或者模块库的，在链接的配置里要加上位置无关代码标志：
 
@@ -446,6 +439,54 @@ set_target_properties(dependency_target
 ```
 
 否则在运行时会出现一些问题。
+
+动态库习惯上需要在目标上设置构建版本和API版本，如：
+
+```cmake
+set_target_properties(
+target
+PROPERTIES VERSION ${PROJECT_VERSION}
+SOVERSION ${PROJECT_VERSION_MAJOR}
+)
+```
+
+这样最后创建的so文件会使用版本号作为后缀。
+
+如果是debug版本，可以额外加上一个后缀d：
+
+```cmake
+set_target_properties(
+target
+PROPERTIES DEBUG_POSTFIX d)
+```
+
+符号可见性问题：
+
+gcc/clang默认头文件中所有符号可见，但是vs默认所有符号都不可见，不过可以强制使用`CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS`将其转为一致。
+
+更好的方法是将`CXX_VISIBILITY_PRESET`设为`HIDDEN`，然后使用`generate_export_header`宏进行显式的导出：
+
+```cmake
+add_library(hello SHARED)
+set_property(TARGET hello PROPERTYCXX_VISIBILITY_PRESET "hidden")
+set_property(TARGET hello PROPERTYVISIBILITY_INLINES_HIDDEN TRUE)
+include(GenerateExportHeader)
+generate_export_header(hello EXPORT_MACRO_NAME HELLO_EXPORT EXPORT_FILE_NAME export/hello/export_hello.hpp)
+target_include_directories(hello PUBLIC "${CMAKE_CURRENT_BINARY_DIR}/export")
+```
+
+在代码里需要使用一个明确的标记:
+
+```c++
+#include "hello/export_hello.hpp"
+class HELLO_EXPORT Hello{
+    
+};
+```
+
+包含导出的文件，并与上面的`EXPORT_MACRO_NAME`指定的宏名称一致即可。
+
+
 
 命名冲突问题：
 

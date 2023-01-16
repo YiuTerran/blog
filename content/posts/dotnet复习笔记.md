@@ -10,7 +10,7 @@ date: 2022-12-17T10:27:37+08:00
 lastmod: 2022-12-17T10:27:37+08:00
 featuredVideo:
 featuredImage:
-draft: false
+draft: true
 ---
 
 最近有一些做GUI项目的需求，Flutter离不开对原生的理解，简单需求还是用C#来写吧，最近的技术栈是C#11 + dotnet7。
