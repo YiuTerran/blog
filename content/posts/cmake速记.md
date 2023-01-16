@@ -534,3 +534,113 @@ install(TAREGETS target_name)
 
 安装文件夹时，可以使用`FILES_MATCHING`来进行通配符(`PATTERN`)或者正则(`REGEX`)过滤，尾部还可以加上`EXCLUDE`用来表示排除文件。
 
+### 配置导出
+
+如果想要一个库被使用者发现，需要导出包。cmake目前主要使用`Config-file package`来供库使用者使用`find_package`寻找。
+
+包配置文件习惯上命名为`<projectname>-config.cmake`或者`<ProjectName>Config.cmake`，注意大小写习惯。该文件里面的内容就是指示头文件和库文件的位置。
+
+还有一个可选的包版本文件，命名为`<projectname>-config-version.cmake`或`<ProjectName>ConfigVersion.cmake`。
+
+`find_package`默认寻找路径是`<CMAKE_PREFIX_PATH>/cmake`，所以导出包时也要放到对应的位置。总的来说分为两步：
+
+```cmake
+# 定义导出路径变量（相对路径），并缓存
+set(ch4_ex05_lib_INSTALL_CMAKEDIR cmake CACHE PATH "Installation directory for config-file package cmake files")
+# 定义导出名称ch4_ex05_lib_export，并指明头文件目录
+install(TARGETS ch4_ex05_lib
+        EXPORT ch4_ex05_lib_export
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+# 导出，使用上文定义的导出名称，指明文件名、命名空间和导出路径
+install(EXPORT ch4_ex05_lib_export
+        FILE ch4_ex05_lib-config.cmake
+        NAMESPACE ch4_ex05_lib::
+        DESTINATION ${ch4_ex05_lib_INSTALL_CMAKEDIR}
+)
+```
+
+最后，还要生成版本文件：
+
+```cmake
+# Defines write_basic_package_version_file
+include(CMakePackageConfigHelpers)
+
+# 与cmake project的主版本号一致
+write_basic_package_version_file(
+  "ch4_ex05_lib-config-version.cmake"
+  COMPATIBILITY SameMajorVersion
+)
+install(FILES
+  "${CMAKE_CURRENT_BINARY_DIR}/ch4_ex05_lib-config-version.cmake"
+  DESTINATION "${ch4_ex05_lib_INSTALL_CMAKEDIR}"
+)
+
+```
+
+### 打包
+
+使用cpack打包，这个没啥好说的。就是`include(CPack)`之后，配置一些打包信息，然后跑CPack命令指定格式进行打包。
+
+在进行部署或者提供`deb`/`rpm`包时，很有用。
+
+## 依赖管理
+
+### 包管理
+
+前面已经介绍了`find_package`，除此之外，cmake还提供了`find_file`/`file_path`/`find_library`和`find_program`来查找各种需要的文件。
+
+这一系列的指令都有较为复杂的默认行为，通常情况下，使用系统包管理器（*nix）安装的头文件和库，都可以自动找到而无需额外配置。
+
+但是系统包管理器会污染全局库版本，所以更好的办法是使用第三方的包管理器。这里主要推荐了conan和vcpkg这两个包管理工具。前者和cmake融合的比较好，可以直接在cmake中使用，后者则更加独立一些。
+
+windows下编程更推荐vcpkg，使用清单模式用起来很像npm。只需要在cmake命令增加
+
+```bash
+ -DCMAKE_TOOLCHAIN_FILE=[vcpkg root]/scripts/buildsystems/vcpkg.cmake
+```
+
+参数，即可自动下载`vcpkg.json`中的依赖。
+
+如果需要其他toolchain配置，则通过`-DVCPKG_CHAINLOAD_TOOLCHAIN_FILE`追加。
+
+### 源码集成
+
+相较于上面的包方案，C/C++更习惯使用源码集成的方案，也就是所谓的供应商模式。这个方案在其他语言里实际上不是那么流行（除了golang，但是go编译很快）。
+
+cmake提供`ExternalProject`和`FetchContent`两个模块，用来抓取源码，一般推荐使用后者。
+
+```cmake
+include(FetchContent)
+# declare where to get si from 
+FetchContent_Declare(
+  SI
+  GIT_REPOSITORY https://github.com/bernedom/si.git
+  GIT_TAG 5f4b9a5924a8b3509baec07525fda9ad926adcec) # 2.3.0
+
+# populate si to make it available
+FetchContent_MakeAvailable(si)
+```
+
+这就OK了，也可以使用`FetchContent_Populate`手动控制拉取的模块各个目录放在哪里：
+
+如果第三方库不是基于cmake的，例如使用了autotools或者automake，那就需要使用`ExternalProject`，该命令的使用较为复杂，这里不再记录。
+
+## 文档生成
+
+其实就是用`add_custom_target`跑`doxygen`来生成文档，这里不做太多记录。
+
+## 测试
+
+通过ctest可以生成二进制文件进行测试，需要配合各种测试框架进行使用。
+
+cmake还支持一些静态代码分析工具、消杀工具的集成。
+
+## 自定义任务
+
+主要讲述`add_custom_command`如何配置自定义目标使用，以及使用`execute_process`调用其他进程。
+
+## 其他
+
+在《cmake best practices》里面还有很多实用的内容，比如将cmake代码作为单独的项目进行维护，以便复用；如何维护cmake代码，进行cmake性能分析，以及将非cmake项目进行迁移。这些知识偏向于实践，可以在需要的时候再进行查阅。
+
+一般简单项目，只需要知道上面的知识就能够很好的把握了。
