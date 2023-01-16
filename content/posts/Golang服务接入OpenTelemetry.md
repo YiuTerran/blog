@@ -321,6 +321,21 @@ func ToW3CBinary(sxt trace.SpanContext) (traceParent, traceState []byte) {
 }
 ```
 
+## 需要注意的坑
+
+golang中使用context.Context传递trace上下文，所以一般是请求过来之后将入口的context往下传递即可。但是context.Context的主要作用并不是传递trace，而是用来控制超时(timeout)和请求取消(cancel)，所以如果新的goroutine里直接传递外围的context，很可能会遇到`Context Canceled`问题。
+
+解决方案也很简单，使用：
+
+```go
+	spanCtx := trace.SpanContextFromContext(ctx)
+	return trace.ContextWithSpanContext(context.Background(), spanCtx)
+```
+
+将trace上下文从中取出，创建一个新的context即可。
+
+在使用grpc或者http服务时，尤其需要注意这个问题。
+
 ## 附：常用Trace字段
 
 OpenTelemetry约定了一系列常用的Trace字段，应对不同的场景，参考[这里](https://opentelemetry.io/docs/reference/specification/trace/semantic_conventions/)，截止目前还是Experimental状态，所以后面还会有新的变动。 建议脑子里有个大致的概念就行，需要的时候再按图索骥，东西有点多。大部分基础库都内置了相关机制，只需要传入context即可。
