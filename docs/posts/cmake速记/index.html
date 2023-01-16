@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang='zh' dir='ltr' ><meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+<title>CMake速记 | 应许之地</title>
+
+<meta name="generator" content="Hugo Eureka 0.9.0" />
+<link rel="stylesheet" href="https://yiuterran.github.io/blog/css/eureka.min.css">
+<script defer src="https://yiuterran.github.io/blog/js/eureka.min.js"></script>
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload"
+  href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Noto+Serif+SC:wght@400;600;700&display=swap"
+  as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/styles/solarized-light.min.css"
+   media="print"
+  onload="this.media='all';this.onload=null" crossorigin>
+<script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/highlight.min.js"
+   crossorigin></script>
+
+  <script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/languages/dart.min.js"
+     crossorigin></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/js/all.min.js"
+   integrity="sha256-uNYoXefWRqv&#43;PsIF/OflNmwtKM4lStn9yrz2gVl6ymo="  crossorigin></script>
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+   integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3&#43;Aro6EYUG4&#43;cU&#43;KJWu/X"  media="print"
+  onload="this.media='all';this.onload=null" crossorigin>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js" 
+  integrity="sha384-g7c&#43;Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI&#43;sEnkvrMWph2EDg4"  crossorigin></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
+   integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC&#43;Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa"  crossorigin></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: "$$", right: "$$", display: true },
+        { left: "$", right: "$", display: false },
+        { left: "\\(", right: "\\)", display: false },
+        { left: "\\[", right: "\\]", display: true }
+      ],
+    });
+  });
+</script>
+
+
+<script defer src="https://cdn.jsdelivr.net/npm/mermaid@8.9.2/dist/mermaid.min.js" 
+  integrity="sha256-Zmpaaj&#43;GXFsPF5WdPArSrnW3b30dovldeKsW00xBVwE="  crossorigin></script>
+<link rel="preconnect" href="https://www.google-analytics.com" crossorigin>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-C0R8DENDJ0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-C0R8DENDJ0');
+</script>
+
+
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
+
+<meta name="description"
+  content="主要参考书籍《Modern CMake for C&#43;&#43;》，以及《CMake Best Practices》，使用CMake版本3.25. 建议先看第一本，再看第二本。 使用 一般而言，">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+      "@type": "ListItem",
+      "position": 1 ,
+      "name":"文章列表",
+      "item":"https://yiuterran.github.io/blog/posts/"},{
+      "@type": "ListItem",
+      "position": 2 ,
+      "name":"CMake速记",
+      "item":"https://yiuterran.github.io/blog/posts/cmake%E9%80%9F%E8%AE%B0/"}]
+}
+</script>
+
+
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://yiuterran.github.io/blog/posts/cmake%E9%80%9F%E8%AE%B0/"
+    },
+    "headline": "CMake速记 | 应许之地","datePublished": "2023-01-09T16:42:44+08:00",
+    "dateModified": "2023-01-09T16:42:44+08:00",
+    "wordCount":  8488 ,
+    "author": {
+        "@type": "Person",
+        "name": ["tryao"]
+    },
+    "publisher": {
+        "@type": "Person",
+        "name": "C. Wang",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://yiuterran.github.io/blog/images/icon.png"
+        }
+        },
+    "description": "主要参考书籍《Modern CMake for C\u002b\u002b》，以及《CMake Best Practices》，使用CMake版本3.25. 建议先看第一本，再看第二本。 使用 一般而言，"
+}
+</script><meta property="og:title" content="CMake速记 | 应许之地" />
+<meta property="og:type" content="article" />
+
+
+<meta property="og:image" content="https://yiuterran.github.io/blog/images/icon.png">
+
+
+<meta property="og:url" content="https://yiuterran.github.io/blog/posts/cmake%E9%80%9F%E8%AE%B0/" />
+
+
+
+
+<meta property="og:description" content="主要参考书籍《Modern CMake for C&#43;&#43;》，以及《CMake Best Practices》，使用CMake版本3.25. 建议先看第一本，再看第二本。 使用 一般而言，" />
+
+
+
+
+<meta property="og:locale" content="zh" />
+
+
+
+
+<meta property="og:site_name" content="应许之地" />
+
+
+
+
+
+
+<meta property="article:published_time" content="2023-01-09T16:42:44&#43;08:00" />
+
+
+<meta property="article:modified_time" content="2023-01-09T16:42:44&#43;08:00" />
+
+
+
+<meta property="article:section" content="posts" />
+
+
+<meta property="article:tag" content="cmake" />
+
+<meta property="article:tag" content="c&#43;&#43;" />
+
+
+
+
+
+<body class="flex flex-col min-h-screen">
+  <header class="fixed flex items-center w-full min-h-16 ps-scrollbar z-50 bg-secondary-bg shadow-sm">
+    <div class="w-full max-w-screen-xl mx-auto"><script>
+    let storageColorScheme = localStorage.getItem("lightDarkMode")
+    if (((storageColorScheme == 'Auto' || storageColorScheme == null) && window.matchMedia("(prefers-color-scheme: dark)").matches) || storageColorScheme == "Dark") {
+        document.getElementsByTagName('html')[0].classList.add('dark')
+    }
+</script>
+<nav class="flex items-center justify-between flex-wrap px-4 py-4 md:py-0">
+    <a href="https://yiuterran.github.io/blog/" class="me-6 text-primary-text text-xl font-bold">应许之地</a>
+    <button id="navbar-btn" class="md:hidden flex items-center px-3 py-2" aria-label="Open Navbar">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div id="target"
+        class="hidden block md:flex md:grow md:justify-between md:items-center w-full md:w-auto text-primary-text z-20">
+        <div class="md:flex md:h-16 text-sm md:grow pb-4 md:pb-0 border-b md:border-b-0">
+            <a href="https://yiuterran.github.io/blog/authors/tryao/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  border-transparent  me-4">作者</a>
+            <a href="https://yiuterran.github.io/blog/posts/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  selected-menu-item  me-4">文章</a>
+        </div>
+
+        <div class="flex">
+            <div class="relative pt-4 md:pt-0">
+                <div class="cursor-pointer hover:text-eureka" id="lightDarkMode">
+                    <i class="fas fa-adjust"></i>
+                </div>
+                <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-30" id="is-open">
+                </div>
+                <div class="absolute flex flex-col start-0 md:start-auto end-auto md:end-0 hidden bg-secondary-bg w-48 rounded py-2 border border-tertiary-bg cursor-pointer z-40"
+                    id='lightDarkOptions'>
+                    <span class="px-4 py-1 hover:text-eureka" name="Light">浅色</span>
+                    <span class="px-4 py-1 hover:text-eureka" name="Dark">深色</span>
+                    <span class="px-4 py-1 hover:text-eureka" name="Auto">自动</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-0" id="is-open-mobile">
+    </div>
+
+</nav>
+<script>
+    
+    let element = document.getElementById('lightDarkMode')
+    if (storageColorScheme == null || storageColorScheme == 'Auto') {
+        document.addEventListener('DOMContentLoaded', () => {
+            window.matchMedia("(prefers-color-scheme: dark)").addEventListener('change', switchDarkMode)
+        })
+    } else if (storageColorScheme == "Light") {
+        element.firstElementChild.classList.remove('fa-adjust')
+        element.firstElementChild.setAttribute("data-icon", 'sun')
+        element.firstElementChild.classList.add('fa-sun')
+    } else if (storageColorScheme == "Dark") {
+        element.firstElementChild.classList.remove('fa-adjust')
+        element.firstElementChild.setAttribute("data-icon", 'moon')
+        element.firstElementChild.classList.add('fa-moon')
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        getcolorscheme();
+        switchBurger();
+    });
+</script>
+</div>
+  </header>
+  <main class="grow pt-16">
+    <div class="ps-scrollbar">
+      <div class="w-full max-w-screen-xl lg:px-4 xl:px-8 mx-auto">
+
+
+<div class="grid grid-cols-2 lg:grid-cols-8 gap-4 lg:pt-12">
+    <div
+        class="col-span-2  lg:col-span-6 bg-secondary-bg rounded px-6 py-8">
+        <h1 class="font-bold text-3xl text-primary-text">CMake速记</h1>
+        <div class="flex flex-wrap flex-row items-center mt-2 text-tertiary-text">
+    <div class="me-6 my-2">
+        <i class="fas fa-calendar me-1"></i>
+        <span>2023-01-09</span>
+    </div>
+    <div class="me-6 my-2">
+        <i class="fas fa-clock me-1"></i>
+        <span>17分钟阅读时长</span>
+    </div>
+    
+    
+
+    
+</div>
+        
+        
+        
+
+        <div class="content">
+            <p>主要参考书籍《Modern CMake for C++》，以及《CMake Best Practices》，使用CMake版本3.25.</p>
+<p>建议先看第一本，再看第二本。</p>
+<h2 id="使用">使用</h2>
+<p>一般而言，cmake的使用方式非常简单。在命令行下使用</p>
+<pre><code class="language-bash">cmake -B &lt;build tree&gt; -S &lt;source tree&gt;
+cmake --build &lt;build tree&gt;
+</code></pre>
+<p>其中<code>build tree</code>即build结果文件夹，可以直接用<code>build</code>，<code>source tree</code>则是源代码目录，一般就是<code>.</code>.</p>
+<p>上面第一步是构建准备（配置阶段+生成阶段），第二步是真正的构建（包括compile/link/test/package）。</p>
+<h3 id="准备阶段">准备阶段</h3>
+<p>可以通过<code>-G</code>指定生成器，通过<code>cmake --help</code>可以看到可用的生成器列表，unix下习惯使用<code>Makefile</code>或者<code>Ninja</code>这两种生成器；windows下则习惯使用Visual Studio的各种版本IDE工程文件。</p>
+<p>可以通过<code>-C</code>指定脚本文件，来预填充缓存信息；或者使用<code>-D k=v</code> 直接在命令行里面指定参数；</p>
+<p><code>-U</code>与<code>-D</code>的含义相反，是用来删除变量的，这两个参数都可以多次使用。</p>
+<p><code>--log-level=&lt;level&gt;</code>用来指定日志等级，可以通过<code>CMAKE_MESSAGE_LOG_LEVEL</code>来永久保留设置；</p>
+<p><code>--trace</code>跟踪模式，类似断点调试；</p>
+<p>开发人员可以提供<code>CMakePresets.json</code>文件，用来预置相关选项，使用的时候通过<code>--preset=&lt;preset&gt;</code>来指定预设文件。</p>
+<p>构建之后，可以通过<code>-L</code>列出已填充的变量，<code>-LA</code>会额外显示出高级变量，<code>-LH</code>会额外显示变量的帮助信息；注意通过<code>-D</code>指定的<strong>自定义</strong>变量，这里是看不到的；</p>
+<h3 id="构建阶段">构建阶段</h3>
+<p>需要传入的参数可以放在命令末尾。例如<code>-j</code>或者<code>--parallel</code>来指定并发构建数目。</p>
+<p>先清理再构建：<code>--clean-first</code>.</p>
+<p>多配置生成器，可以通过<code>--config &lt;cfg&gt;</code>来指定配置，包括<code>Debug, Release, MinSizeRel 或 RelWithDebInfo</code>，默认是Debug.</p>
+<p>可以通过<code>-v</code>参数，打印更多信息。</p>
+<h3 id="安装">安装</h3>
+<p>类似<code>make install</code>的效果，在cmake中是<code>cmake --install &lt;dir&gt; [options]</code>.</p>
+<p>如果是多配置生成器，使用<code>--config &lt;cfg&gt;</code>来指定配置，一般是<code>Release</code>。</p>
+<p>单个组件安装，则通过<code>--component &lt;comp&gt;</code>来指定组件的名字。</p>
+<p>unix系统可以指定安装目录的默认权限，格式为<code>--default-directory-permissions &lt;permissions&gt;</code>，默认权限是755.</p>
+<h3 id="其他">其他</h3>
+<p>cmake还提供了一些跨平台命令，使用<code>cmake -E</code>来执行，或者使用<code>cmake -P</code>来运行脚本。后者也可以用Python之类的完成，但是简单的任务可以考虑直接用cmake脚本来完成（后缀就是cmake），不过说实话cmake作为一门脚本语言真的很烂。</p>
+<h2 id="语法">语法</h2>
+<h3 id="基础">基础</h3>
+<p>cmake的语法有点像bash，比如<code>#</code>和<code>${}</code>，不过这只是粗略看来，实际上坑很多。</p>
+<p>注释：<code>#</code>，但是也可以是<code>[[]]</code>，这个其实是多行字符串的表达方式，类似python中的三引号。两个方括号之间可以加任意数量的<code>=</code>，只要最后两边对称。在左括号之前可以有一个<code>#</code>前缀：</p>
+<pre><code class="language-cmake">#[==[
+message(&quot;hello world&quot;)
+#]==]
+</code></pre>
+<p>这样，在第1行前面再加一个<code>#</code>就可以取消注释，比较方便调试大段代码（不过有IDE的时候这个功能实际上没什么用）。</p>
+<p>上文的<code>message</code>是一个指令，习惯上用<code>snake_case</code>，不区分大小写。指令调用不是表达式，不能作为另外一个指令的参数。</p>
+<p>双引号参数也能跨越多行，这点和大部分语言并不相同。甚至于，可以不带引号，这个是不推荐的使用方式。</p>
+<h3 id="变量">变量</h3>
+<p>变量通过<code>set</code>和<code>unset</code>来赋值/取消赋值：</p>
+<pre><code class="language-cmake">set(&quot;test&quot; &quot;TRUE&quot;)
+message(&quot;test is ${test}&quot;)
+unset(&quot;test&quot;)
+</code></pre>
+<p>引用变量是<code>${}</code>，比较蛋疼的是，这个引用其实是一种<strong>替换</strong>，从内到外进行替换，所以这里</p>
+<pre><code class="language-cmake">set(&quot;test1&quot; &quot;xxx&quot;)
+set(&quot;n&quot; &quot;1&quot;)
+message(&quot;${test${n}}&quot;)
+</code></pre>
+<p>结果是&quot;xxx&quot;.</p>
+<p>除了普通变量，还有环境变量<code>$ENV{}</code>和缓存变量<code>$CACHE{}</code>。前者比较容易理解，后者是在build tree上下文中共享的变量，当普通变量不存在时，会尝试获取缓存变量，可以理解为服务中存放在redis中的变量。</p>
+<p>运行cmake脚本时，类似其他脚本，也可以传入参数。脚本中通过<code>${CMAKE_ARGV&lt;n&gt;}</code>来引用，通过<code>${CMAKE_ARGV}</code>获取变量个数。</p>
+<p>环境变量的设置比较复杂：</p>
+<pre><code class="language-cmake">set(CACHE{var} value CACHE BOOL &quot;something desc&quot; FORCE)
+</code></pre>
+<p>BOOL那里是变量类型，也可以是<code>FILEPATH</code>(路径)/<code>STRING</code>(字符串)/<code>INTERNAL</code>(一行字符串)。FORCE关键字用于覆盖已有缓存，不加的话不会覆盖已有的，类似redis中的<code>setnx</code>。</p>
+<h3 id="作用域">作用域</h3>
+<p>主要两个作用域：</p>
+<ul>
+<li>函数作用域：<code>function</code>的自定义函数，比较类似一般编程语言；</li>
+<li>目录作用域：<code>add_subdirectory</code>嵌套其他目录中的<code>CMakeLists.txt</code>文件；</li>
+</ul>
+<p>当创建嵌套作用域时，cmake会将当前作用域变量的副本复制到嵌套作用域，嵌套作用域执行完毕后，副本会被删除。有点类似函数调用的传值，特别注意的是，如果cmake找不到普通变量，就会尝试找缓存变量；而后者永远是传引用的（还是理解为redis中的key比较简单）。</p>
+<p>可以通过<code>set(k v PARENT_SCOPE)</code>强行修改上一级作用域中的变量，有点类似传入引用，但是这个并不会修改本作用域的变量，比较坑。</p>
+<p>显然，环境变量和缓存变量的作用域都是全局的。</p>
+<h3 id="列表">列表</h3>
+<p>这是cmake中唯一内置的数据结构，表现形式是分号分割的字符串：</p>
+<pre><code class="language-cmake">set(myList &quot;a;b;c;d&quot;)
+message(${myList})
+</code></pre>
+<p>这个结果是&quot;abcd&quot;，因为后面不带引号传递变量时，会自动解包。</p>
+<p>可以通过<code>list</code>指令来进行常用的列表操作，包括：</p>
+<pre><code class="language-cmake">list(LENGTH myList len) # myList的长度赋予变量len
+list(GET myList 0 value) # 索引从0开始
+list(JOIN &lt;list&gt; &lt;glue&gt; &lt;out-var&gt;) # 用分隔符连接字符串
+list(SUBLIST &lt;list&gt; &lt;begin&gt; &lt;length&gt; &lt;out-var&gt;) # 子数组
+list(FIND &lt;list&gt; &lt;value&gt; &lt;out-var&gt;) # 查找索引
+list(APPEND &lt;list&gt; [&lt;element&gt;...]) # 追加数据
+list(FILTER &lt;list&gt; {INCLUDE | EXCLUDE} REGEX &lt;regex&gt;) # 正则过滤
+list(INSERT &lt;list&gt; &lt;index&gt; [&lt;element&gt;...]) # 插入元素
+list(POP_BACK &lt;list&gt; [&lt;out-var&gt;...]) # 弹出尾部元素
+list(POP_FRONT &lt;list&gt; [&lt;out-var&gt;...]) # 弹出头部元素
+list(PREPEND &lt;list&gt; [&lt;element&gt;...]) # 前端增加元素
+list(REMOVE_ITEM &lt;list&gt; &lt;value&gt;...) # 移除元素
+list(REMOVE_AT &lt;list&gt; &lt;index&gt;...) # 按索引移除元素
+list(REMOVE_DUPLICATES &lt;list&gt;) # 去重
+list(TRANSFORM &lt;list&gt; &lt;ACTION&gt; [...]) # 变换
+list(REVERSE &lt;list&gt;) # 翻转
+list(SORT &lt;list&gt; [...]) # 排序
+</code></pre>
+<h3 id="条件语句">条件语句</h3>
+<pre><code class="language-cmake">if(&lt;condition&gt;)
+  &lt;commands&gt;
+elseif(&lt;condition&gt;)
+  &lt;commands&gt;
+endif()
+</code></pre>
+<p>类似其他语言，不过<code>&lt;condition&gt;</code>判断布尔量的方式比较特别：</p>
+<blockquote>
+<ul>
+<li>如果condition是引号变量或者方括号变量，则仅当字符串为<code>ON</code>,<code>Y</code>,<code>YES</code>或者<code>TRUE</code>时，对应bool值true，其他字符串均为false；如果是数字，则非0数字皆为true；</li>
+<li>如果condition是不带引号的变量，仅当字符串为空，<code>OFF</code>,<code>NO</code>,<code>FALSE</code>,<code>N</code>,<code>IGNORE</code>,<code>NOTFOUND</code>或者以<code>-NOTFOUND</code>结尾的字符串时，对应false，其余字符串均对应true；数字的判断逻辑同上；</li>
+</ul>
+<p>强烈建议不要使用第二个逻辑，即将所有参数都加上引号。</p>
+</blockquote>
+<p>逻辑操作符：<code>AND</code>, <code>OR</code>, <code>NOT</code>，类似python.</p>
+<p>判断变量是否已经定义：<code>if(DEFINED &lt;xxx&gt;)</code>，也可以判断CACHE和ENV变量。</p>
+<p>数值比较操作符：EQUAL, LESS, LESS_EQUAL, GREATER和GREATER_EQUAL，如果用数值和字符串作比较，可以和<strong>以数值作为前缀的字符串</strong>比较，其他情况都返回false.</p>
+<p>可以比较版本号，操作符是在上述操作符的基础上增加<code>VERSION_</code>前缀。</p>
+<p>字符串直接比较，在上述操作符前增加<code>STR</code>前缀。</p>
+<p>可以用<code>MATCHES</code>做正则匹配，匹配的组在<code>CMAKE_MATCH_&lt;N&gt;</code>变量里。</p>
+<p>可以用<code>in_LIST&lt;var&gt;</code>判断值是否在列表中。</p>
+<p>可以用<code>command&lt;command-name&gt;</code>判断指令是否可用。</p>
+<p>可以用<code>target&lt;target-name&gt;</code>判断target是否存在，用<code>test&lt;test-name&gt;</code>判断测试是否存在，用<code>POLICY&lt;policy-id&gt;</code>判断cmake策略是否存在。</p>
+<p>可以用<code>EXISTS&lt;path&gt;</code>判断文件/目录是否存在；用<code>&lt;file1&gt;IS_NEWER_THAN&lt;file2&gt;</code>判断哪个文件更新；用<code>IS_DIRECTORY</code>,<code>IS_SYMLINK</code>和<code>IS_ABSOLUTE</code>判断路径信息。</p>
+<h3 id="循环语句">循环语句</h3>
+<p>比较类似其他语句，包括：</p>
+<pre><code class="language-cmake">while(&lt;condition&gt;)
+	&lt;commands&gt;
+endwhile()
+foreach(i range 0 10 1) # 迭代范围是闭区间，与python不同
+	&lt;commands&gt;
+endforeach()
+foreach(item in LISTS myList ITEMS xx) # xx是追加在myList后面的迭代值
+	&lt;commands&gt;
+endforeach()
+</code></pre>
+<p>压缩列表：</p>
+<p>可以用来模拟map，由于cmake仅支持list不支持map，所以只能用两个list的索引匹配来映射map. 3.17之后可以用以下语法来同时遍历两个列表：</p>
+<pre><code class="language-cmake">foreach(num IN ZIP_LISTS LIST1 LIST2)
+	message(&quot;left is ${num_0}, right is ${num_1}&quot;)
+endforeach()
+# 或者可以用两个变量：
+foreach(key value IN ZIP_LISTS LISTS1 LIST2)
+	message(&quot;left is ${key}, right is ${value}&quot;)
+endforeach()
+</code></pre>
+<p>需要注意的是，如果两个LIST的长度不一样，短列表对应的变量是不存在的。</p>
+<h3 id="宏和函数">宏和函数</h3>
+<p>即自定义指令，概念比较类似C语言中的宏和函数。大家都知道C语言中的宏是不推荐使用的，显然这里也一样。</p>
+<pre><code class="language-cmake">function(myFunc arg1 arg2)
+	&lt;commands&gt;
+endfunction()
+</code></pre>
+<p>函数的内置变量包括：</p>
+<p>• CMAKE_CURRENT_FUNCTION: 当前函数的名字</p>
+<p>• CMAKE_CURRENT_FUNCTION_LIST_DIR: 当前函数对应的文件夹</p>
+<p>• CMAKE_CURRENT_FUNCTION_LIST_FILE： 当前函数对应的文件</p>
+<p>• CMAKE_CURRENT_FUNCTION_LIST_LINE：当前行数</p>
+<p>类似bash，参数也可以通过<code>$ARG&lt;n&gt;</code>来访问，通过<code>${ARGV}</code>获取完整的参数列表。除了动态参数的函数，其他情况下不建议使用这个方式来传参。</p>
+<h3 id="编程范式">编程范式</h3>
+<p>和C语言一样，函数要先声明才能引用，所以正常来说必须这样：</p>
+<pre><code class="language-cmake">cmake_minimum_required(VERSION 3.20.0)
+project(test)
+
+function(f1)
+endfunction()
+
+function(f2)
+endfunction()
+
+f1()
+f2()
+</code></pre>
+<p>如果想要先写主程序再写代码，可以使用marco技巧：</p>
+<pre><code class="language-cmake">cmake_minimum_required(VERSION 3.20.0)
+project(test)
+
+macro(main)
+f1()
+f2()
+endmacro()
+
+function(f1)
+endfunction()
+
+function(f2)
+endfunction()
+
+main()
+</code></pre>
+<p>由于宏只是替换，所以可以在宏里面访问全局变量。</p>
+<h3 id="实用命令">实用命令</h3>
+<h4 id="message命令">message命令</h4>
+<p>message是最常用的，可以增加额外的mode参数，即：<code>message(&lt;mode&gt; &quot;text&quot;)</code></p>
+<p>mode包括：</p>
+<p>• FATAL_ERROR: 将停止处理和生成。</p>
+<p>• SEND_ERROR: 将继续处理，但跳过生成。</p>
+<p>• WARNING: 继续处理。</p>
+<p>• AUTHOR_WARNING: CMake 警告。继续处理。</p>
+<p>• DEPRECATION: 若 启 用 了 <code>CMAKE_ERROR_DEPRECATED </code>或 <code>CMAKE_WARN_DEPRECATED</code> 变量，将做出相应处理。</p>
+<p>• NOTICE 或省略模式 (默认): 将向 stderr 输出一条消息，以吸引用户的注意。</p>
+<p>• STATUS: 将继续处理，建议用于用户的主要消息。</p>
+<p>• VERBOSE: 将继续处理，用于通常不是很有必要的更详细的信息。</p>
+<p>• DEBUG: 将继续处理，并包含在项目出现问题时可能有用的详细信息。</p>
+<p>• TRACE: 将继续处理，并建议在项目开发期间打印消息。通常，在发布项目之前，将这些类型</p>
+<p>的消息删除。</p>
+<p>换句话说，这是一个log工具，可以选择日志等级。<code>cmake</code>指令的<code>–log-context</code>参数可以打印message对应的上下文（函数名等），用来调试。</p>
+<p>如果想要不同层级之间的缩进，可以用<code>list(APPEND CMAKE_MESSAGE_INDENT &quot; &quot;)</code>，这样打印起来更加直观。</p>
+<h4 id="include命令">include命令</h4>
+<p>类似C语言的include，命令格式：</p>
+<pre><code class="language-cmake">include(&lt;file|module&gt; [OPTIONAL] [RESULT_VAR &lt;var&gt;])
+</code></pre>
+<p>如果使用了optional，可以增加一个变量返回是否include成功（成功返回路径，失败返回NOTFOUND）。</p>
+<p>文件默认从当前工作目录解析相对路径，也可以用<code>${CMAKE_CURRENT_LIST_DIR}/&lt;filename&gt;.cmake</code>指定绝对路径。</p>
+<p>注意include不会创建单独的作用域，修改该文件中的变量会影响调用作用域。</p>
+<h4 id="include_guard命令">include_guard命令</h4>
+<p>防止被重复include，放在最前面。可选模式：<code>include_guard([DIRECTORY|GLOBAL])</code>.</p>
+<p>顾名思义，DIRECTORY保护当前目录及其以下，GLOBAL保护整个构建流程。</p>
+<h4 id="file命令">file命令</h4>
+<p>类似python中的<code>open</code>，内置的文件读写功能。</p>
+<h4 id="execute_process命令">execute_process命令</h4>
+<p>启动子进程。</p>
+<p>注意这里不再保证跨平台可用，需要提示用户安装对应的依赖。</p>
+<h2 id="构建项目">构建项目</h2>
+<p><img src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/image-20230110152346150.png" alt="image-20230110152346150"></p>
+<p>文中推荐的项目结构如上图。</p>
+<p>设置C++标准：</p>
+<pre><code class="language-cmake">set_property(TARGET &lt;target&gt; PROPERTY CXX_STANDARD &lt;standard&gt;) #设置标准版本，也可以用target_compile_features配置
+set(CMAKE_CXX_STANDARD_REQUIRED ON) # 强制打开标准检测
+set(CMAKE_CXX_EXTENSIONS OFF) # 关闭非标特性
+</code></pre>
+<p>禁止内构建：</p>
+<pre><code class="language-cmake">if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
+	message(FATAL_ERROR &quot;In-source builds are not allowed&quot;)
+endif()
+</code></pre>
+<p>生成器表达式，一种邪恶的语法：</p>
+<pre><code class="language-cmake">$&lt;IF:condition,true_string,false_string&gt;
+$&lt;IF:codition,true_string,&gt;
+$&lt;condition:true_string&gt;
+$&lt;expression:arg1,arg2&gt;
+</code></pre>
+<h3 id="编译配置">编译配置</h3>
+<p>首先是目标：</p>
+<ul>
+<li>add_executable: 创建可执行文件</li>
+<li>add_library：创建库，包括三种不同的库，如果不设置的话，需要在cmake运行时传入<code>BUILD_SHARED_LIBS</code>参数；注意库名称需要全局唯一，习惯上用<code>ALIAS</code>配合命名空间来保证唯一性；</li>
+<li>add_custom_target: 自定义目标，执行脚本之类的任务；</li>
+</ul>
+<p>目标配置常用指令：</p>
+<ul>
+<li>
+<p>target_compile_features(): 需要具有特定功能的编译器来编译此目标，例如<code>cxx_std_17</code>表示17标准，修饰符PUBLIC/INTERFACE适用于头文件也需要新标准特性的场景；可以使用生成器表达式来添加不同编译器的不同选项；一般使用<code>PRIVATE</code>传递；</p>
+</li>
+<li>
+<p>target_sources(): 向已定义的目标添加源，只能手动添加文件列表，没有特别方便的办法；</p>
+</li>
+<li>
+<p>target_include_directories(): 设置预处理器的包含路径，用来给预处理器解析<code>#include&lt;&gt;</code>或<code>#include &quot;&quot;</code>中指定的header；有一个system参数用来标记文件夹是否标准的系统目录；</p>
+</li>
+<li>
+<p>target_compile_definitions(): 设置预处理定义，即C中的<code>#define</code>定义，可以通过cmake脚本注入数据；也可以通过<code>configure_file</code>将配置文件生成为头文件；</p>
+</li>
+<li>
+<p>target_compile_options(): 特定于编译器的选项，一般是打开各种优化配置；默认的有debug和release模式；</p>
+</li>
+<li>
+<p>target_precompile_headers(): 预编译头文件；</p>
+</li>
+<li>
+<p>set_target_properties()：配置目标属性；</p>
+</li>
+</ul>
+<p><code>target_sources</code>在添加源文件时，一般使用<code>PRIVATE</code>修饰符；<code>PUBLIC</code>/<code>INTERFACE</code>一般给库目标使用。前者会把源文件附加到依赖当前库的目标上（一般不需要，相当于对外暴露实现，一般只需要暴露头文件）；后者更特殊，一般原来添加纯头文件库；</p>
+<p>对应的，<code>target_include_directories</code>一般使用<code>PUBLIC</code>修饰符，除非是纯粹的头文件才使用INTERFACE；</p>
+<h3 id="链接配置">链接配置</h3>
+<p>链接的配置其实只有<code>target_link_libraries</code>。</p>
+<p>编译生成的ELF文件是独立的，需要通过链接器进行整合，从而重定位.data, .text等区段。有以下几种类型的库：</p>
+<ul>
+<li>静态库(.lib/.a)，最简单的，使用<code>add_library(&lt;name&gt; STATIC [&lt;sources&gt; …])</code>来添加目标；</li>
+<li>动态库(.so/.dll)，将上面的<code>STATIC</code>替换成<code>SHARED</code>即可；</li>
+<li>模块库，一种特殊的动态库，可以通过在代码中使用<code>LoadLibrary</code>或者<code>dlopen/dlsym</code>动态加载的库，将上面的<code>STATIC</code>替换成<code>MODULE</code>即可；</li>
+<li>对象库，关键字替换为<code>OBJECT</code>即可，这种库不会生成真正的库，仅用来分离代码模块。因此不会进行链接，仅有编译过程；</li>
+</ul>
+<p>特别注意，所有依赖动态库或者模块库的，在链接的配置里要加上位置无关代码标志：</p>
+<pre><code class="language-cmake">set_target_properties(dependency_target
+    PROPERTIES POSITION_INDEPENDENT_CODE
+    ON)
+</code></pre>
+<p>否则在运行时会出现一些问题。</p>
+<p>动态库习惯上需要在目标上设置构建版本和API版本，如：</p>
+<pre><code class="language-cmake">set_target_properties(
+target
+PROPERTIES VERSION ${PROJECT_VERSION}
+SOVERSION ${PROJECT_VERSION_MAJOR}
+)
+</code></pre>
+<p>这样最后创建的so文件会使用版本号作为后缀。</p>
+<p>如果是debug版本，可以额外加上一个后缀d：</p>
+<pre><code class="language-cmake">set_target_properties(
+target
+PROPERTIES DEBUG_POSTFIX d)
+</code></pre>
+<p>符号可见性问题：</p>
+<p>gcc/clang默认头文件中所有符号可见，但是vs默认所有符号都不可见，不过可以强制使用<code>CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS</code>将其转为一致。</p>
+<p>更好的方法是将<code>CXX_VISIBILITY_PRESET</code>设为<code>HIDDEN</code>，然后使用<code>generate_export_header</code>宏进行显式的导出：</p>
+<pre><code class="language-cmake">add_library(hello SHARED)
+set_property(TARGET hello PROPERTYCXX_VISIBILITY_PRESET &quot;hidden&quot;)
+set_property(TARGET hello PROPERTYVISIBILITY_INLINES_HIDDEN TRUE)
+include(GenerateExportHeader)
+generate_export_header(hello EXPORT_MACRO_NAME HELLO_EXPORT EXPORT_FILE_NAME export/hello/export_hello.hpp)
+target_include_directories(hello PUBLIC &quot;${CMAKE_CURRENT_BINARY_DIR}/export&quot;)
+</code></pre>
+<p>在代码里需要使用一个明确的标记:</p>
+<pre><code class="language-c++">#include &quot;hello/export_hello.hpp&quot;
+class HELLO_EXPORT Hello{
+    
+};
+</code></pre>
+<p>显然这里<code>#include</code>的文件是cmake创建的，所以在写这行代码的时候可能还不存在…</p>
+<p>命名冲突问题：</p>
+<p>在链接二进制文件或者静态库时，命名经常会冲突，此时链接器会直接报错，简单的处理办法是使用C++的命名空间。</p>
+<p>如果链接器提示未定义符号，多半是链接依赖的顺序错了。</p>
+<p>如果有循环依赖，可以在链接时重复添加库。</p>
+<h3 id="管理依赖">管理依赖</h3>
+<p>主要介绍find_package指令的使用。</p>
+<h2 id="安装配置">安装配置</h2>
+<h3 id="安装目标">安装目标</h3>
+<p>在<code>CMakeLists.txt</code>里面增加：</p>
+<pre><code class="language-cmake">install(TAREGETS target_name)
+</code></pre>
+<p>然后使用<code>cmake --install ./build --prefix /path</code>来将目标构件安装到系统中。</p>
+<p>即使不加<code>--prefix</code>选项，cmake也知道要把生成构件安装到哪里，默认*nix下，安装目录是：</p>
+<table>
+<thead>
+<tr>
+<th>目标类型</th>
+<th>GNUInstallDirs</th>
+<th>默认位置</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RUNTIME</td>
+<td>${CMAKE_INSTALL_BINDIR}</td>
+<td>bin</td>
+<td>可执行文件和dll</td>
+</tr>
+<tr>
+<td>LIBRARY</td>
+<td>${CMAKE_INSTALL_LIBDIR}</td>
+<td>lib</td>
+<td>动态库</td>
+</tr>
+<tr>
+<td>ARCHIVE</td>
+<td>${CMAKE_INSTALL_LIBDIR}</td>
+<td>lib</td>
+<td>静态库</td>
+</tr>
+<tr>
+<td>PRIVATE_HEADER</td>
+<td>${CMAKE_INSTALL_INCLUDEDIR}</td>
+<td>include</td>
+<td>私有头文件</td>
+</tr>
+<tr>
+<td>PUBLIC_HEADER</td>
+<td>${CMAKE_INSTALL_INCLUDEDIR}</td>
+<td>include</td>
+<td>公用头文件</td>
+</tr>
+</tbody>
+</table>
+<p>可以在install参数中增加<code>&lt;TARGET_TYPE&gt; DESTINATION</code>来修改默认位置。</p>
+<h3 id="安装文件和目录">安装文件和目录</h3>
+<p>类似的，有<code>install(FILES &lt;TYPE&gt;/&lt;DESTINATION&gt;)</code>和<code>install(DIRECTORY &lt;DESTINATION&gt;)</code>来安装文件或者目录。</p>
+<p>对于文件，有类似的TYPE预定义和默认安装目录，一般只需要指定类型就行；当然也可以直接指定目录名称。</p>
+<p>还有一种<code>install(PROGRAMES...)</code>，专门用来安装二进制文件的，可以使用<code>PERMISSIONS</code>设置权限。</p>
+<p>单文件install时，可以使用RENAME参数重命名文件。</p>
+<p>安装文件夹时，可以使用<code>FILES_MATCHING</code>来进行通配符(<code>PATTERN</code>)或者正则(<code>REGEX</code>)过滤，尾部还可以加上<code>EXCLUDE</code>用来表示排除文件。</p>
+<h3 id="配置导出">配置导出</h3>
+<p>如果想要一个库被使用者发现，需要导出包。cmake目前主要使用<code>Config-file package</code>来供库使用者使用<code>find_package</code>寻找。</p>
+<p>包配置文件习惯上命名为<code>&lt;projectname&gt;-config.cmake</code>或者<code>&lt;ProjectName&gt;Config.cmake</code>，注意大小写习惯。该文件里面的内容就是指示头文件和库文件的位置。</p>
+<p>还有一个可选的包版本文件，命名为<code>&lt;projectname&gt;-config-version.cmake</code>或<code>&lt;ProjectName&gt;ConfigVersion.cmake</code>。</p>
+<p><code>find_package</code>默认寻找路径是<code>&lt;CMAKE_PREFIX_PATH&gt;/cmake</code>，所以导出包时也要放到对应的位置。总的来说分为两步：</p>
+<pre><code class="language-cmake"># 定义导出路径变量（相对路径），并缓存
+set(ch4_ex05_lib_INSTALL_CMAKEDIR cmake CACHE PATH &quot;Installation directory for config-file package cmake files&quot;)
+# 定义导出名称ch4_ex05_lib_export，并指明头文件目录
+install(TARGETS ch4_ex05_lib
+        EXPORT ch4_ex05_lib_export
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+# 导出，使用上文定义的导出名称，指明文件名、命名空间和导出路径
+install(EXPORT ch4_ex05_lib_export
+        FILE ch4_ex05_lib-config.cmake
+        NAMESPACE ch4_ex05_lib::
+        DESTINATION ${ch4_ex05_lib_INSTALL_CMAKEDIR}
+)
+</code></pre>
+<p>最后，还要生成版本文件：</p>
+<pre><code class="language-cmake"># Defines write_basic_package_version_file
+include(CMakePackageConfigHelpers)
+
+# 与cmake project的主版本号一致
+write_basic_package_version_file(
+  &quot;ch4_ex05_lib-config-version.cmake&quot;
+  COMPATIBILITY SameMajorVersion
+)
+install(FILES
+  &quot;${CMAKE_CURRENT_BINARY_DIR}/ch4_ex05_lib-config-version.cmake&quot;
+  DESTINATION &quot;${ch4_ex05_lib_INSTALL_CMAKEDIR}&quot;
+)
+
+</code></pre>
+<h3 id="打包">打包</h3>
+<p>使用cpack打包，这个没啥好说的。就是<code>include(CPack)</code>之后，配置一些打包信息，然后跑CPack命令指定格式进行打包。</p>
+<p>在进行部署或者提供<code>deb</code>/<code>rpm</code>包时，很有用。</p>
+<h2 id="依赖管理">依赖管理</h2>
+<h3 id="包管理">包管理</h3>
+<p>前面已经介绍了<code>find_package</code>，除此之外，cmake还提供了<code>find_file</code>/<code>file_path</code>/<code>find_library</code>和<code>find_program</code>来查找各种需要的文件。</p>
+<p>这一系列的指令都有较为复杂的默认行为，通常情况下，使用系统包管理器（*nix）安装的头文件和库，都可以自动找到而无需额外配置。</p>
+<p>但是系统包管理器会污染全局库版本，所以更好的办法是使用第三方的包管理器。这里主要推荐了conan和vcpkg这两个包管理工具。前者和cmake融合的比较好，可以直接在cmake中使用，后者则更加独立一些。</p>
+<p>windows下编程更推荐vcpkg，使用清单模式用起来很像npm。只需要在cmake命令增加</p>
+<pre><code class="language-bash"> -DCMAKE_TOOLCHAIN_FILE=[vcpkg root]/scripts/buildsystems/vcpkg.cmake
+</code></pre>
+<p>参数，即可自动下载<code>vcpkg.json</code>中的依赖。</p>
+<p>如果需要其他toolchain配置，则通过<code>-DVCPKG_CHAINLOAD_TOOLCHAIN_FILE</code>追加。</p>
+<h3 id="源码集成">源码集成</h3>
+<p>相较于上面的包方案，C/C++更习惯使用源码集成的方案，也就是所谓的供应商模式。这个方案在其他语言里实际上不是那么流行（除了golang，但是go编译很快）。</p>
+<p>cmake提供<code>ExternalProject</code>和<code>FetchContent</code>两个模块，用来抓取源码，一般推荐使用后者。</p>
+<pre><code class="language-cmake">include(FetchContent)
+# declare where to get si from 
+FetchContent_Declare(
+  SI
+  GIT_REPOSITORY https://github.com/bernedom/si.git
+  GIT_TAG 5f4b9a5924a8b3509baec07525fda9ad926adcec) # 2.3.0
+
+# populate si to make it available
+FetchContent_MakeAvailable(si)
+</code></pre>
+<p>这就OK了，也可以使用<code>FetchContent_Populate</code>手动控制拉取的模块各个目录放在哪里：</p>
+<p>如果第三方库不是基于cmake的，例如使用了autotools或者automake，那就需要使用<code>ExternalProject</code>，该命令的使用较为复杂，这里不再记录。</p>
+<h2 id="文档生成">文档生成</h2>
+<p>其实就是用<code>add_custom_target</code>跑<code>doxygen</code>来生成文档，这里不做太多记录。</p>
+<h2 id="测试">测试</h2>
+<p>通过ctest可以生成二进制文件进行测试，需要配合各种测试框架进行使用。</p>
+<p>cmake还支持一些静态代码分析工具、消杀工具的集成。</p>
+<h2 id="自定义任务">自定义任务</h2>
+<p>主要讲述<code>add_custom_command</code>如何配置自定义目标使用，以及使用<code>execute_process</code>调用其他进程。</p>
+<h2 id="其他-1">其他</h2>
+<p>在《cmake best practices》里面还有很多实用的内容，比如将cmake代码作为单独的项目进行维护，以便复用；如何维护cmake代码，进行cmake性能分析，以及将非cmake项目进行迁移。这些知识偏向于实践，可以在需要的时候再进行查阅。</p>
+<p>一般简单项目，只需要知道上面的知识就能够很好的把握了。</p>
+
+        </div>
+        
+        <div class="my-4">
+    
+    <a href="https://yiuterran.github.io/blog/tags/cmake/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#cmake</a>
+    
+    <a href="https://yiuterran.github.io/blog/tags/c&#43;&#43;/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#c&#43;&#43;</a>
+    
+</div>
+        
+        
+        
+
+
+        
+        
+        <div class="py-2">
+    
+    <div class="flex flex-col md:flex-row items-center my-8">
+        <a href="https://yiuterran.github.io/blog/authors/tryao/" class="w-24 h-24 md:me-4">
+            
+            
+            <img src="https://yiuterran.github.io/blog/images/avatar.png" class="w-full bg-primary-bg rounded-full" alt="Avatar">
+            
+        </a>
+        <div class="w-full md:w-auto mt-4 md:mt-0">
+            <a href="https://yiuterran.github.io/blog/authors/tryao/" class="block font-bold text-lg pb-1 mb-2 border-b">个人介绍</a>
+            <span class="block pb-2">兴趣使然的程序员，博而不精，乐学不倦</span>
+            
+            
+            
+            
+            
+            <a href="mailto:yaotairan@gmail.com" class="me-1">
+                <i class="fas fa-envelope"></i>
+            </a>
+            
+            
+            
+            
+            
+            <a href="https://github.com/YiuTerran" class="me-1">
+                <i class="fab fa-github"></i>
+            </a>
+            
+        </div>
+    </div>
+    
+</div>
+        
+        
+        
+<div class="flex flex-col md:flex-row md:justify-between -mx-2 mt-4 px-2 pt-4 border-t">
+    <div>
+        
+    </div>
+    <div class="md:text-right mt-4 md:mt-0">
+        
+        <span class="block font-bold">下一页</span>
+        <a href="https://yiuterran.github.io/blog/posts/golang%E6%9C%8D%E5%8A%A1%E6%8E%A5%E5%85%A5opentelemetry/" class="block">Golang服务接入OpenTelemetry</a>
+        
+    </div>
+</div>
+
+        
+
+
+
+  <script id="utterances" src="https://utteranc.es/client.js"
+            issue-term=title
+            repo=YiuTerran/blog-comment
+              theme=preferred-color-scheme
+        crossorigin="anonymous"
+        async>
+</script>
+<script>
+    if (storageColorScheme == "Light") {
+      document.getElementById('utterances').setAttribute('theme', 'github-light')
+    } else if (storageColorScheme == "Dark") {
+      document.getElementById('utterances').setAttribute('theme', 'github-dark')
+    }
+</script>
+
+    </div>
+    
+    <div class="col-span-2">
+        
+        
+        <div class="sticky top-16 z-10 hidden lg:block px-6 py-4  bg-primary-bg ">
+    <span class="text-lg font-semibold">本页内容</span>
+</div>
+<div class="sticky-toc hidden lg:block px-6 pb-6 ">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#使用">使用</a>
+      <ul>
+        <li><a href="#准备阶段">准备阶段</a></li>
+        <li><a href="#构建阶段">构建阶段</a></li>
+        <li><a href="#安装">安装</a></li>
+        <li><a href="#其他">其他</a></li>
+      </ul>
+    </li>
+    <li><a href="#语法">语法</a>
+      <ul>
+        <li><a href="#基础">基础</a></li>
+        <li><a href="#变量">变量</a></li>
+        <li><a href="#作用域">作用域</a></li>
+        <li><a href="#列表">列表</a></li>
+        <li><a href="#条件语句">条件语句</a></li>
+        <li><a href="#循环语句">循环语句</a></li>
+        <li><a href="#宏和函数">宏和函数</a></li>
+        <li><a href="#编程范式">编程范式</a></li>
+        <li><a href="#实用命令">实用命令</a>
+          <ul>
+            <li><a href="#message命令">message命令</a></li>
+            <li><a href="#include命令">include命令</a></li>
+            <li><a href="#include_guard命令">include_guard命令</a></li>
+            <li><a href="#file命令">file命令</a></li>
+            <li><a href="#execute_process命令">execute_process命令</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#构建项目">构建项目</a>
+      <ul>
+        <li><a href="#编译配置">编译配置</a></li>
+        <li><a href="#链接配置">链接配置</a></li>
+        <li><a href="#管理依赖">管理依赖</a></li>
+      </ul>
+    </li>
+    <li><a href="#安装配置">安装配置</a>
+      <ul>
+        <li><a href="#安装目标">安装目标</a></li>
+        <li><a href="#安装文件和目录">安装文件和目录</a></li>
+        <li><a href="#配置导出">配置导出</a></li>
+        <li><a href="#打包">打包</a></li>
+      </ul>
+    </li>
+    <li><a href="#依赖管理">依赖管理</a>
+      <ul>
+        <li><a href="#包管理">包管理</a></li>
+        <li><a href="#源码集成">源码集成</a></li>
+      </ul>
+    </li>
+    <li><a href="#文档生成">文档生成</a></li>
+    <li><a href="#测试">测试</a></li>
+    <li><a href="#自定义任务">自定义任务</a></li>
+    <li><a href="#其他-1">其他</a></li>
+  </ul>
+</nav>
+</div>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        enableStickyToc();
+    });
+</script>
+        
+    </div>
+    
+
+    
+    
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', ()=>{
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+
+      </div>
+    </div>
+    
+  </main>
+  <footer class="ps-scrollbar">
+    <div class="w-full max-w-screen-xl mx-auto"><div class="text-center p-6 pin-b">
+    <p class="text-sm text-tertiary-text">&copy; 2021 <a href="https://github.com/YiuTerran">tryao</a>
+ &middot;  Powered by the <a href="https://github.com/wangchucheng/hugo-eureka" class="hover:text-eureka">Eureka</a> theme for <a href="https://gohugo.io" class="hover:text-eureka">Hugo</a></p>
+</div></div>
+  </footer>
+</body>
+
+</html>

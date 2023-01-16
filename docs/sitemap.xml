@@ -2,17 +2,32 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://yiuterran.github.io/blog/posts/golang%E6%9C%8D%E5%8A%A1%E6%8E%A5%E5%85%A5opentelemetry/</loc>
-    <lastmod>2022-12-05T11:12:41+08:00</lastmod>
+    <loc>https://yiuterran.github.io/blog/authors/</loc>
+    <lastmod>2023-01-09T16:42:44+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/tags/c&#43;&#43;/</loc>
+    <lastmod>2023-01-09T16:42:44+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/tags/cmake/</loc>
+    <lastmod>2023-01-09T16:42:44+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/posts/cmake%E9%80%9F%E8%AE%B0/</loc>
+    <lastmod>2023-01-09T16:42:44+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/tags/</loc>
+    <lastmod>2023-01-09T16:42:44+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/authors/tryao/</loc>
+    <lastmod>2023-01-09T16:42:44+08:00</lastmod>
   </url><url>
     <loc>https://yiuterran.github.io/blog/posts/</loc>
-    <lastmod>2022-12-05T11:12:41+08:00</lastmod>
+    <lastmod>2023-01-09T16:42:44+08:00</lastmod>
   </url><url>
     <loc>https://yiuterran.github.io/blog/</loc>
-    <lastmod>2022-12-05T11:12:41+08:00</lastmod>
+    <lastmod>2023-01-09T16:42:44+08:00</lastmod>
   </url><url>
-    <loc>https://yiuterran.github.io/blog/authors/</loc>
-    <lastmod>2022-11-14T19:21:38+08:00</lastmod>
+    <loc>https://yiuterran.github.io/blog/posts/golang%E6%9C%8D%E5%8A%A1%E6%8E%A5%E5%85%A5opentelemetry/</loc>
+    <lastmod>2022-12-05T11:12:41+08:00</lastmod>
   </url><url>
     <loc>https://yiuterran.github.io/blog/tags/golang/</loc>
     <lastmod>2022-11-14T19:21:38+08:00</lastmod>
@@ -20,16 +35,10 @@
     <loc>https://yiuterran.github.io/blog/tags/im/</loc>
     <lastmod>2022-11-14T19:21:38+08:00</lastmod>
   </url><url>
-    <loc>https://yiuterran.github.io/blog/tags/</loc>
-    <lastmod>2022-11-14T19:21:38+08:00</lastmod>
-  </url><url>
     <loc>https://yiuterran.github.io/blog/tags/tinode/</loc>
     <lastmod>2022-11-14T19:21:38+08:00</lastmod>
   </url><url>
     <loc>https://yiuterran.github.io/blog/posts/tinode%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</loc>
-    <lastmod>2022-11-14T19:21:38+08:00</lastmod>
-  </url><url>
-    <loc>https://yiuterran.github.io/blog/authors/tryao/</loc>
     <lastmod>2022-11-14T19:21:38+08:00</lastmod>
   </url><url>
     <loc>https://yiuterran.github.io/blog/posts/%E7%9B%91%E6%8E%A7%E5%B9%B3%E5%8F%B0%E8%B0%83%E7%A0%94%E6%8A%A5%E5%91%8A/</loc>

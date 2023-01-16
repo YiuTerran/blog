@@ -15,7 +15,7 @@
       <pubDate>Mon, 14 Nov 2022 19:21:38 +0800</pubDate>
       
       <guid>https://yiuterran.github.io/blog/posts/tinode%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</guid>
-      <description>概述 有朋友需要做一个im，简单做了一下技术调研，流行的开源框架包括： Tinode/chat: 即本文主角，golang编写，架构比较简单，有MySQL就能跑，轻量级方案。支持</description>
+      <description>概述 有朋友需要做一个im，简单做了一下技术调研，开源的实现其实蛮多的，这里挑几个说一下： Synapse/dendrite，matrix系，客户端比较多</description>
     </item>
     
     <item>
