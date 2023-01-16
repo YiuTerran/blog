@@ -365,7 +365,7 @@ include(<file|module> [OPTIONAL] [RESULT_VAR <var>])
 
 ## 构建项目
 
-![image-20230110152346150](https://csceciti-iot-dev.oss-cn-beijing.aliyuncs.com/docs/image-20230110152346150.png)
+![image-20230110152346150](https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/image-20230110152346150.png)
 
 文中推荐的项目结构如上图。
 
@@ -399,12 +399,12 @@ $<expression:arg1,arg2>
 首先是目标：
 
 * add_executable: 创建可执行文件
-* add_library：创建库，包括三种不同的库，如果不设置的话，需要在cmake运行时传入`BUILD_SHARED_LIBS`参数；注意库名称需要全局唯一；
-* add_custom_target: 自定义目标，执行脚本之类的任务
+* add_library：创建库，包括三种不同的库，如果不设置的话，需要在cmake运行时传入`BUILD_SHARED_LIBS`参数；注意库名称需要全局唯一，习惯上用`ALIAS`配合命名空间来保证唯一性；
+* add_custom_target: 自定义目标，执行脚本之类的任务；
 
 目标配置常用指令：
 
-* target_compile_features(): 需要具有特定功能的编译器来编译此目标，例如`cxx_std_17`表示17标准，修饰符PUBLIC/INTERFACE适用于头文件也需要新标准特性的场景；
+* target_compile_features(): 需要具有特定功能的编译器来编译此目标，例如`cxx_std_17`表示17标准，修饰符PUBLIC/INTERFACE适用于头文件也需要新标准特性的场景；可以使用生成器表达式来添加不同编译器的不同选项；一般使用`PRIVATE`传递；
 
 * target_sources(): 向已定义的目标添加源，只能手动添加文件列表，没有特别方便的办法；
 * target_include_directories(): 设置预处理器的包含路径，用来给预处理器解析`#include<>`或`#include ""`中指定的header；有一个system参数用来标记文件夹是否标准的系统目录；
@@ -416,8 +416,6 @@ $<expression:arg1,arg2>
 `target_sources`在添加源文件时，一般使用`PRIVATE`修饰符；`PUBLIC`/`INTERFACE`一般给库目标使用。前者会把源文件附加到依赖当前库的目标上（一般不需要，相当于对外暴露实现，一般只需要暴露头文件）；后者更特殊，一般原来添加纯头文件库；
 
 对应的，`target_include_directories`一般使用`PUBLIC`修饰符，除非是纯粹的头文件才使用INTERFACE；
-
-
 
 ### 链接配置
 
@@ -484,7 +482,7 @@ class HELLO_EXPORT Hello{
 };
 ```
 
-包含导出的文件，并与上面的`EXPORT_MACRO_NAME`指定的宏名称一致即可。
+显然这里`#include`的文件是cmake创建的，所以在写这行代码的时候可能还不存在…
 
 
 
@@ -499,3 +497,40 @@ class HELLO_EXPORT Hello{
 ### 管理依赖
 
 主要介绍find_package指令的使用。
+
+## 安装配置
+
+### 安装目标
+
+在`CMakeLists.txt`里面增加：
+
+```cmake
+install(TAREGETS target_name)
+```
+
+然后使用`cmake --install ./build --prefix /path`来将目标构件安装到系统中。
+
+即使不加`--prefix`选项，cmake也知道要把生成构件安装到哪里，默认*nix下，安装目录是：
+
+| 目标类型       | GNUInstallDirs              | 默认位置 | 备注            |
+| -------------- | --------------------------- | -------- | --------------- |
+| RUNTIME        | ${CMAKE_INSTALL_BINDIR}     | bin      | 可执行文件和dll |
+| LIBRARY        | ${CMAKE_INSTALL_LIBDIR}     | lib      | 动态库          |
+| ARCHIVE        | ${CMAKE_INSTALL_LIBDIR}     | lib      | 静态库          |
+| PRIVATE_HEADER | ${CMAKE_INSTALL_INCLUDEDIR} | include  | 私有头文件      |
+| PUBLIC_HEADER  | ${CMAKE_INSTALL_INCLUDEDIR} | include  | 公用头文件      |
+
+可以在install参数中增加`<TARGET_TYPE> DESTINATION`来修改默认位置。
+
+### 安装文件和目录
+
+类似的，有`install(FILES <TYPE>/<DESTINATION>)`和`install(DIRECTORY <DESTINATION>)`来安装文件或者目录。
+
+对于文件，有类似的TYPE预定义和默认安装目录，一般只需要指定类型就行；当然也可以直接指定目录名称。
+
+还有一种`install(PROGRAMES...)`，专门用来安装二进制文件的，可以使用`PERMISSIONS`设置权限。
+
+单文件install时，可以使用RENAME参数重命名文件。
+
+安装文件夹时，可以使用`FILES_MATCHING`来进行通配符(`PATTERN`)或者正则(`REGEX`)过滤，尾部还可以加上`EXCLUDE`用来表示排除文件。
+
