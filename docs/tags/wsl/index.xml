@@ -15,7 +15,7 @@
       <pubDate>Fri, 04 Mar 2022 20:54:01 +0800</pubDate>
       
       <guid>https://yiuterran.github.io/blog/posts/windows&#43;wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</guid>
-      <description>就我个人而言，目前感觉最理想的后端开发环境还是Intel CPU的MacOS，基本所有常用的后端依赖都可以用homebrew安装，GUI和命令行的结合也</description>
+      <description>2023/2/2 Update: wsl已经解决了systemd和网络问题，现在已经基本无障碍使用，移除了大部分无用的配置步骤。 就我个人而言，目前感觉最理想的后端开发环境还是Int</description>
     </item>
     
   </channel>
