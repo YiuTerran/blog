@@ -3,7 +3,31 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://yiuterran.github.io/blog/authors/</loc>
-    <lastmod>2023-01-09T16:42:44+08:00</lastmod>
+    <lastmod>2023-01-25T16:49:11+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/tags/cpp/</loc>
+    <lastmod>2023-01-25T16:49:11+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/tags/gnu/</loc>
+    <lastmod>2023-01-25T16:49:11+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/tags/make/</loc>
+    <lastmod>2023-01-25T16:49:11+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/posts/makefile%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/</loc>
+    <lastmod>2023-01-25T16:49:11+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/tags/</loc>
+    <lastmod>2023-01-25T16:49:11+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/authors/tryao/</loc>
+    <lastmod>2023-01-25T16:49:11+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/posts/</loc>
+    <lastmod>2023-01-25T16:49:11+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/</loc>
+    <lastmod>2023-01-25T16:49:11+08:00</lastmod>
   </url><url>
     <loc>https://yiuterran.github.io/blog/tags/c&#43;&#43;/</loc>
     <lastmod>2023-01-09T16:42:44+08:00</lastmod>
@@ -12,18 +36,6 @@
     <lastmod>2023-01-09T16:42:44+08:00</lastmod>
   </url><url>
     <loc>https://yiuterran.github.io/blog/posts/cmake%E9%80%9F%E8%AE%B0/</loc>
-    <lastmod>2023-01-09T16:42:44+08:00</lastmod>
-  </url><url>
-    <loc>https://yiuterran.github.io/blog/tags/</loc>
-    <lastmod>2023-01-09T16:42:44+08:00</lastmod>
-  </url><url>
-    <loc>https://yiuterran.github.io/blog/authors/tryao/</loc>
-    <lastmod>2023-01-09T16:42:44+08:00</lastmod>
-  </url><url>
-    <loc>https://yiuterran.github.io/blog/posts/</loc>
-    <lastmod>2023-01-09T16:42:44+08:00</lastmod>
-  </url><url>
-    <loc>https://yiuterran.github.io/blog/</loc>
     <lastmod>2023-01-09T16:42:44+08:00</lastmod>
   </url><url>
     <loc>https://yiuterran.github.io/blog/posts/golang%E6%9C%8D%E5%8A%A1%E6%8E%A5%E5%85%A5opentelemetry/</loc>
