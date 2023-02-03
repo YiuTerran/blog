@@ -95,7 +95,7 @@
     },
     "headline": "Makefile要点简记 | 应许之地","datePublished": "2023-01-25T16:49:11+08:00",
     "dateModified": "2023-01-25T16:49:11+08:00",
-    "wordCount":  1080 ,
+    "wordCount":  1081 ,
     "author": {
         "@type": "Person",
         "name": ["tryao"]
@@ -268,7 +268,7 @@
 <h2 id="语法">语法</h2>
 <ol>
 <li>类似bash，直接<code>obj = a b c</code>就是数组，使用<code>$(obj)</code>来引用变量；</li>
-<li>使用<code>include</code>来导入其他makefile，也医用<code>MAKEFILES</code>的环境变量来隐式include；</li>
+<li>使用<code>include</code>来导入其他makefile，也可以用<code>MAKEFILES</code>的环境变量来隐式include；</li>
 <li>通配符默认并不会展开，需要手动指定，如<code>obj := $(wildcard *.c)</code>;</li>
 <li>使用<code>vpath</code>关键字定义搜索目录，语法是<code>vpath pattern directorys</code>，pattern并不是正则，而是类似glob语法，但是使用<code>%</code>而不是<code>*</code>。如<code>vpath %.h ../headers</code>;</li>
 <li><code>.PHONY</code>表示伪目标，并不会真的生成对应的目标，如<code>clean</code>动作；</li>

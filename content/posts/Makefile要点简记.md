@@ -34,7 +34,7 @@ target ... : prerequisites ...
 ## 语法
 
 1. 类似bash，直接`obj = a b c`就是数组，使用`$(obj)`来引用变量；
-2. 使用`include`来导入其他makefile，也医用`MAKEFILES`的环境变量来隐式include；
+2. 使用`include`来导入其他makefile，也可以用`MAKEFILES`的环境变量来隐式include；
 3. 通配符默认并不会展开，需要手动指定，如`obj := $(wildcard *.c)`;
 4. 使用`vpath`关键字定义搜索目录，语法是`vpath pattern directorys`，pattern并不是正则，而是类似glob语法，但是使用`%`而不是`*`。如`vpath %.h ../headers`;
 5. `.PHONY`表示伪目标，并不会真的生成对应的目标，如`clean`动作；
