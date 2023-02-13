@@ -167,6 +167,7 @@ pod是k8s最小运行单元，1一个pod可以包含多个容器（使用同一�
 * `kubectl rollout status`，滚动查看API对象的状态；
 * `kubectl edit`直接编辑etcd中的API对象定义；
 * `kubectl set`直接修改某个字段，如`image`；
+* `kubectl patch`直接给API对象打补丁，补丁有具体的语法，详情可以查询文档；
 
 ## k8s编排原理
 
@@ -174,29 +175,42 @@ pod是k8s最小运行单元，1一个pod可以包含多个容器（使用同一�
 
 Pod是一个逻辑概念，并没有对应的实体，实际操作的仍然是容器，或者说Linux Namespace和CGroup.一组共享网络Namespace的Pod，并且可以共享Volume的容器，被称为Pod.
 
-多个容器构成pod，需要先创建一个*Infra container*，其他容器共享该容器的网络Namespace，这个容器由汇编语言写成，永远处于暂停状态，所以消耗的资源极少。pod的生命周期与infra容器一致，用户容器的进出流量也可以视为通过infra容器完成。
+所有pod，k8s都需要先创建一个*Infra container*，其他容器共享该容器的网络Namespace，这个容器由汇编语言写成，永远处于暂停状态，所以消耗的资源极少。pod的生命周期与infra容器一致，用户容器的进出流量也可以视为通过infra容器完成。
 
 正是因为有了infra容器这个隐藏的container，Volume才可以定义在pod层级。
 
 Pod的定义，一方面是为了调度方便（多个容器），另一方面是为了所谓的**容器设计模式**。也就是容器=进程，pod=进程组/虚拟机的设计。
 
-通过`initContainers`，可以在pod中预定义多个容器，用来初始化环境，这就是所谓的sidecar模式。
+通过`initContainers`，可以在pod中预定义多个容器，用来初始化环境，需要注意`initContainers`每次都会启动，如果是一次性的初始化需要检测是否需要跳过。
+
+initContainers一定会先于pod启动，并按着定义的顺序严格执行；但是**containers里面规定的多个容器则没有明确的启动顺序**，所以如果有依赖问题，需要检测指定容器是否已经就绪。
+
+多个container协作的设计模式，又称为**sidecar模式**。
 
 ### Pod字段
 
 按着Pod=虚拟机这种模拟来理解，很容易明白哪些配置需要定义在pod级别，哪些是container级别。一些pod级别的常用字段（spec下面）：
 
-* `nodeSelector`，调度条件，如`diskType:ssd`，标明该pod只能在打有这个标签的节点上被调度；
+* `nodeSelector`，调度条件，如`diskType:ssd`，标明该pod只能在打有这个标签的节点上被调度。已废弃，使用`affinity.nodeAffinity`代替；
 * `nodeName`，这个字段是k8s赋予的，有值的时候就会认为已调度；
 * `hostAliases`，host定义；
-* `containers`，下面是容器级别的定义，当然；
+* `containers`，容器级别的定义；
+* `volumes`，卷声明；
+* `terminationGracePeriodSeconds`，优雅关闭等待时长；
+* `backoffLimit`，最大重启次数；
+* `activeDeadlineSeconds`，最大运行市场（一般Job里面使用）；
+
+volumes声明为`emptyDir:{}`，则会在宿主机上创建一个临时目录绑定到该volume的name上；volumes也可以声明为`hostPath`，通过`path: /xxx`来直接映射宿主机的目录。这两种volume是最常用的的，但是数据卷有时候需要分布式文件系统，此时就要使用其他方式（如PVC）来声明了。
 
 container级别的常用字段：
 
 * `imagePullPolicy`，默认是always，可以设置为`never`或者`ifNotPresent`；
 * `lifecycle`，生命周期，如：`postStart`、`preStop`，用于定义容器生命周期各个阶段回调的命令；需要注意的是`postStart`启动的时候，容器的CMD可能还未结束；
 * `livenessProbe`，存活探针。支持http探测（200或者其他）或者bash命令（通过返回0或者非0）探测，甚至tcp探测（端口存活）；
+* `readinessProbe`，
 * `restartPolicy`，重新创建pod的策略，默认是`Always`，可以设置为`OnFailure`或者`Never`。注意`onFailure`的条件是所有容器都异常了，`Always`则是任意一个容器异常；如果需要保留案发现场，则可以设置为Never；
+* `volumeMounts`，卷挂载。将pod级别的卷声明根据需要挂载到容器里，通过`mountPath`指定挂载路径；
+* `resources`，容器的资源声明，`requests`和`limits`来声明最小和最大限制；
 
 由于字段太多，开发人员编写API对象难度较大，此时运维人员可以预定义一些参数，这就是所谓的`PodPreset`。这也是一类API对象，他可以通过`spec.selector.matchLabels`匹配开发人员创建的API对象。注意preset需要先于pod创建。
 
@@ -216,11 +230,11 @@ container级别的常用字段：
 
 pod中用户容器的配置，一般通过`project volume`的方式注入进去，包括：
 
-* Secret: 将密码保存在etcd里，可以打开加密；
-* ConfigMap: 一般的配置；
-* Downward API: 将pod的信息暴露到容器里，必须是容器启动前就能确定下来的信息，不支持运行时更改；
+* `Secret`: 将密码保存在etcd里，可以打开加密；
+* `ConfigMap`: 一般的配置；
+* `Downward API`: 将pod的信息暴露到容器里，必须是容器启动前就能确定下来的信息，不支持运行时更改；
 
-以上都是通过`kubectl create xxx`创建（或apply）. 也可以通过环境变量注入，但是环境变量不具备自动更新的能力。
+以上都是通过`kubectl create xxx`创建（或apply），然后通过volume挂载到pod中。当然也可以通过环境变量注入，但是后者不具备自动更新的能力。
 
 ServiceAccoutToken是一种特殊的Secret，k8s默认会隐式注入到所有容器里，这样容器中的应用可以通过kubectl控制k8s.
 
@@ -230,7 +244,7 @@ ServiceAccoutToken是一种特殊的Secret，k8s默认会隐式注入到所有�
 
 Deployment并不是直接控制Pod对象，而是通过Replica对象来控制。
 
-对于用户而言，就是通过`replicas`定义副本数量，通过`matchLabel`机制匹配pod定义。
+对于用户而言，就是通过`replicas`定义副本数量，通过`spec.selector.matchLabels`匹配pod定义。
 
 然后`apply`就行，k8s会自动完成滚动更新，相关命令：
 
@@ -245,9 +259,9 @@ Deployment并不是直接控制Pod对象，而是通过Replica对象来控制。
 
 ### StatefulSet
 
-有状态Pod，主要指代两种状态：
+与ReplicaSet对应的有状态Pod，主要指代两种状态：
 
-1. 拓扑状态，即pod有严格的启动顺序，重建需要保持顺序的问题。这个statefulSet默认就能解决。解决方式是对pod赋予唯一的名称(`<name>-N`，N是编号)，访问pod通过headless service对应的唯一域名来访问，创建pod时保持名称不变即可；
+1. 拓扑状态，即pod有严格的启动顺序，重建需要保持顺序的问题。这个statefulSet默认就能解决。解决方式是对pod赋予唯一的名称(hostname：`<name>-N`，N是编号)，访问pod通过headless service对应的唯一域名来访问，创建pod时保持名称不变即可；
 2. 存储依赖，即应用有需要落地的数据，当pod重建后能恢复这些数据；这个需要其他技术来辅助；
 
 由于Volume的编写过于复杂，所以这里又抽象出两个新概念：
@@ -255,5 +269,328 @@ Deployment并不是直接控制Pod对象，而是通过Replica对象来控制。
 * PVC: PersistentVolumeClaim，即对存储的需求描述，大小、挂载方式等；在volume中只要指定这个pvc就行；
 * PV：真正的volume细节，一般是运维编写；
 
-所以对于第2个问题，直接指定PVC即可。绑定到Pod的PVC的命名也有与Pod相同的编号，重建pod时找到符合该规律的PVC挂载上去即可。
+PVC例子：
+
+```yaml
+spec:
+  volumes:
+    - name: pv-storage
+      persistentVolumeClaim:
+        claimName: pv-claim
+```
+
+实际使用中一般只需要说明需要的PVC：
+
+```yaml
+spec:
+  volumeClaimTemplate:
+  - metadata:
+      name: xxx
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 10Gi
+```
+
+这里就指定了权限和大小，k8s会自动寻找合适的PV绑定到PVC上，PVC的名字是`xxx-<podname>`.
+
+所以对于第2个问题，直接指定PVC即可。由于绑定到Pod的PVC的命名也有与Pod相同的编号，重建pod时找到符合该规律的PVC挂载上去即可。
+
+特别注意的是，`StatefulSet`要求使用同一个容器镜像，如果容器镜像不同，需要使用`Operator`.既然是同一个镜像，那么按着pod名称中的序号0,1,2...就可知道启动的顺序，这样就可以把需要先启动的放前面。常见的需求是主从集群，0为主，1,2为从这种设计。
+
+StatefulSet的滚动更新与ReplicaSet不同，有严格的销毁和启动顺序，销毁按着序号倒序进行。可以在`rollingUpdate`里按序号指定部分更新（灰度）。
+
+### DaemonSet
+
+宿主机守护进程，在k8s上每个节点上都会运行且只运行一个pod，当然“每个节点”不是很准确，应该是拥有满足`spec.selector.matchLabels`筛选pod的每个结点。
+
+DaemonSet启动的很早，因此可以通过`spec.tolerations`指定污点来忽略某些限制。
+
+类似Deployment，支持版本管理。不同的是，Deployment的一个版本对应一个ReplicaSet，DaemonSet直接控制Pod，所以实现方式不一样。
+
+DaemonSet版本管理使用的对象是`ControllerRevision`， 可以通过`get`/`describe`该对象查看具体的版本信息。StateFulSet也是使用该对象实现版本管理的。
+
+### Job和CronJob
+
+一次性或者周期性调度的任务。Job直接控制Pod，CronJob则控制Job. 一些特殊字段：
+
+* `spec.parallelism`定义job可以启动多少个pod进行并发计算；
+
+* `spec.completions`定义job至少完成的pod数目；
+* `spec.concurrencypolicy`，cronjob对job重合的处理，默认为`Allow`，可以设置为`Forbid`或者`Replace`；
+
+CronJob的最小检查周期是10s，定义最小周期则是1分钟。
+
+如果从上次运行时间到现在，CronJob创建失败次数超过了100，这个CronJob将不会再被调度；如果设置了`spec.startingDeadlineSeconds: n`，则检查的时间点就会固定到n秒之前，次数则固定是100，不可设置。这个参数还表示cronJob容许的延迟启动时间。
+
+### 声明式API
+
+前文已经说过，尽量是用`kubectl apply`来实现CURD，而不是直接用`create/replace/patch`等命令，这是因为有并发处理同一个API对象的情况。k8s会在apply时自动处理各种冲突，最终达到需求的状态。
+
+### 自定义API资源
+
+即CRD(custom resource definition)，用户可以自定义API对象，格式如下：
+
+```yaml
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: network.samplecrd.k8s.io
+spec:
+  group: samplecrd.k8s.io
+  version: v1
+  names:
+    kind: Network
+    plural: networks #复数
+  scope: Namespaced
+```
+
+这里需要做一些云原生开发，即golang写插件。由于涉及到编程，此处细节会单独开blog来写。
+
+### RBAC
+
+k8s的权限控制也是基于RBAC制定的，主要概念：
+
+* Role：角色，对应了具体的权限集；
+* Subject: 主题，被赋予角色的对象；
+* RoleBinding：上面两个的绑定关系；
+
+Role的定义格式：
+```yaml
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: mynamespace # 必须指定namespace，默认是default
+  name: example-role
+rules:
+  - apiGroups: [""]
+    resources: ["pods"] # 资源组
+    resourceName: ["mysql"] # 资源的名称
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]  # 权限动词
+```
+
+RoleBinding的定义：
+
+```yaml
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: example-rolebinding
+  namespace: mynamespace # 也必须指定namespace
+subjects:
+  - kind: User
+    name: example-user
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: example-role
+  apiGroup: rbac.authorization.k8s.io
+```
+
+如果想在所有namespace里都生效，需要使用`clusterRole`和`clusterRoleBindings`.
+
+与User相比，习惯上更多使用`ServiceAccount`来分配权限，用户在pod里通过`spec.serviceAccountName`来引用该对象。
+
+### 准入控制器
+
+Admission Controllers，在RBAC校验通过之后，对象被持久化之前调用，主要用来过滤非只读请求。
+
+可以通过webhook自定义准入控制器。
+
+### Operator
+
+由于有状态服务过于复杂，经常需要在yaml里面写逻辑。所以另外一种更编程友好的方法是使用Operator来完成。这其实就是一种CRD配合自定义控制器的完全自定义方式。
+
+涉及到编程，这里不再赘述。一般Stateful搞不定的，就要使用Operator来定义了。
+
+## k8s存储原理
+
+PV和PVC的匹配机制：
+
+* PV必须满足PVC的大小限制；
+* 二者的`storageClassName`必须一致（如果没声明，则为空字符串）；
+
+k8s中专门处理持久化存储的控制器叫`Volume Controller`，其维护多个控制循环，其中一个循环会持续尝试绑定PV和PVC，即`PersistentVolumeController`.所谓绑定，就是将PV对象的名字填入PVC的`spec.volumeName`字段。
+
+### Dynamic Provisioning
+
+人工创建PV的方式被称为`Static Provisioning`，只能对小规模集群使用人工管理。
+
+动态分配的核心在于名为`StorageClass`的API对象，其定义主要包括两个部分：
+
+* PV的属性，如存储类型、Volume的大小等；
+* 所需存储插件，如Ceph等，对应字段是`provisioner`；
+
+k8s官方支持存储插件很多，如果实在是不支持，也可以自己开发。
+
+### Local PV
+
+直接使用宿主机磁盘的PV，理论上IO性能最好，但是存在数据丢失风险。使用时需要注意：
+
+1. 一个PV一块盘，不应当使用宿主机的主硬盘；
+2. 只能使用Static Provisioning，即预先创建PV才能绑定到PVC；
+3. 需要延迟绑定，通过`StorageClass.volumeBindMode: WaitForFirstConsumer`延迟PV和PVC的绑定；
+
+PV示例：
+
+```yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: example-pv
+spec:
+  capacity:
+    storage: 5Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: local-storage # 存储类
+  local:
+    path: /mnt/disks/vol1
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions: # pod仅能在当前节点运行
+          - key: kubernetes.io/hostname
+            operator: In
+            values:
+              - node-1
+```
+
+StorageClass示例：
+
+```yaml
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: local-storage
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer # 延迟绑定声明
+```
+
+最后删除PV的顺序：
+
+1. 删除使用PV的Pod；
+2. 移除磁盘(unmount);
+3. 删除PVC；
+4. 删除PV；
+
+可以通过k8s的StaticProvisioner来自动化LocalPV的相关操作。
+
+### CSI插件编写
+
+涉及到编程，先跳过
+
+## k8s网络原理
+
+容器的network namespace默认是隔离的，通信需要经过交换网络。
+
+docker的实现方式是在宿主机创建一个名为docker0的网桥，网桥工作在二层网络，根据mac地址转发数据包。
+
+然后docker为每个容器创建一对Veth Pair，这种虚拟设备成对出现，都插在docker0网桥上，一端在宿主机里，另一端在容器里(eth0)。发往任一端的数据包，在另一端都能收到，且无视namespace隔离。
+
+对于跨主机网络，这个docker0就力不能及了，这时候就需要Flannel项目出马。
+
+### Flannel
+
+该项目是一个框架，有多种后端实现，用于解决跨主机容器通信问题。
+
+#### UDP后端
+
+flannel进程会在每个宿主机上监听一个UDP端口，并创建一个名为`flannel0`的虚拟设备，这是一个3层TUN设备，主要作用是在OS kernel层和user层之间传递ip数据包，具体来说就是将ip包在内核和flannel进程之间传递。
+
+每个宿主机上的容器都属于该宿主机被分配的子网，flannel进程可以根据目标ip地址对应的子网找到其宿主机，然后将ip包转发给对应宿主机的flannel进程即可。后者会将数据包传入内核，根据路由表将数据转给docker0网桥。
+
+由于数据需要多次在内核态和用户态之间切换，导致性能太低，所以已被逐渐废弃。
+
+### VXLAN后端
+
+非常类似UDP后端，VXLAN会在宿主机上设置一个特殊的网络设备`VTEP`，不过它是工作在二层。
+
+### k8s对上述方案的兼容
+
+k8s肯定不会直接用docker0，而是通过CNI接口来进行网络通信，默认创建的网桥是`cni0`.
+
+为宿主分配子网可以使用`kubeadm init --pod-network-cidr=<ipv4/n>`来指定，也可以创建完成之后通过`kube-controller-manager`来指定。
+
+CNI具体的配置须放在宿主机的`/etc/cni/net.d/`中，格式类似：
+
+```js
+{
+    "name": "cbr0",
+    "plugins":[
+        {
+            "type": "flannel",
+            "delegate":{ //托管给内置的插件
+                "hairpinMode": true, //打开发夹模式，允许自己访问自己
+                "isDefaultGateway": true
+            }
+        },
+     	{
+            "type": "portmap",
+            "capabilities":{
+                "portMappings": true,
+            }
+        }
+    ]
+}
+```
+
+容器网络相关的逻辑并不在`kubelet`中，而是在具体的CRI中，对于docker就是`dockershim`，目前已经弃用。
+
+目前k8s网络不支持多个CNI复用。
+
+Infra容器创建之后会执行`SetUpPod`，该函数用于为CNI插件准备参数。对于flannel，他需要的参数分为两部分：
+
+* 各种环境变量，其中最重要的是CNI_COMMAND，可选的值是DEL或者ADD，表示把容器添加到CNI网络，或者从中移除；
+* 上面配置文件中的配置信息；
+
+参数加载完毕之后，CRI就会调用CNI插件，对于flannel而言，由于这个插件是内置在k8s网络里，所以实际上只是对配置参数做了一些补充。
+
+之后，CNI插件就会调用bridge插件，后者会检查CNI网桥是否存在，没有则创建一个cni0. 之后，创建Veth Pair，将其中一端放在宿主机上，另一端放在infra容器里。
+
+特别注意在infra容器的那段需要设置`hairpinMode: true`，即允许容器通过Service自己访问自己。
+
+之后bridge插件调用ipam插件，为容器分配子网中某个ip地址，并绑定到容器的eth0上。
+
+最后，CNI插件将ip地址这些信息返回给CRI，kubelet再将这些信息添加到Pod的相关字段上。
+
+### host-gw后端
+
+将宿主机ip作为flannel子网的下一条地址，即将宿主机当做路由器来用。这个思路其实类似物理组网。
+
+优势是性能损失更低（10%左右），缺点是要求宿主机集群之间二层互通，而VXLan仅要求三层互通。一般公有云环境更推荐这种模式。
+
+对于复杂项目，可以考虑使用calico项目，该项目使用BGP协议进行大规模路由表维护，避免人工维护成本。
+
+由于BGP网络极其复杂，这里不再详述。
+
+### 网络隔离
+
+k8s通过API对象`NetPolicy`来控制网络隔离，该对象通过`spec.podSelector`来匹配pod，并进行白名单管控。
+
+使用起来其实很类似IaaS中的“安全组”。
+
+### Service原理
+
+service是由kube-proxy和iptables共同实现的。
+
+推荐打开kube-proxy的IPVS模式以提高性能，纯iptables在大量pod时性能较差。
+
+Service的`spec.type`支持以下几种模式：
+
+* ClusterIP，最常用的的模式。如果设为None，则为headless模式，否则通过随机负载均衡访问；
+* NodePort，强行暴露pod的端口到宿主机；每个节点只能部署一个pod示例；
+* LoadBalancer，对接公有云时使用；
+* ExternalName，类似在DNS中直接加CNAME；
+* ExternalIp，直接在`spec.externalIps`里面声明可以访问的ip地址，该地址会路由到对应的service；
+
+对于4层协议，如果想获取客户端的真实ip，需要将`spec.externalTrafficPolicy`设置为local.
+
+### Ingress对象
+
+即总的负载均衡入口。
 
