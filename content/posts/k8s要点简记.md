@@ -592,5 +592,59 @@ Service的`spec.type`支持以下几种模式：
 
 ### Ingress对象
 
-即总的负载均衡入口。
+即k8s对反向代理的抽象，可以视为Service的Service.
+
+其实没啥好说的，配置很类似Nginx.
+
+## k8s资源调度
+
+资源的`spec.resources.requests`表示调度需要的最小资源，`spec.resource.limits`则是CGroup设置的限制值。
+
+Pod资源QoS的三个级别：
+
+* Guaranteed.  同时设置上述两个指标，且二者相同；
+* Burstable. 至少有一个容器设置了requests；
+* BestEffort. 两个参数都没设置；
+
+当资源不足时，上述QoS的Pod回收的优先级是从低到高的。因此像DaemonSet这种资源，应当设置为`Guaranteed`保证尽量不被回收。
+
+如果`Guaranteed`级别的Pod指定cpu数量（整数），则称为`cpuset`，指将pod绑定到具体的核上，避免频繁的上下文切换，生产环境比较常用。
+
+### 调度流程
+
+默认调度器的调度流程分为预选和优选两步。
+
+预选是并发遍历所有节点寻找满足API对象需求的Node并筛选出来，在单个节点上的筛选流程是固定的4步（顺序执行）。
+
+优选则是对预选的结果分别打分，最后得分最高的被选出来。
+
+不过最后创建Pod时，还是kubelet会二次检查确认满足条件。主要是因为前面的检查是无锁乐观的，最后一步还是要二次确认才能保证没问题。
+
+### 调度优先级
+
+默认都是0，可以创建`PriorityClass`对象来指定优先级，然后在pod的`spec.priorityClassName`里指定具体的优先级对象名字。
+
+### Device Plugin
+
+cpu/内存以外的资源，都是通过`Extend Resource`来实现的。`Device Plugin`是一种插件，通过与Kubelet进行gRPC通信定时上报节点拥有的其他硬件资源。
+
+## CRI与容器运行时
+
+最开始k8s是基于docker实现的，后面抽象成了CRI，并逐步从核心代码中移除了dockershim.
+
+容器运行时除了docker之外，现在还有containerd等项目。
+
+甚至，gVistor等项目还支持硬模拟，从而创造隔离性更好的pod（如内核级别的隔离）
+
+## k8s监控与日志
+
+开启apiserver的aggregator模式之后，会启动一个代理。代理之后还包括metric server，这里就是k8s本身promethus格式的metric api.
+
+HPA就是基于应用的metric server完成的.
+
+k8s鼓励应用直接把日志直接输出到stdout和stderr，它会将日志重定向到宿主机的文件中。
+
+## KubeVela项目
+
+由于k8s配置过于复杂，对应用开发人员不太友好，该项目是为了减轻开发者负担而创建。
 
