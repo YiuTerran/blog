@@ -8,7 +8,16 @@
     <language>zh</language>
     <copyright>&amp;copy; 2021 &lt;a href=&#34;https://github.com/YiuTerran&#34;&gt;tryao&lt;/a&gt;
 </copyright>
-    <lastBuildDate>Wed, 25 Jan 2023 16:49:11 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 10 Feb 2023 09:30:19 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>k8s</title>
+      <link>https://yiuterran.github.io/blog/tags/k8s/</link>
+      <pubDate>Fri, 10 Feb 2023 09:30:19 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/tags/k8s/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>cpp</title>
       <link>https://yiuterran.github.io/blog/tags/cpp/</link>

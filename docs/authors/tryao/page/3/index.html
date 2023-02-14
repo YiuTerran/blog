@@ -52,6 +52,14 @@
 
 <script defer src="https://cdn.jsdelivr.net/npm/mermaid@8.9.2/dist/mermaid.min.js" 
   integrity="sha256-Zmpaaj&#43;GXFsPF5WdPArSrnW3b30dovldeKsW00xBVwE="  crossorigin></script>
+<link rel="preconnect" href="https://www.google-analytics.com" crossorigin>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-C0R8DENDJ0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-C0R8DENDJ0');
+</script>
 
 
 <link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
@@ -85,42 +93,66 @@
     "itemListElement":[{
             "@type":"ListItem",
             "position":  1 ,
-            "name": "Tinode源码解析",
-            "description": "概述 有朋友需要做一个im，简单做了一下技术调研，流行的开源框架包括： Tinode/chat: 即本文主角，golang编写，架构比较简单，有MySQL就能跑，轻量级方案。支持",
-            "url": "https://yiuterran.github.io/blog/posts/tinode%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/"
+            "name": "K8s要点简记",
+            "description": "22年的时候需要使用CICD的时候，看了一遍k8s相关的知识点。买了一本《深入剖析Kubernetes》，大致熟悉了常用的概念。 最近因为工作调动需要做",
+            "url": "https://yiuterran.github.io/blog/posts/k8s%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/"
         },{
             "@type":"ListItem",
             "position":  2 ,
+            "name": "Makefile要点简记",
+            "description": "虽然现代C/CPP一般使用cmake作为工具链，但是如果要看陈年老项目，makefile相关的知识还是要掌握一些的，不然估计很难理清编译逻辑。这也是c",
+            "url": "https://yiuterran.github.io/blog/posts/makefile%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/"
+        },{
+            "@type":"ListItem",
+            "position":  3 ,
+            "name": "CMake速记",
+            "description": "主要参考书籍《Modern CMake for C++》，以及《CMake Best Practices》，使用CMake版本3.25. 建议先看第一本，再看第二本。 使用 一般而言，",
+            "url": "https://yiuterran.github.io/blog/posts/cmake%E9%80%9F%E8%AE%B0/"
+        },{
+            "@type":"ListItem",
+            "position":  4 ,
+            "name": "Tinode源码解析",
+            "description": "概述 有朋友需要做一个im，简单做了一下技术调研，开源的实现其实蛮多的，这里挑几个说一下： Synapse/dendrite，matrix系，客户端比较多",
+            "url": "https://yiuterran.github.io/blog/posts/tinode%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/"
+        },{
+            "@type":"ListItem",
+            "position":  5 ,
             "name": "SRE读书笔记",
             "description": "SRE相关的书籍，截止目前google出了2本，分别是2016年的的《Site Reliability Engineering: How Google Runs Production Systems》和2020年的《The Site Reliability Workbook》",
             "url": "https://yiuterran.github.io/blog/posts/sre%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"
         },{
             "@type":"ListItem",
-            "position":  3 ,
+            "position":  6 ,
             "name": "Ginkgo使用笔记",
             "description": "go自带的单元测试比较适合测一个小函数，如果要做一系列的流程测试，则显得较为繁琐。 推荐使用ginkgo来做流程测试，BDD风格写出来的测试代码非常容易",
             "url": "https://yiuterran.github.io/blog/posts/ginkgo%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/"
         },{
             "@type":"ListItem",
-            "position":  4 ,
+            "position":  7 ,
+            "name": "Influxdb Cluster集成",
+            "description": "本文记录在golang项目中集成influxdb-cluster需要的知识储备。 术语 database 和MySQL中一致 batch \\n分割的多行数据，用来批量写入。 influ",
+            "url": "https://yiuterran.github.io/blog/posts/influxdb-cluster%E9%9B%86%E6%88%90/"
+        },{
+            "@type":"ListItem",
+            "position":  8 ,
             "name": "Zabbix配置记录",
             "description": "安装服务 这里演示的是物理机环境监控场景，容器场景还是更推荐k8s+prom来搞。 版本是zabbix6.0 LTS，官方已经不提供CentOS7的安装包了",
             "url": "https://yiuterran.github.io/blog/posts/zabbix%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/"
         },{
             "@type":"ListItem",
-            "position":  5 ,
+            "position":  9 ,
             "name": "Golang定时器要点",
             "description": "golang内置的定时器是基于多个四叉堆封装调度的，增删定时器的效率是O(lgn)，所以大量定时器本身可能成为性能瓶颈。可以考虑使用开源的时间轮算法实",
             "url": "https://yiuterran.github.io/blog/posts/golang%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A6%81%E7%82%B9/"
         },{
             "@type":"ListItem",
-            "position":  6 ,
+            "position":  10 ,
             "name": "Windows+wsl2后端开发环境搭建",
-            "description": "就我个人而言，目前感觉最理想的后端开发环境还是Intel CPU的MacOS，基本所有常用的后端依赖都可以用homebrew安装，GUI和命令行的结合也",
+            "description": "2023/2/2 Update: wsl已经解决了systemd和网络问题，现在已经基本无障碍使用，移除了大部分无用的配置步骤。 就我个人而言，目前感觉最理想的后端开发环境还是Int",
             "url": "https://yiuterran.github.io/blog/posts/windows+wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"
         },{
             "@type":"ListItem",
-            "position":  7 ,
+            "position":  11 ,
             "name": "Gb28181解析",
             "description": "国标GB28181（以下简称国标或者gb）文档分析的文档我去年其实写过一版，但是由于原来的电脑炸了，文档还没来得及传上去就丢了（痛苦），所以还要重写一",
             "url": "https://yiuterran.github.io/blog/posts/gb28181%E8%A7%A3%E6%9E%90/"
@@ -158,7 +190,7 @@
 
 
 
-<meta property="og:updated_time" content="2022-11-14T19:21:38&#43;08:00" />
+<meta property="og:updated_time" content="2023-02-10T09:30:19&#43;08:00" />
 
 
 
@@ -197,9 +229,9 @@
                 </div>
                 <div class="absolute flex flex-col start-0 md:start-auto end-auto md:end-0 hidden bg-secondary-bg w-48 rounded py-2 border border-tertiary-bg cursor-pointer z-40"
                     id='lightDarkOptions'>
-                    <span class="px-4 py-1 hover:text-eureka" name="Light">Light</span>
-                    <span class="px-4 py-1 hover:text-eureka" name="Dark">Dark</span>
-                    <span class="px-4 py-1 hover:text-eureka" name="Auto">Auto</span>
+                    <span class="px-4 py-1 hover:text-eureka" name="Light">浅色</span>
+                    <span class="px-4 py-1 hover:text-eureka" name="Dark">深色</span>
+                    <span class="px-4 py-1 hover:text-eureka" name="Auto">自动</span>
                 </div>
             </div>
         </div>
@@ -239,6 +271,10 @@
     <div class="lg:w-3/4 mx-auto px-6 md:px-8 xl:px-12 py-12">
       <div class="flex flex-col md:flex-row items-center justify-center mb-12">
   
+  
+    <div class="flex-none w-48 mx-auto md:ms-0 md:me-8 md:pe-8 md:border-e">
+      <img src="https://yiuterran.github.io/blog/images/avatar.png" class="rounded-full" alt="Avatar">
+    </div>
   
   <div class="grow mt-4 md:mt-0">
     <div class="text-3xl py-4">个人介绍</div>
@@ -284,15 +320,6 @@
       
       
       <div class="pb-2 pe-4 md:pe-0 pt-4 md:pt-0">
-        <a href="https://twitter.com/TerranYiu"><i class="fab fa-twitter"></i></a>
-      </div>
-    
-      
-      
-      
-      
-      
-      <div class="pb-2 pe-4 md:pe-0 pt-4 md:pt-0">
         <a href="https://github.com/YiuTerran"><i class="fab fa-github"></i></a>
       </div>
     
@@ -319,11 +346,113 @@
   
   <div class="w-full ">
     <div class="mb-4">
+  <a href="https://yiuterran.github.io/blog/posts/k8s%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/" class="font-bold text-xl hover:text-eureka">K8s要点简记</a>
+</div>
+<div class="content">
+  
+    22年的时候需要使用CICD的时候，看了一遍k8s相关的知识点。买了一本《深入剖析Kubernetes》，大致熟悉了常用的概念。 最近因为工作调动需要做
+  
+</div>
+
+<div class="flex flex-wrap flex-row items-center mt-2 text-tertiary-text">
+    <div class="me-6 my-2">
+        <i class="fas fa-calendar me-1"></i>
+        <span>2023-02-10</span>
+    </div>
+    <div class="me-6 my-2">
+        <i class="fas fa-clock me-1"></i>
+        <span>25分钟阅读时长</span>
+    </div>
+    
+    
+
+    
+</div>
+
+  </div>
+
+  
+</div>
+  </div>
+  
+  <div class="py-6">
+    <div class="flex flex-col-reverse lg:flex-row justify-between">
+  
+  <div class="w-full ">
+    <div class="mb-4">
+  <a href="https://yiuterran.github.io/blog/posts/makefile%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/" class="font-bold text-xl hover:text-eureka">Makefile要点简记</a>
+</div>
+<div class="content">
+  
+    虽然现代C/CPP一般使用cmake作为工具链，但是如果要看陈年老项目，makefile相关的知识还是要掌握一些的，不然估计很难理清编译逻辑。这也是c
+  
+</div>
+
+<div class="flex flex-wrap flex-row items-center mt-2 text-tertiary-text">
+    <div class="me-6 my-2">
+        <i class="fas fa-calendar me-1"></i>
+        <span>2023-01-25</span>
+    </div>
+    <div class="me-6 my-2">
+        <i class="fas fa-clock me-1"></i>
+        <span>3分钟阅读时长</span>
+    </div>
+    
+    
+
+    
+</div>
+
+  </div>
+
+  
+</div>
+  </div>
+  
+  <div class="py-6">
+    <div class="flex flex-col-reverse lg:flex-row justify-between">
+  
+  <div class="w-full ">
+    <div class="mb-4">
+  <a href="https://yiuterran.github.io/blog/posts/cmake%E9%80%9F%E8%AE%B0/" class="font-bold text-xl hover:text-eureka">CMake速记</a>
+</div>
+<div class="content">
+  
+    主要参考书籍《Modern CMake for C&#43;&#43;》，以及《CMake Best Practices》，使用CMake版本3.25. 建议先看第一本，再看第二本。 使用 一般而言，
+  
+</div>
+
+<div class="flex flex-wrap flex-row items-center mt-2 text-tertiary-text">
+    <div class="me-6 my-2">
+        <i class="fas fa-calendar me-1"></i>
+        <span>2023-01-09</span>
+    </div>
+    <div class="me-6 my-2">
+        <i class="fas fa-clock me-1"></i>
+        <span>17分钟阅读时长</span>
+    </div>
+    
+    
+
+    
+</div>
+
+  </div>
+
+  
+</div>
+  </div>
+  
+  <div class="py-6">
+    <div class="flex flex-col-reverse lg:flex-row justify-between">
+  
+  <div class="w-full ">
+    <div class="mb-4">
   <a href="https://yiuterran.github.io/blog/posts/tinode%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="font-bold text-xl hover:text-eureka">Tinode源码解析</a>
 </div>
 <div class="content">
   
-    概述 有朋友需要做一个im，简单做了一下技术调研，流行的开源框架包括： Tinode/chat: 即本文主角，golang编写，架构比较简单，有MySQL就能跑，轻量级方案。支持
+    概述 有朋友需要做一个im，简单做了一下技术调研，开源的实现其实蛮多的，这里挑几个说一下： Synapse/dendrite，matrix系，客户端比较多
   
 </div>
 
@@ -334,7 +463,7 @@
     </div>
     <div class="me-6 my-2">
         <i class="fas fa-clock me-1"></i>
-        <span>11 min read</span>
+        <span>12分钟阅读时长</span>
     </div>
     
     
@@ -368,7 +497,7 @@
     </div>
     <div class="me-6 my-2">
         <i class="fas fa-clock me-1"></i>
-        <span>11 min read</span>
+        <span>11分钟阅读时长</span>
     </div>
     
     
@@ -402,7 +531,41 @@
     </div>
     <div class="me-6 my-2">
         <i class="fas fa-clock me-1"></i>
-        <span>2 min read</span>
+        <span>2分钟阅读时长</span>
+    </div>
+    
+    
+
+    
+</div>
+
+  </div>
+
+  
+</div>
+  </div>
+  
+  <div class="py-6">
+    <div class="flex flex-col-reverse lg:flex-row justify-between">
+  
+  <div class="w-full ">
+    <div class="mb-4">
+  <a href="https://yiuterran.github.io/blog/posts/influxdb-cluster%E9%9B%86%E6%88%90/" class="font-bold text-xl hover:text-eureka">Influxdb Cluster集成</a>
+</div>
+<div class="content">
+  
+    本文记录在golang项目中集成influxdb-cluster需要的知识储备。 术语 database 和MySQL中一致 batch \n分割的多行数据，用来批量写入。 influ
+  
+</div>
+
+<div class="flex flex-wrap flex-row items-center mt-2 text-tertiary-text">
+    <div class="me-6 my-2">
+        <i class="fas fa-calendar me-1"></i>
+        <span>2022-09-01</span>
+    </div>
+    <div class="me-6 my-2">
+        <i class="fas fa-clock me-1"></i>
+        <span>3分钟阅读时长</span>
     </div>
     
     
@@ -436,7 +599,7 @@
     </div>
     <div class="me-6 my-2">
         <i class="fas fa-clock me-1"></i>
-        <span>6 min read</span>
+        <span>6分钟阅读时长</span>
     </div>
     
     
@@ -470,7 +633,7 @@
     </div>
     <div class="me-6 my-2">
         <i class="fas fa-clock me-1"></i>
-        <span>2 min read</span>
+        <span>2分钟阅读时长</span>
     </div>
     
     
@@ -493,7 +656,7 @@
 </div>
 <div class="content">
   
-    就我个人而言，目前感觉最理想的后端开发环境还是Intel CPU的MacOS，基本所有常用的后端依赖都可以用homebrew安装，GUI和命令行的结合也
+    2023/2/2 Update: wsl已经解决了systemd和网络问题，现在已经基本无障碍使用，移除了大部分无用的配置步骤。 就我个人而言，目前感觉最理想的后端开发环境还是Int
   
 </div>
 
@@ -504,7 +667,7 @@
     </div>
     <div class="me-6 my-2">
         <i class="fas fa-clock me-1"></i>
-        <span>9 min read</span>
+        <span>7分钟阅读时长</span>
     </div>
     
     
@@ -545,7 +708,7 @@
     </div>
     <div class="me-6 my-2">
         <i class="fas fa-clock me-1"></i>
-        <span>18 min read</span>
+        <span>18分钟阅读时长</span>
     </div>
     
     
@@ -576,7 +739,7 @@
   </main>
   <footer class="ps-scrollbar">
     <div class="w-full max-w-screen-xl mx-auto"><div class="text-center p-6 pin-b">
-    <p class="text-sm text-tertiary-text">&copy; 2021 <a href="https://www.wangchucheng.com/">WANG Chucheng</a> and <a href="https://www.ruiqima.com/">MA Ruiqi</a>
+    <p class="text-sm text-tertiary-text">&copy; 2021 <a href="https://github.com/YiuTerran">tryao</a>
  &middot;  Powered by the <a href="https://github.com/wangchucheng/hugo-eureka" class="hover:text-eureka">Eureka</a> theme for <a href="https://gohugo.io" class="hover:text-eureka">Hugo</a></p>
 </div></div>
   </footer>

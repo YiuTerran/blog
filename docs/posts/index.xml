@@ -8,7 +8,16 @@
     <language>zh</language>
     <copyright>&amp;copy; 2021 &lt;a href=&#34;https://github.com/YiuTerran&#34;&gt;tryao&lt;/a&gt;
 </copyright>
-    <lastBuildDate>Wed, 25 Jan 2023 16:49:11 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 10 Feb 2023 09:30:19 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>K8s要点简记</title>
+      <link>https://yiuterran.github.io/blog/posts/k8s%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/</link>
+      <pubDate>Fri, 10 Feb 2023 09:30:19 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/posts/k8s%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/</guid>
+      <description>22年的时候需要使用CICD的时候，看了一遍k8s相关的知识点。买了一本《深入剖析Kubernetes》，大致熟悉了常用的概念。 最近因为工作调动需要做</description>
+    </item>
+    
     <item>
       <title>Makefile要点简记</title>
       <link>https://yiuterran.github.io/blog/posts/makefile%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/</link>
