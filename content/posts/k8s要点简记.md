@@ -168,6 +168,7 @@ pod是k8s最小运行单元，1一个pod可以包含多个容器（使用同一�
 * `kubectl edit`直接编辑etcd中的API对象定义；
 * `kubectl set`直接修改某个字段，如`image`；
 * `kubectl patch`直接给API对象打补丁，补丁有具体的语法，详情可以查询文档；
+* `kubectl logs [-f] [-p] POD [-c CONTAINER]`，查看pod日志；
 
 ## k8s编排原理
 
@@ -644,7 +645,15 @@ HPA就是基于应用的metric server完成的.
 
 k8s鼓励应用直接把日志直接输出到stdout和stderr，它会将日志重定向到宿主机的文件中。
 
-## KubeVela项目
+## 明星项目和工具
 
-由于k8s配置过于复杂，对应用开发人员不太友好，该项目是为了减轻开发者负担而创建。
+* kubevela: 由于k8s配置过于复杂，对应用开发人员不太友好，该项目是为了减轻开发者负担而创建；
+* kubeclipper: kubeadm的图形化打包，方便安装集群；
+* helm: 类似apt的包管理工具，直接在k8s里面安装容器；
+* k3s: 简化的k8s，边缘机器使用；配合docker的叫做k3d；
+* kind: 利用docker快速部署集群，可以在本机开发时使用；完全兼容k8s；
+* krew: kubectl的插件管理工具；
+* Lens：多集群管理；
+* Capsule/vCluster：单集群多租户管理工具；后者更成熟；
+* SchemaHero：云原生的数据库迁移工具；
 

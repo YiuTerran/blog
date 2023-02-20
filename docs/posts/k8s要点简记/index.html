@@ -95,7 +95,7 @@
     },
     "headline": "K8s要点简记 | 应许之地","datePublished": "2023-02-10T09:30:19+08:00",
     "dateModified": "2023-02-10T09:30:19+08:00",
-    "wordCount":  12085 ,
+    "wordCount":  12305 ,
     "author": {
         "@type": "Person",
         "name": ["tryao"]
@@ -418,6 +418,7 @@ kubeadm join &lt;master ip:port&gt;
 <li><code>kubectl edit</code>直接编辑etcd中的API对象定义；</li>
 <li><code>kubectl set</code>直接修改某个字段，如<code>image</code>；</li>
 <li><code>kubectl patch</code>直接给API对象打补丁，补丁有具体的语法，详情可以查询文档；</li>
+<li><code>kubectl logs [-f] [-p] POD [-c CONTAINER]</code>，查看pod日志；</li>
 </ul>
 <h2 id="k8s编排原理">k8s编排原理</h2>
 <h3 id="pod原理">Pod原理</h3>
@@ -759,8 +760,18 @@ volumeBindingMode: WaitForFirstConsumer # 延迟绑定声明
 <p>开启apiserver的aggregator模式之后，会启动一个代理。代理之后还包括metric server，这里就是k8s本身promethus格式的metric api.</p>
 <p>HPA就是基于应用的metric server完成的.</p>
 <p>k8s鼓励应用直接把日志直接输出到stdout和stderr，它会将日志重定向到宿主机的文件中。</p>
-<h2 id="kubevela项目">KubeVela项目</h2>
-<p>由于k8s配置过于复杂，对应用开发人员不太友好，该项目是为了减轻开发者负担而创建。</p>
+<h2 id="明星项目和工具">明星项目和工具</h2>
+<ul>
+<li>kubevela: 由于k8s配置过于复杂，对应用开发人员不太友好，该项目是为了减轻开发者负担而创建；</li>
+<li>kubeclipper: kubeadm的图形化打包，方便安装集群；</li>
+<li>helm: 类似apt的包管理工具，直接在k8s里面安装容器；</li>
+<li>k3s: 简化的k8s，边缘机器使用；配合docker的叫做k3d；</li>
+<li>kind: 利用docker快速部署集群，可以在本机开发时使用；完全兼容k8s；</li>
+<li>krew: kubectl的插件管理工具；</li>
+<li>Lens：多集群管理；</li>
+<li>Capsule/vCluster：单集群多租户管理工具；后者更成熟；</li>
+<li>SchemaHero：云原生的数据库迁移工具；</li>
+</ul>
 
         </div>
         
@@ -913,7 +924,7 @@ volumeBindingMode: WaitForFirstConsumer # 延迟绑定声明
     </li>
     <li><a href="#cri与容器运行时">CRI与容器运行时</a></li>
     <li><a href="#k8s监控与日志">k8s监控与日志</a></li>
-    <li><a href="#kubevela项目">KubeVela项目</a></li>
+    <li><a href="#明星项目和工具">明星项目和工具</a></li>
   </ul>
 </nav>
 </div>
