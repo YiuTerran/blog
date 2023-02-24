@@ -17,7 +17,7 @@ draft: false
 
 最近因为工作调动需要做云原生相关的开发，有必要重新复习一遍相关概念，并深入部分章节的细节。
 
-## 容器部分
+## 容器基础
 
 ### 容器原理
 
@@ -656,4 +656,139 @@ k8s鼓励应用直接把日志直接输出到stdout和stderr，它会将日志�
 * Lens：多集群管理；
 * Capsule/vCluster：单集群多租户管理工具；后者更成熟；
 * SchemaHero：云原生的数据库迁移工具；
+
+## k8s国内安装
+
+可以参考这个[repo](https://github.com/mingcheng/deploy-k8s-within-aliyun-mirror)，主要使用阿里云的镜像来安装，当然完整的流程还是要参考[k8s官方流程](https://kubernetes.io/zh-cn/docs/setup/production-environment/tools/)。
+
+由于装的时候踩了不少坑，这里还是记录一下详细流程。
+
+### 准备工作
+
+linux配置：
+
+1. 关闭swap，注意是永久关闭，不要临时关闭，否则重启之后kubelet运行不了。
+2. 配置内核参数，先启用对应的内核模块：
+
+```bash
+ modprobe bridge
+ modprobe br_netfilter
+```
+
+上面是临时修改。如果要永久修改，不同发行版不太一样，ubuntu只要修改`/etc/modules`，在里面写入上面两个模块的名字即可。
+
+然后编辑`/etc/sysctl.conf`，加入：
+
+```ini
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+
+net.ipv4.ip_forward = 1
+net.ipv6.conf.all.forwarding = 0
+net.bridge.bridge-nf-call-ip6tables = 0
+
+vm.swappiness = 0
+```
+
+这个配置里面禁用了ipv6，如果想要启用双栈，则应参考[这里](https://kubernetes.io/zh-cn/docs/setup/production-environment/tools/kubeadm/dual-stack-support/)，一般应该是不用启用的。运行`sysctl -p`生效。
+
+3. 安装运行时，为了适配v1.24之后的k8s，这里不再安装docker，仅安装containerd。参考[官方文档](https://github.com/containerd/containerd/blob/main/docs/getting-started.md)安装即可，如果使用apt/dnf安装，需要将CNI插件手动下载并解压到指定位置；
+4. 配置containerd，需要配置地方比较多，主要是：
+
+```toml
+  [plugins."io.containerd.grpc.v1.cri"]
+    sandbox_image = "registry.aliyuncs.com/google_containers/pause:3.6"
+
+      [plugins."io.containerd.grpc.v1.cri".registry.mirrors."docker.io"]
+      endpoint = ["https://mirror.baiduce.com","https://dockerproxy.com"]
+      [plugins."io.containerd.grpc.v1.cri".registry.mirrors."k8s.gcr.io"]
+      endpoint = ["registry.aliyuncs.com/google_containers"]
+
+    [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
+      ...
+      [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+        SystemdCgroup = true
+```
+
+5. 安装kubelet/kubectl和kubeadm，这里必须用阿里云镜像了，参考[这里](https://developer.aliyun.com/mirror/kubernetes/)，修改apt/yum的配置，然后安装**指定版本**并冻结版本即可。
+6. 使用`systemctl enable containerd && systemctl start containerd`启动运行时；kubelet可能也需要类似操作；
+7. 多台主机的主机名不能重复；
+8. 如果是搭建多master的HA模式，需要配置nginx/haproxy做LB，或者使用云主机商提供的LB；
+
+### 安装master
+
+以上准备工作完成后，就可以用kubeadm进行安装了，配置文件参考（v1.23）：
+
+```yaml
+apiVersion: kubeadm.k8s.io/v1beta3
+kind: InitConfiguration
+localAPIEndpoint:
+#这里改成你的实际ip地址
+  advertiseAddress: 172.16.20.14
+  bindPort: 6443
+nodeRegistration:
+  criSocket: unix:///var/run/containerd/containerd.sock
+  imagePullPolicy: Always
+---
+apiVersion: kubeadm.k8s.io/v1beta3
+kind: ClusterConfiguration
+#这里同样需要改成实际ip，如果有LB，则设为LB的入口地址（可以是域名）
+controlPlaneEndpoint: 172.16.20.14:6443
+imageRepository: registry.cn-hangzhou.aliyuncs.com/google_containers
+# 改为你需要的版本
+kubernetesVersion: v1.23.16
+networking:
+  # 这里必须和flannel的配置一致
+  podSubnet: "10.244.0.0/16"
+---
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+# 节点pod限制可以参考自己的机器配置
+maxPods: 200
+---
+apiVersion: kubeproxy.config.k8s.io/v1alpha1
+kind: KubeProxyConfiguration
+mode: "ipvs"
+ipvs:
+  strictARP: true
+```
+
+根据需求修改上面的配置，之后跑`kubeadm init --config xxx.yaml`用上面的文件初始化控制面.
+
+根据提示操作，root/非root用户都需要配置一下。
+
+运行`kubectl get nodes`，确认一切正常了。
+
+如果配置有误，可以`kubeadm reset`重置，然后重新init.
+
+配置CNI：
+
+```bash
+kubectl apply -f https://ghproxy.com/https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
+```
+
+直接跑flannel的yml即可.
+
+完成之后要看flannel能否正常work：
+
+```
+kubectl get pods -n kube-flannel
+```
+
+最后是配置CSI，不过这一步是可选，如果有集群可以考虑使用Rook+Ceph，否则使用host-path也够了。
+
+master节点默认禁止调度用户pod，可以通过移除taint取消限制：
+
+```
+kubectl taint nodes --all node-role.kubernetes.io/master-
+```
+
+helm的安装需要翻墙，建议直接下载二进制文件上传过去。chart可以用微软的仓库，或者华为的：
+
+```
+helm repo add microsoft http://mirror.azure.cn/kubernetes/charts/
+```
 
