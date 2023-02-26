@@ -661,17 +661,27 @@ k8s鼓励应用直接把日志直接输出到stdout和stderr，它会将日志�
 
 可以参考这个[repo](https://github.com/mingcheng/deploy-k8s-within-aliyun-mirror)，主要使用阿里云的镜像来安装，当然完整的流程还是要参考[k8s官方流程](https://kubernetes.io/zh-cn/docs/setup/production-environment/tools/)。
 
+update: 建议使用[DaoCloud](https://github.com/DaoCloud/public-image-mirror)的工具来安装，更加无侵入和傻瓜化。
+
 由于装的时候踩了不少坑，这里还是记录一下详细流程。
 
 ### 准备工作
 
 linux配置：
 
-1. 关闭swap，注意是永久关闭，不要临时关闭，否则重启之后kubelet运行不了。
-2. 配置内核参数，先启用对应的内核模块：
+1. 关闭swap，注意是永久关闭，不要临时关闭，否则重启之后kubelet运行不了：
 
 ```bash
- modprobe bridge
+sed -ri 's/.*swap.*/#&/' /etc/fstab
+swapoff  -a
+```
+
+2. 配置静态ip，如果是云端服务，需要购买弹性ip；
+
+3. 配置内核参数，先启用对应的内核模块(ubuntu可能需要先用apt install bridge-utils)：
+
+```bash
+ modprobe overlay
  modprobe br_netfilter
 ```
 
@@ -693,10 +703,11 @@ net.bridge.bridge-nf-call-ip6tables = 0
 vm.swappiness = 0
 ```
 
-这个配置里面禁用了ipv6，如果想要启用双栈，则应参考[这里](https://kubernetes.io/zh-cn/docs/setup/production-environment/tools/kubeadm/dual-stack-support/)，一般应该是不用启用的。运行`sysctl -p`生效。
+这个配置里面禁用了ipv6，如果想要启用双栈，则应参考[这里](https://kubernetes.io/zh-cn/docs/setup/production-environment/tools/kubeadm/dual-stack-support/)，一般应该是不用启用的。修改之后运行`sysctl -p`生效。
 
-3. 安装运行时，为了适配v1.24之后的k8s，这里不再安装docker，仅安装containerd。参考[官方文档](https://github.com/containerd/containerd/blob/main/docs/getting-started.md)安装即可，如果使用apt/dnf安装，需要将CNI插件手动下载并解压到指定位置；
-4. 配置containerd，需要配置地方比较多，主要是：
+4. 安装容器运行时，为了适配v1.24之后的k8s，这里不再安装docker，仅安装containerd。参考[官方文档](https://github.com/containerd/containerd/blob/main/docs/getting-started.md)安装即可，如果使用apt/dnf安装，需要将CNI插件手动下载并解压到指定位置；
+
+5. 配置containerd，需要配置地方比较多，主要是：
 
 ```toml
   [plugins."io.containerd.grpc.v1.cri"]
@@ -715,7 +726,7 @@ vm.swappiness = 0
 
 5. 安装kubelet/kubectl和kubeadm，这里必须用阿里云镜像了，参考[这里](https://developer.aliyun.com/mirror/kubernetes/)，修改apt/yum的配置，然后安装**指定版本**并冻结版本即可。
 6. 使用`systemctl enable containerd && systemctl start containerd`启动运行时；kubelet可能也需要类似操作；
-7. 多台主机的主机名不能重复；
+7. 集群中的多台主机的主机名不能重复；
 8. 如果是搭建多master的HA模式，需要配置nginx/haproxy做LB，或者使用云主机商提供的LB；
 
 ### 安装master
@@ -735,13 +746,13 @@ nodeRegistration:
 ---
 apiVersion: kubeadm.k8s.io/v1beta3
 kind: ClusterConfiguration
-#这里同样需要改成实际ip，如果有LB，则设为LB的入口地址（可以是域名）
+# 这里同样需要改成实际ip，如果有LB，则设为LB的入口地址（可以是域名）
 controlPlaneEndpoint: 172.16.20.14:6443
 imageRepository: registry.cn-hangzhou.aliyuncs.com/google_containers
 # 改为你需要的版本
 kubernetesVersion: v1.23.16
 networking:
-  # 这里必须和flannel的配置一致
+  # 这里必须和flannel的配置一致，用其他CNI实现则需要参考插件的描述
   podSubnet: "10.244.0.0/16"
 ---
 apiVersion: kubelet.config.k8s.io/v1beta1
@@ -764,6 +775,8 @@ ipvs:
 
 如果配置有误，可以`kubeadm reset`重置，然后重新init.
 
+### 配置插件
+
 配置CNI：
 
 ```bash
@@ -778,9 +791,9 @@ kubectl apply -f https://ghproxy.com/https://github.com/flannel-io/flannel/relea
 kubectl get pods -n kube-flannel
 ```
 
-最后是配置CSI，不过这一步是可选，如果有集群可以考虑使用Rook+Ceph，否则使用host-path也够了。
+配置CSI，不过这一步是可选，如果有集群可以考虑使用Rook+Ceph，否则使用host-path也够了。
 
-master节点默认禁止调度用户pod，可以通过移除taint取消限制：
+master节点默认禁止调度用户pod，可以通过移除taint取消限制（for 1.24之前，之后的可以移除掉NoSchdule）：
 
 ```
 kubectl taint nodes --all node-role.kubernetes.io/master-
@@ -792,3 +805,10 @@ helm的安装需要翻墙，建议直接下载二进制文件上传过去。char
 helm repo add microsoft http://mirror.azure.cn/kubernetes/charts/
 ```
 
+### 安装ingress
+
+如果自己测试的话用NodePort模式就够了，稍微大一点规模的微服务，一般都是用ingress的.
+
+ingress的安装其实也是`kubectl apply -f`，问题是这个镜像要从Google拉，所以不能直接用。将yaml下载到本地，替换`registry.k8s.io`为`k8s.m.daocloud.io`，然后再apply即可。
+
+后面需要配置Nginx，跟传统的其实差不多，只是upstream是动态的cluster domain.
