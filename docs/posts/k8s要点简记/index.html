@@ -95,7 +95,7 @@
     },
     "headline": "K8s要点简记 | 应许之地","datePublished": "2023-02-10T09:30:19+08:00",
     "dateModified": "2023-02-10T09:30:19+08:00",
-    "wordCount":  12305 ,
+    "wordCount":  13833 ,
     "author": {
         "@type": "Person",
         "name": ["tryao"]
@@ -237,7 +237,7 @@
     </div>
     <div class="me-6 my-2">
         <i class="fas fa-clock me-1"></i>
-        <span>25分钟阅读时长</span>
+        <span>28分钟阅读时长</span>
     </div>
     
     
@@ -251,7 +251,7 @@
         <div class="content">
             <p>22年的时候需要使用CICD的时候，看了一遍k8s相关的知识点。买了一本《深入剖析Kubernetes》，大致熟悉了常用的概念。</p>
 <p>最近因为工作调动需要做云原生相关的开发，有必要重新复习一遍相关概念，并深入部分章节的细节。</p>
-<h2 id="容器部分">容器部分</h2>
+<h2 id="容器基础">容器基础</h2>
 <h3 id="容器原理">容器原理</h3>
 <p>容器是云原生时代的进程。</p>
 <p>之前大家都是在ECS这种虚拟机里面部署应用，操作系统一般是CentOS/Debian之类的Linux系统，服务通过Supervisor/Systemd等进程管理工具进行管理，CPU/内存等容量规划是以虚拟机为单位的，环境一般使用bash/python脚本进行初始化，监控、服务集群扩容和缩容都是运维手动配置。</p>
@@ -772,6 +772,128 @@ volumeBindingMode: WaitForFirstConsumer # 延迟绑定声明
 <li>Capsule/vCluster：单集群多租户管理工具；后者更成熟；</li>
 <li>SchemaHero：云原生的数据库迁移工具；</li>
 </ul>
+<h2 id="k8s国内安装">k8s国内安装</h2>
+<p>可以参考这个<a href="https://github.com/mingcheng/deploy-k8s-within-aliyun-mirror">repo</a>，主要使用阿里云的镜像来安装，当然完整的流程还是要参考<a href="https://kubernetes.io/zh-cn/docs/setup/production-environment/tools/">k8s官方流程</a>。</p>
+<p>update: 建议使用<a href="https://github.com/DaoCloud/public-image-mirror">DaoCloud</a>的工具来安装，更加无侵入和傻瓜化。</p>
+<p>由于装的时候踩了不少坑，这里还是记录一下详细流程。</p>
+<h3 id="准备工作">准备工作</h3>
+<p>linux配置：</p>
+<ol>
+<li>关闭swap，注意是永久关闭，不要临时关闭，否则重启之后kubelet运行不了：</li>
+</ol>
+<pre><code class="language-bash">sed -ri 's/.*swap.*/#&amp;/' /etc/fstab
+swapoff  -a
+</code></pre>
+<ol start="2">
+<li>
+<p>配置静态ip，如果是云端服务，需要购买弹性ip；</p>
+</li>
+<li>
+<p>配置内核参数，先启用对应的内核模块(ubuntu可能需要先用apt install bridge-utils)：</p>
+</li>
+</ol>
+<pre><code class="language-bash"> modprobe overlay
+ modprobe br_netfilter
+</code></pre>
+<p>上面是临时修改。如果要永久修改，不同发行版不太一样，ubuntu只要修改<code>/etc/modules</code>，在里面写入上面两个模块的名字即可。</p>
+<p>然后编辑<code>/etc/sysctl.conf</code>，加入：</p>
+<pre><code class="language-ini">net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+
+net.ipv4.ip_forward = 1
+net.ipv6.conf.all.forwarding = 0
+net.bridge.bridge-nf-call-ip6tables = 0
+
+vm.swappiness = 0
+</code></pre>
+<p>这个配置里面禁用了ipv6，如果想要启用双栈，则应参考<a href="https://kubernetes.io/zh-cn/docs/setup/production-environment/tools/kubeadm/dual-stack-support/">这里</a>，一般应该是不用启用的。修改之后运行<code>sysctl -p</code>生效。</p>
+<ol start="4">
+<li>
+<p>安装容器运行时，为了适配v1.24之后的k8s，这里不再安装docker，仅安装containerd。参考<a href="https://github.com/containerd/containerd/blob/main/docs/getting-started.md">官方文档</a>安装即可，如果使用apt/dnf安装，需要将CNI插件手动下载并解压到指定位置；</p>
+</li>
+<li>
+<p>配置containerd，需要配置地方比较多，主要是：</p>
+</li>
+</ol>
+<pre><code class="language-toml">  [plugins.&quot;io.containerd.grpc.v1.cri&quot;]
+    sandbox_image = &quot;registry.aliyuncs.com/google_containers/pause:3.6&quot;
+
+      [plugins.&quot;io.containerd.grpc.v1.cri&quot;.registry.mirrors.&quot;docker.io&quot;]
+      endpoint = [&quot;https://mirror.baiduce.com&quot;,&quot;https://dockerproxy.com&quot;]
+      [plugins.&quot;io.containerd.grpc.v1.cri&quot;.registry.mirrors.&quot;k8s.gcr.io&quot;]
+      endpoint = [&quot;registry.aliyuncs.com/google_containers&quot;]
+
+    [plugins.&quot;io.containerd.grpc.v1.cri&quot;.containerd.runtimes.runc]
+      ...
+      [plugins.&quot;io.containerd.grpc.v1.cri&quot;.containerd.runtimes.runc.options]
+        SystemdCgroup = true
+</code></pre>
+<ol start="5">
+<li>安装kubelet/kubectl和kubeadm，这里必须用阿里云镜像了，参考<a href="https://developer.aliyun.com/mirror/kubernetes/">这里</a>，修改apt/yum的配置，然后安装<strong>指定版本</strong>并冻结版本即可。</li>
+<li>使用<code>systemctl enable containerd &amp;&amp; systemctl start containerd</code>启动运行时；kubelet可能也需要类似操作；</li>
+<li>集群中的多台主机的主机名不能重复；</li>
+<li>如果是搭建多master的HA模式，需要配置nginx/haproxy做LB，或者使用云主机商提供的LB；</li>
+</ol>
+<h3 id="安装master">安装master</h3>
+<p>以上准备工作完成后，就可以用kubeadm进行安装了，配置文件参考（v1.23）：</p>
+<pre><code class="language-yaml">apiVersion: kubeadm.k8s.io/v1beta3
+kind: InitConfiguration
+localAPIEndpoint:
+#这里改成你的实际ip地址
+  advertiseAddress: 172.16.20.14
+  bindPort: 6443
+nodeRegistration:
+  criSocket: unix:///var/run/containerd/containerd.sock
+  imagePullPolicy: Always
+---
+apiVersion: kubeadm.k8s.io/v1beta3
+kind: ClusterConfiguration
+# 这里同样需要改成实际ip，如果有LB，则设为LB的入口地址（可以是域名）
+controlPlaneEndpoint: 172.16.20.14:6443
+imageRepository: registry.cn-hangzhou.aliyuncs.com/google_containers
+# 改为你需要的版本
+kubernetesVersion: v1.23.16
+networking:
+  # 这里必须和flannel的配置一致，用其他CNI实现则需要参考插件的描述
+  podSubnet: &quot;10.244.0.0/16&quot;
+---
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+# 节点pod限制可以参考自己的机器配置
+maxPods: 200
+---
+apiVersion: kubeproxy.config.k8s.io/v1alpha1
+kind: KubeProxyConfiguration
+mode: &quot;ipvs&quot;
+ipvs:
+  strictARP: true
+</code></pre>
+<p>根据需求修改上面的配置，之后跑<code>kubeadm init --config xxx.yaml</code>用上面的文件初始化控制面.</p>
+<p>根据提示操作，root/非root用户都需要配置一下。</p>
+<p>运行<code>kubectl get nodes</code>，确认一切正常了。</p>
+<p>如果配置有误，可以<code>kubeadm reset</code>重置，然后重新init.</p>
+<h3 id="配置插件">配置插件</h3>
+<p>配置CNI：</p>
+<pre><code class="language-bash">kubectl apply -f https://ghproxy.com/https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
+</code></pre>
+<p>直接跑flannel的yml即可.</p>
+<p>完成之后要看flannel能否正常work：</p>
+<pre><code>kubectl get pods -n kube-flannel
+</code></pre>
+<p>配置CSI，不过这一步是可选，如果有集群可以考虑使用Rook+Ceph，否则使用host-path也够了。</p>
+<p>master节点默认禁止调度用户pod，可以通过移除taint取消限制（for 1.24之前，之后的可以移除掉NoSchdule）：</p>
+<pre><code>kubectl taint nodes --all node-role.kubernetes.io/master-
+</code></pre>
+<p>helm的安装需要翻墙，建议直接下载二进制文件上传过去。chart可以用微软的仓库，或者华为的：</p>
+<pre><code>helm repo add microsoft http://mirror.azure.cn/kubernetes/charts/
+</code></pre>
+<h3 id="安装ingress">安装ingress</h3>
+<p>如果自己测试的话用NodePort模式就够了，稍微大一点规模的微服务，一般都是用ingress的.</p>
+<p>ingress的安装其实也是<code>kubectl apply -f</code>，问题是这个镜像要从Google拉，所以不能直接用。将yaml下载到本地，替换<code>registry.k8s.io</code>为<code>k8s.m.daocloud.io</code>，然后再apply即可。</p>
+<p>后面需要配置Nginx，跟传统的其实差不多，只是upstream是动态的cluster domain.</p>
 
         </div>
         
@@ -826,6 +948,9 @@ volumeBindingMode: WaitForFirstConsumer # 延迟绑定声明
 <div class="flex flex-col md:flex-row md:justify-between -mx-2 mt-4 px-2 pt-4 border-t">
     <div>
         
+        <span class="block font-bold">上一页</span>
+        <a href="https://yiuterran.github.io/blog/posts/kubeedge%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/" class="block">KubeEdge要点笔记</a>
+        
     </div>
     <div class="md:text-right mt-4 md:mt-0">
         
@@ -865,7 +990,7 @@ volumeBindingMode: WaitForFirstConsumer # 延迟绑定声明
 <div class="sticky-toc hidden lg:block px-6 pb-6 ">
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#容器部分">容器部分</a>
+    <li><a href="#容器基础">容器基础</a>
       <ul>
         <li><a href="#容器原理">容器原理</a></li>
         <li><a href="#镜像原理">镜像原理</a></li>
@@ -925,6 +1050,14 @@ volumeBindingMode: WaitForFirstConsumer # 延迟绑定声明
     <li><a href="#cri与容器运行时">CRI与容器运行时</a></li>
     <li><a href="#k8s监控与日志">k8s监控与日志</a></li>
     <li><a href="#明星项目和工具">明星项目和工具</a></li>
+    <li><a href="#k8s国内安装">k8s国内安装</a>
+      <ul>
+        <li><a href="#准备工作">准备工作</a></li>
+        <li><a href="#安装master">安装master</a></li>
+        <li><a href="#配置插件">配置插件</a></li>
+        <li><a href="#安装ingress">安装ingress</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
 </div>

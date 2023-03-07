@@ -223,5 +223,5 @@ launch{
 }
 ```
 
-2. 当然实际使用的时候，还是主要用`async`, `await`关键字；
-3. kotlin内置了Actor支持，当然也可以用akka；
+2. kotlin内置了Actor支持，当然也可以用akka；
+3. 待续，这里估计要看一下底层原理才知道kotlin的协程和其他的区别；

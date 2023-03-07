@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width">
 
 
-<title>devops | 应许之地</title>
+<title>edge | 应许之地</title>
 
 <meta name="generator" content="Hugo Eureka 0.9.0" />
 <link rel="stylesheet" href="https://yiuterran.github.io/blog/css/eureka.min.css">
@@ -78,8 +78,8 @@
       "item":"https://yiuterran.github.io/blog/tags/"},{
       "@type": "ListItem",
       "position": 2 ,
-      "name":"devops",
-      "item":"https://yiuterran.github.io/blog/tags/devops/"}]
+      "name":"edge",
+      "item":"https://yiuterran.github.io/blog/tags/edge/"}]
 }
 </script>
 
@@ -99,26 +99,20 @@
         },{
             "@type":"ListItem",
             "position":  2 ,
-            "name": "SRE读书笔记",
-            "description": "SRE相关的书籍，截止目前google出了2本，分别是2016年的的《Site Reliability Engineering: How Google Runs Production Systems》和2020年的《The Site Reliability Workbook》",
-            "url": "https://yiuterran.github.io/blog/posts/sre%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"
-        },{
-            "@type":"ListItem",
-            "position":  3 ,
-            "name": "Zabbix配置记录",
-            "description": "安装服务 这里演示的是物理机环境监控场景，容器场景还是更推荐k8s+prom来搞。 版本是zabbix6.0 LTS，官方已经不提供CentOS7的安装包了",
-            "url": "https://yiuterran.github.io/blog/posts/zabbix%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/"
+            "name": "KubeEdge要点笔记",
+            "description": "安装流程 首先要在云端安装k8s，理论上只需要master节点，可以没有worker，换句话说可以是一个单节点集群（但是要关闭NoSchedule的ta",
+            "url": "https://yiuterran.github.io/blog/posts/kubeedge%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/"
         }
     ]
 }
-</script><meta property="og:title" content="devops | 应许之地" />
+</script><meta property="og:title" content="edge | 应许之地" />
 <meta property="og:type" content="website" />
 
 
 <meta property="og:image" content="https://yiuterran.github.io/blog/images/icon.png">
 
 
-<meta property="og:url" content="https://yiuterran.github.io/blog/tags/devops/" />
+<meta property="og:url" content="https://yiuterran.github.io/blog/tags/edge/" />
 
 
 
@@ -149,7 +143,7 @@
 <meta property="article:section" content="tags" />
 
 
-<link rel="alternate" type="application/rss+xml" href="https://yiuterran.github.io/blog/tags/devops/index.xml" title="应许之地" />
+<link rel="alternate" type="application/rss+xml" href="https://yiuterran.github.io/blog/tags/edge/index.xml" title="应许之地" />
 
 <body class="flex flex-col min-h-screen">
   <header class="fixed flex items-center w-full min-h-16 ps-scrollbar z-50 bg-secondary-bg shadow-sm">
@@ -221,7 +215,7 @@
     <div class="ps-scrollbar">
       <div class="w-full max-w-screen-xl lg:px-4 xl:px-8 mx-auto">
 <article class="mx-6 my-8">
-    <h1 class="font-bold text-3xl text-primary-text">devops</h1>
+    <h1 class="font-bold text-3xl text-primary-text">edge</h1>
     
 </article>
 <div class="bg-secondary-bg rounded px-6">
@@ -266,56 +260,22 @@
   
   <div class="w-full ">
     <div class="mb-4">
-  <a href="https://yiuterran.github.io/blog/posts/sre%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" class="font-bold text-xl hover:text-eureka">SRE读书笔记</a>
+  <a href="https://yiuterran.github.io/blog/posts/kubeedge%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/" class="font-bold text-xl hover:text-eureka">KubeEdge要点笔记</a>
 </div>
 <div class="content">
   
-    SRE相关的书籍，截止目前google出了2本，分别是2016年的的《Site Reliability Engineering: How Google Runs Production Systems》和2020年的《The Site Reliability Workbook》
+    安装流程 首先要在云端安装k8s，理论上只需要master节点，可以没有worker，换句话说可以是一个单节点集群（但是要关闭NoSchedule的ta
   
 </div>
 
 <div class="flex flex-wrap flex-row items-center mt-2 text-tertiary-text">
     <div class="me-6 my-2">
         <i class="fas fa-calendar me-1"></i>
-        <span>2022-09-22</span>
+        <span>2023-02-21</span>
     </div>
     <div class="me-6 my-2">
         <i class="fas fa-clock me-1"></i>
-        <span>11分钟阅读时长</span>
-    </div>
-    
-    
-
-    
-</div>
-
-  </div>
-
-  
-</div>
-  </div>
-  
-  <div class="py-6">
-    <div class="flex flex-col-reverse lg:flex-row justify-between">
-  
-  <div class="w-full ">
-    <div class="mb-4">
-  <a href="https://yiuterran.github.io/blog/posts/zabbix%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/" class="font-bold text-xl hover:text-eureka">Zabbix配置记录</a>
-</div>
-<div class="content">
-  
-    安装服务 这里演示的是物理机环境监控场景，容器场景还是更推荐k8s&#43;prom来搞。 版本是zabbix6.0 LTS，官方已经不提供CentOS7的安装包了
-  
-</div>
-
-<div class="flex flex-wrap flex-row items-center mt-2 text-tertiary-text">
-    <div class="me-6 my-2">
-        <i class="fas fa-calendar me-1"></i>
-        <span>2022-07-13</span>
-    </div>
-    <div class="me-6 my-2">
-        <i class="fas fa-clock me-1"></i>
-        <span>6分钟阅读时长</span>
+        <span>2分钟阅读时长</span>
     </div>
     
     

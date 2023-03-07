@@ -8,7 +8,16 @@
     <language>zh</language>
     <copyright>&amp;copy; 2021 &lt;a href=&#34;https://github.com/YiuTerran&#34;&gt;tryao&lt;/a&gt;
 </copyright>
-    <lastBuildDate>Thu, 22 Sep 2022 10:01:11 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/tags/devops/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 06 Mar 2023 14:37:28 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/tags/devops/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>边缘服务器管理工具选型</title>
+      <link>https://yiuterran.github.io/blog/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/</link>
+      <pubDate>Mon, 06 Mar 2023 14:37:28 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/</guid>
+      <description>这里我们主要的需求是能够穿透内网管理服务器，服务器大部分情况下应当是linux，但是也可能是windows。我们的服务要通过API和这个服务器管理软件</description>
+    </item>
+    
     <item>
       <title>SRE读书笔记</title>
       <link>https://yiuterran.github.io/blog/posts/sre%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/</link>

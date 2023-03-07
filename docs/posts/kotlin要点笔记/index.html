@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang='zh' dir='ltr' ><meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+<title>Kotlin要点笔记 | 应许之地</title>
+
+<meta name="generator" content="Hugo Eureka 0.9.0" />
+<link rel="stylesheet" href="https://yiuterran.github.io/blog/css/eureka.min.css">
+<script defer src="https://yiuterran.github.io/blog/js/eureka.min.js"></script>
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload"
+  href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Noto+Serif+SC:wght@400;600;700&display=swap"
+  as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/styles/solarized-light.min.css"
+   media="print"
+  onload="this.media='all';this.onload=null" crossorigin>
+<script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/highlight.min.js"
+   crossorigin></script>
+
+  <script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/languages/dart.min.js"
+     crossorigin></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/js/all.min.js"
+   integrity="sha256-uNYoXefWRqv&#43;PsIF/OflNmwtKM4lStn9yrz2gVl6ymo="  crossorigin></script>
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+   integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3&#43;Aro6EYUG4&#43;cU&#43;KJWu/X"  media="print"
+  onload="this.media='all';this.onload=null" crossorigin>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js" 
+  integrity="sha384-g7c&#43;Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI&#43;sEnkvrMWph2EDg4"  crossorigin></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
+   integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC&#43;Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa"  crossorigin></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: "$$", right: "$$", display: true },
+        { left: "$", right: "$", display: false },
+        { left: "\\(", right: "\\)", display: false },
+        { left: "\\[", right: "\\]", display: true }
+      ],
+    });
+  });
+</script>
+
+
+<script defer src="https://cdn.jsdelivr.net/npm/mermaid@8.9.2/dist/mermaid.min.js" 
+  integrity="sha256-Zmpaaj&#43;GXFsPF5WdPArSrnW3b30dovldeKsW00xBVwE="  crossorigin></script>
+<link rel="preconnect" href="https://www.google-analytics.com" crossorigin>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-C0R8DENDJ0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-C0R8DENDJ0');
+</script>
+
+
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
+
+<meta name="description"
+  content="实际上学习kotlin的动力一直不足，因为java is enough. 不过最近打算写一个QQ机器人玩，现在流行的框架是基于kotlin的，虽然可以用HTTP API进行">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+      "@type": "ListItem",
+      "position": 1 ,
+      "name":"文章列表",
+      "item":"https://yiuterran.github.io/blog/posts/"},{
+      "@type": "ListItem",
+      "position": 2 ,
+      "name":"Kotlin要点笔记",
+      "item":"https://yiuterran.github.io/blog/posts/kotlin%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/"}]
+}
+</script>
+
+
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://yiuterran.github.io/blog/posts/kotlin%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/"
+    },
+    "headline": "Kotlin要点笔记 | 应许之地","datePublished": "2023-03-05T12:58:37+08:00",
+    "dateModified": "2023-03-05T12:58:37+08:00",
+    "wordCount":  3926 ,
+    "author": {
+        "@type": "Person",
+        "name": ["tryao"]
+    },
+    "publisher": {
+        "@type": "Person",
+        "name": "C. Wang",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://yiuterran.github.io/blog/images/icon.png"
+        }
+        },
+    "description": "实际上学习kotlin的动力一直不足，因为java is enough. 不过最近打算写一个QQ机器人玩，现在流行的框架是基于kotlin的，虽然可以用HTTP API进行"
+}
+</script><meta property="og:title" content="Kotlin要点笔记 | 应许之地" />
+<meta property="og:type" content="article" />
+
+
+<meta property="og:image" content="https://yiuterran.github.io/blog/images/icon.png">
+
+
+<meta property="og:url" content="https://yiuterran.github.io/blog/posts/kotlin%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/" />
+
+
+
+
+<meta property="og:description" content="实际上学习kotlin的动力一直不足，因为java is enough. 不过最近打算写一个QQ机器人玩，现在流行的框架是基于kotlin的，虽然可以用HTTP API进行" />
+
+
+
+
+<meta property="og:locale" content="zh" />
+
+
+
+
+<meta property="og:site_name" content="应许之地" />
+
+
+
+
+
+
+<meta property="article:published_time" content="2023-03-05T12:58:37&#43;08:00" />
+
+
+<meta property="article:modified_time" content="2023-03-05T12:58:37&#43;08:00" />
+
+
+
+<meta property="article:section" content="posts" />
+
+
+<meta property="article:tag" content="kotlin" />
+
+
+
+
+
+<body class="flex flex-col min-h-screen">
+  <header class="fixed flex items-center w-full min-h-16 ps-scrollbar z-50 bg-secondary-bg shadow-sm">
+    <div class="w-full max-w-screen-xl mx-auto"><script>
+    let storageColorScheme = localStorage.getItem("lightDarkMode")
+    if (((storageColorScheme == 'Auto' || storageColorScheme == null) && window.matchMedia("(prefers-color-scheme: dark)").matches) || storageColorScheme == "Dark") {
+        document.getElementsByTagName('html')[0].classList.add('dark')
+    }
+</script>
+<nav class="flex items-center justify-between flex-wrap px-4 py-4 md:py-0">
+    <a href="https://yiuterran.github.io/blog/" class="me-6 text-primary-text text-xl font-bold">应许之地</a>
+    <button id="navbar-btn" class="md:hidden flex items-center px-3 py-2" aria-label="Open Navbar">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div id="target"
+        class="hidden block md:flex md:grow md:justify-between md:items-center w-full md:w-auto text-primary-text z-20">
+        <div class="md:flex md:h-16 text-sm md:grow pb-4 md:pb-0 border-b md:border-b-0">
+            <a href="https://yiuterran.github.io/blog/authors/tryao/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  border-transparent  me-4">作者</a>
+            <a href="https://yiuterran.github.io/blog/posts/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  selected-menu-item  me-4">文章</a>
+        </div>
+
+        <div class="flex">
+            <div class="relative pt-4 md:pt-0">
+                <div class="cursor-pointer hover:text-eureka" id="lightDarkMode">
+                    <i class="fas fa-adjust"></i>
+                </div>
+                <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-30" id="is-open">
+                </div>
+                <div class="absolute flex flex-col start-0 md:start-auto end-auto md:end-0 hidden bg-secondary-bg w-48 rounded py-2 border border-tertiary-bg cursor-pointer z-40"
+                    id='lightDarkOptions'>
+                    <span class="px-4 py-1 hover:text-eureka" name="Light">浅色</span>
+                    <span class="px-4 py-1 hover:text-eureka" name="Dark">深色</span>
+                    <span class="px-4 py-1 hover:text-eureka" name="Auto">自动</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-0" id="is-open-mobile">
+    </div>
+
+</nav>
+<script>
+    
+    let element = document.getElementById('lightDarkMode')
+    if (storageColorScheme == null || storageColorScheme == 'Auto') {
+        document.addEventListener('DOMContentLoaded', () => {
+            window.matchMedia("(prefers-color-scheme: dark)").addEventListener('change', switchDarkMode)
+        })
+    } else if (storageColorScheme == "Light") {
+        element.firstElementChild.classList.remove('fa-adjust')
+        element.firstElementChild.setAttribute("data-icon", 'sun')
+        element.firstElementChild.classList.add('fa-sun')
+    } else if (storageColorScheme == "Dark") {
+        element.firstElementChild.classList.remove('fa-adjust')
+        element.firstElementChild.setAttribute("data-icon", 'moon')
+        element.firstElementChild.classList.add('fa-moon')
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        getcolorscheme();
+        switchBurger();
+    });
+</script>
+</div>
+  </header>
+  <main class="grow pt-16">
+    <div class="ps-scrollbar">
+      <div class="w-full max-w-screen-xl lg:px-4 xl:px-8 mx-auto">
+
+
+<div class="grid grid-cols-2 lg:grid-cols-8 gap-4 lg:pt-12">
+    <div
+        class="col-span-2  lg:col-span-6 bg-secondary-bg rounded px-6 py-8">
+        <h1 class="font-bold text-3xl text-primary-text">Kotlin要点笔记</h1>
+        <div class="flex flex-wrap flex-row items-center mt-2 text-tertiary-text">
+    <div class="me-6 my-2">
+        <i class="fas fa-calendar me-1"></i>
+        <span>2023-03-05</span>
+    </div>
+    <div class="me-6 my-2">
+        <i class="fas fa-clock me-1"></i>
+        <span>8分钟阅读时长</span>
+    </div>
+    
+    
+
+    
+</div>
+        
+        
+        
+
+        <div class="content">
+            <p>实际上学习kotlin的动力一直不足，因为java is enough. 不过最近打算写一个QQ机器人玩，现在流行的框架是基于kotlin的，虽然可以用HTTP API进行桥接，但是这样部署太麻烦，而且性能有影响，索性简单的学习一下kotlin，然后直接扩展。用的教材是阿里的《kotlin核心编程》。</p>
+<h2 id="语法要点">语法要点</h2>
+<ol>
+<li>var声明变量，val声明常量（即java里面的final，注意不是immutable），格式类似golang，除了类型前面要加冒号；</li>
+<li>val声明的变量可以不立即赋值；</li>
+<li>支持通过<code>fun</code>定义函数，也支持函数闭包，格式也类似golang，不过返回类型之前要加<code>:</code>；</li>
+<li>类似C++，函数支持默认参数；</li>
+<li>函数类型声明的格式和函数不一样，返回类型之前要用<code>-&gt;</code>；特别的，没有返回值也要写<code>-&gt;Unit</code></li>
+<li>返回值同样可以是函数，所以这个格式有点像haskell，如<code>(Int) -&gt;((Int)-&gt;Unit)</code>，可以简化为<code>(Int)-&gt;(Int)-&gt;Unit</code>，这样就更像Haskell了；</li>
+<li>通过<code>class::func_memeber_name</code>来引用函数或者成员变量，
+<ol>
+<li>lambda表达式的格式非常类似函数声明：<code>func f (x:Int,y:Int)-&gt;Int={x,y-&gt;x+y}</code>，或者更简单点<code>val f ={x:Int,y:Int: x+y}</code>；即用<code>{}</code>括起来的表达式；</li>
+</ol>
+</li>
+<li>单个参数可以不声明，隐式的为<code>it</code>；</li>
+<li>func与lambda的区别：
+<ol>
+<li>fun在没有等号，只有花括号时，就是最常见的函数实现，必须带return；</li>
+<li>fun有等号，没有花括号时，表示单表达式函数体，此时无须带return；</li>
+<li>如果是等号同时有花括号，无论使用val还是fun，都表示lambda表达式；</li>
+<li>lambda可以定义接收者，语法是<code>val sum: Int.(int) -&gt; Int = {other-&gt;plus(other)}</code>;</li>
+</ol>
+</li>
+<li>kotlin的闭包是可以修改外部变量的，比java合理；</li>
+<li>如果一个函数只有一个参数，且参数是函数，则调用该函数时，无须传入外层的括号：</li>
+</ol>
+<pre><code class="language-kotlin">func t(block: ()-&gt;Unit){
+    block()
+}
+t{
+    println(&quot;hello world&quot;)
+}
+</code></pre>
+<ol start="11">
+<li>如果一个函数有多个参数，最后一个参数是函数时，也可以省略最后一个参数直接传入内容，如：</li>
+</ol>
+<pre><code class="language-kotlin">func t(s:String, block:(String)-&gt;Unit){
+    block(s)
+}
+t(&quot;hello world&quot;){
+    s-&gt;println(s)
+}
+</code></pre>
+<ol start="12">
+<li>与C++类似，kotlin中很多流程控制语句是一个表达式，即会返回值，所以他可以用类似Python的方式实现3目运算：<code>val t = if(x&gt;3) 5 else 7</code>；</li>
+<li>kotlin设计<code>Unit</code>代替<code>void</code>，就是为了让所有函数调用都有返回值（即成为表达式）；</li>
+<li>枚举是类，语法有点像C++11：<code>enum class Day{}</code>; 如果要加方法的话，最后一个枚举要加一个<code>;</code></li>
+<li>kotlin支持模式匹配，语法有点像rust，关键词是<code>when</code>，当然它也是一个表达式：</li>
+</ol>
+<pre><code class="language-kotlin">val k = when(day){
+    Day.MON -&gt; 1
+    Day.THU -&gt; 2
+    else -&gt; 3
+}
+</code></pre>
+<ol start="16">
+<li>内置range表达式，类似rust，如<code>for (k in 1..10 step 2)</code>，倒着用<code>10 downTo 1 step -2</code>；全闭区间；</li>
+<li>如果想用左闭右开区间，用<code>1 unitl 10</code>；</li>
+<li>数组遍历，如果想带上下标，用<code>array.withIndex()</code>，类似Python的<code>enumerate</code>；</li>
+<li>支持中缀函数，类似Haskell，形式是<code>infix func</code>。声明条件比较苛刻：
+<ol>
+<li>必须是成员函数或者扩展函数，这样函数左侧的对象是确定的</li>
+<li>只能有一个参数，即函数右侧的参数</li>
+<li>该参数不能有默认值</li>
+</ol>
+</li>
+<li>kotlin的可变参数用<code>vararg</code>来表示，比较特别的是，它不需要一定是最后一个参数；有点像Python的<code>(*args, **kwargs)</code>；</li>
+<li>kotlin的字符串支持下标访问；支持三引号（类似Python）；支持字符串模板（类似bash）；</li>
+<li>支持<code>==</code>判断结构相等（相当于java里面的<code>equal</code>)，<code>===</code>判断引用相等(相当于java的<code>==</code>)；</li>
+<li>kotlin支持内联函数，但是设计的很复杂，一般情况下尽量不要使用，除了泛型注入类型；</li>
+<li>inline可以让lambda表达式非局部返回，即直接return父函数的结果；语法糖是<code>return @func</code></li>
+</ol>
+<h2 id="面向对象">面向对象</h2>
+<p>上面可以看出kotlin实际上是支持函数式编程的，所以不是纯OO语言，但是也支持类。</p>
+<ol>
+<li>默认函数是public的，但是默认成员是private的；</li>
+<li>所有变量必须显式初始化；</li>
+<li>接口中的属性不能直接复制，需要写成<code>val c get()=100</code>而不是<code>val c =100</code>；</li>
+<li>声明对象无须<code>new</code>，类似Python；</li>
+<li>可以使用<code>init</code>函数块来进行初始化，属于构造函数的一部分，而且可以有多个；</li>
+<li>构造函数可以放在类名后面声明：</li>
+</ol>
+<pre><code class="language-kotlin">class Bird(weight: Double, age: Int, color: String=&quot;blue&quot;){
+    val weight = weight
+    val age = age
+    val color: String
+    init{
+        this.color = color
+    }
+}
+</code></pre>
+<ol start="7">
+<li>延迟初始化：不可变成员的初始化延迟到对象被创建出来之后，如：</li>
+</ol>
+<pre><code class="language-kotlin">val color: String by lazy{
+    if(age &gt; 10) &quot;blue&quot; else &quot;green&quot;
+}
+</code></pre>
+<p>默认线程安全，仅能用来初始化不可变变量；第一次被调用时，才会被初始化。</p>
+<ol start="8">
+<li>对于var变量，可以用lateinit来延迟初始化，但是不能用于基础数据类，只能用包装类：</li>
+</ol>
+<pre><code class="language-kotlin">lateinit var color: String
+</code></pre>
+<ol start="9">
+<li>可以通过<code>constructor</code>显式声明构造方法，这被称为<strong>从构造方法</strong>，主构造方法就是类名后面那个，语法类似C++的初始化列表：</li>
+</ol>
+<pre><code class="language-kotlin">constructor(other: Some)this(some.color){
+    //...
+}
+</code></pre>
+<ol start="10">
+<li>继承的语法类似C++而不是java，用<code>:</code>，默认类并不能被继承，需要加上<code>open</code>关键字；</li>
+<li>kotlin的protect不能被package访问，而是使用关键字<code>internal</code>；</li>
+<li><code>sealed</code>表示密封类，它其实是枚举的一种扩展：当值为有限情况时，主要用于状态匹配；</li>
+<li>kotlin一个文件里可以定义多个类，如果用private修饰类，表示类的作用域就是当前文件；</li>
+<li>指定某个具体的父类：<code>super&lt;Base&gt;.func()</code>；</li>
+<li>kotlin的接口可以定义成员，覆盖的时候同样要带上<code>overrite</code>；</li>
+<li>如果要在kotlin中声明一个内部类，必须加上<code>inner</code>修饰符。这和java的设计是相反的：java需要加上static关键字才是嵌套类，默认就是内部类；</li>
+<li>内部类可以访问外部类的成员，嵌套类则是完全独立的；可以用内部类解决多重继承问题；</li>
+<li>类似C#，kotlin支持委托，语法上就是上面提到的<code>by</code>：</li>
+</ol>
+<pre><code class="language-kotlin">class Bird(flyer: Flyer, animal: Animal): CanFly by flyer, CanEat by animal{}
+</code></pre>
+<p>其实有点像组合，或者Go里面的结构体嵌套；</p>
+<ol start="18">
+<li>kotlin支持数据类，类似lombok中的<code>@Data</code>注解，语法是<code>data class</code>，java后续版本中有<code>record</code>关键字；</li>
+<li>kotlin支持自动解包，类似<code>val(a,b,c)=o1</code>；数组、数据类都支持自动解包；</li>
+<li>内置<code>Pair</code>和<code>Triple</code>；</li>
+<li>移除了<code>static</code>关键字，但是引入了<code>object</code>关键字；</li>
+<li>引入<strong>伴生对象</strong>概念，就是属于类的对象，使用<code>companion object</code>+花括号声明，类似java中的所有static变量+static初始化；</li>
+<li>使用object可以直接声明单例；</li>
+<li>类似Haskell，kotlin引入了ADT的概念，这主要通过<code>sealed class</code>实现，配合模式匹配和解构来使用；</li>
+<li>kotlin的when可以嵌套；</li>
+<li>kotlin的类型默认都是非空的，需要加上<code>?</code>来表示可为null，如<code>var k: String?</code>；</li>
+<li>使用这些变量时，也可以在后面加上<code>?</code>表示非空判定（类似java里面的Optional，Swift和Rust里面有类似的设计）；默认值使用<code>?:</code>来赋予（可以使用表达式）；</li>
+<li>非空断言：<code>!!</code>，断言失败抛出NPE异常；</li>
+<li>使用<code>is</code>和<code>as</code>来做类型判断和转换，这个语法和Rust也很类似；</li>
+<li>可以用<code>as?</code>来尝试转换，失败则返回null；</li>
+<li>所有类型的父类是<code>Any</code>；java中所有的对象转到kotlin都被视为<strong>平台类型</strong>，即不知道是否非空的；</li>
+<li><code>Nothing</code>是没有实例的类型，位于最底层，实际上只能为null；</li>
+<li>可以对类的<strong>实例</strong>进行方法扩展，语法是：</li>
+</ol>
+<pre><code class="language-kotlin">fun ClassA.toJson():String{
+    
+}
+</code></pre>
+<p>扩展本质上注入静态方法；</p>
+<ol start="34">
+<li>kotlin支持运算符重载，函数名有点像Python，语法：</li>
+</ol>
+<pre><code class="language-kotlin">operator func ClassA.plus(rhs:ClassA):classA{
+    
+}
+</code></pre>
+<ol start="35">
+<li>同名的情况下，扩展方法的优先级低于类成员；</li>
+<li>当在扩展函数里调用this时，指代的是接收者类型的实例；如果想要强行指定类的实例，使用<code>this@ClassA</code>的语法；</li>
+<li>扩展函数始终是静态调度，不支持多态（因为是静态实现）；</li>
+<li>标准库中有<code>with</code>, <code>apply</code>, <code>run</code>, <code>let</code>, <code>takeIf</code>等扩展函数；其中<code>let</code>一般用于非空判断的执行逻辑；</li>
+<li>不要滥用扩展功能；</li>
+</ol>
+<h2 id="数据结构">数据结构</h2>
+<ol>
+<li>不含有内置数组，直接用<code>Array</code>类，使用<code>arrayOf&lt;&gt;</code>来生成；建议优先使用<code>intArrayOf</code>之类的特化，性能更好；</li>
+<li>一般的集合和java中一样，只是分为可变和不可变两种了；默认是<strong>不可变</strong>的，<code>Mutable</code>前缀的才是可变的；</li>
+<li><code>mapOf(1 to 2)</code>，这里的to分割键值对；</li>
+<li>直接使用函数式接口处理数据会创建很多临时数据结构（因为函数式编程讲究的是不可变）；需要用<code>asSequence()</code>转成序列再处理；</li>
+<li>sequence是惰性求值的，类似Haskell中的设计。当然java中的stream也是惰性求值的；</li>
+<li>因为支持惰性求值，所以也支持无限长序列，如<code>val naturalNum=generateSequences(0){it + 1}</code>；</li>
+</ol>
+<h2 id="泛型编程">泛型编程</h2>
+<ol>
+<li>kotlin泛型的语法和java区别不大，只是类型约束这里用<code>:</code>而不是<code>extend</code>；</li>
+<li>可以使用内联函数避免泛型擦除，语法是：</li>
+</ol>
+<pre><code class="language-kotlin">inline fun&lt;reified T&gt; getType(){
+    return T::class.java
+}
+</code></pre>
+<p>这种函数无法在java中被调用；</p>
+<ol start="3">
+<li>如果在定义的泛型类和泛型⽅法的泛型参数前⾯加上out关键词，说明这个泛型类及泛型⽅法是协变，简单来说类型A是类 型B的子类型，那么<code>Generic&lt;A&gt;</code>也是<code>Generic&lt;B&gt;</code>的⼦类型；</li>
+<li>关键词<code>in</code>用于实现泛型逆变；作用和上面正好相反；</li>
+</ol>
+<h2 id="元编程">元编程</h2>
+<p>对于kotlin而言，由于不支持宏或者模板，剩下能讨论的元编程其实就只剩反射了。</p>
+<ol>
+<li>反射这块的内容用的时候再查，这里不做记录，因为平时用的不多；值得一提的是kotlin有个<code>KClass</code>，里面是kotlin特有的类型；</li>
+<li>使用<code>annotation</code>创建注解，用法和java类似；</li>
+</ol>
+<h2 id="异步支持">异步支持</h2>
+<ol>
+<li>kotlin支持协程，用法：</li>
+</ol>
+<pre><code class="language-kotlin">launch{
+    delay(1000L) //类似线程中使用sleep
+}
+</code></pre>
+<ol start="2">
+<li>kotlin内置了Actor支持，当然也可以用akka；</li>
+<li>待续，这里估计要看一下底层原理才知道kotlin的协程和其他的区别；</li>
+</ol>
+
+        </div>
+        
+        <div class="my-4">
+    
+    <a href="https://yiuterran.github.io/blog/tags/kotlin/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#kotlin</a>
+    
+</div>
+        
+        
+        
+
+
+        
+        
+        <div class="py-2">
+    
+    <div class="flex flex-col md:flex-row items-center my-8">
+        <a href="https://yiuterran.github.io/blog/authors/tryao/" class="w-24 h-24 md:me-4">
+            
+            
+            <img src="https://yiuterran.github.io/blog/images/avatar.png" class="w-full bg-primary-bg rounded-full" alt="Avatar">
+            
+        </a>
+        <div class="w-full md:w-auto mt-4 md:mt-0">
+            <a href="https://yiuterran.github.io/blog/authors/tryao/" class="block font-bold text-lg pb-1 mb-2 border-b">个人介绍</a>
+            <span class="block pb-2">兴趣使然的程序员，博而不精，乐学不倦</span>
+            
+            
+            
+            
+            
+            <a href="mailto:yaotairan@gmail.com" class="me-1">
+                <i class="fas fa-envelope"></i>
+            </a>
+            
+            
+            
+            
+            
+            <a href="https://github.com/YiuTerran" class="me-1">
+                <i class="fab fa-github"></i>
+            </a>
+            
+        </div>
+    </div>
+    
+</div>
+        
+        
+        
+<div class="flex flex-col md:flex-row md:justify-between -mx-2 mt-4 px-2 pt-4 border-t">
+    <div>
+        
+        <span class="block font-bold">上一页</span>
+        <a href="https://yiuterran.github.io/blog/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/" class="block">边缘服务器管理工具选型</a>
+        
+    </div>
+    <div class="md:text-right mt-4 md:mt-0">
+        
+        <span class="block font-bold">下一页</span>
+        <a href="https://yiuterran.github.io/blog/posts/kubeedge%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/" class="block">KubeEdge要点笔记</a>
+        
+    </div>
+</div>
+
+        
+
+
+
+  <script id="utterances" src="https://utteranc.es/client.js"
+            issue-term=title
+            repo=YiuTerran/blog-comment
+              theme=preferred-color-scheme
+        crossorigin="anonymous"
+        async>
+</script>
+<script>
+    if (storageColorScheme == "Light") {
+      document.getElementById('utterances').setAttribute('theme', 'github-light')
+    } else if (storageColorScheme == "Dark") {
+      document.getElementById('utterances').setAttribute('theme', 'github-dark')
+    }
+</script>
+
+    </div>
+    
+    <div class="col-span-2">
+        
+        
+        <div class="sticky top-16 z-10 hidden lg:block px-6 py-4  bg-primary-bg ">
+    <span class="text-lg font-semibold">本页内容</span>
+</div>
+<div class="sticky-toc hidden lg:block px-6 pb-6 ">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#语法要点">语法要点</a></li>
+    <li><a href="#面向对象">面向对象</a></li>
+    <li><a href="#数据结构">数据结构</a></li>
+    <li><a href="#泛型编程">泛型编程</a></li>
+    <li><a href="#元编程">元编程</a></li>
+    <li><a href="#异步支持">异步支持</a></li>
+  </ul>
+</nav>
+</div>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        enableStickyToc();
+    });
+</script>
+        
+    </div>
+    
+
+    
+    
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', ()=>{
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+
+      </div>
+    </div>
+    
+  </main>
+  <footer class="ps-scrollbar">
+    <div class="w-full max-w-screen-xl mx-auto"><div class="text-center p-6 pin-b">
+    <p class="text-sm text-tertiary-text">&copy; 2021 <a href="https://github.com/YiuTerran">tryao</a>
+ &middot;  Powered by the <a href="https://github.com/wangchucheng/hugo-eureka" class="hover:text-eureka">Eureka</a> theme for <a href="https://gohugo.io" class="hover:text-eureka">Hugo</a></p>
+</div></div>
+  </footer>
+</body>
+
+</html>

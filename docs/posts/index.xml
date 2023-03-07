@@ -8,7 +8,34 @@
     <language>zh</language>
     <copyright>&amp;copy; 2021 &lt;a href=&#34;https://github.com/YiuTerran&#34;&gt;tryao&lt;/a&gt;
 </copyright>
-    <lastBuildDate>Fri, 10 Feb 2023 09:30:19 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 06 Mar 2023 14:37:28 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>边缘服务器管理工具选型</title>
+      <link>https://yiuterran.github.io/blog/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/</link>
+      <pubDate>Mon, 06 Mar 2023 14:37:28 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/</guid>
+      <description>这里我们主要的需求是能够穿透内网管理服务器，服务器大部分情况下应当是linux，但是也可能是windows。我们的服务要通过API和这个服务器管理软件</description>
+    </item>
+    
+    <item>
+      <title>Kotlin要点笔记</title>
+      <link>https://yiuterran.github.io/blog/posts/kotlin%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Sun, 05 Mar 2023 12:58:37 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/posts/kotlin%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/</guid>
+      <description>实际上学习kotlin的动力一直不足，因为java is enough. 不过最近打算写一个QQ机器人玩，现在流行的框架是基于kotlin的，虽然可以用HTTP API进行</description>
+    </item>
+    
+    <item>
+      <title>KubeEdge要点笔记</title>
+      <link>https://yiuterran.github.io/blog/posts/kubeedge%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Tue, 21 Feb 2023 15:07:54 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/posts/kubeedge%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/</guid>
+      <description>安装流程 首先要在云端安装k8s，理论上只需要master节点，可以没有worker，换句话说可以是一个单节点集群（但是要关闭NoSchedule的ta</description>
+    </item>
+    
     <item>
       <title>K8s要点简记</title>
       <link>https://yiuterran.github.io/blog/posts/k8s%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/</link>
