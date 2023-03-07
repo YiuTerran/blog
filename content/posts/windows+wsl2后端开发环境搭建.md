@@ -206,14 +206,14 @@ Gateway=192.168.0.1 # 自行修改
 2. idea支持ssh远程开发，但目前还是beta，不好用；vscode还是比较流畅的，习惯ssh开发的推荐使用该方式；
 3. 如果是本地开发，优先建议在windows下直接使用IDE开发，不要使用wslg，因为很难用；
 4. 类似java/python/golang这种高级语言，直接在windows下写代码调试就行；
-5. 如果是C++开发，推荐使用CLion+WSL工具链。现在CLion已经支持Makefile工程，所以linux下所有开发都已经无碍；
+5. 如果是C++开发，推荐使用CLion+WSL工具链。现在CLion已经支持Makefile工程，所以linux下所有开发都已经无碍；2023版本的CLion甚至支持vcpkg集成，有一说一比rust也差不多了；
 6. 如果是CMake工程，也可以使用VisualStudio+Resharper工具链，不过Makefile工程还不行；
 7. 建议wsl直接用root账户，不然会经常遇到各种权限问题，比较迷惑；
 8. linux的PATH会自动继承windows的path，不过Linux系统里同名的文件优先级更高；所以像git这种软件到底装Windows还是装Linux要自己想清楚；全部在Linux下也可以，都装不是不行…就是要配置两遍；
 9. WSL的命令行可以直接调用windows PATH下的exe文件，如`code`，不过非`/mnt`路径下可能无法正常使用；
 10. 在powershell里面可以用`start`命令打开文件，会自动调用关联的打开方式。类似macos的`open`命令，在wsl里面通过`alias`也可以调用（参考最后附录）；
-11. 在idea里面讲终端设置为：`"cmd.exe" /k "wsl.exe"`，就可以使用bash做终端了；
-12. 如果原来是macos用户，可以在win下使用quicklook实现空格预览，utools实现spotlight，并使用powertoys做快捷键映射：个人比较怀恋ctrl+a/ctrl+e映射到home和end的功能，然后把alt+a/c/v/s/w/r都映射成ctrl，alt+q映射成alt+f4；
+11. 在idea里面讲终端设置为：`"cmd.exe" /k "wsl.exe"`，就可以使用bash做终端了；当然也可以直接用bash的路径；
+12. 如果原来是macos用户，可以在win下使用quicklook实现空格预览，utools实现spotlight（或者直接用powertools里面那个简化的run工具也行），并使用powertoys做快捷键映射：个人比较怀恋ctrl+a/ctrl+e映射到home和end的功能，然后把alt+a/c/v/s/w/r都映射成ctrl，alt+q映射成alt+f4；
 
 ## 附：常用alias
 
