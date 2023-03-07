@@ -260,7 +260,7 @@
 <p>k8s迭代的非常快，kubeEdge适配的版本会落后3~4个大版本，因此k8s的版本不能太新。这里使用的是k8s v1.22.16，对应的是kubeEdge的v1.12.2. 事实上我先尝试了v1.23+1.13的组合，但是kubeEdge的代码质量确实不太行，1.13甚至无法正常卸载…</p>
 <p>另外，注意并不能用k3s代替k8s来充当master，至少用keadm来安装是不行的。</p>
 <p>这里使用helm来安装，因为用二进制安装很麻烦，keadm不像kubeadm那样支持直接使用配置文件初始化，而且<strong>keadm安装时需要翻墙</strong>，这是一个golang写的二进制文件，而不是bash脚本，没法直接改，在云上翻墙十分麻烦，我放弃了。</p>
-<h4 id="云端">云端</h4>
+<h3 id="云端">云端</h3>
 <p>从<a href="https://github.com/kubeedge/kubeedge/tree/master/manifests/charts">这里</a>将整个cloudcore文件夹clone下来（或者用<a href="https://download-directory.github.io/">这个</a>工具打包)，上传到服务器。然后编辑<code>values.yaml</code>，修改镜像版本（我这里用的是v1.12.2），并填入服务器地址（advertiseAddress那里），最后跑一下：</p>
 <pre><code>helm upgrade --install cloudcore ./cloudcore --namespace kubeedge --create-namespace -f ./cloudcore/values.yaml
 </code></pre>
@@ -388,11 +388,7 @@ kubectl delete ns kubeedge
   <ul>
     <li><a href="#安装流程">安装流程</a>
       <ul>
-        <li>
-          <ul>
-            <li><a href="#云端">云端</a></li>
-          </ul>
-        </li>
+        <li><a href="#云端">云端</a></li>
         <li><a href="#边缘端">边缘端</a></li>
       </ul>
     </li>

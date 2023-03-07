@@ -23,7 +23,7 @@ k8s迭代的非常快，kubeEdge适配的版本会落后3~4个大版本，因此
 
 这里使用helm来安装，因为用二进制安装很麻烦，keadm不像kubeadm那样支持直接使用配置文件初始化，而且**keadm安装时需要翻墙**，这是一个golang写的二进制文件，而不是bash脚本，没法直接改，在云上翻墙十分麻烦，我放弃了。
 
-#### 云端
+### 云端
 
 从[这里](https://github.com/kubeedge/kubeedge/tree/master/manifests/charts)将整个cloudcore文件夹clone下来（或者用[这个](https://download-directory.github.io/)工具打包)，上传到服务器。然后编辑`values.yaml`，修改镜像版本（我这里用的是v1.12.2），并填入服务器地址（advertiseAddress那里），最后跑一下：
 

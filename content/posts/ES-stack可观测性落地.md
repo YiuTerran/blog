@@ -37,7 +37,7 @@ autorefresh=1
 type=rpm-md
 EOF
 
-sudo yum install -y --enablerepo=elasticsearch elasticsearch
+sudo yum install -y --enablerepo=elasticsearch elasticsearch 
 ```
 
 es应该是有中国的CDN，所以下载很快。在安装过程中会自动生成超管密码：
@@ -199,7 +199,7 @@ server.publicBaseUrl: "http://<out-ip>:5601"
 
 Fleet Server是接受Elastic Agent或者各种Beat发送过来的数据并存储到ES的服务。比较蛋疼的是，FleetServer是集成在ElasticAgent这个二进制文件里面的，所以agent体积巨大。
 
-![Fleet Server on-premises deployment model](https://www.elastic.co/guide/en/fleet/8.4/images/fleet-server-on-prem-deployment.png)
+![Fleet Server on-premises deployment model](https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/fleet-server-on-prem-deployment-20230307194341712.png)
 
 MetricBeats等beats工具则比较轻量一些，可以直接传输数据到ES，不过此类工具就无法通过kibana直接进行配置升级等管理了。
 
@@ -369,14 +369,19 @@ systemctl start metricbeat
 可以通过`journalctl -u metricbeat`查看日志，如果没有ERROR应该就是OK了（日志很长，可以用左右箭头移动看具体错误）。
 
 ## 安装Metricbeat(k8s)
+
 ### 基础配置
+
 下载metricbeat配置文件，使用命令
+
 ```bash
 curl -L -O https://raw.githubusercontent.com/elastic/beats/8.4/deploy/kubernetes/metricbeat-kubernetes.yaml
 ```
+
 > 配置文件下载之后，首先将文件中所有的namespace修改为metricbeat
 
 找到Metricbeat配置ES信息的位置，将`ELASTICSEARCH_HOST`和`ELASTICSEARCH_PORT`修改为对应ElasticSearch的IP和端口，将`ELASTICSEARCH_USERNAME`和`ELASTICSEARCH_PASSWORD`修改为对应的ElasticSearch用户名和密码
+
 ```yml
         env:
         - name: ELASTICSEARCH_HOST
@@ -388,7 +393,9 @@ curl -L -O https://raw.githubusercontent.com/elastic/beats/8.4/deploy/kubernetes
         - name: ELASTICSEARCH_PASSWORD
           value: a-WxDYOh65KAIPSx1O6s
 ```
+
 另外，metricbeat默认的内存配置太小，需要改大，这里将`limits`调整为500MB
+
 ```yml
         resources:
           limits:
@@ -397,8 +404,10 @@ curl -L -O https://raw.githubusercontent.com/elastic/beats/8.4/deploy/kubernetes
             cpu: 100m
             memory: 100Mi
 ```
+
 如果es没有启用ssl，那么到这里基础配置就结束了，如果启用了ssl，还需要配置ssl信息
 找到配置文件中的`output.elasticsearch`部分，将其修改为
+
 ```yml
 output.elasticsearch:
   hosts: ['${ELASTICSEARCH_HOST:elasticsearch}:${ELASTICSEARCH_PORT:9200}']
@@ -409,9 +418,11 @@ output.elasticsearch:
       enabled: true
       ca_trusted_fingerprint: "${ES_PRINT}"
 ```
+
 其中ES_PRINT就是es那个ca证书的指纹，使用同ECS中的metricbeat配置，参考上文.
 
 ### 服务监控配置
+
 首先确保各k8s中的服务都已引入prometheus并以通过http接口暴露metric。
 找到配置文件中的`metricbeat.autodiscover`配置项，将其修改为：
 
@@ -431,16 +442,20 @@ metricbeat.autodiscover:
               metrics_path: /metrics/prometheus
               period: 30s      
 ```
+
 上面使用的是metricbeat的自动探测功能，自动监控了iot的iotgateway服务，其中的`metrics_path`是服务暴露的metric接口路径，period是metric采集周期。下面这一段代表的是要采集那个服务的metric。
+
 ```yml
 templates:
         - condition:
             contains:
               kubernetes.labels.app: "sim-iotgateway"
 ```
+
 这里使用了metricbeat的标签过滤功能，要配置哪个服务，就过滤哪个服务的标签即可。
 
 如果要新增hermes服务的监控，只需新增对应的配置
+
 ```yml
 metricbeat.autodiscover:
   providers:
@@ -469,7 +484,9 @@ metricbeat.autodiscover:
               metrics_path: /metrics/prometheus
               period: 30s    
 ```
+
 每个服务的标签labels，可以在对应服务k8s的yaml中找到，例如：
+
 ```yml
 apiVersion: v1
 kind: Pod
@@ -485,11 +502,15 @@ metadata:
 ```
 
 ### 部署
+
 修改完`metricbeat-kubernetes.yaml`之后，在k8s机器上执行下述命令即可
+
 > 注意，这里采用的是DaemonSet模式
+
 ```bash
 kubectl create -f metricbeat-kubernetes.yaml
 ```
+
 部署完成后，也可在configmap中的metricbeat.yml中进行监控服务的增删.
 
 ## 安装Filebeat
@@ -522,7 +543,7 @@ systemctl start filebeat
 
 在ES所在机器安装了MetricBeat和Filebeat之后，就可以在kibana的**堆栈监测**里面看到es相关信息，差不多就是下图的样子：
 
-![image-20221017104832361](https://s2.loli.net/2022/10/17/crdIyuoa97LKDjJ.png)
+![image-20221017104832361](https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/crdIyuoa97LKDjJ-20230307194342564.png)
 
 如果仅仅使用es自带的monitor，则不会有下面的beats部分，**同时也不会有log的监控**。
 
@@ -622,21 +643,23 @@ Elastic Agent已经集成了Prometheus Metric采集功能（还是beta），当�
 
 需要注意的是，在kibana界面上添加管道时，**需要对`\`进行转义**，即改为`(\\s+([/\\w_%!$@:.,+~-]+|\\.)*:\\d+)?`。
 
-添加完成之后可以点击**添加文档**，在pipeline里再测试一次。同时也可以在后面添加别的pipeline进一步处理，比如添加新字段等。
+添加完成之后可以点击**添加文档**，在pipeline里再测试一次。同时也可以在后面添加别的pipeline进一步处理，比如添加新字段等。该功能的详细使用步骤可以参考[这里](https://juejin.cn/post/7129767885177618463)。
 
 部分预处理需要使用[painless脚本](https://www.elastic.co/guide/en/elasticsearch/painless/current/painless-ingest-processor-context.html)，比如某些服务没有区分error日志与普通日志，那么需要drop掉warn等级以下的日志，可以用`ctx.log.level != 'WARN' && ctx.log.level != 'ERROR'`。
 
 一般同一种语言使用相同的日志格式，这里假设添加管道的名字为`golang-common-log-parser`，并创建一个`common-logs-policy`的策略，对所有应用日志生命周期进行统一管理。
 
+**NOTE**: 建议加一个处理失败则drop的处理器，避免部分数据格式问题导致的发送失败。
+
 ### 配置索引模板
 
 我们需要将上面的grok转换后的格式关联一个索引模板。
 
-先创建一个组件模板以供复用，到`Stack Management`-`索引管理`下面，点击**组件模板**tab页下**创建**相关按钮，填入名称（如custom-logs@mapping），在**映射**页面配置字段映射：
+先创建一个组件模板以供复用，到`Stack Management`-`索引管理`下面，点击**组件模板**tab页下**创建**相关按钮，填入名称（如custom-logs@mapping），在mapping页面做好映射：
 
-![image-20221102111708534](https://s2.loli.net/2022/11/02/iOIGgqcJyrnQf1P.png)
+![image-20221102111708534](https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/iOIGgqcJyrnQf1P-20230307194343074.png)
 
-对应的json配置如下：
+对应json如下：
 
 ```json
 {
@@ -668,7 +691,7 @@ Elastic Agent已经集成了Prometheus Metric采集功能（还是beta），当�
 
 ### 配置采集器(Fleet)
 
-![image-20221026180330634](https://s2.loli.net/2022/10/26/WRYNswyo1d3qrJV.png)
+![image-20221026180330634](https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/WRYNswyo1d3qrJV-20230307194343541.png)
 
 在`Custom Logs`的添加界面上，命名空间配置当前环境(如`dev`)，点击高级配置，dataset填入服务的名字，如`golang_video`，这样最后index的名字就是`logs-golang_video-dev`，由于这里已经指定中划线作为分隔符，所以dataset中不能出现`-`. 建议这里将同一个格式的日志放在一个配置里（不同命名空间的需要分开），方便修改，可以从log.path里分辨出日志具体属于哪个服务。
 
@@ -686,7 +709,7 @@ pipeline: golang-common-log-parser
 
 可以用`event.dataset`搜索上面添加的`golang_sip_server`，看到对应的日志。
 
-如果没有日志，一般在Fleet的代理日志里可以看到相关信息。或者去所在机器的`/opt/Elastic/Agent`目录下，查看采集侧的`njson`日志。ES这边的日志需要使用filebeat监控才能在kibana中看到，可以去
+如果没有日志，一般在Fleet的代理日志里可以看到相关信息。或者去所在机器的`/opt/Elastic/Agent`目录下，查看采集侧的`njson`日志。
 
 ## KQL简单学习
 
@@ -698,14 +721,20 @@ ES的查询语法是复杂的JSON，直接在界面上不方便使用，所以ki
 4. 范围查询，支持>, <, = 各种组合；
 5. 日期查询一般用右侧的time filter，不过也可以手动写 `@timestamp < "2022-10-10"`之类的，也支持类似influxdb的算术表达式；
 6. 允许使用`*`做模糊匹配，k或者v中都可以；
-7.  list of object的匹配，匹配object中的字段，使用大括号。例如`items:{name: banana}`这种；
+7. list of object的匹配，匹配object中的字段，使用大括号。例如`items:{name: banana}`这种；
 8. 如果是多级嵌套，如`k1:[{k2: [{"k3": "v"}]]`，搜索的时候需要写全路径，即`k1.k2:{k3: v}`这种搜索；
 
-## 安装Elastic APM(TODO)
+## 安装Elastic APM
 
 这里的APM其实指的是Trace系统，通过Fleet直接绑定集成就可以。
 
-由于应用还未做好准备，这里先不搞，后续再增补相关步骤。这里的关键在应用改造，集成的难度其实不大。
+推荐使用OpenTelemetry的Agent进行Export，方便将来迁移到其他平台。
+
+对于Java而言，可以使用自动导出，支持大部分组件。Go/C++服务则需要手动集成，并且需要修改大量代码。
+
+跨服务传递时，一般通过`traceparent`和`tracestate`header进行传递，相关w3c标准见[这里](https://w3c.github.io/trace-context/).
+
+sdk提供了propagate相关的API，用来Inject和Extract trace上下文，使用起来非常方便。
 
 ## 周期性任务
 
@@ -757,11 +786,11 @@ ES的查询语法是复杂的JSON，直接在界面上不方便使用，所以ki
 
 如果只是简单的创建一个error日志告警，可以在Observability点击创建规则，选择日志阈值，然后创建一个如下的规则：
 
-![image-20221020141946295](https://s2.loli.net/2022/10/20/chDWbTyCmFlVs2f.png)
+![image-20221020141946295](https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/chDWbTyCmFlVs2f-20230307194344056.png)
 
 由于我们在上面的数据预处理里面已经将log.level映射出来，所以这里使用这个字段判断一下就行。连接器选择刚才创建的webhook，在Fired和Recovered两种条件下创建两个不同的告警提示即可。
 
-![image-20221020142216332](https://s2.loli.net/2022/10/20/lIORdb4Dt6GwngU.png)
+![image-20221020142216332](https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/lIORdb4Dt6GwngU-20230307194344606.png)
 
 右侧可以看到这里可以使用的变量。可以注意到这里并**没有字段可以拿到日志的详情**，这是因为这里只能做聚合查询，肯定是拿不到具体日志的详情的，不过可以通过group by source.ip之类的方式获取到具体的主机。如果需要直接提示详细的错误，需要用其他方案；
 
@@ -771,7 +800,7 @@ ES的查询语法是复杂的JSON，直接在界面上不方便使用，所以ki
 
 如果不想这么粗放的创建告警，也可以用`logs-golang_sip_server*`，作为匹配，这样就匹配到单个服务的所有日志。所以index的名字很重要，不要随便取。
 
-![image-20221021090656229](https://s2.loli.net/2022/10/21/EqnO2xCD1f6Hb8R.png)
+![image-20221021090656229](https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/EqnO2xCD1f6Hb8R-20230307194345086.png)
 
 查询条件仍然是日志等级为ERROR（这里是区分大小写的，可以在预处理里统一转换成大写），这里就是过去5分钟出现任意错误日志则触发。这里在body里面可以拿到`{{context.hits}}`，我们可以通过[mustache](http://mustache.github.io/mustache.5.html)这个模板语言对其内容进行解析。
 
@@ -807,7 +836,7 @@ ES的查询语法是复杂的JSON，直接在界面上不方便使用，所以ki
 
 效果如图：
 
-![image-20221021112827617](https://s2.loli.net/2022/10/21/iFZBmhLjnrRbNAG.png)
+![image-20221021112827617](https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/iFZBmhLjnrRbNAG-20230307194345363.png)
 
 #### 安全告警使用示例
 
@@ -865,9 +894,12 @@ Canvas部分则可以通过灵活地拖曳完成各种图表的数据、样式�
 
 ### emqx
 
-官方支持`statsd`的[插件](https://github.com/emqx/emqx-prometheus)，配合metricbeat的[Statsd module](https://www.elastic.co/guide/en/beats/metricbeat/8.4/metricbeat-module-statsd.html)，即可采集到数据。
-
-注意ElasticAgent尚不支持该类型数据采集。
+需要先将数据推送到pushgateway，然后从pushgateway暴露/metrics端口给prometheus或者metricbeat使用。
+需要几步：
+1. 安装pushgateway，[pushgateway下载](https://github.com/prometheus/pushgateway/releases/tag/v1.4.3)
+2. 开启emqx_prometheus插件，可在emqx的dashboard的插件模块下开启
+3. 配置/etc/emqx/plugins/emqx_prometheus.conf文件。将prometheus.push.gateway.server配置为对应pushgateway的地址，通常是http://xxx/9091; prometheus.interval使用默认值即可
+4. 调用pushgateway的metrics接口即可，通常是http://xxx:9091/metrics
 
 ### influxdb cluster
 
@@ -885,6 +917,72 @@ telegraf其实可以代替MetricBeat直接将数据发到es，不过和kibana那
 
 官方给了grafana的json配置，kibana这边就需要自己配置了。
 
+### nacos
+官方支持Metric导出，参考[这里](https://nacos.io/zh-cn/docs/monitor-guide.html)
+
 ### 阿里云商用中间件
 
 可以参考[`aliyun-exporter`](https://github.com/aylei/aliyun-exporter)这个repo，虽然已经archive，不过思路没变。
+
+## 附录1：中间件采集
+
+大部分中间件都集成在fleet里了，如果不能满足需求，可以点开custom这一栏。已经有官方集成的这里就不写了，包括MySQL、Redis、kafka、rabbitMQ和Nginx。
+
+### emqx
+
+需要先将数据推送到pushgateway，然后从pushgateway暴露/metrics端口给prometheus或者metricbeat使用。
+需要几步：
+
+1. 安装pushgateway，[pushgateway下载](https://github.com/prometheus/pushgateway/releases/tag/v1.4.3)
+2. 开启emqx_prometheus插件，可在emqx的dashboard的插件模块下开启
+3. 配置/etc/emqx/plugins/emqx_prometheus.conf文件。将prometheus.push.gateway.server配置为对应pushgateway的地址，通常是http://xxx/9091; prometheus.interval使用默认值即可
+4. 调用pushgateway的metrics接口即可，通常是http://xxx:9091/metrics
+
+### influxdb cluster
+
+支持metrics接口，可以直接用。不过能采集到的数据其实都是默认的golang exporter里面的。
+
+通过`debug/vars`接口可以拿到influxdb本身的监控数据，不过这个不是prometheus格式的，需要自己转换。
+
+可以通过开源的[influxdb exporter](https://github.com/prometheus/influxdb_exporter)或者直接用[telegraf](https://github.com/influxdata/telegraf)作为exporter，后者在output里面启动一个prometheus client即可.
+
+telegraf其实可以代替MetricBeat直接将数据发到es，不过和kibana那套体系配合的不是很好，需要自己管理相关index.
+
+### seaweedFS
+
+参考[这里](https://github.com/seaweedfs/seaweedfs/wiki/System-Metrics)，需要启动服务时额外配置metrics端口。
+
+官方给了grafana的json配置，kibana这边就需要自己配置了。
+
+### nacos
+
+官方支持Metric导出，参考[这里](https://nacos.io/zh-cn/docs/monitor-guide.html)
+
+### 阿里云商用中间件
+
+可以参考[`aliyun-exporter`](https://github.com/aylei/aliyun-exporter)这个repo，虽然已经archive，不过思路没变。
+
+## 附录2：ES常见问题
+### 磁盘空间不足
+到`Stack Management`-`索引管理`里，打开`包括隐藏的索引`，点击`存储大小`，使其从大到小排序。
+
+点击索引名称，右侧会显示“索引生命周期管理”，查看对应的生命周期策略是否需要调整。如果是托管的策略，不建议直接修改，改为修改索引/数据流对应的模板，在模板中添加生命周期策略即可。
+
+可以视具体情况删除部分索引。
+
+### 索引无法删除，提示bad request
+这种一般是由于索引正在被使用，必须先解除使用。
+
+点击索引名称，点击“编辑设置”。
+
+先看索引是否设置了`index.lifecycle.indexing_complete=true`，有的话改为`false`，这个选项会导致索引skip rollover，一直往同一个索引里面写。
+
+然后为索引正常设置生命周期策略（如：`"index.lifecycle.name": "metricbeat"`），并确认有个别名：`index.lifecycle.rollover_alias`，别名可以随意。
+
+最后需要手动滚动数据流，到控制台上运行：
+
+```bash
+POST <datastream/alias name>/_rollover
+```
+
+正常的话，会创建一个新的索引。这样就可以删掉原来的索引了。

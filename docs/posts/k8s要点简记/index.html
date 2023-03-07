@@ -673,7 +673,7 @@ volumeBindingMode: WaitForFirstConsumer # 延迟绑定声明
 <p>flannel进程会在每个宿主机上监听一个UDP端口，并创建一个名为<code>flannel0</code>的虚拟设备，这是一个3层TUN设备，主要作用是在OS kernel层和user层之间传递ip数据包，具体来说就是将ip包在内核和flannel进程之间传递。</p>
 <p>每个宿主机上的容器都属于该宿主机被分配的子网，flannel进程可以根据目标ip地址对应的子网找到其宿主机，然后将ip包转发给对应宿主机的flannel进程即可。后者会将数据包传入内核，根据路由表将数据转给docker0网桥。</p>
 <p>由于数据需要多次在内核态和用户态之间切换，导致性能太低，所以已被逐渐废弃。</p>
-<h3 id="vxlan后端">VXLAN后端</h3>
+<h4 id="vxlan后端">VXLAN后端</h4>
 <p>非常类似UDP后端，VXLAN会在宿主机上设置一个特殊的网络设备<code>VTEP</code>，不过它是工作在二层。</p>
 <h3 id="k8s对上述方案的兼容">k8s对上述方案的兼容</h3>
 <p>k8s肯定不会直接用docker0，而是通过CNI接口来进行网络通信，默认创建的网桥是<code>cni0</code>.</p>
@@ -1030,9 +1030,9 @@ ipvs:
         <li><a href="#flannel">Flannel</a>
           <ul>
             <li><a href="#udp后端">UDP后端</a></li>
+            <li><a href="#vxlan后端">VXLAN后端</a></li>
           </ul>
         </li>
-        <li><a href="#vxlan后端">VXLAN后端</a></li>
         <li><a href="#k8s对上述方案的兼容">k8s对上述方案的兼容</a></li>
         <li><a href="#host-gw后端">host-gw后端</a></li>
         <li><a href="#网络隔离">网络隔离</a></li>
