@@ -95,7 +95,7 @@
     },
     "headline": "Kotlin要点笔记 | 应许之地","datePublished": "2023-03-05T12:58:37+08:00",
     "dateModified": "2023-03-05T12:58:37+08:00",
-    "wordCount":  3926 ,
+    "wordCount":  5304 ,
     "author": {
         "@type": "Person",
         "name": ["tryao"]
@@ -237,7 +237,7 @@
     </div>
     <div class="me-6 my-2">
         <i class="fas fa-clock me-1"></i>
-        <span>8分钟阅读时长</span>
+        <span>11分钟阅读时长</span>
     </div>
     
     
@@ -258,20 +258,14 @@
 <li>类似C++，函数支持默认参数；</li>
 <li>函数类型声明的格式和函数不一样，返回类型之前要用<code>-&gt;</code>；特别的，没有返回值也要写<code>-&gt;Unit</code></li>
 <li>返回值同样可以是函数，所以这个格式有点像haskell，如<code>(Int) -&gt;((Int)-&gt;Unit)</code>，可以简化为<code>(Int)-&gt;(Int)-&gt;Unit</code>，这样就更像Haskell了；</li>
-<li>通过<code>class::func_memeber_name</code>来引用函数或者成员变量，
-<ol>
+<li>通过<code>class::func_memeber_name</code>来引用函数或者成员变量；</li>
 <li>lambda表达式的格式非常类似函数声明：<code>func f (x:Int,y:Int)-&gt;Int={x,y-&gt;x+y}</code>，或者更简单点<code>val f ={x:Int,y:Int: x+y}</code>；即用<code>{}</code>括起来的表达式；</li>
-</ol>
-</li>
 <li>单个参数可以不声明，隐式的为<code>it</code>；</li>
-<li>func与lambda的区别：
-<ol>
+<li>func与lambda的区别：</li>
 <li>fun在没有等号，只有花括号时，就是最常见的函数实现，必须带return；</li>
 <li>fun有等号，没有花括号时，表示单表达式函数体，此时无须带return；</li>
 <li>如果是等号同时有花括号，无论使用val还是fun，都表示lambda表达式；</li>
 <li>lambda可以定义接收者，语法是<code>val sum: Int.(int) -&gt; Int = {other-&gt;plus(other)}</code>;</li>
-</ol>
-</li>
 <li>kotlin的闭包是可以修改外部变量的，比java合理；</li>
 <li>如果一个函数只有一个参数，且参数是函数，则调用该函数时，无须传入外层的括号：</li>
 </ol>
@@ -306,7 +300,7 @@ t(&quot;hello world&quot;){
 </code></pre>
 <ol start="16">
 <li>内置range表达式，类似rust，如<code>for (k in 1..10 step 2)</code>，倒着用<code>10 downTo 1 step -2</code>；全闭区间；</li>
-<li>如果想用左闭右开区间，用<code>1 unitl 10</code>；</li>
+<li>如果想用左闭右开区间，用<code>1 until 10</code>；</li>
 <li>数组遍历，如果想带上下标，用<code>array.withIndex()</code>，类似Python的<code>enumerate</code>；</li>
 <li>支持中缀函数，类似Haskell，形式是<code>infix func</code>。声明条件比较苛刻：
 <ol>
@@ -442,16 +436,92 @@ t(&quot;hello world&quot;){
 </ol>
 <h2 id="异步支持">异步支持</h2>
 <ol>
-<li>kotlin支持协程，用法：</li>
+<li>
+<p>kotlin支持协程，且协程的设计比较复杂；</p>
+</li>
+<li>
+<p>使用<code>runBlocking</code>会阻塞等待作用域内的协程执行完毕，一般用于main函数；</p>
+</li>
+<li>
+<p>使用<code>coroutineScope</code>关键字创建协程作用域，在所有已启动子协程执行完毕之前该作用域不会结束；</p>
+</li>
+<li>
+<p>使用<code>GlobalScope</code>创建全局作用域；</p>
+</li>
+<li>
+<p>使用<code>launch</code>在上面创建的作用域里创建一个新协程；</p>
+</li>
+<li>
+<p><code>launch</code>内的函数可以单独提取出来，但是需要增加<code>suspend</code>关键字；</p>
+</li>
+<li>
+<p><code>launch</code>返回一个<code>Job</code>对象，可以被取消掉；</p>
+</li>
+<li>
+<p>但是无法强制取消，必须在代码里做取消检测（如检测<code>isActive</code>）；</p>
+</li>
+<li>
+<p>一般需要在<code>launch</code>代码块里进行<code>finally</code>检测，从而释放资源；</p>
+</li>
+<li>
+<p>注意<code>finally</code>的代码不一定能执行完毕(主要是不能调用delay），如果需要确保这一点，使用<code>withContext(NonCancellable)</code>来强制保证；</p>
+</li>
+<li>
+<p>一般取消协程是为了避免超时，在最外围加上<code>withTimeout</code>或者<code>withTimeoutOrNull</code>即可；</p>
+</li>
+<li>
+<p>除了<code>launch</code>之外，还可以使用<code>async</code>启动协程，与前者不同的是，它返回一个<code>Deferred</code>，类似其他语言中的promise，可以使用<code>.await</code>等待结果；</p>
+</li>
+<li>
+<p>换句话说<code>launch</code>有点类似返回<code>void</code>的函数，<code>async</code>则是有返回值的函数；</p>
+</li>
+<li>
+<p><code>launch</code>会立刻启动，但是<code>async</code>可以加上<code>(start = CoroutineStart.LAZY)</code>改为惰性启动，即需要手动调用<code>.start</code>来启动；</p>
+</li>
+<li>
+<p>很容易看出，kotlin与go协程的区别之一，就是协程作用域的设计。协程作用域主要是为了将相关工作分组；</p>
+</li>
+<li>
+<p>协程作用域中某个协程抛出异常，会导致其他协程立刻被取消；当一个父协程被取消的时候，所有它的子协程也会被递归的取消；一个父协程总是等待所有的子协程执行结束，无须显式join；</p>
+</li>
+<li>
+<p>kotlin并不推荐直接是使用全局async函数（像其他语言那种设计），即<code>GlobalScope.async</code>，因为全局作用域中的协程并不满足上面那条规则；</p>
+</li>
+<li>
+<p>使用协程作用域+协程，被称为结构化并发；</p>
+</li>
+<li>
+<p><code>async</code>和<code>launch</code>都可以显式指定调度策略，这包括：</p>
+<ol>
+<li>不传参数：从启动它的coroutineScope中继承；</li>
+<li><code>Dispatchers.Unconfined</code>，非受限调度器，可能会使用不同的线程来调度协程中不同的部分（每当遇到被挂起的调用，就视为一个新的部分），高级特性，一般不会使用；</li>
+<li><code>Dispatchers.Default</code>，默认调度器，使用共享的线程池；</li>
+<li><code>newSingleThreadContext(&quot;MyOwnThread&quot;)</code>，启动一个新线程；</li>
 </ol>
-<pre><code class="language-kotlin">launch{
-    delay(1000L) //类似线程中使用sleep
-}
-</code></pre>
-<ol start="2">
-<li>kotlin内置了Actor支持，当然也可以用akka；</li>
-<li>待续，这里估计要看一下底层原理才知道kotlin的协程和其他的区别；</li>
+</li>
+<li>
+<p>给jvm加上<code>-Dkotlinx.coroutines.debug</code>的参数，打印日志时就会打印出协程的名称，方便调试；</p>
+</li>
+<li>
+<p>可以给<code>async</code>或者<code>launch</code>加上<code>CoroutineName</code>参数来给协程命名；</p>
+</li>
+<li>
+<p>给<code>async</code>/<code>launch</code>加多个参数，需要使用<code>+</code>来连接，例如：<code>launch(Dispatchers.Default + CoroutineName(&quot;test&quot;))</code>；</p>
+</li>
+<li>
+<p>kotlin支持异步流，将函数返回值改为<code>Flow</code>，然后通过<code>emit</code>逐个抛出数据；调用端使用<code>collect</code>收集值；</p>
+</li>
+<li>
+<p>kotlin支持<code>Channel</code>抽象，用法很像go中的channel；</p>
+</li>
+<li>
+<p>kotlin内置了actor支持，但是官方已经不再推荐使用；</p>
+</li>
+<li>
+<p>有类似go的<code>select</code>支持，但是目前还是实验性质的；</p>
+</li>
 </ol>
+<p>总的来说，相比于go，kotlin的协程设计的有点过于复杂了，废案了好几次。所以设计一门语言还是没那么容易的。</p>
 
         </div>
         

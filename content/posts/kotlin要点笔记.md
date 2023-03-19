@@ -23,16 +23,16 @@ draft: false
 4. 类似C++，函数支持默认参数；
 5. 函数类型声明的格式和函数不一样，返回类型之前要用`->`；特别的，没有返回值也要写`->Unit`
 6. 返回值同样可以是函数，所以这个格式有点像haskell，如`(Int) ->((Int)->Unit)`，可以简化为`(Int)->(Int)->Unit`，这样就更像Haskell了；
-7. 通过`class::func_memeber_name`来引用函数或者成员变量，
-   1. lambda表达式的格式非常类似函数声明：`func f (x:Int,y:Int)->Int={x,y->x+y}`，或者更简单点`val f ={x:Int,y:Int: x+y}`；即用`{}`括起来的表达式；
-8. 单个参数可以不声明，隐式的为`it`；
-9. func与lambda的区别：
+7. 通过`class::func_memeber_name`来引用函数或者成员变量；
+8. lambda表达式的格式非常类似函数声明：`func f (x:Int,y:Int)->Int={x,y->x+y}`，或者更简单点`val f ={x:Int,y:Int: x+y}`；即用`{}`括起来的表达式；
+9. 单个参数可以不声明，隐式的为`it`；
+10. func与lambda的区别：
    1. fun在没有等号，只有花括号时，就是最常见的函数实现，必须带return；
    2. fun有等号，没有花括号时，表示单表达式函数体，此时无须带return；
    3. 如果是等号同时有花括号，无论使用val还是fun，都表示lambda表达式；
    4. lambda可以定义接收者，语法是`val sum: Int.(int) -> Int = {other->plus(other)}`;
-10. kotlin的闭包是可以修改外部变量的，比java合理；
-11. 如果一个函数只有一个参数，且参数是函数，则调用该函数时，无须传入外层的括号：
+11. kotlin的闭包是可以修改外部变量的，比java合理；
+12. 如果一个函数只有一个参数，且参数是函数，则调用该函数时，无须传入外层的括号：
 
 ```kotlin
 func t(block: ()->Unit){
@@ -68,7 +68,7 @@ val k = when(day){
 ```
 
 16. 内置range表达式，类似rust，如`for (k in 1..10 step 2)`，倒着用`10 downTo 1 step -2`；全闭区间；
-17. 如果想用左闭右开区间，用`1 unitl 10`；
+17. 如果想用左闭右开区间，用`1 until 10`；
 18. 数组遍历，如果想带上下标，用`array.withIndex()`，类似Python的`enumerate`；
 19. 支持中缀函数，类似Haskell，形式是`infix func`。声明条件比较苛刻：
     1. 必须是成员函数或者扩展函数，这样函数左侧的对象是确定的
@@ -215,13 +215,36 @@ inline fun<reified T> getType(){
 
 ## 异步支持
 
-1. kotlin支持协程，用法：
+1. kotlin支持协程，且协程的设计比较复杂；
+2. 使用`runBlocking`会阻塞等待作用域内的协程执行完毕，一般用于main函数；
+3. 使用` coroutineScope `关键字创建协程作用域，在所有已启动子协程执行完毕之前该作用域不会结束；
+4. 使用`GlobalScope`创建全局作用域；
+5. 使用`launch`在上面创建的作用域里创建一个新协程；
+6. `launch`内的函数可以单独提取出来，但是需要增加`suspend`关键字；
+7. `launch`返回一个`Job`对象，可以被取消掉；
+8. 但是无法强制取消，必须在代码里做取消检测（如检测`isActive`）；
+9. 一般需要在`launch`代码块里进行`finally`检测，从而释放资源；
+10. 注意`finally`的代码不一定能执行完毕(主要是不能调用delay），如果需要确保这一点，使用`withContext(NonCancellable)`来强制保证；
+11. 一般取消协程是为了避免超时，在最外围加上`withTimeout`或者`withTimeoutOrNull`即可；
+12. 除了`launch`之外，还可以使用`async`启动协程，与前者不同的是，它返回一个`Deferred`，类似其他语言中的promise，可以使用`.await`等待结果；
+13. 换句话说`launch`有点类似返回`void`的函数，`async`则是有返回值的函数；
+14. `launch`会立刻启动，但是`async`可以加上`(start = CoroutineStart.LAZY)`改为惰性启动，即需要手动调用`.start`来启动；
+15. 很容易看出，kotlin与go协程的区别之一，就是协程作用域的设计。协程作用域主要是为了将相关工作分组；
+16. 协程作用域中某个协程抛出异常，会导致其他协程立刻被取消；当一个父协程被取消的时候，所有它的子协程也会被递归的取消；一个父协程总是等待所有的子协程执行结束，无须显式join；
+17. kotlin并不推荐直接是使用全局async函数（像其他语言那种设计），即`GlobalScope.async`，因为全局作用域中的协程并不满足上面那条规则；
+18. 使用协程作用域+协程，被称为结构化并发；
+19. `async`和`launch`都可以显式指定调度策略，这包括：
+    1. 不传参数：从启动它的coroutineScope中继承；
+    2. `Dispatchers.Unconfined`，非受限调度器，可能会使用不同的线程来调度协程中不同的部分（每当遇到被挂起的调用，就视为一个新的部分），高级特性，一般不会使用；
+    3. `Dispatchers.Default`，默认调度器，使用共享的线程池；
+    4. `newSingleThreadContext("MyOwnThread")`，启动一个新线程；
 
-```kotlin
-launch{
-    delay(1000L) //类似线程中使用sleep
-}
-```
+20. 给jvm加上`-Dkotlinx.coroutines.debug`的参数，打印日志时就会打印出协程的名称，方便调试；
+21. 可以给`async`或者`launch`加上`CoroutineName`参数来给协程命名；
+22. 给`async`/`launch`加多个参数，需要使用`+`来连接，例如：`launch(Dispatchers.Default + CoroutineName("test"))`；
+23. kotlin支持异步流，将函数返回值改为`Flow`，然后通过`emit`逐个抛出数据；调用端使用`collect`收集值；
+24. kotlin支持`Channel`抽象，用法很像go中的channel；
+25. kotlin内置了actor支持，但是官方已经不再推荐使用；
+26. 有类似go的`select`支持，但是目前还是实验性质的；
 
-2. kotlin内置了Actor支持，当然也可以用akka；
-3. 待续，这里估计要看一下底层原理才知道kotlin的协程和其他的区别；
+总的来说，相比于go，kotlin的协程设计的有点过于复杂了，废案了好几次。所以设计一门语言还是没那么容易的。 
