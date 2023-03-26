@@ -888,42 +888,6 @@ Canvas部分则可以通过灵活地拖曳完成各种图表的数据、样式�
 
 由于这部分内容比较符合使用者的直觉，且更偏向于前端的工作，这里就不写详细的配置步骤了。有需求可以阅读[kibana的文档](https://www.elastic.co/guide/en/kibana/current/create-a-dashboard-of-panels-with-web-server-data.html)来学习。
 
-## 附录：中间件采集
-
-大部分中间件都集成在fleet里了，如果不能满足需求，可以点开custom这一栏。已经有官方集成的这里就不写了，包括MySQL、Redis、kafka、rabbitMQ和Nginx。
-
-### emqx
-
-需要先将数据推送到pushgateway，然后从pushgateway暴露/metrics端口给prometheus或者metricbeat使用。
-需要几步：
-1. 安装pushgateway，[pushgateway下载](https://github.com/prometheus/pushgateway/releases/tag/v1.4.3)
-2. 开启emqx_prometheus插件，可在emqx的dashboard的插件模块下开启
-3. 配置/etc/emqx/plugins/emqx_prometheus.conf文件。将prometheus.push.gateway.server配置为对应pushgateway的地址，通常是http://xxx/9091; prometheus.interval使用默认值即可
-4. 调用pushgateway的metrics接口即可，通常是http://xxx:9091/metrics
-
-### influxdb cluster
-
-支持metrics接口，可以直接用。不过能采集到的数据其实都是默认的golang exporter里面的。
-
-通过`debug/vars`接口可以拿到influxdb本身的监控数据，不过这个不是prometheus格式的，需要自己转换。
-
-可以通过开源的[influxdb exporter](https://github.com/prometheus/influxdb_exporter)或者直接用[telegraf](https://github.com/influxdata/telegraf)作为exporter，后者在output里面启动一个prometheus client即可.
-
-telegraf其实可以代替MetricBeat直接将数据发到es，不过和kibana那套体系配合的不是很好，需要自己管理相关index.
-
-### seaweedFS
-
-参考[这里](https://github.com/seaweedfs/seaweedfs/wiki/System-Metrics)，需要启动服务时额外配置metrics端口。
-
-官方给了grafana的json配置，kibana这边就需要自己配置了。
-
-### nacos
-官方支持Metric导出，参考[这里](https://nacos.io/zh-cn/docs/monitor-guide.html)
-
-### 阿里云商用中间件
-
-可以参考[`aliyun-exporter`](https://github.com/aylei/aliyun-exporter)这个repo，虽然已经archive，不过思路没变。
-
 ## 附录1：中间件采集
 
 大部分中间件都集成在fleet里了，如果不能满足需求，可以点开custom这一栏。已经有官方集成的这里就不写了，包括MySQL、Redis、kafka、rabbitMQ和Nginx。

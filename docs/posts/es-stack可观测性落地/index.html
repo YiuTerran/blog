@@ -95,7 +95,7 @@
     },
     "headline": "Elastic Observability系统搭建 | 应许之地","datePublished": "2022-10-12T17:52:42+08:00",
     "dateModified": "2022-10-12T17:52:42+08:00",
-    "wordCount":  15446 ,
+    "wordCount":  14607 ,
     "publisher": {
         "@type": "Person",
         "name": "C. Wang",
@@ -229,7 +229,7 @@
     </div>
     <div class="me-6 my-2">
         <i class="fas fa-clock me-1"></i>
-        <span>31分钟阅读时长</span>
+        <span>30分钟阅读时长</span>
     </div>
     
     
@@ -854,7 +854,7 @@ systemctl start filebeat
 <p>Dashboard里面内置了一部分仪表盘，也可以自己使用KQL筛选数据后自行创建，一般内部监控用这个创建可视化就够了。</p>
 <p>Canvas部分则可以通过灵活地拖曳完成各种图表的数据、样式配置，可以非常方便地作出各种炫酷的大屏。</p>
 <p>由于这部分内容比较符合使用者的直觉，且更偏向于前端的工作，这里就不写详细的配置步骤了。有需求可以阅读<a href="https://www.elastic.co/guide/en/kibana/current/create-a-dashboard-of-panels-with-web-server-data.html">kibana的文档</a>来学习。</p>
-<h2 id="附录中间件采集">附录：中间件采集</h2>
+<h2 id="附录1中间件采集">附录1：中间件采集</h2>
 <p>大部分中间件都集成在fleet里了，如果不能满足需求，可以点开custom这一栏。已经有官方集成的这里就不写了，包括MySQL、Redis、kafka、rabbitMQ和Nginx。</p>
 <h3 id="emqx">emqx</h3>
 <p>需要先将数据推送到pushgateway，然后从pushgateway暴露/metrics端口给prometheus或者metricbeat使用。
@@ -876,29 +876,6 @@ systemctl start filebeat
 <h3 id="nacos">nacos</h3>
 <p>官方支持Metric导出，参考<a href="https://nacos.io/zh-cn/docs/monitor-guide.html">这里</a></p>
 <h3 id="阿里云商用中间件">阿里云商用中间件</h3>
-<p>可以参考<a href="https://github.com/aylei/aliyun-exporter"><code>aliyun-exporter</code></a>这个repo，虽然已经archive，不过思路没变。</p>
-<h2 id="附录1中间件采集">附录1：中间件采集</h2>
-<p>大部分中间件都集成在fleet里了，如果不能满足需求，可以点开custom这一栏。已经有官方集成的这里就不写了，包括MySQL、Redis、kafka、rabbitMQ和Nginx。</p>
-<h3 id="emqx-1">emqx</h3>
-<p>需要先将数据推送到pushgateway，然后从pushgateway暴露/metrics端口给prometheus或者metricbeat使用。
-需要几步：</p>
-<ol>
-<li>安装pushgateway，<a href="https://github.com/prometheus/pushgateway/releases/tag/v1.4.3">pushgateway下载</a></li>
-<li>开启emqx_prometheus插件，可在emqx的dashboard的插件模块下开启</li>
-<li>配置/etc/emqx/plugins/emqx_prometheus.conf文件。将prometheus.push.gateway.server配置为对应pushgateway的地址，通常是http://xxx/9091; prometheus.interval使用默认值即可</li>
-<li>调用pushgateway的metrics接口即可，通常是http://xxx:9091/metrics</li>
-</ol>
-<h3 id="influxdb-cluster-1">influxdb cluster</h3>
-<p>支持metrics接口，可以直接用。不过能采集到的数据其实都是默认的golang exporter里面的。</p>
-<p>通过<code>debug/vars</code>接口可以拿到influxdb本身的监控数据，不过这个不是prometheus格式的，需要自己转换。</p>
-<p>可以通过开源的<a href="https://github.com/prometheus/influxdb_exporter">influxdb exporter</a>或者直接用<a href="https://github.com/influxdata/telegraf">telegraf</a>作为exporter，后者在output里面启动一个prometheus client即可.</p>
-<p>telegraf其实可以代替MetricBeat直接将数据发到es，不过和kibana那套体系配合的不是很好，需要自己管理相关index.</p>
-<h3 id="seaweedfs-1">seaweedFS</h3>
-<p>参考<a href="https://github.com/seaweedfs/seaweedfs/wiki/System-Metrics">这里</a>，需要启动服务时额外配置metrics端口。</p>
-<p>官方给了grafana的json配置，kibana这边就需要自己配置了。</p>
-<h3 id="nacos-1">nacos</h3>
-<p>官方支持Metric导出，参考<a href="https://nacos.io/zh-cn/docs/monitor-guide.html">这里</a></p>
-<h3 id="阿里云商用中间件-1">阿里云商用中间件</h3>
 <p>可以参考<a href="https://github.com/aylei/aliyun-exporter"><code>aliyun-exporter</code></a>这个repo，虽然已经archive，不过思路没变。</p>
 <h2 id="附录2es常见问题">附录2：ES常见问题</h2>
 <h3 id="磁盘空间不足">磁盘空间不足</h3>
@@ -1030,22 +1007,13 @@ systemctl start filebeat
       </ul>
     </li>
     <li><a href="#看板配置">看板配置</a></li>
-    <li><a href="#附录中间件采集">附录：中间件采集</a>
+    <li><a href="#附录1中间件采集">附录1：中间件采集</a>
       <ul>
         <li><a href="#emqx">emqx</a></li>
         <li><a href="#influxdb-cluster">influxdb cluster</a></li>
         <li><a href="#seaweedfs">seaweedFS</a></li>
         <li><a href="#nacos">nacos</a></li>
         <li><a href="#阿里云商用中间件">阿里云商用中间件</a></li>
-      </ul>
-    </li>
-    <li><a href="#附录1中间件采集">附录1：中间件采集</a>
-      <ul>
-        <li><a href="#emqx-1">emqx</a></li>
-        <li><a href="#influxdb-cluster-1">influxdb cluster</a></li>
-        <li><a href="#seaweedfs-1">seaweedFS</a></li>
-        <li><a href="#nacos-1">nacos</a></li>
-        <li><a href="#阿里云商用中间件-1">阿里云商用中间件</a></li>
       </ul>
     </li>
     <li><a href="#附录2es常见问题">附录2：ES常见问题</a>
