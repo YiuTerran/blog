@@ -29,7 +29,7 @@ influxDB推荐5000~10000个点批量写入以提高性能。
 
 ### bucket
 
-database+RP
+database+retain policy（保留策略，简称RP）
 
 ### CQ
 
