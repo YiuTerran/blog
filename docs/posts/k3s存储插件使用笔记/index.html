@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang='zh' dir='ltr' ><meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+<title>K3s存储插件使用笔记 | 应许之地</title>
+
+<meta name="generator" content="Hugo Eureka 0.9.0" />
+<link rel="stylesheet" href="https://yiuterran.github.io/blog/css/eureka.min.css">
+<script defer src="https://yiuterran.github.io/blog/js/eureka.min.js"></script>
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload"
+  href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Noto+Serif+SC:wght@400;600;700&display=swap"
+  as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/styles/solarized-light.min.css"
+   media="print"
+  onload="this.media='all';this.onload=null" crossorigin>
+<script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/highlight.min.js"
+   crossorigin></script>
+
+  <script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/languages/dart.min.js"
+     crossorigin></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/js/all.min.js"
+   integrity="sha256-uNYoXefWRqv&#43;PsIF/OflNmwtKM4lStn9yrz2gVl6ymo="  crossorigin></script>
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+   integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3&#43;Aro6EYUG4&#43;cU&#43;KJWu/X"  media="print"
+  onload="this.media='all';this.onload=null" crossorigin>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js" 
+  integrity="sha384-g7c&#43;Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI&#43;sEnkvrMWph2EDg4"  crossorigin></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
+   integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC&#43;Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa"  crossorigin></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: "$$", right: "$$", display: true },
+        { left: "$", right: "$", display: false },
+        { left: "\\(", right: "\\)", display: false },
+        { left: "\\[", right: "\\]", display: true }
+      ],
+    });
+  });
+</script>
+
+
+<script defer src="https://cdn.jsdelivr.net/npm/mermaid@8.9.2/dist/mermaid.min.js" 
+  integrity="sha256-Zmpaaj&#43;GXFsPF5WdPArSrnW3b30dovldeKsW00xBVwE="  crossorigin></script>
+<link rel="preconnect" href="https://www.google-analytics.com" crossorigin>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-C0R8DENDJ0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-C0R8DENDJ0');
+</script>
+
+
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
+
+<meta name="description"
+  content="原理 k8s存储主要依赖PV和PVC的机制，前者由运维人员声明可用的存储，如： apiVersion: v1 kind: PersistentVolume metadata: name: nfs spec: storageClassName: manual capacity: storage: 10Gi accessModes: - ReadWriteMany nfs: server: 10.244.1.4 path: &quot;/&quot; 后者是用户（开发人员）声明的需求">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+      "@type": "ListItem",
+      "position": 1 ,
+      "name":"文章列表",
+      "item":"https://yiuterran.github.io/blog/posts/"},{
+      "@type": "ListItem",
+      "position": 2 ,
+      "name":"K3s存储插件使用笔记",
+      "item":"https://yiuterran.github.io/blog/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/"}]
+}
+</script>
+
+
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://yiuterran.github.io/blog/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/"
+    },
+    "headline": "K3s存储插件使用笔记 | 应许之地","datePublished": "2023-06-12T09:20:20+08:00",
+    "dateModified": "2023-06-12T09:20:20+08:00",
+    "wordCount":  2506 ,
+    "author": {
+        "@type": "Person",
+        "name": ["tryao"]
+    },
+    "publisher": {
+        "@type": "Person",
+        "name": "C. Wang",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://yiuterran.github.io/blog/images/icon.png"
+        }
+        },
+    "description": "原理 k8s存储主要依赖PV和PVC的机制，前者由运维人员声明可用的存储，如： apiVersion: v1 kind: PersistentVolume metadata: name: nfs spec: storageClassName: manual capacity: storage: 10Gi accessModes: - ReadWriteMany nfs: server: 10.244.1.4 path: \u0026quot;\/\u0026quot; 后者是用户（开发人员）声明的需求"
+}
+</script><meta property="og:title" content="K3s存储插件使用笔记 | 应许之地" />
+<meta property="og:type" content="article" />
+
+
+<meta property="og:image" content="https://yiuterran.github.io/blog/images/icon.png">
+
+
+<meta property="og:url" content="https://yiuterran.github.io/blog/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/" />
+
+
+
+
+<meta property="og:description" content="原理 k8s存储主要依赖PV和PVC的机制，前者由运维人员声明可用的存储，如： apiVersion: v1 kind: PersistentVolume metadata: name: nfs spec: storageClassName: manual capacity: storage: 10Gi accessModes: - ReadWriteMany nfs: server: 10.244.1.4 path: &quot;/&quot; 后者是用户（开发人员）声明的需求" />
+
+
+
+
+<meta property="og:locale" content="zh" />
+
+
+
+
+<meta property="og:site_name" content="应许之地" />
+
+
+
+
+
+
+<meta property="article:published_time" content="2023-06-12T09:20:20&#43;08:00" />
+
+
+<meta property="article:modified_time" content="2023-06-12T09:20:20&#43;08:00" />
+
+
+
+<meta property="article:section" content="posts" />
+
+
+<meta property="article:tag" content="k8s" />
+
+
+
+
+
+<meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/kubeedge%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/" />
+
+<meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/k8s%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/" />
+
+
+
+<body class="flex flex-col min-h-screen">
+  <header class="fixed flex items-center w-full min-h-16 ps-scrollbar z-50 bg-secondary-bg shadow-sm">
+    <div class="w-full max-w-screen-xl mx-auto"><script>
+    let storageColorScheme = localStorage.getItem("lightDarkMode")
+    if (((storageColorScheme == 'Auto' || storageColorScheme == null) && window.matchMedia("(prefers-color-scheme: dark)").matches) || storageColorScheme == "Dark") {
+        document.getElementsByTagName('html')[0].classList.add('dark')
+    }
+</script>
+<nav class="flex items-center justify-between flex-wrap px-4 py-4 md:py-0">
+    <a href="https://yiuterran.github.io/blog/" class="me-6 text-primary-text text-xl font-bold">应许之地</a>
+    <button id="navbar-btn" class="md:hidden flex items-center px-3 py-2" aria-label="Open Navbar">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div id="target"
+        class="hidden block md:flex md:grow md:justify-between md:items-center w-full md:w-auto text-primary-text z-20">
+        <div class="md:flex md:h-16 text-sm md:grow pb-4 md:pb-0 border-b md:border-b-0">
+            <a href="https://yiuterran.github.io/blog/authors/tryao/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  border-transparent  me-4">作者</a>
+            <a href="https://yiuterran.github.io/blog/posts/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  selected-menu-item  me-4">文章</a>
+        </div>
+
+        <div class="flex">
+            <div class="relative pt-4 md:pt-0">
+                <div class="cursor-pointer hover:text-eureka" id="lightDarkMode">
+                    <i class="fas fa-adjust"></i>
+                </div>
+                <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-30" id="is-open">
+                </div>
+                <div class="absolute flex flex-col start-0 md:start-auto end-auto md:end-0 hidden bg-secondary-bg w-48 rounded py-2 border border-tertiary-bg cursor-pointer z-40"
+                    id='lightDarkOptions'>
+                    <span class="px-4 py-1 hover:text-eureka" name="Light">浅色</span>
+                    <span class="px-4 py-1 hover:text-eureka" name="Dark">深色</span>
+                    <span class="px-4 py-1 hover:text-eureka" name="Auto">自动</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-0" id="is-open-mobile">
+    </div>
+
+</nav>
+<script>
+    
+    let element = document.getElementById('lightDarkMode')
+    if (storageColorScheme == null || storageColorScheme == 'Auto') {
+        document.addEventListener('DOMContentLoaded', () => {
+            window.matchMedia("(prefers-color-scheme: dark)").addEventListener('change', switchDarkMode)
+        })
+    } else if (storageColorScheme == "Light") {
+        element.firstElementChild.classList.remove('fa-adjust')
+        element.firstElementChild.setAttribute("data-icon", 'sun')
+        element.firstElementChild.classList.add('fa-sun')
+    } else if (storageColorScheme == "Dark") {
+        element.firstElementChild.classList.remove('fa-adjust')
+        element.firstElementChild.setAttribute("data-icon", 'moon')
+        element.firstElementChild.classList.add('fa-moon')
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        getcolorscheme();
+        switchBurger();
+    });
+</script>
+</div>
+  </header>
+  <main class="grow pt-16">
+    <div class="ps-scrollbar">
+      <div class="w-full max-w-screen-xl lg:px-4 xl:px-8 mx-auto">
+
+
+<div class="grid grid-cols-2 lg:grid-cols-8 gap-4 lg:pt-12">
+    <div
+        class="col-span-2  lg:col-span-6 bg-secondary-bg rounded px-6 py-8">
+        <h1 class="font-bold text-3xl text-primary-text">K3s存储插件使用笔记</h1>
+        <div class="flex flex-wrap flex-row items-center mt-2 text-tertiary-text">
+    <div class="me-6 my-2">
+        <i class="fas fa-calendar me-1"></i>
+        <span>2023-06-12</span>
+    </div>
+    <div class="me-6 my-2">
+        <i class="fas fa-clock me-1"></i>
+        <span>6分钟阅读时长</span>
+    </div>
+    
+    
+
+    
+</div>
+        
+        
+        
+
+        <div class="content">
+            <h2 id="原理">原理</h2>
+<p>k8s存储主要依赖PV和PVC的机制，前者由运维人员声明可用的存储，如：</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  nfs:
+    server: 10.244.1.4
+    path: &quot;/&quot;
+</code></pre>
+<p>后者是用户（开发人员）声明的需求：</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: manual
+  resources:
+    requests:
+      storage: 1Gi
+</code></pre>
+<p>两者的匹配机制：</p>
+<ol>
+<li>存储要求的容量必须满足需求；</li>
+<li><code>spec.storageClassName</code>必须完全匹配；</li>
+<li>权限要求能够匹配上；</li>
+</ol>
+<p>绑定成功之后，在Pod里面就可以正常使用这个PVC了：</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: pod
+metadata:
+  labels:
+    role: web-frontend
+spec:
+  containers:
+    - name: web
+      image: nginx
+      ports:
+        - name: web
+          containerPort: 80
+      volumeMounts:
+        - name: nfs
+          mountPath: /usr/share/nginx/html
+  volumes:
+    - name: nfs
+      persistentVolumeClaim:
+        claimName: nfs
+</code></pre>
+<ol>
+<li><code>spec.containers.volumeMounts</code>这里将卷名为<code>nfs</code>的卷挂载到容器中的指定目录；</li>
+<li><code>spec.volumes</code>中声明了上面用的名为<code>nfs</code>的volume；</li>
+<li>上面那个volume实际上对应了<code>persistentVolumeClaim.claimName</code>；</li>
+</ol>
+<p>k8s中内置了一个循环调度器，会定期检查并绑定PV和PVC，即使Pod启动的时候PVC还没有成功绑定PV，等到有合适可用的磁盘时也会自动绑定成功。</p>
+<p>PV的实现方式非常多，主要包括<strong>块存储</strong>和<strong>文件存储</strong>两类，两者的区别是前者类似是磁盘，需要格式化成文件系统之后才能使用，后者则可以直接使用（如NFS）；</p>
+<h2 id="dynamic-provisioning">Dynamic Provisioning</h2>
+<p>上面那种手动声明PV的方式，被称为Static Provisioning. 一般只有服务规模比较小的时候使用，大型集群里面有成千上万个pod，每个需要成百上千的PV，人工创建PV的成本太高，所以一般并不使用。</p>
+<p>StorageClass是创建PV的模板，主要包括：</p>
+<ol>
+<li>PV的属性，如存储类型、Volume的大小等；</li>
+<li>创建PV需要的插件，如Ceph等；</li>
+</ol>
+<p>例如：</p>
+<pre><code class="language-yaml">apiVersion: ceph.rook.io/v1beta1
+kind: Pool
+metadata:
+  name: replicapool
+  namespace: rook-ceph
+spec:
+  replicated:
+    size: 3
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: block-service
+provisioner: ceph.rook.io/block
+parametes:
+  pool: replicapool
+  clusterNamespace: rook-ceph
+</code></pre>
+<p>使用这个StorageClass:</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: example
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: block-service
+  resources:
+    requests:
+      storage: 30Gi
+</code></pre>
+<p>这里核心的就是<code>spec.storageClassName</code>这个字段，使用<code>kubectl apply -f pvc.yaml</code>，就可以看到对应的pvc了。</p>
+<p>使用<code>kubectl describe pv &lt;pvc-volume&gt;</code>可以看到对应的PV.</p>
+<p>需要注意的是，使用静态供应的时候，storageClassName是名称匹配的，并不是模板匹配。</p>
+<h2 id="localpv">LocalPV</h2>
+<p>考虑到资源隔离和可用性等问题，不应直接把host-path用作LocalPV，一般情况下，一个LocalPV对应一个外挂磁盘。</p>
+<p>LocalPV的格式很简单：</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: example
+spec:
+  capacity:
+    storage: 10Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: local-storage
+  local:
+    path: /mnt/disks/vol1
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/hostname
+            operator: In
+            values:
+              - node-1
+</code></pre>
+<p>显然上面的<code>local-path</code>指定了本地路径，下面的节点亲和性需求上强制要求了使用这个PV的Pod只能在<code>node-1</code>上运行。</p>
+<p>如果将LocalPV声明为一个StorageClass，其格式如下：</p>
+<pre><code class="language-yaml">apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: local-path
+provisioner: rancher.io/local-path
+volumeBindingMode: WaitForFirstConsumer
+</code></pre>
+<p>上面其实就是k3s内置的LocalPV的格式（移除了metadata中的大部分内容），这里值得注意的是<code>volumeBindingMode</code>的延迟绑定设计。</p>
+<p>通过<code>WaitForFirstConsumer</code>的声明，PV和PVC的绑定会被延迟到调度Pod的时候，而不是在声明PVC之后立刻绑定。这是由于节点亲和性的需求导致的。</p>
+<p>使用这个StorageClass的PVC格式和普通的PVC并无二致：</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: example-local-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: local-path
+</code></pre>
+<h2 id="移除pv">移除PV</h2>
+<p>移除PV的流程和创建PV正好相反，如果是静态声明的LocalPV，流程是：</p>
+<ol>
+<li>删除使用PV的Pod；</li>
+<li>从宿主机移除挂载；</li>
+<li>删除PVC；</li>
+<li>删除PV；</li>
+</ol>
+<p>静态创建/删除PV的流程都比较繁琐，可以使用k8s提供的<code>External Provisioner</code>中的某个静态Provisioner自动扫描磁盘完成PV声明。</p>
+<h2 id="csi">CSI</h2>
+<p>k8s中除了kubelet等几个核心组件之外，大部分组件都是插件化的，存储也不例外，可以自己根据CSI接口自行创建。</p>
+<p>k3s默认的StorageClass <code>local-path</code>就是通过CSI自己实现的，<code>metadata.annotations.storageclass.kubernetes.io/is-default-class</code>设为<code>&quot;true&quot;</code>即可设置为默认StorageClass.</p>
+<h2 id="k3s默认配置">k3s默认配置</h2>
+<p>刚说了k3s默认的<code>local-path</code>是一个LocalPV，他的默认数据路径其实在安装的时候可以修改，有个<code>--default-local-storage-path</code>的参数指明，如果不改的话默认是<code>/var/lib/rancher/k3s/storage</code>.</p>
+<p>在k3s安装好之后，也可以通过修改<code>/var/lib/rancher/k3s/server/manifests/local-storage.yaml</code>中的<code>configmap</code>，将<code>nodePathMap</code>中的<code>paths</code>改为需要的路径。</p>
+<p>k3s删除了k8s自带的大部分存储插件，如果是分布式文件存储，推荐使用<code>Longhorn</code>.</p>
+<h2 id="longhorn">Longhorn</h2>
+<p>官方文档见：https://longhorn.io/docs/1.4.2/，目前还是沙箱阶段。</p>
+<p>安装使用helm3即可：</p>
+<pre><code class="language-bash">helm repo add longhorn https://charts.longhorn.io
+helm repo update
+helm install longhorn longhorn/longhorn --namespace longhorn-system --create-namespace --version $LONGHORN_VERSION
+kubectl patch sc longhorn -p '{&quot;metadata&quot;: {&quot;annotations&quot;:{&quot;storageclass.kubernetes.io/is-default-class&quot;:&quot;false&quot;}}}'
+</code></pre>
+<p>其中最后是将longhorn的default StorageClass配置取消掉，因为k3s默认是使用<code>local-path</code>的，没必要改成默认longhorn.</p>
+<p>longhorn默认的配置可以在安装时修改，见<a href="https://longhorn.io/docs/1.4.2/advanced-resources/deploy/customizing-default-settings/">这里</a>，大部分时候使用默认配置即可。如果有很多node，但是只有部分node想充当分布式存储服务器（建议最少3个），可以通过<a href="https://longhorn.io/docs/1.4.2/advanced-resources/deploy/node-selector/">NodeSelector</a>进行修改。</p>
+<p>安装完成之后可以通过ingress将其前端页面暴露出来，不过这个页面没有认证机制，有一定的安全风险：</p>
+<pre><code class="language-yaml">apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: longhorn-ingress
+  namespace: longhorn-system
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: longhorn-frontend
+            port:
+              number: 80
+</code></pre>
+<p>上面的配置直接占用了ingress的根path，虽然github上说longhorn支持通过subpath访问，但是我实际测试的时候是一片空白页…</p>
+<p>longhorn默认使用的磁盘路径是<code>/var/lib/longhorn</code>，一般我们会将数据盘直接挂载到这个路径下；或者你也可以根据<a href="https://longhorn.io/docs/1.4.2/volumes-and-nodes/multidisk/">这里</a>的提示修改路径或者添加多磁盘支持。</p>
+<p>longhorn需要配置的东西其实很少，直接创建PVC时指定StorageClass为<code>longhorn</code>即可。其他备份、快照等功能使用可以参考<a href="https://mritd.com/2021/03/06/longhorn-storage-test">这篇</a>博客。</p>
+
+        </div>
+        
+        <div class="my-4">
+    
+    <a href="https://yiuterran.github.io/blog/tags/k8s/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#k8s</a>
+    
+</div>
+        
+        
+        
+
+
+        
+        
+        <div class="py-2">
+    
+    <div class="flex flex-col md:flex-row items-center my-8">
+        <a href="https://yiuterran.github.io/blog/authors/tryao/" class="w-24 h-24 md:me-4">
+            
+            
+            <img src="https://yiuterran.github.io/blog/images/avatar.png" class="w-full bg-primary-bg rounded-full" alt="Avatar">
+            
+        </a>
+        <div class="w-full md:w-auto mt-4 md:mt-0">
+            <a href="https://yiuterran.github.io/blog/authors/tryao/" class="block font-bold text-lg pb-1 mb-2 border-b">个人介绍</a>
+            <span class="block pb-2">兴趣使然的程序员，博而不精，乐学不倦</span>
+            
+            
+            
+            
+            
+            <a href="mailto:yaotairan@gmail.com" class="me-1">
+                <i class="fas fa-envelope"></i>
+            </a>
+            
+            
+            
+            
+            
+            <a href="https://github.com/YiuTerran" class="me-1">
+                <i class="fab fa-github"></i>
+            </a>
+            
+        </div>
+    </div>
+    
+</div>
+        
+        
+        
+<div class="flex flex-col md:flex-row md:justify-between -mx-2 mt-4 px-2 pt-4 border-t">
+    <div>
+        
+    </div>
+    <div class="md:text-right mt-4 md:mt-0">
+        
+        <span class="block font-bold">下一页</span>
+        <a href="https://yiuterran.github.io/blog/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/" class="block">边缘服务器管理工具选型</a>
+        
+    </div>
+</div>
+
+        
+
+
+
+  <script id="utterances" src="https://utteranc.es/client.js"
+            issue-term=title
+            repo=YiuTerran/blog-comment
+              theme=preferred-color-scheme
+        crossorigin="anonymous"
+        async>
+</script>
+<script>
+    if (storageColorScheme == "Light") {
+      document.getElementById('utterances').setAttribute('theme', 'github-light')
+    } else if (storageColorScheme == "Dark") {
+      document.getElementById('utterances').setAttribute('theme', 'github-dark')
+    }
+</script>
+
+    </div>
+    
+    <div class="col-span-2">
+        
+        
+        <div class="sticky top-16 z-10 hidden lg:block px-6 py-4  bg-primary-bg ">
+    <span class="text-lg font-semibold">本页内容</span>
+</div>
+<div class="sticky-toc hidden lg:block px-6 pb-6 ">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#原理">原理</a></li>
+    <li><a href="#dynamic-provisioning">Dynamic Provisioning</a></li>
+    <li><a href="#localpv">LocalPV</a></li>
+    <li><a href="#移除pv">移除PV</a></li>
+    <li><a href="#csi">CSI</a></li>
+    <li><a href="#k3s默认配置">k3s默认配置</a></li>
+    <li><a href="#longhorn">Longhorn</a></li>
+  </ul>
+</nav>
+</div>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        enableStickyToc();
+    });
+</script>
+        
+    </div>
+    
+
+    
+    
+    <div
+        class="col-span-2  lg:col-span-6 bg-secondary-bg rounded p-6">
+        <h2 class="text-lg font-semibold mb-4">相关</h2>
+        <div class="content">
+            
+            <a href="https://yiuterran.github.io/blog/posts/kubeedge%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/">KubeEdge要点笔记</a>
+            <br />
+            
+            <a href="https://yiuterran.github.io/blog/posts/k8s%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/">K8s要点简记</a>
+            <br />
+            
+        </div>
+    </div>
+    
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', ()=>{
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+
+      </div>
+    </div>
+    
+  </main>
+  <footer class="ps-scrollbar">
+    <div class="w-full max-w-screen-xl mx-auto"><div class="text-center p-6 pin-b">
+    <p class="text-sm text-tertiary-text">&copy; 2021 <a href="https://github.com/YiuTerran">tryao</a>
+ &middot;  Powered by the <a href="https://github.com/wangchucheng/hugo-eureka" class="hover:text-eureka">Eureka</a> theme for <a href="https://gohugo.io" class="hover:text-eureka">Hugo</a></p>
+</div></div>
+  </footer>
+</body>
+
+</html>

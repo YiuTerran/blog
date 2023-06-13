@@ -8,7 +8,16 @@
     <language>zh</language>
     <copyright>&amp;copy; 2021 &lt;a href=&#34;https://github.com/YiuTerran&#34;&gt;tryao&lt;/a&gt;
 </copyright>
-    <lastBuildDate>Mon, 06 Mar 2023 14:37:28 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 12 Jun 2023 09:20:20 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>k8s</title>
+      <link>https://yiuterran.github.io/blog/tags/k8s/</link>
+      <pubDate>Mon, 12 Jun 2023 09:20:20 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/tags/k8s/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>devops</title>
       <link>https://yiuterran.github.io/blog/tags/devops/</link>
@@ -33,15 +42,6 @@
       <pubDate>Sun, 05 Mar 2023 12:58:37 +0800</pubDate>
       
       <guid>https://yiuterran.github.io/blog/tags/kotlin/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>k8s</title>
-      <link>https://yiuterran.github.io/blog/tags/k8s/</link>
-      <pubDate>Tue, 21 Feb 2023 15:07:54 +0800</pubDate>
-      
-      <guid>https://yiuterran.github.io/blog/tags/k8s/</guid>
       <description></description>
     </item>
     

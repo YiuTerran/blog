@@ -3,7 +3,25 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://yiuterran.github.io/blog/authors/</loc>
-    <lastmod>2023-03-06T14:37:28+08:00</lastmod>
+    <lastmod>2023-06-12T09:20:20+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/</loc>
+    <lastmod>2023-06-12T09:20:20+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/tags/k8s/</loc>
+    <lastmod>2023-06-12T09:20:20+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/tags/</loc>
+    <lastmod>2023-06-12T09:20:20+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/authors/tryao/</loc>
+    <lastmod>2023-06-12T09:20:20+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/posts/</loc>
+    <lastmod>2023-06-12T09:20:20+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/</loc>
+    <lastmod>2023-06-12T09:20:20+08:00</lastmod>
   </url><url>
     <loc>https://yiuterran.github.io/blog/tags/devops/</loc>
     <lastmod>2023-03-06T14:37:28+08:00</lastmod>
@@ -11,19 +29,7 @@
     <loc>https://yiuterran.github.io/blog/tags/edge/</loc>
     <lastmod>2023-03-06T14:37:28+08:00</lastmod>
   </url><url>
-    <loc>https://yiuterran.github.io/blog/tags/</loc>
-    <lastmod>2023-03-06T14:37:28+08:00</lastmod>
-  </url><url>
     <loc>https://yiuterran.github.io/blog/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/</loc>
-    <lastmod>2023-03-06T14:37:28+08:00</lastmod>
-  </url><url>
-    <loc>https://yiuterran.github.io/blog/authors/tryao/</loc>
-    <lastmod>2023-03-06T14:37:28+08:00</lastmod>
-  </url><url>
-    <loc>https://yiuterran.github.io/blog/posts/</loc>
-    <lastmod>2023-03-06T14:37:28+08:00</lastmod>
-  </url><url>
-    <loc>https://yiuterran.github.io/blog/</loc>
     <lastmod>2023-03-06T14:37:28+08:00</lastmod>
   </url><url>
     <loc>https://yiuterran.github.io/blog/tags/kotlin/</loc>
@@ -31,9 +37,6 @@
   </url><url>
     <loc>https://yiuterran.github.io/blog/posts/kotlin%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/</loc>
     <lastmod>2023-03-05T12:58:37+08:00</lastmod>
-  </url><url>
-    <loc>https://yiuterran.github.io/blog/tags/k8s/</loc>
-    <lastmod>2023-02-21T15:07:54+08:00</lastmod>
   </url><url>
     <loc>https://yiuterran.github.io/blog/posts/kubeedge%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/</loc>
     <lastmod>2023-02-21T15:07:54+08:00</lastmod>
