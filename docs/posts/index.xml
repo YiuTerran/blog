@@ -8,7 +8,16 @@
     <language>zh</language>
     <copyright>&amp;copy; 2021 &lt;a href=&#34;https://github.com/YiuTerran&#34;&gt;tryao&lt;/a&gt;
 </copyright>
-    <lastBuildDate>Mon, 12 Jun 2023 09:20:20 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 10 Jul 2023 12:29:45 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>解决k8s的javaSDK与jackson不兼容问题</title>
+      <link>https://yiuterran.github.io/blog/posts/%E8%A7%A3%E5%86%B3k8s%E7%9A%84javasdk%E4%B8%8Ejackson%E4%B8%8D%E5%85%BC%E5%AE%B9%E9%97%AE%E9%A2%98/</link>
+      <pubDate>Mon, 10 Jul 2023 12:29:45 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/posts/%E8%A7%A3%E5%86%B3k8s%E7%9A%84javasdk%E4%B8%8Ejackson%E4%B8%8D%E5%85%BC%E5%AE%B9%E9%97%AE%E9%A2%98/</guid>
+      <description>k8s的java sdk中json序列化使用了google自家的gosn，但是springboot中默认使用Jackson，我们的业务代码里面也习惯上使</description>
+    </item>
+    
     <item>
       <title>K3s存储插件使用笔记</title>
       <link>https://yiuterran.github.io/blog/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/</link>
