@@ -34,6 +34,8 @@ public class SpringMvcConf {
         //注册k8s object的特殊类
         simpleModule.addSerializer(IntOrString.class, new IntOrStringSerializer());
         simpleModule.addDeserializer(IntOrString.class, new IntOrStringDeserializer());
+        simpleModule.addSerializer(Quantity.class, new QuantitySerializer());
+        simpleModule.addDeserializer(Quantity.class, new QuantityDeserializer());
         mapper.registerModule(simpleModule);
     }
 
@@ -86,7 +88,7 @@ public class V1ListMetaMixIn {
 
 k8s的sdk里，使用了`_continue`字段来反序列化，这里将其ignore掉，改为`cursor`。
 
-## `IntOrString`问题
+## 特殊类型
 
 yaml中同一个key，value可以是int也可以是字符串，所以k8s有一个`IntOrString`类，需要做特殊处理才能正常序列化/反序列化：
 
@@ -122,6 +124,33 @@ public class IntOrStringDeserializer extends JsonDeserializer<IntOrString> {
     }
 }
 ```
+
+同样，还有一个`Quantity`是用来处理单位转换的：
+
+```java
+public class QuantitySerializer extends StdSerializer<Quantity> {
+
+    public QuantitySerializer() {
+        super(Quantity.class);
+    }
+
+    @Override
+    public void serialize(Quantity value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+        gen.writeString(value.toSuffixedString());
+    }
+}
+```
+
+```java
+public class QuantityDeserializer extends JsonDeserializer<Quantity> {
+    @Override
+    public Quantity deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+        return Quantity.fromString(p.getValueAsString());
+    }
+}
+```
+
+实际上`V1Patch`也需要做类似的处理，不过一般打patch都是直接用字符串的，所以也可以不管。
 
 ## 忽略null字段
 

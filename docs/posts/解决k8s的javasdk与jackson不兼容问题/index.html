@@ -95,7 +95,7 @@
     },
     "headline": "解决k8s的javaSDK与jackson不兼容问题 | 应许之地","datePublished": "2023-07-10T12:29:45+08:00",
     "dateModified": "2023-07-10T12:29:45+08:00",
-    "wordCount":  1204 ,
+    "wordCount":  1322 ,
     "author": {
         "@type": "Person",
         "name": ["tryao"]
@@ -262,6 +262,8 @@ public class SpringMvcConf {
         //注册k8s object的特殊类
         simpleModule.addSerializer(IntOrString.class, new IntOrStringSerializer());
         simpleModule.addDeserializer(IntOrString.class, new IntOrStringDeserializer());
+        simpleModule.addSerializer(Quantity.class, new QuantitySerializer());
+        simpleModule.addDeserializer(Quantity.class, new QuantityDeserializer());
         mapper.registerModule(simpleModule);
     }
 
@@ -307,7 +309,7 @@ public class V1ListMetaMixIn {
 }
 </code></pre>
 <p>k8s的sdk里，使用了<code>_continue</code>字段来反序列化，这里将其ignore掉，改为<code>cursor</code>。</p>
-<h2 id="intorstring问题"><code>IntOrString</code>问题</h2>
+<h2 id="特殊类型">特殊类型</h2>
 <p>yaml中同一个key，value可以是int也可以是字符串，所以k8s有一个<code>IntOrString</code>类，需要做特殊处理才能正常序列化/反序列化：</p>
 <pre><code class="language-java">public class IntOrStringSerializer extends StdSerializer&lt;IntOrString&gt; {
     public IntOrStringSerializer() {
@@ -338,6 +340,27 @@ public class V1ListMetaMixIn {
     }
 }
 </code></pre>
+<p>同样，还有一个<code>Quantity</code>是用来处理单位转换的：</p>
+<pre><code class="language-java">public class QuantitySerializer extends StdSerializer&lt;Quantity&gt; {
+
+    public QuantitySerializer() {
+        super(Quantity.class);
+    }
+
+    @Override
+    public void serialize(Quantity value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+        gen.writeString(value.toSuffixedString());
+    }
+}
+</code></pre>
+<pre><code class="language-java">public class QuantityDeserializer extends JsonDeserializer&lt;Quantity&gt; {
+    @Override
+    public Quantity deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+        return Quantity.fromString(p.getValueAsString());
+    }
+}
+</code></pre>
+<p>实际上<code>V1Patch</code>也需要做类似的处理，不过一般打patch都是直接用字符串的，所以也可以不管。</p>
 <h2 id="忽略null字段">忽略null字段</h2>
 <p>k8s api object中字段非常多，输出到yaml时一般需要忽略掉null字段，所以这里对yaml单独做了配置：</p>
 <pre><code class="language-java">public static ObjectMapper yamlMapper() {
@@ -496,7 +519,7 @@ public class MvcConfig implements WebMvcConfigurer {
   <ul>
     <li><a href="#解决方案">解决方案</a></li>
     <li><a href="#关键字冲突">关键字冲突</a></li>
-    <li><a href="#intorstring问题"><code>IntOrString</code>问题</a></li>
+    <li><a href="#特殊类型">特殊类型</a></li>
     <li><a href="#忽略null字段">忽略null字段</a></li>
     <li><a href="#兼容yaml和json">兼容yaml和json</a></li>
   </ul>
