@@ -95,7 +95,7 @@
     },
     "headline": "边侧监控选型 | 应许之地","datePublished": "2023-07-26T12:06:43+08:00",
     "dateModified": "2023-07-26T12:06:43+08:00",
-    "wordCount":  9574 ,
+    "wordCount":  9588 ,
     "publisher": {
         "@type": "Person",
         "name": "C. Wang",
@@ -751,7 +751,7 @@ def syslog {
 <p>linux版本的安装参考<a href="https://loggie-io.github.io/docs/main/getting-started/install/node/">这里</a>即可。</p>
 <h4 id="k8s安装-1">k8s安装</h4>
 <p>支持helm安装，参考<a href="https://loggie-io.github.io/docs/main/getting-started/install/kubernetes/">这里</a>.</p>
-<p>特别需要注意的是：如果日志挂载到<code>hostpath</code>，需要在</p>
+<p>特别需要注意的是：如果日志挂载到<code>hostpath</code>，需要在配置里面把对应的路径挂载上。</p>
 <pre><code class="language-bash">helm install loggie https://ghproxy.com/https://github.com/loggie-io/installation/releases/download/v1.4.0/loggie-v1.4.0.tgz -n monitor \
 --set image=loggieio/loggie:v1.4.1 \
 --set config.loggie.discovery.enabled=true \
