@@ -8,7 +8,25 @@
     <language>zh</language>
     <copyright>&amp;copy; 2021 &lt;a href=&#34;https://github.com/YiuTerran&#34;&gt;tryao&lt;/a&gt;
 </copyright>
-    <lastBuildDate>Mon, 10 Jul 2023 12:29:45 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 26 Jul 2023 12:06:43 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>边侧监控选型</title>
+      <link>https://yiuterran.github.io/blog/posts/%E8%BE%B9%E4%BE%A7%E7%9B%91%E6%8E%A7%E9%80%89%E5%9E%8B/</link>
+      <pubDate>Wed, 26 Jul 2023 12:06:43 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/posts/%E8%BE%B9%E4%BE%A7%E7%9B%91%E6%8E%A7%E9%80%89%E5%9E%8B/</guid>
+      <description>边侧监控方案 问题 边缘计算v2适配了目前所有流行的应用部署方式： 裸系统（物理机）部署； docker部署； k8s部署； 因此对应的监控系统也要考虑兼顾各种部</description>
+    </item>
+    
+    <item>
+      <title>PromQL笔记</title>
+      <link>https://yiuterran.github.io/blog/posts/promql%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Mon, 24 Jul 2023 11:21:33 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/posts/promql%E7%AC%94%E8%AE%B0/</guid>
+      <description>格式 类似influxdb，prometheus也有自己的line protocol： &amp;lt;--------------- metric ---------------------&amp;gt;&amp;lt;-timestamp -&amp;gt;&amp;lt;-value-&amp;gt; &amp;lt;---metric name---&amp;gt;{labelname=labelvalue,....} http_request_total{status=&amp;quot;200&amp;quot;, method=&amp;quot;GET&amp;quot;}@1434417560938 =&amp;gt; 94355 http_request_total{status=&amp;quot;200&amp;quot;, method=&amp;quot;GET&amp;quot;}@1434417561287 =&amp;gt; 94334 上面就表示在某个时间戳系统http GET</description>
+    </item>
+    
     <item>
       <title>解决k8s的javaSDK与jackson不兼容问题</title>
       <link>https://yiuterran.github.io/blog/posts/%E8%A7%A3%E5%86%B3k8s%E7%9A%84javasdk%E4%B8%8Ejackson%E4%B8%8D%E5%85%BC%E5%AE%B9%E9%97%AE%E9%A2%98/</link>

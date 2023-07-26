@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang='zh' dir='ltr' ><meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+<title>PromQL笔记 | 应许之地</title>
+
+<meta name="generator" content="Hugo Eureka 0.9.0" />
+<link rel="stylesheet" href="https://yiuterran.github.io/blog/css/eureka.min.css">
+<script defer src="https://yiuterran.github.io/blog/js/eureka.min.js"></script>
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload"
+  href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Noto+Serif+SC:wght@400;600;700&display=swap"
+  as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/styles/solarized-light.min.css"
+   media="print"
+  onload="this.media='all';this.onload=null" crossorigin>
+<script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/highlight.min.js"
+   crossorigin></script>
+
+  <script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/languages/dart.min.js"
+     crossorigin></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/js/all.min.js"
+   integrity="sha256-uNYoXefWRqv&#43;PsIF/OflNmwtKM4lStn9yrz2gVl6ymo="  crossorigin></script>
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+   integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3&#43;Aro6EYUG4&#43;cU&#43;KJWu/X"  media="print"
+  onload="this.media='all';this.onload=null" crossorigin>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js" 
+  integrity="sha384-g7c&#43;Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI&#43;sEnkvrMWph2EDg4"  crossorigin></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
+   integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC&#43;Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa"  crossorigin></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: "$$", right: "$$", display: true },
+        { left: "$", right: "$", display: false },
+        { left: "\\(", right: "\\)", display: false },
+        { left: "\\[", right: "\\]", display: true }
+      ],
+    });
+  });
+</script>
+
+
+<script defer src="https://cdn.jsdelivr.net/npm/mermaid@8.9.2/dist/mermaid.min.js" 
+  integrity="sha256-Zmpaaj&#43;GXFsPF5WdPArSrnW3b30dovldeKsW00xBVwE="  crossorigin></script>
+<link rel="preconnect" href="https://www.google-analytics.com" crossorigin>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-C0R8DENDJ0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-C0R8DENDJ0');
+</script>
+
+
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
+
+<meta name="description"
+  content="格式 类似influxdb，prometheus也有自己的line protocol： &lt;--------------- metric ---------------------&gt;&lt;-timestamp -&gt;&lt;-value-&gt; &lt;---metric name---&gt;{labelname=labelvalue,....} http_request_total{status=&quot;200&quot;, method=&quot;GET&quot;}@1434417560938 =&gt; 94355 http_request_total{status=&quot;200&quot;, method=&quot;GET&quot;}@1434417561287 =&gt; 94334 上面就表示在某个时间戳系统http GET">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+      "@type": "ListItem",
+      "position": 1 ,
+      "name":"文章列表",
+      "item":"https://yiuterran.github.io/blog/posts/"},{
+      "@type": "ListItem",
+      "position": 2 ,
+      "name":"PromQL笔记",
+      "item":"https://yiuterran.github.io/blog/posts/promql%E7%AC%94%E8%AE%B0/"}]
+}
+</script>
+
+
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://yiuterran.github.io/blog/posts/promql%E7%AC%94%E8%AE%B0/"
+    },
+    "headline": "PromQL笔记 | 应许之地","datePublished": "2023-07-24T11:21:33+08:00",
+    "dateModified": "2023-07-24T11:21:33+08:00",
+    "wordCount":  2014 ,
+    "author": {
+        "@type": "Person",
+        "name": ["“tryao\""]
+    },
+    "publisher": {
+        "@type": "Person",
+        "name": "C. Wang",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://yiuterran.github.io/blog/images/icon.png"
+        }
+        },
+    "description": "格式 类似influxdb，prometheus也有自己的line protocol： \u0026lt;--------------- metric ---------------------\u0026gt;\u0026lt;-timestamp -\u0026gt;\u0026lt;-value-\u0026gt; \u0026lt;---metric name---\u0026gt;{labelname=labelvalue,....} http_request_total{status=\u0026quot;200\u0026quot;, method=\u0026quot;GET\u0026quot;}@1434417560938 =\u0026gt; 94355 http_request_total{status=\u0026quot;200\u0026quot;, method=\u0026quot;GET\u0026quot;}@1434417561287 =\u0026gt; 94334 上面就表示在某个时间戳系统http GET"
+}
+</script><meta property="og:title" content="PromQL笔记 | 应许之地" />
+<meta property="og:type" content="article" />
+
+
+<meta property="og:image" content="https://yiuterran.github.io/blog/images/icon.png">
+
+
+<meta property="og:url" content="https://yiuterran.github.io/blog/posts/promql%E7%AC%94%E8%AE%B0/" />
+
+
+
+
+<meta property="og:description" content="格式 类似influxdb，prometheus也有自己的line protocol： &lt;--------------- metric ---------------------&gt;&lt;-timestamp -&gt;&lt;-value-&gt; &lt;---metric name---&gt;{labelname=labelvalue,....} http_request_total{status=&quot;200&quot;, method=&quot;GET&quot;}@1434417560938 =&gt; 94355 http_request_total{status=&quot;200&quot;, method=&quot;GET&quot;}@1434417561287 =&gt; 94334 上面就表示在某个时间戳系统http GET" />
+
+
+
+
+<meta property="og:locale" content="zh" />
+
+
+
+
+<meta property="og:site_name" content="应许之地" />
+
+
+
+
+
+
+<meta property="article:published_time" content="2023-07-24T11:21:33&#43;08:00" />
+
+
+<meta property="article:modified_time" content="2023-07-24T11:21:33&#43;08:00" />
+
+
+
+<meta property="article:section" content="posts" />
+
+
+<meta property="article:tag" content="prometheus" />
+
+<meta property="article:tag" content="k8s" />
+
+
+
+
+
+<meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/" />
+
+<meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/kubeedge%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/" />
+
+<meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/k8s%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/" />
+
+
+
+<body class="flex flex-col min-h-screen">
+  <header class="fixed flex items-center w-full min-h-16 ps-scrollbar z-50 bg-secondary-bg shadow-sm">
+    <div class="w-full max-w-screen-xl mx-auto"><script>
+    let storageColorScheme = localStorage.getItem("lightDarkMode")
+    if (((storageColorScheme == 'Auto' || storageColorScheme == null) && window.matchMedia("(prefers-color-scheme: dark)").matches) || storageColorScheme == "Dark") {
+        document.getElementsByTagName('html')[0].classList.add('dark')
+    }
+</script>
+<nav class="flex items-center justify-between flex-wrap px-4 py-4 md:py-0">
+    <a href="https://yiuterran.github.io/blog/" class="me-6 text-primary-text text-xl font-bold">应许之地</a>
+    <button id="navbar-btn" class="md:hidden flex items-center px-3 py-2" aria-label="Open Navbar">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div id="target"
+        class="hidden block md:flex md:grow md:justify-between md:items-center w-full md:w-auto text-primary-text z-20">
+        <div class="md:flex md:h-16 text-sm md:grow pb-4 md:pb-0 border-b md:border-b-0">
+            <a href="https://yiuterran.github.io/blog/authors/tryao/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  border-transparent  me-4">作者</a>
+            <a href="https://yiuterran.github.io/blog/posts/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  selected-menu-item  me-4">文章</a>
+        </div>
+
+        <div class="flex">
+            <div class="relative pt-4 md:pt-0">
+                <div class="cursor-pointer hover:text-eureka" id="lightDarkMode">
+                    <i class="fas fa-adjust"></i>
+                </div>
+                <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-30" id="is-open">
+                </div>
+                <div class="absolute flex flex-col start-0 md:start-auto end-auto md:end-0 hidden bg-secondary-bg w-48 rounded py-2 border border-tertiary-bg cursor-pointer z-40"
+                    id='lightDarkOptions'>
+                    <span class="px-4 py-1 hover:text-eureka" name="Light">浅色</span>
+                    <span class="px-4 py-1 hover:text-eureka" name="Dark">深色</span>
+                    <span class="px-4 py-1 hover:text-eureka" name="Auto">自动</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-0" id="is-open-mobile">
+    </div>
+
+</nav>
+<script>
+    
+    let element = document.getElementById('lightDarkMode')
+    if (storageColorScheme == null || storageColorScheme == 'Auto') {
+        document.addEventListener('DOMContentLoaded', () => {
+            window.matchMedia("(prefers-color-scheme: dark)").addEventListener('change', switchDarkMode)
+        })
+    } else if (storageColorScheme == "Light") {
+        element.firstElementChild.classList.remove('fa-adjust')
+        element.firstElementChild.setAttribute("data-icon", 'sun')
+        element.firstElementChild.classList.add('fa-sun')
+    } else if (storageColorScheme == "Dark") {
+        element.firstElementChild.classList.remove('fa-adjust')
+        element.firstElementChild.setAttribute("data-icon", 'moon')
+        element.firstElementChild.classList.add('fa-moon')
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        getcolorscheme();
+        switchBurger();
+    });
+</script>
+</div>
+  </header>
+  <main class="grow pt-16">
+    <div class="ps-scrollbar">
+      <div class="w-full max-w-screen-xl lg:px-4 xl:px-8 mx-auto">
+
+
+<div class="grid grid-cols-2 lg:grid-cols-8 gap-4 lg:pt-12">
+    <div
+        class="col-span-2  lg:col-span-6 bg-secondary-bg rounded px-6 py-8">
+        <h1 class="font-bold text-3xl text-primary-text">PromQL笔记</h1>
+        <div class="flex flex-wrap flex-row items-center mt-2 text-tertiary-text">
+    <div class="me-6 my-2">
+        <i class="fas fa-calendar me-1"></i>
+        <span>2023-07-24</span>
+    </div>
+    <div class="me-6 my-2">
+        <i class="fas fa-clock me-1"></i>
+        <span>5分钟阅读时长</span>
+    </div>
+    
+    
+
+    
+</div>
+        
+        
+        
+
+        <div class="content">
+            <h2 id="格式">格式</h2>
+<p>类似influxdb，prometheus也有自己的line protocol：</p>
+<pre><code>&lt;--------------- metric ---------------------&gt;&lt;-timestamp -&gt;&lt;-value-&gt;
+&lt;---metric name---&gt;{labelname=labelvalue,....}
+http_request_total{status=&quot;200&quot;, method=&quot;GET&quot;}@1434417560938 =&gt; 94355
+http_request_total{status=&quot;200&quot;, method=&quot;GET&quot;}@1434417561287 =&gt; 94334
+</code></pre>
+<p>上面就表示在某个时间戳系统http GET请求中200的数量。</p>
+<p>指标(metric)名称即<code>http_request_total</code>，必须符合正则：<code>[a-zA-Z_:][a-zA-Z0-9_:]*</code>;</p>
+<p>标签(label)用来过滤，名称符合正则：<code>[a-zA-Z_][a-zA-Z0-9_]*</code>;系统保留以双下划线<code>__</code>开头的标签；value则可以是任意字符串；</p>
+<h2 id="指标类型">指标类型</h2>
+<p>prometheus预定义了四种指标类型(Metric Type)：</p>
+<ol>
+<li>Counter：计数器。只增不减，如上面那个<code>http_request_total</code>；推荐用<code>_total</code>作为metric的后缀；</li>
+<li>Gauge: 仪表盘。可增可减，如系统可用内存等；</li>
+<li>Histogram（直方图）和Summary（概览）：为了解决99分位等长尾指标设计的类型。两者的区别是Summary是客户端算好的分位；History则是需要服务端在查询时实时计算；</li>
+</ol>
+<h2 id="promql格式">PromQL格式</h2>
+<h3 id="基础">基础</h3>
+<p>其实prometheus的查询语法很简单，和line protocol很像：</p>
+<pre><code>http_requests_total{instance=&quot;localhost:9090&quot;,...}[5m]offset 1m
+</code></pre>
+<p>前面是查询指标，<code>{}</code>内是查询条件，通过<code>label</code>过滤。支持的操作符包括：</p>
+<blockquote>
+<p>=: 等于</p>
+<p>!=: 不等于</p>
+<p>=~: 正则匹配</p>
+<p>!~: 反向正则匹配</p>
+</blockquote>
+<p><code>[]</code>内是时间范围，支持<code>s/m/h/d/w/y</code>. 这个结束时间就是当前，如果想要结束时间不是当前，就要加上<code>offset</code>，后面跟上的值相当于将结束时间向前推移多少。</p>
+<p>不加时间范围，默认查询的就是最新一条数据，这种返回结果称为<strong>瞬时向量</strong>；反之被称为<strong>区间向量</strong>。</p>
+<p>聚合函数就是在前面一般查询语法的基础上增加函数调用：</p>
+<pre><code>sum(http_requests_total)
+avg(node_cpu) by (mode)
+</code></pre>
+<p>by后面的是分组的标签。</p>
+<p>合法的PromQL要求至少一个指标名称或不会匹配到空字符串的标签过滤器。</p>
+<p>如果想要同时查询多个指标名称，可以写成：</p>
+<pre><code>{__name__=~&quot;a|b&quot;}
+</code></pre>
+<p>这是因为指标名称本身也是一个标签。</p>
+<p>在PromQL中还可以直接使用数值和字符串，如：</p>
+<pre><code>node_memory_free_bytes_total / (1024 * 1024)
+</code></pre>
+<p>后面的数值被称为<strong>标量</strong>。</p>
+<blockquote>
+<p>当瞬时向量与标量之间进行数学运算时，数学运算符会依次作用域瞬时向量中的每一个样本值，从而得到一组新的时间序列。</p>
+</blockquote>
+<p>这个其实比较容易理解。但是瞬时向量之间也可以进行数学运算，如：</p>
+<pre><code>node_disk_bytes_written + node_disk_bytes_read
+</code></pre>
+<p>这个计算流程就比较复杂了：</p>
+<blockquote>
+<p>依次找到与左边向量元素匹配（标签完全一致）的右边向量元素进行运算，如果没找到匹配元素，则直接丢弃。同时新的时间序列将不会包含指标名称。</p>
+</blockquote>
+<p>有点类似SQL中的<code>join on</code>所有字段的意思。</p>
+<h3 id="bool过滤">bool过滤</h3>
+<p>如果需要的是bool类型的过滤，直接在表达式后面添加操作符即可，如<code>==</code>/<code>!=</code>/<code>&gt;</code>/<code>&gt;=</code>/<code>&lt;</code>/<code>&lt;=</code>某个值。如：</p>
+<pre><code>http_request_total &gt; 1000
+</code></pre>
+<p>获取的是&gt;1000的值。</p>
+<p>如果只想要bool的结果，如：</p>
+<pre><code>http_request_total &gt; bool 1000
+</code></pre>
+<p>则返回的时间序列里value是<code>1</code>或者<code>0</code>，表示<code>true</code>和<code>false</code>。</p>
+<h3 id="集合运算">集合运算</h3>
+<p>瞬时向量之间可以使用集合运算：</p>
+<ul>
+<li><code>and</code>: a and b会生成一个a的子集，由a中完全匹配b中的元素组成；</li>
+<li><code>or</code>: a or b会产生一个a的超集，包括a中所有元素和b中未能匹配a中的元素；</li>
+<li><code>unless</code>: a unless b会产生a的一个子集，与and相反，由a中无法与b匹配的元素组成；</li>
+</ul>
+<p>所谓<strong>匹配</strong>，默认情况下指的是标签完全一致，不过可以使用 <code>on</code>或者<code>ignoring</code>来修改匹配的逻辑。</p>
+<p>举个例子，时序数据如下：</p>
+<pre><code>method_code:http_errors:rate5m{method=&quot;get&quot;, code=&quot;500&quot;}  24
+method_code:http_errors:rate5m{method=&quot;get&quot;, code=&quot;404&quot;}  30
+method_code:http_errors:rate5m{method=&quot;put&quot;, code=&quot;501&quot;}  3
+method_code:http_errors:rate5m{method=&quot;post&quot;, code=&quot;500&quot;} 6
+method_code:http_errors:rate5m{method=&quot;post&quot;, code=&quot;404&quot;} 21
+
+method:http_requests:rate5m{method=&quot;get&quot;}  600
+method:http_requests:rate5m{method=&quot;del&quot;}  34
+method:http_requests:rate5m{method=&quot;post&quot;} 120
+</code></pre>
+<p>则表达式</p>
+<pre><code>method_code:http_errors:rate5m{code=&quot;500&quot;} / ignoring(code) method:http_requests:rate5m
+</code></pre>
+<p>分子是所有code=500的瞬时向量，分母是忽略了code匹配的总请求数。如果不使用<code>ignoring</code>表达式，这里无法匹配到任何指标。</p>
+<p>上面是一对一的情况，而表达式：</p>
+<pre><code>method_code:http_errors:rate5m / ignoring(code) group_left method:http_requests:rate5m
+</code></pre>
+<p>则表示多对一的情况。</p>
+<p>在<code>ignoring code</code>的前提下，右侧1行数据可以匹配到左侧多余1行的数据。这种情况下，必须通过<code>group</code>修饰符指明保留左侧的所有行还是右侧的，这里是为了计算各类method报错的比例，所以以左侧为主。</p>
+<h3 id="聚合函数">聚合函数</h3>
+<p>内置的聚合操作符包括：</p>
+<ul>
+<li>sum (求和)</li>
+<li>min (最小值)</li>
+<li>max (最大值)</li>
+<li>avg (平均值)</li>
+<li>stddev (标准差)</li>
+<li>stdvar (标准方差)</li>
+<li>count (计数)</li>
+<li>count_values (对value进行计数)</li>
+<li>bottomk (后n条时序)</li>
+<li>topk (前n条时序)</li>
+<li>quantile (分位数)</li>
+</ul>
+<p>语法是：</p>
+<pre><code>&lt;aggr-op&gt;([parameter,] &lt;vector expression&gt;) [without|by (&lt;label list&gt;)]
+</code></pre>
+<p>只有<code>count_values</code>, <code>quantile</code>, <code>topk</code>, <code>bottomk</code>支持参数(parameter)。</p>
+<p>without用于从计算结果中移除列举的标签，而保留其它标签。by则正好相反，结果向量中只保留列出的标签，其余标签则移除。类似SQL中<code>group by</code>的参数。</p>
+<h3 id="其他内置函数">其他内置函数</h3>
+<p>除了聚合函数外，prometheus内置了大量各种统计的函数方便作图运算。例如：</p>
+<ul>
+<li>irate: 瞬时增长率</li>
+<li>rate: 平均增长率</li>
+<li>increase: 增长量</li>
+<li>predict_linear: 基于线性回归的变化预测</li>
+<li>histogram_quantile: 对histogram类型的数据计算分位数</li>
+<li>label_repace/label_join：对标签做一些基于字符串的动态增减</li>
+</ul>
+<h3 id="通过命令行使用promql">通过命令行使用PromQL</h3>
+<p>就是通过http API直接访问接口获得数据，参考<a href="https://prometheus.io/docs/prometheus/latest/querying/api/">这里</a>。</p>
+<p>这里返回的结果当然就是json数据，如果需要类似MySQL的表格输出，可以使用<a href="https://github.com/nalbury/promql-cli">这个</a>工具，该工具还支持简单的ASCII图形输出。</p>
+
+        </div>
+        
+        <div class="my-4">
+    
+    <a href="https://yiuterran.github.io/blog/tags/prometheus/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#prometheus</a>
+    
+    <a href="https://yiuterran.github.io/blog/tags/k8s/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#k8s</a>
+    
+</div>
+        
+        
+        
+
+
+        
+        
+        <div class="py-2">
+    
+    <div class="flex flex-col md:flex-row items-center my-8">
+        <a href="https://yiuterran.github.io/blog/authors/tryao/" class="w-24 h-24 md:me-4">
+            
+            
+            <img src="https://yiuterran.github.io/blog/images/avatar.png" class="w-full bg-primary-bg rounded-full" alt="Avatar">
+            
+        </a>
+        <div class="w-full md:w-auto mt-4 md:mt-0">
+            <a href="https://yiuterran.github.io/blog/authors/tryao/" class="block font-bold text-lg pb-1 mb-2 border-b">个人介绍</a>
+            <span class="block pb-2">兴趣使然的程序员，博而不精，乐学不倦</span>
+            
+            
+            
+            
+            
+            <a href="mailto:yaotairan@gmail.com" class="me-1">
+                <i class="fas fa-envelope"></i>
+            </a>
+            
+            
+            
+            
+            
+            <a href="https://github.com/YiuTerran" class="me-1">
+                <i class="fab fa-github"></i>
+            </a>
+            
+        </div>
+    </div>
+    
+</div>
+        
+        
+        
+<div class="flex flex-col md:flex-row md:justify-between -mx-2 mt-4 px-2 pt-4 border-t">
+    <div>
+        
+        <span class="block font-bold">上一页</span>
+        <a href="https://yiuterran.github.io/blog/posts/%E8%BE%B9%E4%BE%A7%E7%9B%91%E6%8E%A7%E9%80%89%E5%9E%8B/" class="block">边侧监控选型</a>
+        
+    </div>
+    <div class="md:text-right mt-4 md:mt-0">
+        
+        <span class="block font-bold">下一页</span>
+        <a href="https://yiuterran.github.io/blog/posts/%E8%A7%A3%E5%86%B3k8s%E7%9A%84javasdk%E4%B8%8Ejackson%E4%B8%8D%E5%85%BC%E5%AE%B9%E9%97%AE%E9%A2%98/" class="block">解决k8s的javaSDK与jackson不兼容问题</a>
+        
+    </div>
+</div>
+
+        
+
+
+
+  <script id="utterances" src="https://utteranc.es/client.js"
+            issue-term=title
+            repo=YiuTerran/blog-comment
+              theme=preferred-color-scheme
+        crossorigin="anonymous"
+        async>
+</script>
+<script>
+    if (storageColorScheme == "Light") {
+      document.getElementById('utterances').setAttribute('theme', 'github-light')
+    } else if (storageColorScheme == "Dark") {
+      document.getElementById('utterances').setAttribute('theme', 'github-dark')
+    }
+</script>
+
+    </div>
+    
+    <div class="col-span-2">
+        
+        
+        <div class="sticky top-16 z-10 hidden lg:block px-6 py-4  bg-primary-bg ">
+    <span class="text-lg font-semibold">本页内容</span>
+</div>
+<div class="sticky-toc hidden lg:block px-6 pb-6 ">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#格式">格式</a></li>
+    <li><a href="#指标类型">指标类型</a></li>
+    <li><a href="#promql格式">PromQL格式</a>
+      <ul>
+        <li><a href="#基础">基础</a></li>
+        <li><a href="#bool过滤">bool过滤</a></li>
+        <li><a href="#集合运算">集合运算</a></li>
+        <li><a href="#聚合函数">聚合函数</a></li>
+        <li><a href="#其他内置函数">其他内置函数</a></li>
+        <li><a href="#通过命令行使用promql">通过命令行使用PromQL</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+</div>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        enableStickyToc();
+    });
+</script>
+        
+    </div>
+    
+
+    
+    
+    <div
+        class="col-span-2  lg:col-span-6 bg-secondary-bg rounded p-6">
+        <h2 class="text-lg font-semibold mb-4">相关</h2>
+        <div class="content">
+            
+            <a href="https://yiuterran.github.io/blog/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/">K3s存储插件使用笔记</a>
+            <br />
+            
+            <a href="https://yiuterran.github.io/blog/posts/kubeedge%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/">KubeEdge要点笔记</a>
+            <br />
+            
+            <a href="https://yiuterran.github.io/blog/posts/k8s%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/">K8s要点简记</a>
+            <br />
+            
+        </div>
+    </div>
+    
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', ()=>{
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+
+      </div>
+    </div>
+    
+  </main>
+  <footer class="ps-scrollbar">
+    <div class="w-full max-w-screen-xl mx-auto"><div class="text-center p-6 pin-b">
+    <p class="text-sm text-tertiary-text">&copy; 2021 <a href="https://github.com/YiuTerran">tryao</a>
+ &middot;  Powered by the <a href="https://github.com/wangchucheng/hugo-eureka" class="hover:text-eureka">Eureka</a> theme for <a href="https://gohugo.io" class="hover:text-eureka">Hugo</a></p>
+</div></div>
+  </footer>
+</body>
+
+</html>

@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang='zh' dir='ltr' ><meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+<title>边侧监控选型 | 应许之地</title>
+
+<meta name="generator" content="Hugo Eureka 0.9.0" />
+<link rel="stylesheet" href="https://yiuterran.github.io/blog/css/eureka.min.css">
+<script defer src="https://yiuterran.github.io/blog/js/eureka.min.js"></script>
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload"
+  href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Noto+Serif+SC:wght@400;600;700&display=swap"
+  as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/styles/solarized-light.min.css"
+   media="print"
+  onload="this.media='all';this.onload=null" crossorigin>
+<script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/highlight.min.js"
+   crossorigin></script>
+
+  <script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/languages/dart.min.js"
+     crossorigin></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/js/all.min.js"
+   integrity="sha256-uNYoXefWRqv&#43;PsIF/OflNmwtKM4lStn9yrz2gVl6ymo="  crossorigin></script>
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+   integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3&#43;Aro6EYUG4&#43;cU&#43;KJWu/X"  media="print"
+  onload="this.media='all';this.onload=null" crossorigin>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js" 
+  integrity="sha384-g7c&#43;Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI&#43;sEnkvrMWph2EDg4"  crossorigin></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
+   integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC&#43;Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa"  crossorigin></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: "$$", right: "$$", display: true },
+        { left: "$", right: "$", display: false },
+        { left: "\\(", right: "\\)", display: false },
+        { left: "\\[", right: "\\]", display: true }
+      ],
+    });
+  });
+</script>
+
+
+<script defer src="https://cdn.jsdelivr.net/npm/mermaid@8.9.2/dist/mermaid.min.js" 
+  integrity="sha256-Zmpaaj&#43;GXFsPF5WdPArSrnW3b30dovldeKsW00xBVwE="  crossorigin></script>
+<link rel="preconnect" href="https://www.google-analytics.com" crossorigin>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-C0R8DENDJ0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-C0R8DENDJ0');
+</script>
+
+
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
+
+<meta name="description"
+  content="边侧监控方案 问题 边缘计算v2适配了目前所有流行的应用部署方式： 裸系统（物理机）部署； docker部署； k8s部署； 因此对应的监控系统也要考虑兼顾各种部">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+      "@type": "ListItem",
+      "position": 1 ,
+      "name":"文章列表",
+      "item":"https://yiuterran.github.io/blog/posts/"},{
+      "@type": "ListItem",
+      "position": 2 ,
+      "name":"边侧监控选型",
+      "item":"https://yiuterran.github.io/blog/posts/%E8%BE%B9%E4%BE%A7%E7%9B%91%E6%8E%A7%E9%80%89%E5%9E%8B/"}]
+}
+</script>
+
+
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://yiuterran.github.io/blog/posts/%E8%BE%B9%E4%BE%A7%E7%9B%91%E6%8E%A7%E9%80%89%E5%9E%8B/"
+    },
+    "headline": "边侧监控选型 | 应许之地","datePublished": "2023-07-26T12:06:43+08:00",
+    "dateModified": "2023-07-26T12:06:43+08:00",
+    "wordCount":  9574 ,
+    "publisher": {
+        "@type": "Person",
+        "name": "C. Wang",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://yiuterran.github.io/blog/images/icon.png"
+        }
+        },
+    "description": "边侧监控方案 问题 边缘计算v2适配了目前所有流行的应用部署方式： 裸系统（物理机）部署； docker部署； k8s部署； 因此对应的监控系统也要考虑兼顾各种部"
+}
+</script><meta property="og:title" content="边侧监控选型 | 应许之地" />
+<meta property="og:type" content="article" />
+
+
+<meta property="og:image" content="https://yiuterran.github.io/blog/images/icon.png">
+
+
+<meta property="og:url" content="https://yiuterran.github.io/blog/posts/%E8%BE%B9%E4%BE%A7%E7%9B%91%E6%8E%A7%E9%80%89%E5%9E%8B/" />
+
+
+
+
+<meta property="og:description" content="边侧监控方案 问题 边缘计算v2适配了目前所有流行的应用部署方式： 裸系统（物理机）部署； docker部署； k8s部署； 因此对应的监控系统也要考虑兼顾各种部" />
+
+
+
+
+<meta property="og:locale" content="zh" />
+
+
+
+
+<meta property="og:site_name" content="应许之地" />
+
+
+
+
+
+
+<meta property="article:published_time" content="2023-07-26T12:06:43&#43;08:00" />
+
+
+<meta property="article:modified_time" content="2023-07-26T12:06:43&#43;08:00" />
+
+
+
+<meta property="article:section" content="posts" />
+
+
+
+
+<body class="flex flex-col min-h-screen">
+  <header class="fixed flex items-center w-full min-h-16 ps-scrollbar z-50 bg-secondary-bg shadow-sm">
+    <div class="w-full max-w-screen-xl mx-auto"><script>
+    let storageColorScheme = localStorage.getItem("lightDarkMode")
+    if (((storageColorScheme == 'Auto' || storageColorScheme == null) && window.matchMedia("(prefers-color-scheme: dark)").matches) || storageColorScheme == "Dark") {
+        document.getElementsByTagName('html')[0].classList.add('dark')
+    }
+</script>
+<nav class="flex items-center justify-between flex-wrap px-4 py-4 md:py-0">
+    <a href="https://yiuterran.github.io/blog/" class="me-6 text-primary-text text-xl font-bold">应许之地</a>
+    <button id="navbar-btn" class="md:hidden flex items-center px-3 py-2" aria-label="Open Navbar">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div id="target"
+        class="hidden block md:flex md:grow md:justify-between md:items-center w-full md:w-auto text-primary-text z-20">
+        <div class="md:flex md:h-16 text-sm md:grow pb-4 md:pb-0 border-b md:border-b-0">
+            <a href="https://yiuterran.github.io/blog/authors/tryao/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  border-transparent  me-4">作者</a>
+            <a href="https://yiuterran.github.io/blog/posts/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  selected-menu-item  me-4">文章</a>
+        </div>
+
+        <div class="flex">
+            <div class="relative pt-4 md:pt-0">
+                <div class="cursor-pointer hover:text-eureka" id="lightDarkMode">
+                    <i class="fas fa-adjust"></i>
+                </div>
+                <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-30" id="is-open">
+                </div>
+                <div class="absolute flex flex-col start-0 md:start-auto end-auto md:end-0 hidden bg-secondary-bg w-48 rounded py-2 border border-tertiary-bg cursor-pointer z-40"
+                    id='lightDarkOptions'>
+                    <span class="px-4 py-1 hover:text-eureka" name="Light">浅色</span>
+                    <span class="px-4 py-1 hover:text-eureka" name="Dark">深色</span>
+                    <span class="px-4 py-1 hover:text-eureka" name="Auto">自动</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-0" id="is-open-mobile">
+    </div>
+
+</nav>
+<script>
+    
+    let element = document.getElementById('lightDarkMode')
+    if (storageColorScheme == null || storageColorScheme == 'Auto') {
+        document.addEventListener('DOMContentLoaded', () => {
+            window.matchMedia("(prefers-color-scheme: dark)").addEventListener('change', switchDarkMode)
+        })
+    } else if (storageColorScheme == "Light") {
+        element.firstElementChild.classList.remove('fa-adjust')
+        element.firstElementChild.setAttribute("data-icon", 'sun')
+        element.firstElementChild.classList.add('fa-sun')
+    } else if (storageColorScheme == "Dark") {
+        element.firstElementChild.classList.remove('fa-adjust')
+        element.firstElementChild.setAttribute("data-icon", 'moon')
+        element.firstElementChild.classList.add('fa-moon')
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        getcolorscheme();
+        switchBurger();
+    });
+</script>
+</div>
+  </header>
+  <main class="grow pt-16">
+    <div class="ps-scrollbar">
+      <div class="w-full max-w-screen-xl lg:px-4 xl:px-8 mx-auto">
+
+
+<div class="grid grid-cols-2 lg:grid-cols-8 gap-4 lg:pt-12">
+    <div
+        class="col-span-2  lg:col-span-6 bg-secondary-bg rounded px-6 py-8">
+        <h1 class="font-bold text-3xl text-primary-text">边侧监控选型</h1>
+        <div class="flex flex-wrap flex-row items-center mt-2 text-tertiary-text">
+    <div class="me-6 my-2">
+        <i class="fas fa-calendar me-1"></i>
+        <span>2023-07-26</span>
+    </div>
+    <div class="me-6 my-2">
+        <i class="fas fa-clock me-1"></i>
+        <span>20分钟阅读时长</span>
+    </div>
+    
+    
+
+    
+</div>
+        
+        
+        
+
+        <div class="content">
+            <h1 id="边侧监控方案">边侧监控方案</h1>
+<h2 id="问题">问题</h2>
+<p>边缘计算v2适配了目前所有流行的应用部署方式：</p>
+<ol>
+<li>裸系统（物理机）部署；</li>
+<li>docker部署；</li>
+<li>k8s部署；</li>
+</ol>
+<p>因此对应的监控系统也要考虑兼顾各种部署方式。并且，随着时间的发展，平台会接入越来越多的边侧集群或者设备，因此要考虑负载问题。</p>
+<p>目前阶段主要需要的是<strong>基本的异常检测（应用、机器、网络等），和即时告警通知</strong>。由于边侧服务一般流量比较稳定，因此对于应用性能分析和统计数据等需求没有那么显著，而且这些都可以退化到基于日志来曲线解决问题。</p>
+<p>除了监控自己平台的服务，还要考虑第三方服务接入的问题，因此在数据权限这块需要相对灵活。</p>
+<h2 id="选型">选型</h2>
+<p>目前我们的云端服务也同时有这三种部署模式，使用的解决方案是基于ELK的技术栈。该方案能力强大，对Metric/Trace/Log都有完善的收集方案，缺点就是资源消耗很大。</p>
+<p>考虑到上面分析的监控需求，以及云端资源的短缺问题，这里合理的方案是：</p>
+<ol>
+<li>将监控服务配置在边缘侧而不是统一发送到云端；</li>
+<li>尽量使用轻量级监控方案以减少资源占用；</li>
+<li>需要支持通过命令行配置监控。因为目前边缘计算v2没做端口转发服务，依赖图形界面进行配置的，如<code>zabbix</code>，如果现场没有windows机器就很难配置了；</li>
+<li>需要支持windows采集，在特殊情况下，还是会使用windows host的。这就排除了<code>ilogtail</code>等只支持linux的方案；</li>
+</ol>
+<p>经过调研，这里还是使用基于<code>prometheus</code>的方案，<code>prometheus</code>本身就是基于配置文件进行配置的，查询可以使用命令行工具。主要依赖的东西：</p>
+<ol>
+<li><code>prometheus server</code>. 部署在k8s内部或者裸机中。如果是混合部署环境（既需要k8s也需要裸机部署），应当部署在k8s里。这是因为prometheus是pull模型，可以访问k8s外面的服务；</li>
+<li><code>alert-manager</code>. 配置告警，目前主要考虑钉钉告警，后续根据第三方需求可以增加短信告警等，反正都是调用API；</li>
+<li><code>mtail</code>等轻量级日志收集工具，配合alert-manager完成错误日志告警；</li>
+<li><code>node-exporter</code>等各种exporter，这个需要用户自行安装。当然我们可以在边缘计算脚本/应用模板里面一些常用的；</li>
+</ol>
+<p>1~3都是使用golang编写，支持编译成各平台原生的二进制，能满足跨平台的需求。Trace相关的（<code>OpenTelemetry</code>）收集一般使用Jaeger等工具，边侧使用到的可能性较小。</p>
+<p>如果Log/Metric/Trace都需要收集，那还是直接用EFK这种大型系统吧，零零碎碎的部署更麻烦。</p>
+<h2 id="架构">架构</h2>
+<p>这套架构是很成熟的方案，资料较多。核心思想就是<code>prometheus</code>定时拉取各种exporter暴露出来的metrics端口，将数据存入时序数据库。<code>AlertManager</code>等工具通过<code>PromQL</code>查询语言与时序数据库交互，从而查询想要的数据：</p>
+<p><img src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/1349539-20191210163705605-1556613127.png" alt="img"></p>
+<p>在我们这里，主要使用<code>prometheus</code>和<code>AlertManager</code>，图形化的<code>grafana</code>不是<strong>这个阶段</strong>的重点。这主要是因为<code>prometheus</code>是部署在边缘侧的，图形化工具在云端无法正常浏览，除非做端口转发。</p>
+<p>端口转发需要引入其他agent（如<code>rport</code>或者<code>frp</code>），云端也需要打开端口段或者引入三级域名才能正常工作，运维上比较麻烦，现在暂时不考虑。</p>
+<h2 id="metric--alarm">Metric &amp; Alarm</h2>
+<p>即prometheus和alertManager部分。</p>
+<h3 id="一般安装">一般安装</h3>
+<h4 id="prometheus">prometheus</h4>
+<p>如果在k8s外使用prometheus，就是一般的二进制安装。包括docker安装或者windows安装，原理都差不多。</p>
+<p><code>prometheus-server</code>本身就是一个二进制文件，如果是裸机安装，只要从github上下载最新版，然后通过</p>
+<pre><code class="language-bash">mv prometheus-*.tar.gz prometheus.tar.gz
+tar xvfz prometheus.tar.gz
+cd prometheus
+mkdir -p data
+./prometheus
+</code></pre>
+<p>启动服务就行，默认时序数据库存在当前目录下的<code>data</code>中，配置文件默认就是当前路径下的<code>prometheus.yml</code>文件。</p>
+<p>如果是docker，建议将配置文件挂载到外面，方便修改：</p>
+<pre><code class="language-bash">mkdir -p /etc/prometheus
+docker run -p 9090:9090 -v /etc/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus
+</code></pre>
+<p>windows流程类似，建议都使用docker安装，不然还要设置自启动。</p>
+<p>配置文件的格式：</p>
+<pre><code class="language-yaml"># my global config
+global:
+  scrape_interval: 15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # - alertmanager:9093
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  # - &quot;first_rules.yml&quot;
+  # - &quot;second_rules.yml&quot;
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  # The job name is added as a label `job=&lt;job_name&gt;` to any timeseries scraped from this config.
+  - job_name: &quot;prometheus&quot;
+
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+
+    static_configs:
+      - targets: [&quot;localhost:9090&quot;]
+
+</code></pre>
+<p>里面是静态的抓取和告警配置。</p>
+<p>默认抓取<code>localhost:9090/metrics</code>，即<code>prometheus</code>自身的metric.</p>
+<p>prometheus自带了告警功能，但是不含<strong>通知</strong>功能，需要配合alertmanager来完成通知。</p>
+<p>修改上面的<code>rule_files</code>添加告警规则文件。在后者里面填入告警规则，例如：</p>
+<pre><code class="language-yaml">groups:
+- name: example
+  rules:
+  - alert: HighErrorRate
+    expr: job:request_latency_seconds:mean5m{job=&quot;myjob&quot;} &gt; 0.5
+    for: 10m
+    labels:
+      severity: page
+    annotations:
+      summary: High request latency
+      description: description info
+</code></pre>
+<p>这个结构其实很像是k8s api object, 核心字段主要就是<code>.groups[].rules[].expr</code>的PromQL表达式，以及<code>for</code>的持续时间。<code>labels</code>和<code>annotations</code>是为告警添加的kv.</p>
+<p>注意<code>annotations</code>中的value支持模板化语法，方便填充实际值到告警信息，如：</p>
+<pre><code>{{$labels.&lt;labelname&gt;}}
+{{$value}}
+</code></pre>
+<p><code>alerting</code>配置下面就是<code>alertmanager</code>的静态配置，通过这里关联下面的<code>alertmanager</code>。</p>
+<p>除了告警之外，<code>rule_files</code>还支持类似物化视图的异步计算时间序列，语法类似：</p>
+<pre><code class="language-yaml">groups:
+  - name: example
+    rules:
+    - record: job:http_inprogress_requests:sum
+      expr: sum(http_inprogress_requests) by (job)
+</code></pre>
+<p>其中<code>record</code>就是新产生的metric名称，expr是PromQL表达式。</p>
+<h4 id="alertmanager">alertmanager</h4>
+<p>如果是docker安装，可以使用docker-compose将二者一起安装。如果是二进制安装，方法类似prometheus，直接下载解压，创建data文件夹之后启动即可。配置文件格式如下：</p>
+<pre><code class="language-yaml">global:
+  resolve_timeout: 5m
+
+route:
+  group_by: ['alertname']
+  group_wait: 5s
+  group_interval: 60s
+  repeat_interval: 1h
+  receiver: 'web.hook'
+receivers:
+- name: 'web.hook'
+  webhook_configs:
+  - url: 'http://127.0.0.1:5001/'
+inhibit_rules:
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'dev', 'instance']
+</code></pre>
+<p>alertmanager的原理有点类似api网关，通过路由进行匹配，然后分发到不同的<code>receiver</code>中。</p>
+<p><code>route</code>的配置例子：</p>
+<pre><code class="language-yaml">route:
+  receiver: 'default-receiver'
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+  group_by: [cluster, alertname]
+  routes:
+  - receiver: 'database-pager'
+    group_wait: 10s
+    match_re:
+      service: mysql|cassandra
+  - receiver: 'frontend-pager'
+    group_by: [product, environment]
+    match:
+      team: frontend
+</code></pre>
+<p>首先是全局配置，默认接收器是<code>default-receiver</code>，分组的依据是集群和告警名称。</p>
+<p><code>group_wait</code>是告警触发之后等待合并同组告警的时间阈值；<code>group_interval</code>是相同group发送通知的冷却时间；<code>repeat_interval</code>是同一个告警的冷却时间。</p>
+<p><code>routes</code>下面定义具体的子路由，通过<code>match</code>或者<code>match_re</code>来匹配Prometheus发送过来数据的<code>label</code>.</p>
+<p>可以添加<code>continue</code>字段配置子路由匹配之后是否继续向下匹配，默认是<code>false</code>.</p>
+<p>receiver的格式取决于其类型，alertmanager内置了很多告警媒介，如邮件、telegram甚至微信。如钉钉这种虽然没有内置进去，但是可以通过webhook扩展，参考<a href="https://prometheus.io/docs/alerting/latest/configuration">这里</a>。</p>
+<p>告警信息同样可以使用消息模板，如果消息比较大也可以写成单独的模板文件。模板的语法和prometheus一样，同样遵从go template语法。</p>
+<p><code>inhibit_rules</code>用来抑制告警，语法如下：</p>
+<pre><code class="language-yaml">- source_match:
+    alertname: NodeDown
+    severity: critical
+  target_match:
+    severity: critical
+  equal:
+    - node
+</code></pre>
+<p>当已经发送的告警匹配到<code>target_match</code>或<code>target_match_re</code>规则，此时新的告警满足<code>source_match</code>或者<code>source_match_re</code>，则新的告警不会发送。</p>
+<p>此外，管理员还可以通过alertmanager的界面配置临时静默。</p>
+<h4 id="高可用">高可用</h4>
+<p>对于边缘侧而言，prometheus一般部署一个就够了，因为边侧节点和服务的数量不会特别多。不过如果需要的话，也可以利用prometheus的联邦集群特性搭建集群。这个功能的核心就是<code>/federate</code>接口可以直接将prometheus的监控数据暴露出去。例如配置prometheus如下：</p>
+<pre><code class="language-yaml">scrape_configs:
+  - job_name: 'federate'
+    scrape_interval: 15s
+    honor_labels: true
+    metrics_path: '/federate'
+    params:
+      'match[]':
+        - '{job=&quot;prometheus&quot;}'
+        - '{__name__=~&quot;job:.*&quot;}'
+        - '{__name__=~&quot;node.*&quot;}'
+    static_configs:
+      - targets:
+        - '192.168.77.11:9090'
+        - '192.168.77.12:9090'
+</code></pre>
+<p>则当前节点会自动抓取<code>targets</code>中其他两个prometheus中的满足<code>match[]</code>条件的数据。</p>
+<p>但是集群联邦实际上解决的是高负载问题，单点的中心集群或者边侧集群仍然存在不可用风险。</p>
+<p>由于k8s自己就是高可用的解决方案，所以k8s内的prometheus一般不需要考虑该问题。但是对于docker或者裸机部署，这个就需要思考一下。</p>
+<p>官方给出的方案其实比较简单粗暴：部署多套一模一样的prometheus即可，因为是pull机制，并没有冲突。</p>
+<p>alertmanager其实类似，也可以部署多套。不同的是，alertmanager的重复通知对用户影响很大。所以alertmanager的不同实例之间需要通信以组成真正的集群。alertmanager的启动参数中可以添加：</p>
+<pre><code class="language-bash">alertmanager  --web.listen-address=&quot;:9093&quot; --cluster.listen-address=&quot;127.0.0.1:8001&quot; --config.file=/etc/prometheus/alertmanager.yml  --storage.path=/data/alertmanager/ 
+</code></pre>
+<p>之后新增的alertmanager的参数中，通过<code>cluster.peer</code>指定之前启动的实例：</p>
+<pre><code class="language-bash">alertmanager  --web.listen-address=&quot;:9094&quot; --cluster.listen-address=&quot;127.0.0.1:8002&quot; --cluster.peer=127.0.0.1:8001 --config.file=/etc/prometheus/alertmanager.yml  --storage.path=/data/alertmanager2/
+</code></pre>
+<p>两者的配置文件一模一样，但是数据存储的位置不同。这些集群实例之间通过gossip协议进行通信。</p>
+<h4 id="服务发现">服务发现</h4>
+<p>prometheus抓取除了支持<code>static_configs</code>之外，还可以集成服务发现动态添加目标服务，不过很遗憾不支持nacos.</p>
+<p>变通的方法是写一个nacos的客户端订阅nacos中的服务列表，然后变化时将数据写入文件，使用基于文件的服务发现。</p>
+<p>不过在边侧，建议还是用静态配置吧，因为节点不会很多。</p>
+<h4 id="自定义标签">自定义标签</h4>
+<p>除了exporter自己暴露的标签外，在<code>scrape_configs</code>下面可以增加<code>labels</code>或者<code>relabel_config</code>,用来添加自定义标签，后者一般配合服务发现使用。</p>
+<h3 id="k8s内安装">k8s内安装</h3>
+<h4 id="安装">安装</h4>
+<p>在k8s里面安装，不要直接安装<code>prometheus</code>，而是选择第三方封装的<a href="https://github.com/prometheus-operator/prometheus-operator">prometheus-operator</a>.</p>
+<p>从上面可以看到，<code>prometheus</code>只有一个单纯的二进制文件，依赖配置文件进行配置，所以每次修改配置都要重启服务，这显然不符合k8s的设计思路。将服务封装成operator，然后通过修改yaml来进行配置才是更合适的方案。</p>
+<p>CoreOS引入了Operator的概念，这里我们使用helm来安装，用到的包是<code>kube-prometheus</code>，<code>bitnami</code>中就有<a href="https://artifacthub.io/packages/helm/bitnami/kube-prometheus">这个包</a>:</p>
+<pre><code class="language-bash">helm install kube-prometheus bitnami/kube-prometheus --namespace monitor --create-namespace --version 8.15.3
+</code></pre>
+<p>好消息是这个chart里面的镜像都是<code>docker.io</code>上面的，所以docker正常配置代理就可以拉下来了，无须修改chart.</p>
+<p>装好之后在<code>monitor</code>下就可以看到对应的服务了：</p>
+<pre><code>NAME                                                     READY   STATUS    RESTARTS   AGE
+pod/kube-prometheus-node-exporter-k5gd6                  1/1     Running   0          43m
+pod/kube-prometheus-blackbox-exporter-8567bbfd99-7k8ms   1/1     Running   0          43m
+pod/kube-prometheus-kube-state-metrics-5c9f68d87-5vdn6   1/1     Running   0          43m
+pod/kube-prometheus-operator-c9c58b595-mv6kk             1/1     Running   0          43m
+pod/alertmanager-kube-prometheus-alertmanager-0          2/2     Running   0          40m
+pod/prometheus-kube-prometheus-prometheus-0              2/2     Running   0          40m
+
+NAME                                         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)                      AGE
+service/kube-prometheus-alertmanager         ClusterIP   10.43.34.93    &lt;none&gt;        9093/TCP                     43m
+service/kube-prometheus-prometheus           ClusterIP   10.43.96.98    &lt;none&gt;        9090/TCP                     43m
+service/kube-prometheus-kube-state-metrics   ClusterIP   10.43.31.57    &lt;none&gt;        8080/TCP                     43m
+service/kube-prometheus-operator             ClusterIP   10.43.33.45    &lt;none&gt;        8080/TCP                     43m
+service/kube-prometheus-blackbox-exporter    ClusterIP   10.43.54.206   &lt;none&gt;        19115/TCP                    43m
+service/kube-prometheus-node-exporter        ClusterIP   10.43.135.99   &lt;none&gt;        9100/TCP                     43m
+service/alertmanager-operated                ClusterIP   None           &lt;none&gt;        9093/TCP,9094/TCP,9094/UDP   40m
+service/prometheus-operated                  ClusterIP   None           &lt;none&gt;        9090/TCP                     40m
+
+NAME                                           DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+daemonset.apps/kube-prometheus-node-exporter   1         1         1       1            1           &lt;none&gt;          43m
+
+NAME                                                 READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/kube-prometheus-blackbox-exporter    1/1     1            1           43m
+deployment.apps/kube-prometheus-kube-state-metrics   1/1     1            1           43m
+deployment.apps/kube-prometheus-operator             1/1     1            1           43m
+
+NAME                                                           DESIRED   CURRENT   READY   AGE
+replicaset.apps/kube-prometheus-blackbox-exporter-8567bbfd99   1         1         1       43m
+replicaset.apps/kube-prometheus-kube-state-metrics-5c9f68d87   1         1         1       43m
+replicaset.apps/kube-prometheus-operator-c9c58b595             1         1         1       43m
+
+NAME                                                         READY   AGE
+statefulset.apps/alertmanager-kube-prometheus-alertmanager   1/1     40m
+statefulset.apps/prometheus-kube-prometheus-prometheus       1/1     40m
+
+</code></pre>
+<p>主要是安装了prometheus、alertmanager和node exporter，满足基本使用需求. 其中prometheus和alertmanager都是sts，存储用的是emptydir：</p>
+<p><img src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/image-20230721094436210.png" alt="image-20230721094436210"></p>
+<p>这也意味着重启pod会导致时序数据库中的数据丢失，如果想要不丢失需要配置一下pvc（不过丢失一般也没啥，毕竟只是监控数据）：</p>
+<pre><code class="language-bash"># ref: https://artifacthub.io/packages/helm/bitnami/kube-prometheus
+kubectl create ns monitor
+helm install prometheus-stack bitnami/kube-prometheus -n monitor --version 8.15.3 \
+--set global.storageClass=longhorn \
+--set prometheus.persistence.enabled=true \
+--set alertmanager.persistence.enabled=true \
+--set kubelet.serviceMonitor.resourcePath=/metrics/resource \
+--set prometheus.service.type=LoadBalancer \
+--set prometheus.ruleSelector.matchLabels.monitor=default \
+--set alertmanager.configSelector.matchLabels.monitor=default
+</code></pre>
+<p>默认会启动2个<code>ClusterIP</code>类型的service，对应<code>prometheus</code>和<code>alertmanager</code>的server，端口分别是9090和9093，内部域名分别是<code>prometheus-stack-prometheus.monitor.svc.cluster.local</code>和<code>prometheus-stack-alertmanager.monitor.svc.cluster.local</code>.</p>
+<p>上面配置将service的type改为<code>LoadBalancer</code>，这样就可以通过外网访问对应的端口了。当然理论上也可以通过配置ingress来达到该目的，请参考<a href="https://prometheus-operator.dev/docs/kube/exposing-prometheus-alertmanager-grafana-ingress/">这里</a>.</p>
+<p>默认情况下，<code>kube-prometheus</code>会安装<code>NodeExporter</code>，所以在安装结束之后，可以打开<code>prometheus</code>的web页，输入<code>up</code>查看一下该功能是否正常。或者简单点输入<code>curl localhost:9090/api/v1/query?query=up</code>看一下也行。</p>
+<h4 id="监控配置">监控配置</h4>
+<p>Operator通过CRD对象进行配置，增加一个服务监控就是增加一个<code>ServiceMonitor</code>，如下：</p>
+<pre><code class="language-yaml">apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: example-app
+  namespace: monitor
+  labels:
+    team: frontend
+spec:
+  namespaceSelector:
+    matchNames:
+    - default
+  selector:
+    matchLabels:
+      app: example-app
+  endpoints:
+    - port: 80
+</code></pre>
+<p>显然<code>namespaceSelector</code>定义服务所在命名空间；<code>selector</code>用来通过label匹配服务；<code>endpoints</code>里面定义服务暴露出来的端口和路径。</p>
+<p>如果想要匹配所有命名空间，则格式为：</p>
+<pre><code class="language-yaml">spec:
+  namespaceSelector:
+    any: true
+</code></pre>
+<p>同理，还有PodMonitor用来监控Pod.</p>
+<h4 id="告警配置">告警配置</h4>
+<p>通过<code>PrometheusRule</code>来配置告警，格式如下：</p>
+<pre><code class="language-yaml">apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    monitor: default
+  name: prometheus-example-rules
+spec:
+  groups:
+  - name: example-rules
+    rules:
+    - alert: ExampleAlert
+      expr: vector(1)
+</code></pre>
+<p><code>groups</code>下面的语法和普通的prometheus的rules文件没啥区别。</p>
+<p><code>AlertManager</code>则通过<code>AlertmanagerConfig</code>来配置：</p>
+<pre><code class="language-yaml">apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata:
+  name: config-example
+  labels:
+    monitor: default
+spec:
+  route:
+    groupBy: ['job']
+    groupWait: 30s
+    groupInterval: 5m
+    repeatInterval: 12h
+    receiver: 'webhook'
+  receivers:
+  - name: 'webhook'
+    webhookConfigs:
+    - url: 'http://example.com/'
+</code></pre>
+<p><code>.spec</code>的内容和直接配置alertmanager的配置文件格式也是一样的。</p>
+<h4 id="黑盒探测">黑盒探测</h4>
+<p>注意到这种方法只能添加k8s内的pod或者服务，如果想要从k8s外的http接口拉取数据。则需要使用<code>Probe</code>，配合<code>blackbox-exporter</code>来使用。</p>
+<p>如果查看deployments，可以看到black-box的deploy，<code>configmap</code>中也有一个相关的配置。实际上black-box就是一个通过ping/tcp/udp探测的服务。使用方法就是创建<code>Probe</code>:</p>
+<pre><code class="language-yaml">apiVersion: monitoring.coreos.com/v1
+kind: Probe
+metadata:
+  name: domain-probe
+  namespace: monitoring
+  labels:
+    monitor: default
+spec:
+  jobName: domain-probe
+  prober:
+    url: prometheus-stack-kube-prom-blackbox-exporter:19115
+  module: http_2xx
+  targets:
+    # ingress:{}
+    staticConfig:
+      static:
+        - baidu.com
+</code></pre>
+<p>module支持各种探测方法，包括：<code>http_2xx</code>, <code>http_post_2xx</code>, <code>tcp_connect</code>,<code> pop3s_banner</code>, <code>ssh_banner</code>, <code>irc_banner</code>，这些都默认配置在blackbox的configmap里了。实际上还可以增加更多，但是默认没打开，如<code>grpc</code>/<code>icmp</code>/<code>dns</code>这些，具体参考<a href="https://github.com/prometheus/blackbox_exporter/blob/master/CONFIGURATION.md">这里</a>。</p>
+<p><code>.spec.prober.url</code>就是<code>blackbox</code>服务的容器地址，如果不在同一个<code>namespace</code>就要使用完全限定名了，即<code>prometheus-stack-kube-prom-blackbox-exporter.monitor.svc.cluster.local:19115</code>.</p>
+<p>注意目前尚不支持UDP探测。</p>
+<h4 id="关联配置">关联配置</h4>
+<p>默认情况下，<code>ServiceMonitor/Probe</code>创建后会自动生效。但是<code>PrometheusRule</code>则不会，我在上面配置了<code>selector</code>中的<code>matchLabels</code>条件，所以需要添加<code>.metadata.labels.monitor</code>=<code>default</code>来匹配上这个规则。同理<code>AlertManagerConfig</code>也需要通过label关联。</p>
+<p>这里的设计实际上有点混乱，有的API对象是直接默认就会关联，有的必须要加标签。如果记不住就都加上<code>monitor:default</code>的标签即可。</p>
+<h3 id="常用告警配置">常用告警配置</h3>
+<p>节点内存、磁盘、CPU等：</p>
+<pre><code class="language-yaml">groups:
+- name: node-alarm
+  rules:
+  - alert: node-up
+    expr: up == 0
+    for: 15s
+    labels:
+      severity: critical 
+    annotations:
+      summary: &quot;{{ $labels.instance }} 已停止运行超过 15s！&quot;
+
+  - alert: &quot;内存使用率过高&quot;
+    expr: round((node_memory_MemTotal_bytes - (node_memory_MemFree_bytes + node_memory_Cached_bytes + node_memory_Buffers_bytes)) / node_memory_MemTotal_bytes * 100) &gt; 80
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      summary: &quot;内存使用率过高&quot;
+      description: &quot;{{ $labels.instance }}内存使用率达到{{ $value }}%&quot;
+
+  - alert: &quot;CPU使用率过高&quot;
+    expr: round(100 - avg(irate(node_cpu_seconds_total{job=&quot;node-exporter&quot;,mode=&quot;idle&quot;}[5m])) by (instance) * 100 ) &gt; 80
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      summary: &quot;CPU使用率过高&quot;
+      description: &quot;{{ $labels.instance }}CPU使用率达到{{ $value }}%&quot;
+
+  - alert: &quot;磁盘使用率过高&quot;
+    expr: round(100-(node_filesystem_free_bytes{fstype=~&quot;ext4|xfs&quot;}/node_filesystem_size_bytes {fstype=~&quot;ext4|xfs&quot;}*100)) &gt; 80
+    for: 15s
+    labels:
+      severity: warning
+    annotations:
+      summary: &quot;磁盘使用率过高&quot;
+      description: &quot;{{ $labels.instance }}的磁盘{{$labels.mountpoint}} 使用率达到{{ $value }}%&quot;
+
+  - alert: &quot;IO过高&quot;
+    expr: 100-(avg(irate(node_disk_io_time_seconds_total[1m])) by(instance)* 100) &lt; 60
+    for: 15s
+    labels:
+      severity: warning
+    annotations:
+      summary: &quot;磁盘IO过高&quot;
+      description: &quot;{{ $labels.instance }}当前磁盘IO达到{{ $value }}%&quot;
+
+  - alert: &quot;网络流出速率过高&quot;
+    expr: round(irate(node_network_receive_bytes_total{instance!~&quot;data.*&quot;,device!~'tap.*|veth.*|br.*|docker.*|vir.*|lo.*|vnet.*'}[1m])/1024) &gt; 2048
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      summary: &quot;网络流出速率过高&quot;
+      description: &quot;{{ $labels.instance }}当前网络流出速率达到{{ $value }}KB/s&quot;
+
+  - alert: &quot;会话链接数过高&quot;
+    expr: node_netstat_Tcp_CurrEstab &gt; 500
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      summary: &quot;当前会话连接数过高&quot;
+      description: &quot;{{ $labels.instance }}当前连接数{{ $value }}&quot;
+</code></pre>
+<h2 id="log">Log</h2>
+<p>实际上我们一般需要做的是<strong>错误日志告警</strong>，即出现ERROR日志的时候通过<code>alertmanager</code>发送告警，而不需要真正的收集日志。边缘侧收集日志推荐使用<code>loki</code>，比<code>efk</code>更加轻量级，简单的日志统计功能推荐使用Google的<code>mtail</code>.</p>
+<p>特别注意的是：如果能通过prometheus收集错误响应(5xx)的次数等数据，就没必要部署mtail来统计错误日志了。不过非请求（如定时任务或异步任务）就需要自己在代码里统计metric暴露了。</p>
+<h3 id="mtail">mtail</h3>
+<p><code>mtail</code>实际上是一种特殊的exporter, 它使用正则过滤日志，并做简单的统计，最后将统计值暴露出去。不同的是<code>mtail</code>还支持push模式。</p>
+<p>Google并没有提供<code>mtail</code>的官方镜像，更别说helm chart了，所以它的安装有点麻烦。</p>
+<h4 id="一般安装-1">一般安装</h4>
+<p><code>mtail</code>仍然只是一个go写的二进制文件，依赖配置文件驱动。所以从github上下载二进制文件之后直接启动就行：</p>
+<pre><code class="language-bash">mtail --progs /etc/mtail --logs /var/log/syslog --logs /var/log/ntp/peerstats --novm_logs_runtime_errors --override_timezone=Local
+</code></pre>
+<p><code>--progs</code>对应的是mtail的配置文件，<code>--logs</code>对应的是需要监控日志文件所在的文件夹。其他选项请参考<a href="https://github.com/google/mtail/blob/main/docs/Deploying.md">这里</a>。</p>
+<h4 id="配置">配置</h4>
+<p>mtail的配置文件语法有点像awk，一个例子：</p>
+<pre><code>counter total
+/^[a-z]+((?P&lt;response_size&gt;\d+)|-)$/ {
+  $1 != &quot;-&quot; {
+    total = $response_size
+  }
+}
+</code></pre>
+<p>首先是声明变量，支持变量类型就是Prometheus的metric type，即：</p>
+<ul>
+<li>counter</li>
+<li>gauge</li>
+<li>histogram</li>
+</ul>
+<p>根据文档描述，不支持summary. 变量支持<code>hidden</code>修饰符，即不export该统计数据.</p>
+<p>下面就是正则匹配，<code>//</code>之间是golang的正则形式，后面应该有个空格。特别地，需要通过<code>strptime</code>解析出日志中的时间戳。</p>
+<p>需要复用的正则可以使用<code>const</code>定义在最前面；如果解析时间戳的逻辑比较复杂，也可以使用装饰器语法定义一个函数：</p>
+<pre><code># The `syslog' decorator defines a procedure.  When a block of mtail code is
+# &quot;decorated&quot;, it is called before entering the block.  The block is entered
+# when the keyword `next' is reached.
+def syslog {
+    /(?P&lt;date&gt;(?P&lt;legacy_date&gt;\w+\s+\d+\s+\d+:\d+:\d+)|(?P&lt;rfc3339_date&gt;\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d+[+-]\d{2}:\d{2}))/ +
+        /\s+(?:\w+@)?(?P&lt;hostname&gt;[\w\.-]+)\s+(?P&lt;application&gt;[\w\.-]+)(?:\[(?P&lt;pid&gt;\d+)\])?:\s+(?P&lt;message&gt;.*)/ {
+        # If the legacy_date regexp matched, try this format.
+        len($legacy_date) &gt; 0 {
+            strptime($legacy_date, &quot;Jan _2 15:04:05&quot;)
+        }
+        # If the RFC3339 style matched, parse it this way.
+        len($rfc3339_date) &gt; 0 {
+            strptime($rfc3339_date, &quot;2006-01-02T15:04:05-07:00&quot;)
+        }
+        # Call into the decorated block
+        next
+    }
+}
+</code></pre>
+<p>上面是官方的例子，它定义了两种可能的时间格式。使用方法是类似python的语法：</p>
+<pre><code>@syslog
+/foo/ {
+  ...
+}
+</code></pre>
+<p>如果时间戳里面有一些奇怪的符号，可以用<code>subst</code>函数先替换掉。</p>
+<p><code>/x/</code>的意思就是 <code>$1 =~ /x/</code>，也可以写<code>$1 !~ /x/</code>表示不匹配，当然也支持<code>else</code>语法；同时还支持<code>otherwise</code>语法，类似<code>switch</code>的<code>default</code>,即：</p>
+<pre><code>/pattern/ {
+  ...
+} else {
+  ...
+}
+
+{
+  /pattern1/ {}
+  /pattern2/ {}
+  otherwise {}
+}
+</code></pre>
+<p>完整的语法描述参考<a href="https://github.com/google/mtail/blob/main/docs/Language.md">这里</a>.</p>
+<h4 id="k8s安装">k8s安装</h4>
+<p>如果k8s容器的日志都以stdout/stderr打出来（按k8s官方推荐的方法）或者挂载到了宿主机，那么mtail可以使用<code>DaemonSet</code>部署。stdout的日志路径都在<code>/var/log/container</code>下面，宿主机路径也是固定的，所以静态配置DaemonSet即可。</p>
+<p>如果k8s容器的日志打在了容器里面，或者使用了分布式文件存储（如longhorn），那只能使用sidecar部署模式，需要每个app自行部署。</p>
+<p>部署完成之后，需要增加Prometheus的<code>ServiceMonitor</code>配置，然后配置<code>PrometheusRule</code>来配置告警。</p>
+<h3 id="loggie">Loggie</h3>
+<p>这个是在调研中意外发现的一个<a href="https://github.com/loggie-io/loggie">国人项目</a>，应该是网易团队开源的，他的功能比mtail更加丰富，但是又不像<code>loki</code>那么重，而且也是golang编写，比阿里用C++写的logtail适用范围更广。更重要的是，loggie是完全开源的，比阿里的半吊子开源部分组件还要商业化要友好的多。</p>
+<p><code>mtail</code>的问题有几个：</p>
+<ol>
+<li>只能满足简单的统计需求，value只能是number；</li>
+<li><code>prometheus</code>本身就不适合用来做日志统计，因为日志收集的信息各种各样，比如错误日志一般要将错误信息记录下来，这个放在Prometheus的tag里很不合适（重复度低，而且信息太长）。这就触发告警时能携带的上下文消息太少：比如错误日志告警就只能提示有错误日志，无法将错误信息也带上。</li>
+<li>mtail没有云原生支持，还是通过传统的配置文件来管理；</li>
+</ol>
+<p><code>Loggie</code>则较好的解决了这几个问题，而且他自带了logAlert功能，可以完成告警的需求。</p>
+<h4 id="一般安装-2">一般安装</h4>
+<p>官方的Release实际上只有linux amd64的二进制，其他的要自己build。写这篇文档的时候windows兼容性还有点问题，不过有pr已经修正。理论上后面可以直接build windows版本（或者自己合并那个pr然后编译）。</p>
+<p>linux版本的安装参考<a href="https://loggie-io.github.io/docs/main/getting-started/install/node/">这里</a>即可。</p>
+<h4 id="k8s安装-1">k8s安装</h4>
+<p>支持helm安装，参考<a href="https://loggie-io.github.io/docs/main/getting-started/install/kubernetes/">这里</a>.</p>
+<p>特别需要注意的是：如果日志挂载到<code>hostpath</code>，需要在</p>
+<pre><code class="language-bash">helm install loggie https://ghproxy.com/https://github.com/loggie-io/installation/releases/download/v1.4.0/loggie-v1.4.0.tgz -n monitor \
+--set image=loggieio/loggie:v1.4.1 \
+--set config.loggie.discovery.enabled=true \
+--set config.loggie.discovery.kubernetes.containerRuntime=docker \
+--set config.loggie.discovery.kubernetes.rootFsCollectionEnabled=true \
+--set config.loggie.discovery.kubernetes.parseStdout=true \
+--set serviceMonitor.enabled=true
+</code></pre>
+<h4 id="配置-1">配置</h4>
+<p>支持通过CRD配置，主要参考<a href="https://loggie-io.github.io/docs/main/user-guide/use-in-kubernetes/collect-container-logs/">这里</a>.</p>
+<p>创建一个<code>Sink</code>，一个<code>LogConfig</code>/<code>ClusterLogConfig</code>即可。</p>
+<p>由于是国人项目，官方文档比较容易看懂，这里就不再赘述，请参考自动化安装的脚本代码。</p>
+<h3 id="loki">Loki</h3>
+<p><code>mtail</code>最大的优势是非常轻量，它实际上不收集任何日志，配合Prometheus和<code>alertmanager</code>可以满足基本的日志告警需求。如果有日志收集的需求，建议还是使用<code>Loki</code>.</p>
+<p>粗略看来，Loki的设计和Prometheus有很多相似之处，配置文件的字段都差不多，<code>LogQL</code>查询语言和<code>PromQL</code>也很像。在k8s中，也有<code>Loki Operator</code>项目，不过很遗憾bitnami中没有对应的chart，<a href="https://github.com/grafana/helm-charts/tree/main/charts/loki-stack">官方仓库</a>需要翻墙。</p>
+<p>但是日志场景实际上比较复杂，Loki并不是pull模型的一般由<code>promtail</code>来解析日志然后通过Loki的HTTP接口推送日志。Loki的架构比Prometheus也复杂很多，虽然也是单个二进制文件，但是支持<code>-target</code>参数，使其扮演不同的角色，从而拆分成微服务架构。</p>
+<p>Loki的数据分为<code>Chunks</code>和<code>Index</code>两种，二者需要不同存储介质。在边缘侧部署，一般使用Loki的单体模式就够了。这种情况下，Loki将所有chunk数据存入文件系统；否则，必须指定一个块文件存储系统，如minio.</p>
+<p>Loki相关资料比较复杂，下面只是简述供参考。</p>
+<h4 id="一般安装-3">一般安装</h4>
+<p>到<a href="https://github.com/grafana/loki/releases">github</a>下载二进制文件（或者使用docker安装也行），包括：</p>
+<ul>
+<li><code>logcli</code>: 这是命令行客户端，Prometheus也有类似的<code>promql-cli</code>，不过后者是社区提供的；</li>
+<li><code>loki</code>:核心服务器程序；</li>
+<li><code>promtail</code>：抓取日志的客户端；</li>
+</ul>
+<p>启动<code>loki</code>服务端：</p>
+<pre><code class="language-bash">loki -config.file=loki.local-config.yaml
+</code></pre>
+<p>需要一个<a href="https://grafana.com/docs/loki/latest/configuration/">配置文件</a>，例如：</p>
+<pre><code class="language-yaml">auth_enabled: false
+
+server:
+  http_listen_port: 3100
+
+common:
+  ring:
+    instance_addr: 127.0.0.1
+    kvstore:
+      store: inmemory
+  replication_factor: 1
+  path_prefix: /tmp/loki
+
+schema_config:
+  configs:
+  - from: 2020-05-15
+    store: boltdb-shipper
+    object_store: filesystem
+    schema: v11
+    index:
+      prefix: index_
+      period: 24h
+
+storage_config:
+  boltdb_shipper:
+    active_index_directory: /data/loki/boltdb-shipper-active
+    cache_location: /data/loki/boltdb-shipper-cache
+    cache_ttl: 24h
+    shared_store: filesystem
+  filesystem:
+    directory: /data/loki/chunks
+
+table_manager:
+  retention_deletes_enabled: true
+  retention_period: 72h
+</code></pre>
+<p>上面的配置主要就是使用了本地存储，并且指定了index和存储路径，最后指明日志仅存储3天（注意这个值必须是24h的整数倍）。</p>
+<p>然后启动promtail（也可以用docker），也需要一个<a href="https://grafana.com/docs/loki/latest/clients/promtail/configuration/">配置文件</a>，例如：</p>
+<pre><code class="language-yaml">server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /var/log/positions.yaml # This location needs to be writeable by Promtail.
+
+client:
+  backoff_config:
+    max_period: 5s
+    max_retries: 20
+    min_period: 100ms
+  batchsize: 102400
+  batchwait: 1s
+  timeout: 10s
+
+clients:
+  - url: http://ip_or_hostname_where_Loki_run:3100/loki/api/v1/push
+
+scrape_configs:
+ - job_name: system
+   pipeline_stages:
+   static_configs:
+   - targets:
+      - localhost
+     labels:
+      job: varlogs  # A `job` label is fairly standard in prometheus and useful for linking metrics and logs.
+      host: yourhost # A `host` label will help identify logs from this machine vs others
+      __path__: /var/log/*.log  # The path matching uses a third party library: https://github.com/bmatcuk/doublestar
+
+</code></pre>
+<p>上面是一个静态文件夹下的日志抓取配置。</p>
+<p>除了这些以外，还有很多配置选项，这里不再描述，使用的时候自己看文档即可。</p>
+<h4 id="k8s安装-2">k8s安装</h4>
+<p>官方的<code>loki-stack</code>被墙了，这里还是用<code>bitnami</code>的<code>grafana-loki</code>来装：</p>
+<pre><code class="language-bash">helm install loki-stack bitnami/grafana-loki -n monitor --version 2.10.1 \
+--set global.storageClass=longhorn \
+--set metrics.enabled=true \
+--set metrics.serviceMonitor.enabled=true \
+--set gateway.service.type=LoadBalancer \
+--set gateway.service.ports.http=9092
+</code></pre>
+<p>需要注意的<code>loki</code>本身没有界面，需要安装<code>grafana</code>，或者使用<code>logcli</code>工具来交互。</p>
+<h4 id="告警配置-1">告警配置</h4>
+<p>类似prometheus，也是通过rule来配置，请参考<a href="https://grafana.com/docs/loki/latest/rules/">这里</a>.</p>
+
+        </div>
+        
+        
+        
+
+
+        
+        
+        
+        
+<div class="flex flex-col md:flex-row md:justify-between -mx-2 mt-4 px-2 pt-4 border-t">
+    <div>
+        
+    </div>
+    <div class="md:text-right mt-4 md:mt-0">
+        
+        <span class="block font-bold">下一页</span>
+        <a href="https://yiuterran.github.io/blog/posts/promql%E7%AC%94%E8%AE%B0/" class="block">PromQL笔记</a>
+        
+    </div>
+</div>
+
+        
+
+
+
+  <script id="utterances" src="https://utteranc.es/client.js"
+            issue-term=title
+            repo=YiuTerran/blog-comment
+              theme=preferred-color-scheme
+        crossorigin="anonymous"
+        async>
+</script>
+<script>
+    if (storageColorScheme == "Light") {
+      document.getElementById('utterances').setAttribute('theme', 'github-light')
+    } else if (storageColorScheme == "Dark") {
+      document.getElementById('utterances').setAttribute('theme', 'github-dark')
+    }
+</script>
+
+    </div>
+    
+    <div class="col-span-2">
+        
+        
+        <div class="sticky top-16 z-10 hidden lg:block px-6 py-4  bg-primary-bg ">
+    <span class="text-lg font-semibold">本页内容</span>
+</div>
+<div class="sticky-toc hidden lg:block px-6 pb-6 ">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#问题">问题</a></li>
+    <li><a href="#选型">选型</a></li>
+    <li><a href="#架构">架构</a></li>
+    <li><a href="#metric--alarm">Metric &amp; Alarm</a>
+      <ul>
+        <li><a href="#一般安装">一般安装</a>
+          <ul>
+            <li><a href="#prometheus">prometheus</a></li>
+            <li><a href="#alertmanager">alertmanager</a></li>
+            <li><a href="#高可用">高可用</a></li>
+            <li><a href="#服务发现">服务发现</a></li>
+            <li><a href="#自定义标签">自定义标签</a></li>
+          </ul>
+        </li>
+        <li><a href="#k8s内安装">k8s内安装</a>
+          <ul>
+            <li><a href="#安装">安装</a></li>
+            <li><a href="#监控配置">监控配置</a></li>
+            <li><a href="#告警配置">告警配置</a></li>
+            <li><a href="#黑盒探测">黑盒探测</a></li>
+            <li><a href="#关联配置">关联配置</a></li>
+          </ul>
+        </li>
+        <li><a href="#常用告警配置">常用告警配置</a></li>
+      </ul>
+    </li>
+    <li><a href="#log">Log</a>
+      <ul>
+        <li><a href="#mtail">mtail</a>
+          <ul>
+            <li><a href="#一般安装-1">一般安装</a></li>
+            <li><a href="#配置">配置</a></li>
+            <li><a href="#k8s安装">k8s安装</a></li>
+          </ul>
+        </li>
+        <li><a href="#loggie">Loggie</a>
+          <ul>
+            <li><a href="#一般安装-2">一般安装</a></li>
+            <li><a href="#k8s安装-1">k8s安装</a></li>
+            <li><a href="#配置-1">配置</a></li>
+          </ul>
+        </li>
+        <li><a href="#loki">Loki</a>
+          <ul>
+            <li><a href="#一般安装-3">一般安装</a></li>
+            <li><a href="#k8s安装-2">k8s安装</a></li>
+            <li><a href="#告警配置-1">告警配置</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+</div>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        enableStickyToc();
+    });
+</script>
+        
+    </div>
+    
+
+    
+    
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', ()=>{
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+
+      </div>
+    </div>
+    
+  </main>
+  <footer class="ps-scrollbar">
+    <div class="w-full max-w-screen-xl mx-auto"><div class="text-center p-6 pin-b">
+    <p class="text-sm text-tertiary-text">&copy; 2021 <a href="https://github.com/YiuTerran">tryao</a>
+ &middot;  Powered by the <a href="https://github.com/wangchucheng/hugo-eureka" class="hover:text-eureka">Eureka</a> theme for <a href="https://gohugo.io" class="hover:text-eureka">Hugo</a></p>
+</div></div>
+  </footer>
+</body>
+
+</html>
