@@ -95,7 +95,7 @@
     },
     "headline": "边侧监控选型 | 应许之地","datePublished": "2023-07-26T12:06:43+08:00",
     "dateModified": "2023-07-26T12:06:43+08:00",
-    "wordCount":  9588 ,
+    "wordCount":  9566 ,
     "publisher": {
         "@type": "Person",
         "name": "C. Wang",
@@ -292,7 +292,6 @@ mkdir -p data
 <pre><code class="language-bash">mkdir -p /etc/prometheus
 docker run -p 9090:9090 -v /etc/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus
 </code></pre>
-<p>windows流程类似，建议都使用docker安装，不然还要设置自启动。</p>
 <p>配置文件的格式：</p>
 <pre><code class="language-yaml"># my global config
 global:
@@ -496,14 +495,18 @@ statefulset.apps/prometheus-kube-prometheus-prometheus       1/1     40m
 <p>这也意味着重启pod会导致时序数据库中的数据丢失，如果想要不丢失需要配置一下pvc（不过丢失一般也没啥，毕竟只是监控数据）：</p>
 <pre><code class="language-bash"># ref: https://artifacthub.io/packages/helm/bitnami/kube-prometheus
 kubectl create ns monitor
-helm install prometheus-stack bitnami/kube-prometheus -n monitor --version 8.15.3 \
---set global.storageClass=longhorn \
---set prometheus.persistence.enabled=true \
---set alertmanager.persistence.enabled=true \
---set kubelet.serviceMonitor.resourcePath=/metrics/resource \
---set prometheus.service.type=LoadBalancer \
---set prometheus.ruleSelector.matchLabels.monitor=default \
---set alertmanager.configSelector.matchLabels.monitor=default
+helm install prometheus-stack bitnami/kube-prometheus -n monitor --version 8.15.4 \
+  --set global.storageClass=local-path \
+  --set prometheus.persistence.enabled=true \
+  --set alertmanager.persistence.enabled=true \
+  --set prometheus.retention=&quot;72h&quot; \
+  --set alertmanager.retention=&quot;72h&quot; \
+  --set kubelet.serviceMonitor.resourcePath=/metrics/resource \
+  --set prometheus.service.type=LoadBalancer \
+  --set alertmanager.service.type=LoadBalancer \
+  --set prometheus.ruleSelector.matchLabels.monitor=default \
+  --set alertmanager.configSelector.matchLabels.monitor=default \
+  --set alertmanager.externalConfig=true
 </code></pre>
 <p>默认会启动2个<code>ClusterIP</code>类型的service，对应<code>prometheus</code>和<code>alertmanager</code>的server，端口分别是9090和9093，内部域名分别是<code>prometheus-stack-prometheus.monitor.svc.cluster.local</code>和<code>prometheus-stack-alertmanager.monitor.svc.cluster.local</code>.</p>
 <p>上面配置将service的type改为<code>LoadBalancer</code>，这样就可以通过外网访问对应的端口了。当然理论上也可以通过配置ingress来达到该目的，请参考<a href="https://prometheus-operator.dev/docs/kube/exposing-prometheus-alertmanager-grafana-ingress/">这里</a>.</p>
@@ -570,6 +573,33 @@ spec:
     - url: 'http://example.com/'
 </code></pre>
 <p><code>.spec</code>的内容和直接配置alertmanager的配置文件格式也是一样的。</p>
+<p><strong>注意</strong>：比较蛋疼的是，Alertmanager上面的配置会被强制注入一个<code>namespace</code>的匹配标签，所以无法在所有命名空间生效。解决办法是自己创建一个全局的配置，而不是使用默认的全局配置。</p>
+<p>所以在使用helm安装之前，需要自己创建一个secret，如果helm应用叫<code>prometheus-stack</code>，那么secret应该叫<code>alertmanager-prometheus-stack-kube-prom-alertmanager</code>，里面有个<code>key</code>叫<code>alertmanager.yaml</code>，内容是（base64）：</p>
+<pre><code class="language-yaml">global:
+  resolve_timeout: 5m
+route:
+  group_by: ['job']
+  group_wait: 5s
+  group_interval: 1m
+  repeat_interval: 15m
+  receiver: 'null'
+  routes:
+  - matchers:
+    - alertname = Watchdog
+    receiver: 'null'
+  - matchers:
+    - severity =~ &quot;critical|warning&quot;
+    receiver: webhook
+
+receivers:
+- name: 'null'
+- name: 'webhook'
+  webhook_configs:
+  - url: 'http://edge-webhook:9095/api/v1/alert'
+    send_resolved: true
+
+</code></pre>
+<p>特别需要注意的是，这个配置文件里面有个默认的WatchDog路径，这是不能删掉的，不然alertmanager就不work了。</p>
 <h4 id="黑盒探测">黑盒探测</h4>
 <p>注意到这种方法只能添加k8s内的pod或者服务，如果想要从k8s外的http接口拉取数据。则需要使用<code>Probe</code>，配合<code>blackbox-exporter</code>来使用。</p>
 <p>如果查看deployments，可以看到black-box的deploy，<code>configmap</code>中也有一个相关的配置。实际上black-box就是一个通过ping/tcp/udp探测的服务。使用方法就是创建<code>Probe</code>:</p>
@@ -598,72 +628,7 @@ spec:
 <p>默认情况下，<code>ServiceMonitor/Probe</code>创建后会自动生效。但是<code>PrometheusRule</code>则不会，我在上面配置了<code>selector</code>中的<code>matchLabels</code>条件，所以需要添加<code>.metadata.labels.monitor</code>=<code>default</code>来匹配上这个规则。同理<code>AlertManagerConfig</code>也需要通过label关联。</p>
 <p>这里的设计实际上有点混乱，有的API对象是直接默认就会关联，有的必须要加标签。如果记不住就都加上<code>monitor:default</code>的标签即可。</p>
 <h3 id="常用告警配置">常用告警配置</h3>
-<p>节点内存、磁盘、CPU等：</p>
-<pre><code class="language-yaml">groups:
-- name: node-alarm
-  rules:
-  - alert: node-up
-    expr: up == 0
-    for: 15s
-    labels:
-      severity: critical 
-    annotations:
-      summary: &quot;{{ $labels.instance }} 已停止运行超过 15s！&quot;
-
-  - alert: &quot;内存使用率过高&quot;
-    expr: round((node_memory_MemTotal_bytes - (node_memory_MemFree_bytes + node_memory_Cached_bytes + node_memory_Buffers_bytes)) / node_memory_MemTotal_bytes * 100) &gt; 80
-    for: 1m
-    labels:
-      severity: warning
-    annotations:
-      summary: &quot;内存使用率过高&quot;
-      description: &quot;{{ $labels.instance }}内存使用率达到{{ $value }}%&quot;
-
-  - alert: &quot;CPU使用率过高&quot;
-    expr: round(100 - avg(irate(node_cpu_seconds_total{job=&quot;node-exporter&quot;,mode=&quot;idle&quot;}[5m])) by (instance) * 100 ) &gt; 80
-    for: 2m
-    labels:
-      severity: warning
-    annotations:
-      summary: &quot;CPU使用率过高&quot;
-      description: &quot;{{ $labels.instance }}CPU使用率达到{{ $value }}%&quot;
-
-  - alert: &quot;磁盘使用率过高&quot;
-    expr: round(100-(node_filesystem_free_bytes{fstype=~&quot;ext4|xfs&quot;}/node_filesystem_size_bytes {fstype=~&quot;ext4|xfs&quot;}*100)) &gt; 80
-    for: 15s
-    labels:
-      severity: warning
-    annotations:
-      summary: &quot;磁盘使用率过高&quot;
-      description: &quot;{{ $labels.instance }}的磁盘{{$labels.mountpoint}} 使用率达到{{ $value }}%&quot;
-
-  - alert: &quot;IO过高&quot;
-    expr: 100-(avg(irate(node_disk_io_time_seconds_total[1m])) by(instance)* 100) &lt; 60
-    for: 15s
-    labels:
-      severity: warning
-    annotations:
-      summary: &quot;磁盘IO过高&quot;
-      description: &quot;{{ $labels.instance }}当前磁盘IO达到{{ $value }}%&quot;
-
-  - alert: &quot;网络流出速率过高&quot;
-    expr: round(irate(node_network_receive_bytes_total{instance!~&quot;data.*&quot;,device!~'tap.*|veth.*|br.*|docker.*|vir.*|lo.*|vnet.*'}[1m])/1024) &gt; 2048
-    for: 1m
-    labels:
-      severity: warning
-    annotations:
-      summary: &quot;网络流出速率过高&quot;
-      description: &quot;{{ $labels.instance }}当前网络流出速率达到{{ $value }}KB/s&quot;
-
-  - alert: &quot;会话链接数过高&quot;
-    expr: node_netstat_Tcp_CurrEstab &gt; 500
-    for: 1m
-    labels:
-      severity: warning
-    annotations:
-      summary: &quot;当前会话连接数过高&quot;
-      description: &quot;{{ $labels.instance }}当前连接数{{ $value }}&quot;
-</code></pre>
+<p>请参考<a href="https://samber.github.io/awesome-prometheus-alerts/">这个项目</a>，基本常用的exporter对应的告警都有。</p>
 <h2 id="log">Log</h2>
 <p>实际上我们一般需要做的是<strong>错误日志告警</strong>，即出现ERROR日志的时候通过<code>alertmanager</code>发送告警，而不需要真正的收集日志。边缘侧收集日志推荐使用<code>loki</code>，比<code>efk</code>更加轻量级，简单的日志统计功能推荐使用Google的<code>mtail</code>.</p>
 <p>特别注意的是：如果能通过prometheus收集错误响应(5xx)的次数等数据，就没必要部署mtail来统计错误日志了。不过非请求（如定时任务或异步任务）就需要自己在代码里统计metric暴露了。</p>
@@ -672,7 +637,7 @@ spec:
 <p>Google并没有提供<code>mtail</code>的官方镜像，更别说helm chart了，所以它的安装有点麻烦。</p>
 <h4 id="一般安装-1">一般安装</h4>
 <p><code>mtail</code>仍然只是一个go写的二进制文件，依赖配置文件驱动。所以从github上下载二进制文件之后直接启动就行：</p>
-<pre><code class="language-bash">mtail --progs /etc/mtail --logs /var/log/syslog --logs /var/log/ntp/peerstats --novm_logs_runtime_errors --override_timezone=Local
+<pre><code class="language-bash">mtail --progs /etc/mtail --logs /var/log/syslog --logs /var/log/ntp/peerstats --novm_logs_runtime_errors
 </code></pre>
 <p><code>--progs</code>对应的是mtail的配置文件，<code>--logs</code>对应的是需要监控日志文件所在的文件夹。其他选项请参考<a href="https://github.com/google/mtail/blob/main/docs/Deploying.md">这里</a>。</p>
 <h4 id="配置">配置</h4>
@@ -732,7 +697,25 @@ def syslog {
   otherwise {}
 }
 </code></pre>
-<p>完整的语法描述参考<a href="https://github.com/google/mtail/blob/main/docs/Language.md">这里</a>.</p>
+<p>完整的语法描述参考<a href="https://github.com/google/mtail/blob/main/docs/Language.md">这里</a>. 一个简单的统计错误日志的计数器如下：</p>
+<pre><code>counter error_line_total by filename
+
+/ERROR/ {
+    error_line_total[getfilename()]++
+}
+</code></pre>
+<p>通过3903端口将统计值暴露出去，prometheus那边配置好采集，加上一个简单的alert rule即可：</p>
+<pre><code class="language-yaml">groups:
+  - name: LogStatExporter
+    rules:
+      - alert: FileErrorAlert
+        expr: sum(increase(error_line_total[1m])) by (filename) &gt; 0
+        labels:
+          severity: critical
+        annotations:
+          summary: &quot;Log file {{ $labels.filename }} has excessive errors&quot;
+          description: &quot;Log file {{ $labels.filename }} has experienced {{ $value }} errors in the last 1m&quot;
+</code></pre>
 <h4 id="k8s安装">k8s安装</h4>
 <p>如果k8s容器的日志都以stdout/stderr打出来（按k8s官方推荐的方法）或者挂载到了宿主机，那么mtail可以使用<code>DaemonSet</code>部署。stdout的日志路径都在<code>/var/log/container</code>下面，宿主机路径也是固定的，所以静态配置DaemonSet即可。</p>
 <p>如果k8s容器的日志打在了容器里面，或者使用了分布式文件存储（如longhorn），那只能使用sidecar部署模式，需要每个app自行部署。</p>
@@ -747,7 +730,7 @@ def syslog {
 </ol>
 <p><code>Loggie</code>则较好的解决了这几个问题，而且他自带了logAlert功能，可以完成告警的需求。</p>
 <h4 id="一般安装-2">一般安装</h4>
-<p>官方的Release实际上只有linux amd64的二进制，其他的要自己build。写这篇文档的时候windows兼容性还有点问题，不过有pr已经修正。理论上后面可以直接build windows版本（或者自己合并那个pr然后编译）。</p>
+<p>官方的Release实际上只有linux amd64的二进制，其他的要自己build。写这篇文档的时候windows兼容性还有点问题，建议windows上还是用mtail作为平替。</p>
 <p>linux版本的安装参考<a href="https://loggie-io.github.io/docs/main/getting-started/install/node/">这里</a>即可。</p>
 <h4 id="k8s安装-1">k8s安装</h4>
 <p>支持helm安装，参考<a href="https://loggie-io.github.io/docs/main/getting-started/install/kubernetes/">这里</a>.</p>
@@ -762,10 +745,36 @@ def syslog {
 </code></pre>
 <h4 id="配置-1">配置</h4>
 <p>支持通过CRD配置，主要参考<a href="https://loggie-io.github.io/docs/main/user-guide/use-in-kubernetes/collect-container-logs/">这里</a>.</p>
-<p>创建一个<code>Sink</code>，一个<code>LogConfig</code>/<code>ClusterLogConfig</code>即可。</p>
-<p>由于是国人项目，官方文档比较容易看懂，这里就不再赘述，请参考自动化安装的脚本代码。</p>
+<p>由于是国人项目，官方文档比较容易看懂，这里就不再赘述，请参考以下配置：</p>
+<pre><code class="language-yaml">apiVersion: loggie.io/v1beta1
+kind: ClusterLogConfig
+metadata:
+  name: error-log-grep
+spec:
+  selector:
+    type: pod
+    labelSelector:
+      alertError: open
+  pipeline:
+    sources: |
+      - type: file
+        name: stdout
+        addonMeta: true
+        paths:
+          - stdout
+    sink: |
+      type: alertWebhook
+      addr: http://edge-webhook:9095/api/v1/loggie
+    interceptors: |
+      - type: rateLimit
+        qps: 4096
+      - type: logAlert
+        matcher:
+          contains: [&quot;ERROR&quot;]
+        sendOnlyMatched: true
+</code></pre>
 <h3 id="loki">Loki</h3>
-<p><code>mtail</code>最大的优势是非常轻量，它实际上不收集任何日志，配合Prometheus和<code>alertmanager</code>可以满足基本的日志告警需求。如果有日志收集的需求，建议还是使用<code>Loki</code>.</p>
+<p>上面两个组件做简单的日志过滤都不错，如果有日志收集的需求，建议还是使用<code>Loki</code>.</p>
 <p>粗略看来，Loki的设计和Prometheus有很多相似之处，配置文件的字段都差不多，<code>LogQL</code>查询语言和<code>PromQL</code>也很像。在k8s中，也有<code>Loki Operator</code>项目，不过很遗憾bitnami中没有对应的chart，<a href="https://github.com/grafana/helm-charts/tree/main/charts/loki-stack">官方仓库</a>需要翻墙。</p>
 <p>但是日志场景实际上比较复杂，Loki并不是pull模型的一般由<code>promtail</code>来解析日志然后通过Loki的HTTP接口推送日志。Loki的架构比Prometheus也复杂很多，虽然也是单个二进制文件，但是支持<code>-target</code>参数，使其扮演不同的角色，从而拆分成微服务架构。</p>
 <p>Loki的数据分为<code>Chunks</code>和<code>Index</code>两种，二者需要不同存储介质。在边缘侧部署，一般使用Loki的单体模式就够了。这种情况下，Loki将所有chunk数据存入文件系统；否则，必须指定一个块文件存储系统，如minio.</p>
@@ -864,6 +873,9 @@ scrape_configs:
 <p>需要注意的<code>loki</code>本身没有界面，需要安装<code>grafana</code>，或者使用<code>logcli</code>工具来交互。</p>
 <h4 id="告警配置-1">告警配置</h4>
 <p>类似prometheus，也是通过rule来配置，请参考<a href="https://grafana.com/docs/loki/latest/rules/">这里</a>.</p>
+<h3 id="总结">总结</h3>
+<p>Linux/K8s环境使用Loggie；windows环境使用mtail。</p>
+<p>需要一个webhook服务，用来将告警发送到钉钉等im工具。</p>
 
         </div>
         
@@ -966,6 +978,7 @@ scrape_configs:
             <li><a href="#告警配置-1">告警配置</a></li>
           </ul>
         </li>
+        <li><a href="#总结">总结</a></li>
       </ul>
     </li>
   </ul>
