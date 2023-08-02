@@ -95,7 +95,7 @@
     },
     "headline": "边侧高可用解决方案 | 应许之地","datePublished": "2023-08-01T14:57:03+08:00",
     "dateModified": "2023-08-01T14:57:03+08:00",
-    "wordCount":  1499 ,
+    "wordCount":  1824 ,
     "author": {
         "@type": "Person",
         "name": ["“tryao\""]
@@ -233,7 +233,7 @@
     </div>
     <div class="me-6 my-2">
         <i class="fas fa-clock me-1"></i>
-        <span>3分钟阅读时长</span>
+        <span>4分钟阅读时长</span>
     </div>
     
     
@@ -265,6 +265,7 @@
 <p><img src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/download" alt="Master设备选举过程"></p>
 <p>默认情况下，所有节点之间通过UDP组播通信，如果在云上也可以改为单播。选举主要需要配置的参数是抢占策略和优先级数值。</p>
 <p>需要注意的是，存在多个master的可能性，不过对于k3s而言这个问题不大。k3s的server节点本来就是等价的，对于LoadBalancer服务而言更是如此。</p>
+<h3 id="配置示例">配置示例</h3>
 <p>一个比较简单的配置如下：</p>
 <pre><code>global_defs {
    vrrp_skip_check_adv_addr
@@ -313,6 +314,77 @@ ExecStop=/bin/kill -TERM $MAINPID
 
 [Install]
 WantedBy=multi-user.target
+</code></pre>
+<h2 id="静态编译方法">静态编译方法</h2>
+<p>官方只提供了源码，可以使用docker buildx来完成静态编译，<code>Dockerfile</code>如下：</p>
+<pre><code class="language-dockerfile">FROM alpine as build
+RUN if [ -f /etc/apk/repositories ];then sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories; fi &amp;&amp; \
+    if [ -f /etc/apt/sources.list ];then sed -ri 's/(deb|security).debian.org/mirrors.aliyun.com/g' /etc/apt/sources.list; fi &amp;&amp; \
+    if [ ! -e /etc/nsswitch.conf ];then echo 'hosts: files dns myhostname' &gt; /etc/nsswitch.conf; fi  &amp;&amp; \
+    apk --no-cache add \
+        binutils \
+        file \
+        file-dev \
+        gcc \
+        glib \
+        glib-dev \
+        ipset \
+        ipset-dev \
+        iptables \
+        iptables-dev \
+        libmnl-dev \
+        libnftnl-dev \
+        libnl3 \
+        libnl3-dev \
+        make \
+        musl-dev \
+        net-snmp-dev \
+        openssl \
+        openssl-dev \
+        openssl-libs-static \
+        pcre2 \
+        pcre2-dev \
+        autoconf \
+        automake zlib-static  alpine-sdk linux-headers  libmnl-static
+WORKDIR /opt
+RUN wget http://ghproxy.com/https://github.com/acassen/keepalived/archive/refs/tags/v2.2.8.tar.gz &amp;&amp; tar xzvf v2.2.8.tar.gz &amp;&amp; mv ./keepalived-2.2.8 /opt/keepalived
+
+RUN set -ex &amp;&amp; \
+    cd /opt/keepalived &amp;&amp; \
+    ./autogen.sh &amp;&amp; \
+    CFLAGS='-static -s' LDFLAGS=-static ./configure  --disable-dynamic-linking \
+    --prefix=/usr \
+    --exec-prefix=/usr \
+    --bindir=/usr/bin \
+    --sbindir=/usr/sbin \
+    --sysconfdir=/etc \
+    --datadir=/usr/share \
+    --localstatedir=/var \
+    --mandir=/usr/share/man \
+    --enable-bfd \
+    --enable-snmp \
+    --enable-snmp-rfc \
+    --enable-nftables \
+    --enable-regex \
+    --enable-json  --with-init=systemd --enable-vrrp --enable-libnl-dynamic
+RUN set -ex &amp;&amp; \
+    cd /opt/keepalived &amp;&amp; \
+    make &amp;&amp; \
+    make DESTDIR=/install_root install &amp;&amp; \
+    find /install_root &amp;&amp; \
+    rm -rf /install_root/usr/share
+
+FROM scratch AS bin
+COPY --from=build /install_root /
+</code></pre>
+<p>运行</p>
+<pre><code class="language-bash">docker buildx build . --platform linux/amd64 --target bin --output .
+</code></pre>
+<p>之后在<code>usr/sbin/</code>下就可以看到静态编译好的二进制文件了。注意libnl仍然是动态链接的，需要安装依赖：</p>
+<pre><code class="language-bash">yum install -y libnl3 libnl3-devel
+</code></pre>
+<p>或</p>
+<pre><code class="language-bash">apt install -y libnl-3-dev
 </code></pre>
 <h2 id="其他方案">其他方案</h2>
 <p>Keepalived是比较古老的方案，现代集群一般使用raft来进行选举，也可以考虑<a href="https://www.retinadata.com/blog/keeping-ips-alive-without-keepalived/">其他方案</a>.</p>
@@ -408,8 +480,10 @@ WantedBy=multi-user.target
     <li><a href="#基于虚拟ip">基于虚拟IP</a>
       <ul>
         <li><a href="#keepalived原理概述">Keepalived原理概述</a></li>
+        <li><a href="#配置示例">配置示例</a></li>
       </ul>
     </li>
+    <li><a href="#静态编译方法">静态编译方法</a></li>
     <li><a href="#其他方案">其他方案</a></li>
   </ul>
 </nav>
