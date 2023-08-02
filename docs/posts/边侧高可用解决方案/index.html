@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang='zh' dir='ltr' ><meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+<title>边侧高可用解决方案 | 应许之地</title>
+
+<meta name="generator" content="Hugo Eureka 0.9.0" />
+<link rel="stylesheet" href="https://yiuterran.github.io/blog/css/eureka.min.css">
+<script defer src="https://yiuterran.github.io/blog/js/eureka.min.js"></script>
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload"
+  href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Noto+Serif+SC:wght@400;600;700&display=swap"
+  as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/styles/solarized-light.min.css"
+   media="print"
+  onload="this.media='all';this.onload=null" crossorigin>
+<script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/highlight.min.js"
+   crossorigin></script>
+
+  <script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/languages/dart.min.js"
+     crossorigin></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/js/all.min.js"
+   integrity="sha256-uNYoXefWRqv&#43;PsIF/OflNmwtKM4lStn9yrz2gVl6ymo="  crossorigin></script>
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+   integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3&#43;Aro6EYUG4&#43;cU&#43;KJWu/X"  media="print"
+  onload="this.media='all';this.onload=null" crossorigin>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js" 
+  integrity="sha384-g7c&#43;Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI&#43;sEnkvrMWph2EDg4"  crossorigin></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
+   integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC&#43;Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa"  crossorigin></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: "$$", right: "$$", display: true },
+        { left: "$", right: "$", display: false },
+        { left: "\\(", right: "\\)", display: false },
+        { left: "\\[", right: "\\]", display: true }
+      ],
+    });
+  });
+</script>
+
+
+<script defer src="https://cdn.jsdelivr.net/npm/mermaid@8.9.2/dist/mermaid.min.js" 
+  integrity="sha256-Zmpaaj&#43;GXFsPF5WdPArSrnW3b30dovldeKsW00xBVwE="  crossorigin></script>
+<link rel="preconnect" href="https://www.google-analytics.com" crossorigin>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-C0R8DENDJ0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-C0R8DENDJ0');
+</script>
+
+
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
+
+<meta name="description"
+  content="边侧服务高可用其实就是当年服务还没上云的时候，使用的那套技术栈。不过稍微有些不同的是，边缘计算需要考虑完全封闭的局域网，有点像组态软件的场景。 基于域名">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+      "@type": "ListItem",
+      "position": 1 ,
+      "name":"文章列表",
+      "item":"https://yiuterran.github.io/blog/posts/"},{
+      "@type": "ListItem",
+      "position": 2 ,
+      "name":"边侧高可用解决方案",
+      "item":"https://yiuterran.github.io/blog/posts/%E8%BE%B9%E4%BE%A7%E9%AB%98%E5%8F%AF%E7%94%A8%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/"}]
+}
+</script>
+
+
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://yiuterran.github.io/blog/posts/%E8%BE%B9%E4%BE%A7%E9%AB%98%E5%8F%AF%E7%94%A8%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/"
+    },
+    "headline": "边侧高可用解决方案 | 应许之地","datePublished": "2023-08-01T14:57:03+08:00",
+    "dateModified": "2023-08-01T14:57:03+08:00",
+    "wordCount":  1499 ,
+    "author": {
+        "@type": "Person",
+        "name": ["“tryao\""]
+    },
+    "publisher": {
+        "@type": "Person",
+        "name": "C. Wang",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://yiuterran.github.io/blog/images/icon.png"
+        }
+        },
+    "description": "边侧服务高可用其实就是当年服务还没上云的时候，使用的那套技术栈。不过稍微有些不同的是，边缘计算需要考虑完全封闭的局域网，有点像组态软件的场景。 基于域名"
+}
+</script><meta property="og:title" content="边侧高可用解决方案 | 应许之地" />
+<meta property="og:type" content="article" />
+
+
+<meta property="og:image" content="https://yiuterran.github.io/blog/images/icon.png">
+
+
+<meta property="og:url" content="https://yiuterran.github.io/blog/posts/%E8%BE%B9%E4%BE%A7%E9%AB%98%E5%8F%AF%E7%94%A8%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" />
+
+
+
+
+<meta property="og:description" content="边侧服务高可用其实就是当年服务还没上云的时候，使用的那套技术栈。不过稍微有些不同的是，边缘计算需要考虑完全封闭的局域网，有点像组态软件的场景。 基于域名" />
+
+
+
+
+<meta property="og:locale" content="zh" />
+
+
+
+
+<meta property="og:site_name" content="应许之地" />
+
+
+
+
+
+
+<meta property="article:published_time" content="2023-08-01T14:57:03&#43;08:00" />
+
+
+<meta property="article:modified_time" content="2023-08-01T14:57:03&#43;08:00" />
+
+
+
+<meta property="article:section" content="posts" />
+
+
+
+
+<body class="flex flex-col min-h-screen">
+  <header class="fixed flex items-center w-full min-h-16 ps-scrollbar z-50 bg-secondary-bg shadow-sm">
+    <div class="w-full max-w-screen-xl mx-auto"><script>
+    let storageColorScheme = localStorage.getItem("lightDarkMode")
+    if (((storageColorScheme == 'Auto' || storageColorScheme == null) && window.matchMedia("(prefers-color-scheme: dark)").matches) || storageColorScheme == "Dark") {
+        document.getElementsByTagName('html')[0].classList.add('dark')
+    }
+</script>
+<nav class="flex items-center justify-between flex-wrap px-4 py-4 md:py-0">
+    <a href="https://yiuterran.github.io/blog/" class="me-6 text-primary-text text-xl font-bold">应许之地</a>
+    <button id="navbar-btn" class="md:hidden flex items-center px-3 py-2" aria-label="Open Navbar">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div id="target"
+        class="hidden block md:flex md:grow md:justify-between md:items-center w-full md:w-auto text-primary-text z-20">
+        <div class="md:flex md:h-16 text-sm md:grow pb-4 md:pb-0 border-b md:border-b-0">
+            <a href="https://yiuterran.github.io/blog/authors/tryao/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  border-transparent  me-4">作者</a>
+            <a href="https://yiuterran.github.io/blog/posts/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  selected-menu-item  me-4">文章</a>
+        </div>
+
+        <div class="flex">
+            <div class="relative pt-4 md:pt-0">
+                <div class="cursor-pointer hover:text-eureka" id="lightDarkMode">
+                    <i class="fas fa-adjust"></i>
+                </div>
+                <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-30" id="is-open">
+                </div>
+                <div class="absolute flex flex-col start-0 md:start-auto end-auto md:end-0 hidden bg-secondary-bg w-48 rounded py-2 border border-tertiary-bg cursor-pointer z-40"
+                    id='lightDarkOptions'>
+                    <span class="px-4 py-1 hover:text-eureka" name="Light">浅色</span>
+                    <span class="px-4 py-1 hover:text-eureka" name="Dark">深色</span>
+                    <span class="px-4 py-1 hover:text-eureka" name="Auto">自动</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-0" id="is-open-mobile">
+    </div>
+
+</nav>
+<script>
+    
+    let element = document.getElementById('lightDarkMode')
+    if (storageColorScheme == null || storageColorScheme == 'Auto') {
+        document.addEventListener('DOMContentLoaded', () => {
+            window.matchMedia("(prefers-color-scheme: dark)").addEventListener('change', switchDarkMode)
+        })
+    } else if (storageColorScheme == "Light") {
+        element.firstElementChild.classList.remove('fa-adjust')
+        element.firstElementChild.setAttribute("data-icon", 'sun')
+        element.firstElementChild.classList.add('fa-sun')
+    } else if (storageColorScheme == "Dark") {
+        element.firstElementChild.classList.remove('fa-adjust')
+        element.firstElementChild.setAttribute("data-icon", 'moon')
+        element.firstElementChild.classList.add('fa-moon')
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        getcolorscheme();
+        switchBurger();
+    });
+</script>
+</div>
+  </header>
+  <main class="grow pt-16">
+    <div class="ps-scrollbar">
+      <div class="w-full max-w-screen-xl lg:px-4 xl:px-8 mx-auto">
+
+
+<div class="grid grid-cols-2 lg:grid-cols-8 gap-4 lg:pt-12">
+    <div
+        class="col-span-2  lg:col-span-6 bg-secondary-bg rounded px-6 py-8">
+        <h1 class="font-bold text-3xl text-primary-text">边侧高可用解决方案</h1>
+        <div class="flex flex-wrap flex-row items-center mt-2 text-tertiary-text">
+    <div class="me-6 my-2">
+        <i class="fas fa-calendar me-1"></i>
+        <span>2023-08-01</span>
+    </div>
+    <div class="me-6 my-2">
+        <i class="fas fa-clock me-1"></i>
+        <span>3分钟阅读时长</span>
+    </div>
+    
+    
+
+    
+</div>
+        
+        
+        
+
+        <div class="content">
+            <p>边侧服务高可用其实就是当年服务还没上云的时候，使用的那套技术栈。不过稍微有些不同的是，边缘计算需要考虑完全封闭的局域网，有点像组态软件的场景。</p>
+<h2 id="基于域名">基于域名</h2>
+<p>本地域名一般使用<code>.local</code>/<code>.lan</code>之类的后缀，避免和<code>.com</code>等云上域名冲突。</p>
+<p>基于域名的高可用显然需要依赖DNS来解决，简单的思路就是：</p>
+<ol>
+<li>为私有域名配置多个后端host ip；</li>
+<li>私有域名自动探测后端的存活性（即健康检查）；</li>
+<li>当DNS解析的请求过来时，如果是配置的私有域名（或其子域名），则随机（或者其他负载均衡策略）返回一个健康的ip地址；</li>
+</ol>
+<p>这个需求最简单的解决方案是使用CoreDNS的插件机制自己写一个插件，存活探测使用ping即可。</p>
+<h2 id="基于虚拟ip">基于虚拟IP</h2>
+<p>这个其实也是成熟技术栈，就是基于LVS的Keepalived. 不过要注意的是这玩意仅支持Linux，Windows平台可以考虑使用WSFC(Windows Server Failover Clustering)来实现类似的功能。不过该组件也是仅支持windows server，普通的家用操作系统是不行的。</p>
+<h3 id="keepalived原理概述">Keepalived原理概述</h3>
+<p>Keepalived底层基于linux内核中的IPVS，即LVS模块，后者提供了负载均衡的功能。Keepalived则主要基于VRRP协议（即虚拟路由冗余协议）解决了高可用（单点故障）问题。</p>
+<p>在多个节点上安装Keepalived，通过配置使其中一个成为master，其他结点都是backup. 外部服务通过master节点的**虚拟IP(vip)**地址访问结点上的服务。如果边侧是k3s环境，由于自带了LoadBalancer，所以只要指向任意一个k3s结点都可以访问暴露出来的服务。所以可以在k3s的server节点上都装上keepalived, 第一台初始化成功的作为master，其他的作为backup即可。</p>
+<p>当master节点宕机时，backup节点会根据配置选举出新的master，这个新的master接管了vip，所以客户端访问该vip的流量就会自动切换过来。</p>
+<p>vrrp设计是给路由器使用的，是将多个路由器视为一个路由器，所以它的算法其实比较简单，见下图：</p>
+<p><img src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/download" alt="Master设备选举过程"></p>
+<p>默认情况下，所有节点之间通过UDP组播通信，如果在云上也可以改为单播。选举主要需要配置的参数是抢占策略和优先级数值。</p>
+<p>需要注意的是，存在多个master的可能性，不过对于k3s而言这个问题不大。k3s的server节点本来就是等价的，对于LoadBalancer服务而言更是如此。</p>
+<p>一个比较简单的配置如下：</p>
+<pre><code>global_defs {
+   vrrp_skip_check_adv_addr
+   vrrp_garp_interval 0
+   vrrp_gna_interval 0
+}
+
+vrrp_instance VI_1 {
+    state BACKUP     # 建议都设成BACKUP，不要直接指定MASTER
+    nopreempt        # 不抢占，避免来回切换master 
+    interface enp3s0 # 真实网卡的名称
+ 
+    virtual_router_id 51 # VRID标记，多个集群不能重复
+    priority 80			 # 优先级，建议配置的不同
+    advert_int 1		 # 检测的默认时间，默认1s
+    authentication {	  # 认证
+        auth_type PASS
+        auth_pass 1111	  # 同一个集群内的认证密码应该一样	
+    }
+    virtual_ipaddress {    # 设置VIP，一般一个就行了
+        172.16.11.111
+    }
+}
+
+virtual_server 172.16.11.111 { # VIP与真实IP的映射配置，可以具体到端口
+    protocol *				 # 支持所有协议，可选TCP/UDP/SCTP
+
+    real_server 172.16.11.66 { # 真实网卡的ip地址
+        weight 1
+    }
+}
+</code></pre>
+<p>如果仅仅是为了将虚拟ip的流量转发到真实ip，上面的配置就够用了。主要需要修改的就是主机的网卡名称和真实ip，以及虚拟的ip地址。</p>
+<p>启动命令：<code>keepalived -f /etc/keepalived/keepalived.conf</code>，建议设置systemd启动：</p>
+<pre><code>[Unit]
+Description=LVS and VRRP High Availability Monitor
+After=syslog.target network.target
+
+[Service]
+Type=forking
+PIDFile=/var/run/keepalived.pid
+KillMode=control-group
+ExecStart=/usr/sbin/keepalived -D -f /etc/keepalived/keepalived.conf
+ExecReload=/bin/kill -HUP $MAINPID
+ExecStop=/bin/kill -TERM $MAINPID
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<h2 id="其他方案">其他方案</h2>
+<p>Keepalived是比较古老的方案，现代集群一般使用raft来进行选举，也可以考虑<a href="https://www.retinadata.com/blog/keeping-ips-alive-without-keepalived/">其他方案</a>.</p>
+<p>不过在边侧用keepalived其实够了，因为该软件最开始就是为了解决局域网问题的写的。</p>
+
+        </div>
+        
+        
+        
+
+
+        
+        
+        <div class="py-2">
+    
+    <div class="flex flex-col md:flex-row items-center my-8">
+        <a href="https://yiuterran.github.io/blog/authors/tryao/" class="w-24 h-24 md:me-4">
+            
+            
+            <img src="https://yiuterran.github.io/blog/images/avatar.png" class="w-full bg-primary-bg rounded-full" alt="Avatar">
+            
+        </a>
+        <div class="w-full md:w-auto mt-4 md:mt-0">
+            <a href="https://yiuterran.github.io/blog/authors/tryao/" class="block font-bold text-lg pb-1 mb-2 border-b">个人介绍</a>
+            <span class="block pb-2">兴趣使然的程序员，博而不精，乐学不倦</span>
+            
+            
+            
+            
+            
+            <a href="mailto:yaotairan@gmail.com" class="me-1">
+                <i class="fas fa-envelope"></i>
+            </a>
+            
+            
+            
+            
+            
+            <a href="https://github.com/YiuTerran" class="me-1">
+                <i class="fab fa-github"></i>
+            </a>
+            
+        </div>
+    </div>
+    
+</div>
+        
+        
+        
+<div class="flex flex-col md:flex-row md:justify-between -mx-2 mt-4 px-2 pt-4 border-t">
+    <div>
+        
+    </div>
+    <div class="md:text-right mt-4 md:mt-0">
+        
+        <span class="block font-bold">下一页</span>
+        <a href="https://yiuterran.github.io/blog/posts/%E8%BE%B9%E4%BE%A7%E7%9B%91%E6%8E%A7%E9%80%89%E5%9E%8B/" class="block">边侧监控选型</a>
+        
+    </div>
+</div>
+
+        
+
+
+
+  <script id="utterances" src="https://utteranc.es/client.js"
+            issue-term=title
+            repo=YiuTerran/blog-comment
+              theme=preferred-color-scheme
+        crossorigin="anonymous"
+        async>
+</script>
+<script>
+    if (storageColorScheme == "Light") {
+      document.getElementById('utterances').setAttribute('theme', 'github-light')
+    } else if (storageColorScheme == "Dark") {
+      document.getElementById('utterances').setAttribute('theme', 'github-dark')
+    }
+</script>
+
+    </div>
+    
+    <div class="col-span-2">
+        
+        
+        <div class="sticky top-16 z-10 hidden lg:block px-6 py-4  bg-primary-bg ">
+    <span class="text-lg font-semibold">本页内容</span>
+</div>
+<div class="sticky-toc hidden lg:block px-6 pb-6 ">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#基于域名">基于域名</a></li>
+    <li><a href="#基于虚拟ip">基于虚拟IP</a>
+      <ul>
+        <li><a href="#keepalived原理概述">Keepalived原理概述</a></li>
+      </ul>
+    </li>
+    <li><a href="#其他方案">其他方案</a></li>
+  </ul>
+</nav>
+</div>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        enableStickyToc();
+    });
+</script>
+        
+    </div>
+    
+
+    
+    
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', ()=>{
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+
+      </div>
+    </div>
+    
+  </main>
+  <footer class="ps-scrollbar">
+    <div class="w-full max-w-screen-xl mx-auto"><div class="text-center p-6 pin-b">
+    <p class="text-sm text-tertiary-text">&copy; 2021 <a href="https://github.com/YiuTerran">tryao</a>
+ &middot;  Powered by the <a href="https://github.com/wangchucheng/hugo-eureka" class="hover:text-eureka">Eureka</a> theme for <a href="https://gohugo.io" class="hover:text-eureka">Hugo</a></p>
+</div></div>
+  </footer>
+</body>
+
+</html>
