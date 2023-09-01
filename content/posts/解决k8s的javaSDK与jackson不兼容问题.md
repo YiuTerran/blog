@@ -31,6 +31,13 @@ public class SpringMvcConf {
         simpleModule.addSerializer(iEnumSerializer);
         //截断用户输入中的头尾部空格
         simpleModule.addDeserializer(String.class, new StringWithoutSpaceDeserializer());
+        simpleModule.addSerializer(OffsetDateTime.class, new OffsetDateTimeSerializer());
+        //k8s中OffsetDateTime需要适配两种格式
+        simpleModule.addDeserializer(OffsetDateTime.class, new OffsetDateTimeDeserializer());
+        simpleModule.addSerializer(OffsetDateTime.class, new OffsetDateTimeSerializer());
+        //字节数组与base64之间的转换
+        simpleModule.addDeserializer(byte[].class, new ByteArrayDeserializer());
+        simpleModule.addSerializer(byte[].class, new ByteArraySerializer());
         //注册k8s object的特殊类
         simpleModule.addSerializer(IntOrString.class, new IntOrStringSerializer());
         simpleModule.addDeserializer(IntOrString.class, new IntOrStringDeserializer());
@@ -151,6 +158,8 @@ public class QuantityDeserializer extends JsonDeserializer<Quantity> {
 ```
 
 实际上`V1Patch`也需要做类似的处理，不过一般打patch都是直接用字符串的，所以也可以不管。
+
+另外还有一个Base64与字节数组之间的转换，这个比较简单，从略。
 
 ## 忽略null字段
 
