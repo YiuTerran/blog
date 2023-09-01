@@ -95,7 +95,7 @@
     },
     "headline": "解决k8s的javaSDK与jackson不兼容问题 | 应许之地","datePublished": "2023-07-10T12:29:45+08:00",
     "dateModified": "2023-07-10T12:29:45+08:00",
-    "wordCount":  1322 ,
+    "wordCount":  1416 ,
     "author": {
         "@type": "Person",
         "name": ["tryao"]
@@ -259,6 +259,13 @@ public class SpringMvcConf {
         simpleModule.addSerializer(iEnumSerializer);
         //截断用户输入中的头尾部空格
         simpleModule.addDeserializer(String.class, new StringWithoutSpaceDeserializer());
+        simpleModule.addSerializer(OffsetDateTime.class, new OffsetDateTimeSerializer());
+        //k8s中OffsetDateTime需要适配两种格式
+        simpleModule.addDeserializer(OffsetDateTime.class, new OffsetDateTimeDeserializer());
+        simpleModule.addSerializer(OffsetDateTime.class, new OffsetDateTimeSerializer());
+        //字节数组与base64之间的转换
+        simpleModule.addDeserializer(byte[].class, new ByteArrayDeserializer());
+        simpleModule.addSerializer(byte[].class, new ByteArraySerializer());
         //注册k8s object的特殊类
         simpleModule.addSerializer(IntOrString.class, new IntOrStringSerializer());
         simpleModule.addDeserializer(IntOrString.class, new IntOrStringDeserializer());
@@ -361,6 +368,7 @@ public class V1ListMetaMixIn {
 }
 </code></pre>
 <p>实际上<code>V1Patch</code>也需要做类似的处理，不过一般打patch都是直接用字符串的，所以也可以不管。</p>
+<p>另外还有一个Base64与字节数组之间的转换，这个比较简单，从略。</p>
 <h2 id="忽略null字段">忽略null字段</h2>
 <p>k8s api object中字段非常多，输出到yaml时一般需要忽略掉null字段，所以这里对yaml单独做了配置：</p>
 <pre><code class="language-java">public static ObjectMapper yamlMapper() {
