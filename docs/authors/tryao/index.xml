@@ -8,7 +8,16 @@
     <language>zh</language>
     <copyright>&amp;copy; 2021 &lt;a href=&#34;https://github.com/YiuTerran&#34;&gt;tryao&lt;/a&gt;
 </copyright>
-    <lastBuildDate>Tue, 01 Aug 2023 14:57:03 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/authors/tryao/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 12 Sep 2023 15:22:00 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/authors/tryao/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Sqlx备忘录</title>
+      <link>https://yiuterran.github.io/blog/posts/sqlx%E5%A4%87%E5%BF%98%E5%BD%95/</link>
+      <pubDate>Tue, 12 Sep 2023 15:22:00 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/posts/sqlx%E5%A4%87%E5%BF%98%E5%BD%95/</guid>
+      <description>很少用golang写增删改查，sqlx的用法和java差别很大，用的时候总是要从头看文档。这里写个备忘录方便以后查询，使用sqlx和go-sqlbui</description>
+    </item>
+    
     <item>
       <title>边侧高可用解决方案</title>
       <link>https://yiuterran.github.io/blog/posts/%E8%BE%B9%E4%BE%A7%E9%AB%98%E5%8F%AF%E7%94%A8%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/</link>
