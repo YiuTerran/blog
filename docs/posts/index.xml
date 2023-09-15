@@ -8,7 +8,16 @@
     <language>zh</language>
     <copyright>&amp;copy; 2021 &lt;a href=&#34;https://github.com/YiuTerran&#34;&gt;tryao&lt;/a&gt;
 </copyright>
-    <lastBuildDate>Tue, 12 Sep 2023 15:22:00 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 15 Sep 2023 09:33:41 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Configmap挂载的几种情况</title>
+      <link>https://yiuterran.github.io/blog/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/</link>
+      <pubDate>Fri, 15 Sep 2023 09:33:41 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/</guid>
+      <description>ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理： 将某个key的值挂载为环境变量 apiVersion: v1 kind: Pod metadata: name: dapi-test-pod spec: containers: - name: test-container image: gcr.io/google_containers/busybox command: [ &amp;quot;/bin/sh&amp;quot;, &amp;quot;-c&amp;quot;, &amp;quot;env&amp;quot; ] env: - name: SPECIAL_LEVEL_KEY valueFrom: configMapKeyRef:</description>
+    </item>
+    
     <item>
       <title>Sqlx备忘录</title>
       <link>https://yiuterran.github.io/blog/posts/sqlx%E5%A4%87%E5%BF%98%E5%BD%95/</link>

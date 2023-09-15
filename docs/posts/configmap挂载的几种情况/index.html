@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width">
 
 
-<title>Sqlx备忘录 | 应许之地</title>
+<title>Configmap挂载的几种情况 | 应许之地</title>
 
 <meta name="generator" content="Hugo Eureka 0.9.0" />
 <link rel="stylesheet" href="https://yiuterran.github.io/blog/css/eureka.min.css">
@@ -66,7 +66,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
 
 <meta name="description"
-  content="很少用golang写增删改查，sqlx的用法和java差别很大，用的时候总是要从头看文档。这里写个备忘录方便以后查询，使用sqlx和go-sqlbui">
+  content="ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理： 将某个key的值挂载为环境变量 apiVersion: v1 kind: Pod metadata: name: dapi-test-pod spec: containers: - name: test-container image: gcr.io/google_containers/busybox command: [ &quot;/bin/sh&quot;, &quot;-c&quot;, &quot;env&quot; ] env: - name: SPECIAL_LEVEL_KEY valueFrom: configMapKeyRef:">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -78,8 +78,8 @@
       "item":"https://yiuterran.github.io/blog/posts/"},{
       "@type": "ListItem",
       "position": 2 ,
-      "name":"Sqlx备忘录",
-      "item":"https://yiuterran.github.io/blog/posts/sqlx%E5%A4%87%E5%BF%98%E5%BD%95/"}]
+      "name":"Configmap挂载的几种情况",
+      "item":"https://yiuterran.github.io/blog/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/"}]
 }
 </script>
 
@@ -91,11 +91,11 @@
     "@type": "Article",
     "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": "https://yiuterran.github.io/blog/posts/sqlx%E5%A4%87%E5%BF%98%E5%BD%95/"
+        "@id": "https://yiuterran.github.io/blog/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/"
     },
-    "headline": "Sqlx备忘录 | 应许之地","datePublished": "2023-09-12T15:22:00+08:00",
-    "dateModified": "2023-09-12T15:22:00+08:00",
-    "wordCount":  1579 ,
+    "headline": "Configmap挂载的几种情况 | 应许之地","datePublished": "2023-09-15T09:33:41+08:00",
+    "dateModified": "2023-09-15T09:33:41+08:00",
+    "wordCount":  939 ,
     "author": {
         "@type": "Person",
         "name": ["“tryao\""]
@@ -108,21 +108,21 @@
             "url": "https://yiuterran.github.io/blog/images/icon.png"
         }
         },
-    "description": "很少用golang写增删改查，sqlx的用法和java差别很大，用的时候总是要从头看文档。这里写个备忘录方便以后查询，使用sqlx和go-sqlbui"
+    "description": "ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理： 将某个key的值挂载为环境变量 apiVersion: v1 kind: Pod metadata: name: dapi-test-pod spec: containers: - name: test-container image: gcr.io\/google_containers\/busybox command: [ \u0026quot;\/bin\/sh\u0026quot;, \u0026quot;-c\u0026quot;, \u0026quot;env\u0026quot; ] env: - name: SPECIAL_LEVEL_KEY valueFrom: configMapKeyRef:"
 }
-</script><meta property="og:title" content="Sqlx备忘录 | 应许之地" />
+</script><meta property="og:title" content="Configmap挂载的几种情况 | 应许之地" />
 <meta property="og:type" content="article" />
 
 
 <meta property="og:image" content="https://yiuterran.github.io/blog/images/icon.png">
 
 
-<meta property="og:url" content="https://yiuterran.github.io/blog/posts/sqlx%E5%A4%87%E5%BF%98%E5%BD%95/" />
+<meta property="og:url" content="https://yiuterran.github.io/blog/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/" />
 
 
 
 
-<meta property="og:description" content="很少用golang写增删改查，sqlx的用法和java差别很大，用的时候总是要从头看文档。这里写个备忘录方便以后查询，使用sqlx和go-sqlbui" />
+<meta property="og:description" content="ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理： 将某个key的值挂载为环境变量 apiVersion: v1 kind: Pod metadata: name: dapi-test-pod spec: containers: - name: test-container image: gcr.io/google_containers/busybox command: [ &quot;/bin/sh&quot;, &quot;-c&quot;, &quot;env&quot; ] env: - name: SPECIAL_LEVEL_KEY valueFrom: configMapKeyRef:" />
 
 
 
@@ -139,31 +139,29 @@
 
 
 
-<meta property="article:published_time" content="2023-09-12T15:22:00&#43;08:00" />
+<meta property="article:published_time" content="2023-09-15T09:33:41&#43;08:00" />
 
 
-<meta property="article:modified_time" content="2023-09-12T15:22:00&#43;08:00" />
+<meta property="article:modified_time" content="2023-09-15T09:33:41&#43;08:00" />
 
 
 
 <meta property="article:section" content="posts" />
 
 
-<meta property="article:tag" content="golang" />
-
-<meta property="article:tag" content="sqlx" />
+<meta property="article:tag" content="k8s" />
 
 
 
 
 
-<meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/tinode%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" />
+<meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/promql%E7%AC%94%E8%AE%B0/" />
 
-<meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/ginkgo%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/" />
+<meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/" />
 
-<meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/influxdb-cluster%E9%9B%86%E6%88%90/" />
+<meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/kubeedge%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/" />
 
-<meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/golang%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A6%81%E7%82%B9/" />
+<meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/k8s%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/" />
 
 
 
@@ -241,15 +239,15 @@
 <div class="grid grid-cols-2 lg:grid-cols-8 gap-4 lg:pt-12">
     <div
         class="col-span-2  lg:col-span-6 bg-secondary-bg rounded px-6 py-8">
-        <h1 class="font-bold text-3xl text-primary-text">Sqlx备忘录</h1>
+        <h1 class="font-bold text-3xl text-primary-text">Configmap挂载的几种情况</h1>
         <div class="flex flex-wrap flex-row items-center mt-2 text-tertiary-text">
     <div class="me-6 my-2">
         <i class="fas fa-calendar me-1"></i>
-        <span>2023-09-12</span>
+        <span>2023-09-15</span>
     </div>
     <div class="me-6 my-2">
         <i class="fas fa-clock me-1"></i>
-        <span>4分钟阅读时长</span>
+        <span>2分钟阅读时长</span>
     </div>
     
     
@@ -261,112 +259,138 @@
         
 
         <div class="content">
-            <p>很少用golang写增删改查，sqlx的用法和java差别很大，用的时候总是要从头看文档。这里写个备忘录方便以后查询，使用sqlx和go-sqlbuilder来完成增删改查。</p>
-<h2 id="连接">连接</h2>
-<pre><code class="language-go">var (
-    db *sqlx.DB
-    err error
-)
-//右边是dsn格式表达式，即&lt;用户名&gt;:&lt;密码&gt;@tcp(&lt;主机&gt;:&lt;端口&gt;)/&lt;数据库名&gt;?&lt;连接参数&gt;
-db, err = sqlx.Connect(&quot;mysql&quot;, &quot;root:123456@localhost:6379/example?charset=utf8mb4&amp;parseTime=True&amp;loc=Local&quot;)
-db.Ping()
+            <p>ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理：</p>
+<h2 id="将某个key的值挂载为环境变量">将某个key的值挂载为环境变量</h2>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Pod
+metadata:
+  name: dapi-test-pod
+spec:
+  containers:
+    - name: test-container
+      image: gcr.io/google_containers/busybox
+      command: [ &quot;/bin/sh&quot;, &quot;-c&quot;, &quot;env&quot; ]
+      env:
+        - name: SPECIAL_LEVEL_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: special-config
+              key: special.how
+        - name: SPECIAL_TYPE_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: special-config
+              key: special.type
+              optional: true
+  restartPolicy: Never
 </code></pre>
-<p>如果只是想打开但不连接，可以用<code>sqlx.Open</code>. 如果从已经存在的<code>sqlx.DB</code>中创建一个新db对象，使用<code>NewDb</code>.</p>
-<p>连接池参数：</p>
-<pre><code class="language-go">//最大闲置连接
-db.SetMaxIdleConns(1)
-//最大允许打开连接，默认无限制
-db.SetMaxOpenConns(5)
+<p>这里在<code>command</code>里可以通过<code>$(SPECIAL_TYPE_KEY)</code>的格式来引用这些环境变量作为命令行参数。</p>
+<h2 id="整个configmap挂载为目录">整个ConfigMap挂载为目录</h2>
+<p>这种情况最简单，每个key都会生成一个同名文件：</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Pod
+metadata:
+  name: dapi-test-pod
+spec:
+  containers:
+    - name: test-container
+      image: gcr.io/google_containers/busybox
+      command: [ &quot;/bin/sh&quot;, &quot;-c&quot;, &quot;cat /etc/config/special.how&quot; ]
+      volumeMounts:
+      - name: config-volume
+        mountPath: /etc/config
+  volumes:
+    - name: config-volume
+      configMap:
+        name: special-config
+  restartPolicy: Never
 </code></pre>
-<h2 id="增删改">增删改</h2>
-<p>非查询请求都是同样的接口，即：<code>db.Exec(sql, args...)</code>，当然也可以用<code>MustExec</code>，失败就panic. 实际上这个接口也是标准sql库支持的接口。</p>
-<p>返回值是<code>sql.Result</code>和<code>error</code>. <code>sql.Result</code>有LastInsertId()和RowsAffected()两个方法，但是这个返回值能不能正确获取其实取决于数据库自己的实现。MySQL可以正确获得自增id和影响的列，但是PG就要自己在sql里面加上<code>returning</code>才行。</p>
-<p>sql和args可以通过<code>go-sqlbuilder</code>库来生成，如（以下例子来自该库的godoc）：</p>
-<pre><code class="language-go">ib := SQLite.NewInsertBuilder()
-ib.InsertIgnoreInto(&quot;demo.user&quot;)
-ib.Cols(&quot;id&quot;, &quot;name&quot;, &quot;status&quot;, &quot;created_at&quot;)
-ib.Values(1, &quot;Huan Du&quot;, 1, Raw(&quot;UNIX_TIMESTAMP(NOW())&quot;))
-ib.Values(2, &quot;Charmy Liu&quot;, 1, 1234567890)
-
-sql, args := ib.Build()
+<h2 id="将某个key挂载为文件">将某个key挂载为文件</h2>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Pod
+metadata:
+  name: dapi-test-pod
+spec:
+  containers:
+    - name: test-container
+      image: gcr.io/google_containers/busybox
+      command: [ &quot;/bin/sh&quot;,&quot;-c&quot;,&quot;cat /etc/config/special-key&quot; ]
+      volumeMounts:
+      - name: config-volume
+        mountPath: /etc/config
+  volumes:
+    - name: config-volume
+      configMap:
+        name: special-config
+        items:
+        - key: special.how
+          path: path/to/special-key
+  restartPolicy: Never
 </code></pre>
-<p>当然select同理.</p>
-<p>如果不使用sqlbuilder，自己写的话，大致格式是：</p>
-<pre><code class="language-sql">insert or ignore into demo.user (id, name, status, created_at) values (?, ?, ?, ?, ?)
+<p>如果<code>/etc/config</code>下有同名文件（使用path中最后一级为文件名，这里即<code>special-key</code>），会覆盖掉。</p>
+<p>默认情况下<code>key</code>的名字和<code>path</code>是一样的，可以不指定<code>path</code>，而修改path相当于对key进行了<strong>重命名</strong>。</p>
+<h2 id="多个configmap挂载到同一个目录">多个ConfigMap挂载到同一个目录</h2>
+<p>直接使用上面的方法，如果多个configmap需要挂载到同一个目录，后挂载的会将之前的覆盖掉，必须使用<code>subPath</code>来解决这个问题：</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Pod
+metadata:
+  name: dapi-test-pod
+spec:
+  containers:
+    - name: test-container
+      image: gcr.io/google_containers/busybox
+      command: [ &quot;/bin/sh&quot;, &quot;-c&quot;, &quot;cat /etc/config/special.how&quot; ]
+      volumeMounts:
+      - name: config1
+        mountPath: /etc/config
+        subPath: key1
+      - name: config2
+        mountPath: /etc/config
+        subPath: key2
+  volumes:
+    - name: config1
+      configMap:
+        name: configmap1
+    - name: config2
+      configMap:
+        name: configmap2
+  restartPolicy: Never
 </code></pre>
-<p>为了防止SQL注入，变量都要使用<code>?</code>占位，而不是直接拼写到sql中。</p>
-<p>内置类型会正确映射成数据库支持的参数类型。如果是自定义类型，则可以通过实现<code>driver.Valuer</code>接口来实现。</p>
-<h2 id="查询">查询</h2>
-<h3 id="基础">基础</h3>
-<p>首先应当知道标准sql库里如何查询：</p>
-<pre><code class="language-go">Query(sql, args...) (*sql.Rows, error)
-QueryRow(sql, args...)*sql.Row
+<p>这里就是从<code>configmap1</code>中选出key为<code>key1</code>的键值挂载到<code>/etc/config</code>下，然后又从<code>configmap2</code>中选出<code>key2</code>挂载。</p>
+<p>这里的<code>subPath</code>起到筛选的作用，如果对应的key不存在，则什么都不挂载。但是pod内会创建<code>mountPath</code>指定的文件夹。<code>subPath</code>需要和<code>path</code>保持一致才能正确匹配到，而不是和<code>key</code>进行匹配。</p>
+<h2 id="特殊情况">特殊情况</h2>
+<p>如上文所述，正常情况下，使用<code>path</code>进行重命名；<code>mountPath</code>指定存储目录，<code>subPath</code>则进行筛选。</p>
+<p>但是如果在<code>mountPath</code>里面直接指定文件名，则会对最终挂载的<strong>文件</strong>再次进行重命名。</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Pod
+metadata:
+  name: dapi-test-pod
+spec:
+  containers:
+    - name: test-container
+      image: gcr.io/google_containers/busybox
+      command: [ &quot;/bin/sh&quot;,&quot;-c&quot;,&quot;cat /etc/config/special-key&quot; ]
+      volumeMounts:
+      - name: config-volume
+        mountPath: /etc/config/x.txt
+        subPath: path/to/special-key
+  volumes:
+    - name: config-volume
+      configMap:
+        name: special-config
+        items:
+        - key: special.how
+          path: path/to/special-key
+  restartPolicy: Never
 </code></pre>
-<p>显然前者返回多行，后者返回单行。</p>
-<p><code>sql.Rows</code>是一个游标，可以通过<code>Next()</code>迭代处理：</p>
-<pre><code class="language-go">rows, err := db.Query(&quot;select age from person&quot;)
-if err != nil{
-    //查询错误
-    return
-}
-for rows.Next(){
-    var x int
-    if err = rows.Scan(&amp;x); err != nil{
-        //scan错误
-        log.Error(err)
-    }
-}
-if err = rows.Err(); err != nil{
-    //处理错误
-    return
-}
-</code></pre>
-<p><code>sql.Row</code>可以直接<code>Scan</code>进行保存，Scan的参数个数显然应当与<code>SELECT</code>中查询的列数相当。</p>
-<p>将数据库中获取的结果<code>Scan</code>到自定义类型，则需要实现<code>sql.Scanner</code>这个接口。</p>
-<p>如果<code>Query</code>结果是空的，Scan会返回<code>sql.ErrNoRows</code>.</p>
-<p><strong>特别注意</strong>：如果使用<code>rows.Next</code>完成迭代，需要手动<code>rows.Close</code>关闭游标。</p>
-<h3 id="sqlx的orm">sqlx的orm</h3>
-<p>sqlx扩展了标准sql的功能，可以将数据直接映射到struct中。</p>
-<pre><code class="language-go">Queryx(sql, args...) (*sqlx.Rows, error)
-QueryRowx(sql, args...) (*sqlx.Row)
-</code></pre>
-<p><code>sqlx.Rows</code>和<code>sqlx.Row</code>可以直接scan到struct里，sql中的字段用<code>db</code>的注解来映射：</p>
-<pre><code class="language-go">var x struct{
-    Age int `db:&quot;age&quot;`
-}
-row.StructScan(&amp;p)
-</code></pre>
-<p>如果不想每个字段都手动映射，可以用<code>db.MapperFunc(f)</code>, f是映射函数.</p>
-<p>除了<code>StructScan</code>之外，还有<code>SliceScan</code>和<code>MapScan</code>，前者目标应当是<code>[]any</code>，后者则是<code>map[string]any</code>，一般很少使用这两个方法，除非不知道列的明确类型。</p>
-<p>除了上面的方法以外，还有两个更简便的方法：</p>
-<pre><code class="language-go">Get(dest, sql, args...) error
-Select([]dest, sql, args...) error
-</code></pre>
-<p><code>Get</code>直接将单行结果Scan到dest里，<code>Select</code>直接将多行结果scan到dest slice里。注意后者会一次性Load所有数据，对内存造成一定的压力。</p>
-<h3 id="sqlbuilder的orm">sqlbuilder的orm</h3>
-<p>sqlbuilder也自带了一个类似的功能，无须使用<code>db.queryx</code>，而是直接使用<code>db.query</code>:</p>
-<pre><code class="language-go">var ageStruct = NewStruct(new(Age))
-var age Age
-row.Scan(ageStruct(&amp;age)...)
-</code></pre>
-<p>不过这个用起来太麻烦，不如直接用sqlx的功能方便。可以仅使用sqlbuilder生成SELECT语句的能力。</p>
-<h2 id="事务">事务</h2>
-<p>sqlx的事务很简单：</p>
-<pre><code>tx, err := db.Beginx()
-tx.Exec()
-tx.Query()
-tx.Commit()
-</code></pre>
-<p>如果事务失败，就手动<code>tx.Rollback()</code>.</p>
-<p>如果想要修改事务的隔离级别，使用<code>tx.Exec</code>直接运行sql语句进行更改即可。</p>
+<p>如上，最终挂载的文件会变成<code>x.txt</code>，而不再是<code>special-key</code>.</p>
+<p>说实话这个技术最好不要用到，通过path重命名+subPath筛选，就能满足需求了。使用mountPath直接指定文件名这个方法有点绕，容易造成误解。</p>
 
         </div>
         
         <div class="my-4">
     
-    <a href="https://yiuterran.github.io/blog/tags/golang/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#golang</a>
-    
-    <a href="https://yiuterran.github.io/blog/tags/sqlx/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#sqlx</a>
+    <a href="https://yiuterran.github.io/blog/tags/k8s/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#k8s</a>
     
 </div>
         
@@ -415,14 +439,11 @@ tx.Commit()
 <div class="flex flex-col md:flex-row md:justify-between -mx-2 mt-4 px-2 pt-4 border-t">
     <div>
         
-        <span class="block font-bold">上一页</span>
-        <a href="https://yiuterran.github.io/blog/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/" class="block">Configmap挂载的几种情况</a>
-        
     </div>
     <div class="md:text-right mt-4 md:mt-0">
         
         <span class="block font-bold">下一页</span>
-        <a href="https://yiuterran.github.io/blog/posts/%E8%BE%B9%E4%BE%A7%E9%AB%98%E5%8F%AF%E7%94%A8%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" class="block">边侧高可用解决方案</a>
+        <a href="https://yiuterran.github.io/blog/posts/sqlx%E5%A4%87%E5%BF%98%E5%BD%95/" class="block">Sqlx备忘录</a>
         
     </div>
 </div>
@@ -457,16 +478,11 @@ tx.Commit()
 <div class="sticky-toc hidden lg:block px-6 pb-6 ">
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#连接">连接</a></li>
-    <li><a href="#增删改">增删改</a></li>
-    <li><a href="#查询">查询</a>
-      <ul>
-        <li><a href="#基础">基础</a></li>
-        <li><a href="#sqlx的orm">sqlx的orm</a></li>
-        <li><a href="#sqlbuilder的orm">sqlbuilder的orm</a></li>
-      </ul>
-    </li>
-    <li><a href="#事务">事务</a></li>
+    <li><a href="#将某个key的值挂载为环境变量">将某个key的值挂载为环境变量</a></li>
+    <li><a href="#整个configmap挂载为目录">整个ConfigMap挂载为目录</a></li>
+    <li><a href="#将某个key挂载为文件">将某个key挂载为文件</a></li>
+    <li><a href="#多个configmap挂载到同一个目录">多个ConfigMap挂载到同一个目录</a></li>
+    <li><a href="#特殊情况">特殊情况</a></li>
   </ul>
 </nav>
 </div>
@@ -486,16 +502,16 @@ tx.Commit()
         <h2 class="text-lg font-semibold mb-4">相关</h2>
         <div class="content">
             
-            <a href="https://yiuterran.github.io/blog/posts/tinode%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/">Tinode源码解析</a>
+            <a href="https://yiuterran.github.io/blog/posts/promql%E7%AC%94%E8%AE%B0/">PromQL笔记</a>
             <br />
             
-            <a href="https://yiuterran.github.io/blog/posts/ginkgo%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/">Ginkgo使用笔记</a>
+            <a href="https://yiuterran.github.io/blog/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/">K3s存储插件使用笔记</a>
             <br />
             
-            <a href="https://yiuterran.github.io/blog/posts/influxdb-cluster%E9%9B%86%E6%88%90/">Influxdb Cluster集成</a>
+            <a href="https://yiuterran.github.io/blog/posts/kubeedge%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/">KubeEdge要点笔记</a>
             <br />
             
-            <a href="https://yiuterran.github.io/blog/posts/golang%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A6%81%E7%82%B9/">Golang定时器要点</a>
+            <a href="https://yiuterran.github.io/blog/posts/k8s%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/">K8s要点简记</a>
             <br />
             
         </div>

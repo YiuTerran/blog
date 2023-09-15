@@ -93,24 +93,30 @@
     "itemListElement":[{
             "@type":"ListItem",
             "position":  1 ,
+            "name": "Configmap挂载的几种情况",
+            "description": "ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理： 将某个key的值挂载为环境变量 apiVersion: v1 kind: Pod metadata: name: dapi-test-pod spec: containers: - name: test-container image: gcr.io/google_containers/busybox command: [ \u0026quot;/bin/sh\u0026quot;, \u0026quot;-c\u0026quot;, \u0026quot;env\u0026quot; ] env: - name: SPECIAL_LEVEL_KEY valueFrom: configMapKeyRef:",
+            "url": "https://yiuterran.github.io/blog/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/"
+        },{
+            "@type":"ListItem",
+            "position":  2 ,
             "name": "PromQL笔记",
             "description": "格式 类似influxdb，prometheus也有自己的line protocol： \u0026lt;--------------- metric ---------------------\u0026gt;\u0026lt;-timestamp -\u0026gt;\u0026lt;-value-\u0026gt; \u0026lt;---metric name---\u0026gt;{labelname=labelvalue,....} http_request_total{status=\u0026quot;200\u0026quot;, method=\u0026quot;GET\u0026quot;}@1434417560938 =\u0026gt; 94355 http_request_total{status=\u0026quot;200\u0026quot;, method=\u0026quot;GET\u0026quot;}@1434417561287 =\u0026gt; 94334 上面就表示在某个时间戳系统http GET",
             "url": "https://yiuterran.github.io/blog/posts/promql%E7%AC%94%E8%AE%B0/"
         },{
             "@type":"ListItem",
-            "position":  2 ,
+            "position":  3 ,
             "name": "K3s存储插件使用笔记",
             "description": "原理 k8s存储主要依赖PV和PVC的机制，前者由运维人员声明可用的存储，如： apiVersion: v1 kind: PersistentVolume metadata: name: nfs spec: storageClassName: manual capacity: storage: 10Gi accessModes: - ReadWriteMany nfs: server: 10.244.1.4 path: \u0026quot;/\u0026quot; 后者是用户（开发人员）声明的需求",
             "url": "https://yiuterran.github.io/blog/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/"
         },{
             "@type":"ListItem",
-            "position":  3 ,
+            "position":  4 ,
             "name": "KubeEdge要点笔记",
             "description": "安装流程 首先要在云端安装k8s，理论上只需要master节点，可以没有worker，换句话说可以是一个单节点集群（但是要关闭NoSchedule的ta",
             "url": "https://yiuterran.github.io/blog/posts/kubeedge%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/"
         },{
             "@type":"ListItem",
-            "position":  4 ,
+            "position":  5 ,
             "name": "K8s要点简记",
             "description": "22年的时候需要使用CICD的时候，看了一遍k8s相关的知识点。买了一本《深入剖析Kubernetes》，大致熟悉了常用的概念。 最近因为工作调动需要做",
             "url": "https://yiuterran.github.io/blog/posts/k8s%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/"
@@ -148,7 +154,7 @@
 
 
 
-<meta property="og:updated_time" content="2023-07-24T11:21:33&#43;08:00" />
+<meta property="og:updated_time" content="2023-09-15T09:33:41&#43;08:00" />
 
 
 
@@ -232,6 +238,40 @@
 </article>
 <div class="bg-secondary-bg rounded px-6">
     <div class="overflow-hidden divide-y">
+  
+  <div class="py-6">
+    <div class="flex flex-col-reverse lg:flex-row justify-between">
+  
+  <div class="w-full ">
+    <div class="mb-4">
+  <a href="https://yiuterran.github.io/blog/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/" class="font-bold text-xl hover:text-eureka">Configmap挂载的几种情况</a>
+</div>
+<div class="content">
+  
+    ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理： 将某个key的值挂载为环境变量 apiVersion: v1 kind: Pod metadata: name: dapi-test-pod spec: containers: - name: test-container image: gcr.io/google_containers/busybox command: [ &#34;/bin/sh&#34;, &#34;-c&#34;, &#34;env&#34; ] env: - name: SPECIAL_LEVEL_KEY valueFrom: configMapKeyRef:
+  
+</div>
+
+<div class="flex flex-wrap flex-row items-center mt-2 text-tertiary-text">
+    <div class="me-6 my-2">
+        <i class="fas fa-calendar me-1"></i>
+        <span>2023-09-15</span>
+    </div>
+    <div class="me-6 my-2">
+        <i class="fas fa-clock me-1"></i>
+        <span>2分钟阅读时长</span>
+    </div>
+    
+    
+
+    
+</div>
+
+  </div>
+
+  
+</div>
+  </div>
   
   <div class="py-6">
     <div class="flex flex-col-reverse lg:flex-row justify-between">
