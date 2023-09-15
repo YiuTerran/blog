@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width">
 
 
-<title>Configmap挂载的几种情况 | 应许之地</title>
+<title>StatefulSet使用思路梳理 | 应许之地</title>
 
 <meta name="generator" content="Hugo Eureka 0.9.0" />
 <link rel="stylesheet" href="https://yiuterran.github.io/blog/css/eureka.min.css">
@@ -66,7 +66,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
 
 <meta name="description"
-  content="ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理： 将某个key的值挂载为环境变量 apiVersion: v1 kind: Pod metadata: name: dapi-test-pod spec: containers: - name: test-container image: gcr.io/google_containers/busybox command: [ &quot;/bin/sh&quot;, &quot;-c&quot;, &quot;env&quot; ] env: - name: SPECIAL_LEVEL_KEY valueFrom: configMapKeyRef:">
+  content="一般服务都是使用deployment部署，deploy的使用非常简单，无状态，随意调度。但是各种需要持久化数据的中间件都需要使用StatefulSet">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -78,8 +78,8 @@
       "item":"https://yiuterran.github.io/blog/posts/"},{
       "@type": "ListItem",
       "position": 2 ,
-      "name":"Configmap挂载的几种情况",
-      "item":"https://yiuterran.github.io/blog/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/"}]
+      "name":"StatefulSet使用思路梳理",
+      "item":"https://yiuterran.github.io/blog/posts/statefulset%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86/"}]
 }
 </script>
 
@@ -91,11 +91,11 @@
     "@type": "Article",
     "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": "https://yiuterran.github.io/blog/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/"
+        "@id": "https://yiuterran.github.io/blog/posts/statefulset%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86/"
     },
-    "headline": "Configmap挂载的几种情况 | 应许之地","datePublished": "2023-09-15T09:33:41+08:00",
-    "dateModified": "2023-09-15T09:33:41+08:00",
-    "wordCount":  939 ,
+    "headline": "StatefulSet使用思路梳理 | 应许之地","datePublished": "2023-09-15T14:57:05+08:00",
+    "dateModified": "2023-09-15T14:57:05+08:00",
+    "wordCount":  1917 ,
     "author": {
         "@type": "Person",
         "name": ["“tryao\""]
@@ -108,21 +108,21 @@
             "url": "https://yiuterran.github.io/blog/images/icon.png"
         }
         },
-    "description": "ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理： 将某个key的值挂载为环境变量 apiVersion: v1 kind: Pod metadata: name: dapi-test-pod spec: containers: - name: test-container image: gcr.io\/google_containers\/busybox command: [ \u0026quot;\/bin\/sh\u0026quot;, \u0026quot;-c\u0026quot;, \u0026quot;env\u0026quot; ] env: - name: SPECIAL_LEVEL_KEY valueFrom: configMapKeyRef:"
+    "description": "一般服务都是使用deployment部署，deploy的使用非常简单，无状态，随意调度。但是各种需要持久化数据的中间件都需要使用StatefulSet"
 }
-</script><meta property="og:title" content="Configmap挂载的几种情况 | 应许之地" />
+</script><meta property="og:title" content="StatefulSet使用思路梳理 | 应许之地" />
 <meta property="og:type" content="article" />
 
 
 <meta property="og:image" content="https://yiuterran.github.io/blog/images/icon.png">
 
 
-<meta property="og:url" content="https://yiuterran.github.io/blog/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/" />
+<meta property="og:url" content="https://yiuterran.github.io/blog/posts/statefulset%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86/" />
 
 
 
 
-<meta property="og:description" content="ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理： 将某个key的值挂载为环境变量 apiVersion: v1 kind: Pod metadata: name: dapi-test-pod spec: containers: - name: test-container image: gcr.io/google_containers/busybox command: [ &quot;/bin/sh&quot;, &quot;-c&quot;, &quot;env&quot; ] env: - name: SPECIAL_LEVEL_KEY valueFrom: configMapKeyRef:" />
+<meta property="og:description" content="一般服务都是使用deployment部署，deploy的使用非常简单，无状态，随意调度。但是各种需要持久化数据的中间件都需要使用StatefulSet" />
 
 
 
@@ -139,10 +139,10 @@
 
 
 
-<meta property="article:published_time" content="2023-09-15T09:33:41&#43;08:00" />
+<meta property="article:published_time" content="2023-09-15T14:57:05&#43;08:00" />
 
 
-<meta property="article:modified_time" content="2023-09-15T09:33:41&#43;08:00" />
+<meta property="article:modified_time" content="2023-09-15T14:57:05&#43;08:00" />
 
 
 
@@ -154,6 +154,8 @@
 
 
 
+
+<meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/" />
 
 <meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/promql%E7%AC%94%E8%AE%B0/" />
 
@@ -239,7 +241,7 @@
 <div class="grid grid-cols-2 lg:grid-cols-8 gap-4 lg:pt-12">
     <div
         class="col-span-2  lg:col-span-6 bg-secondary-bg rounded px-6 py-8">
-        <h1 class="font-bold text-3xl text-primary-text">Configmap挂载的几种情况</h1>
+        <h1 class="font-bold text-3xl text-primary-text">StatefulSet使用思路梳理</h1>
         <div class="flex flex-wrap flex-row items-center mt-2 text-tertiary-text">
     <div class="me-6 my-2">
         <i class="fas fa-calendar me-1"></i>
@@ -247,7 +249,7 @@
     </div>
     <div class="me-6 my-2">
         <i class="fas fa-clock me-1"></i>
-        <span>2分钟阅读时长</span>
+        <span>4分钟阅读时长</span>
     </div>
     
     
@@ -259,132 +261,36 @@
         
 
         <div class="content">
-            <p>ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理：</p>
-<h2 id="将某个key的值挂载为环境变量">将某个key的值挂载为环境变量</h2>
-<pre><code class="language-yaml">apiVersion: v1
-kind: Pod
-metadata:
-  name: dapi-test-pod
-spec:
-  containers:
-    - name: test-container
-      image: gcr.io/google_containers/busybox
-      command: [ &quot;/bin/sh&quot;, &quot;-c&quot;, &quot;env&quot; ]
-      env:
-        - name: SPECIAL_LEVEL_KEY
-          valueFrom:
-            configMapKeyRef:
-              name: special-config
-              key: special.how
-        - name: SPECIAL_TYPE_KEY
-          valueFrom:
-            configMapKeyRef:
-              name: special-config
-              key: special.type
-              optional: true
-  restartPolicy: Never
-</code></pre>
-<p>这里在<code>command</code>里可以通过<code>$(SPECIAL_TYPE_KEY)</code>的格式来引用这些环境变量作为命令行参数。</p>
-<h2 id="整个configmap挂载为目录">整个ConfigMap挂载为目录</h2>
-<p>这种情况最简单，每个key都会生成一个同名文件：</p>
-<pre><code class="language-yaml">apiVersion: v1
-kind: Pod
-metadata:
-  name: dapi-test-pod
-spec:
-  containers:
-    - name: test-container
-      image: gcr.io/google_containers/busybox
-      command: [ &quot;/bin/sh&quot;, &quot;-c&quot;, &quot;cat /etc/config/special.how&quot; ]
-      volumeMounts:
-      - name: config-volume
-        mountPath: /etc/config
-  volumes:
-    - name: config-volume
-      configMap:
-        name: special-config
-  restartPolicy: Never
-</code></pre>
-<h2 id="将某个key挂载为文件">将某个key挂载为文件</h2>
-<pre><code class="language-yaml">apiVersion: v1
-kind: Pod
-metadata:
-  name: dapi-test-pod
-spec:
-  containers:
-    - name: test-container
-      image: gcr.io/google_containers/busybox
-      command: [ &quot;/bin/sh&quot;,&quot;-c&quot;,&quot;cat /etc/config/special-key&quot; ]
-      volumeMounts:
-      - name: config-volume
-        mountPath: /etc/config
-  volumes:
-    - name: config-volume
-      configMap:
-        name: special-config
-        items:
-        - key: special.how
-          path: path/to/special-key
-  restartPolicy: Never
-</code></pre>
-<p>如果<code>/etc/config</code>下有同名文件（使用path中最后一级为文件名，这里即<code>special-key</code>），会覆盖掉。</p>
-<p>默认情况下<code>key</code>的名字和<code>path</code>是一样的，可以不指定<code>path</code>，而修改path相当于对key进行了<strong>重命名</strong>。</p>
-<h2 id="多个configmap挂载到同一个目录">多个ConfigMap挂载到同一个目录</h2>
-<p>直接使用上面的方法，如果多个configmap需要挂载到同一个目录，后挂载的会将之前的覆盖掉，必须使用<code>subPath</code>来解决这个问题：</p>
-<pre><code class="language-yaml">apiVersion: v1
-kind: Pod
-metadata:
-  name: dapi-test-pod
-spec:
-  containers:
-    - name: test-container
-      image: gcr.io/google_containers/busybox
-      command: [ &quot;/bin/sh&quot;, &quot;-c&quot;, &quot;cat /etc/config/special.how&quot; ]
-      volumeMounts:
-      - name: config1
-        mountPath: /etc/config
-        subPath: key1
-      - name: config2
-        mountPath: /etc/config
-        subPath: key2
-  volumes:
-    - name: config1
-      configMap:
-        name: configmap1
-    - name: config2
-      configMap:
-        name: configmap2
-  restartPolicy: Never
-</code></pre>
-<p>这里就是从<code>configmap1</code>中选出key为<code>key1</code>的键值挂载到<code>/etc/config</code>下，然后又从<code>configmap2</code>中选出<code>key2</code>挂载。</p>
-<p>这里的<code>subPath</code>起到筛选的作用，如果对应的key不存在，则什么都不挂载。但是pod内会创建<code>mountPath</code>指定的文件夹。<code>subPath</code>需要和<code>path</code>保持一致才能正确匹配到，而不是和<code>key</code>进行匹配。</p>
-<h2 id="特殊情况">特殊情况</h2>
-<p>如上文所述，正常情况下，使用<code>path</code>进行重命名；<code>mountPath</code>指定存储目录，<code>subPath</code>则进行筛选。</p>
-<p>但是如果在<code>mountPath</code>里面直接指定文件名，则会对最终挂载的<strong>文件</strong>再次进行重命名。</p>
-<pre><code class="language-yaml">apiVersion: v1
-kind: Pod
-metadata:
-  name: dapi-test-pod
-spec:
-  containers:
-    - name: test-container
-      image: gcr.io/google_containers/busybox
-      command: [ &quot;/bin/sh&quot;,&quot;-c&quot;,&quot;cat /etc/config/special-key&quot; ]
-      volumeMounts:
-      - name: config-volume
-        mountPath: /etc/config/x.txt
-        subPath: path/to/special-key
-  volumes:
-    - name: config-volume
-      configMap:
-        name: special-config
-        items:
-        - key: special.how
-          path: path/to/special-key
-  restartPolicy: Never
-</code></pre>
-<p>如上，最终挂载的文件会变成<code>x.txt</code>，而不再是<code>special-key</code>.</p>
-<p>说实话这个技术最好不要用到，通过path重命名+subPath筛选，就能满足需求了。使用mountPath直接指定文件名这个方法有点绕，容易造成误解。</p>
+            <p>一般服务都是使用deployment部署，deploy的使用非常简单，无状态，随意调度。但是各种需要持久化数据的中间件都需要使用StatefulSet来部署，这个玩意儿实际上有点复杂。</p>
+<h2 id="最简单的方法不要使用k8s来部署有状态应用">最简单的方法：不要使用k8s来部署有状态应用</h2>
+<p>比如在部署kafka集群、MySQL集群时，你会发现直接用docker分别在选定节点部署，是最简单的。和传统的物理机部署并无什么区别，你要做的仅仅是将配置文件和宿主机目录挂载到容器里。</p>
+<p>如果想要自动化，就写bash脚本，分别在各个主机运行即可，也并没有那么复杂。</p>
+<p>容器内的服务访问容器外的服务也很简单：直接用网卡的内网ip就行。</p>
+<h2 id="不要太依赖分布式存储">不要太依赖分布式存储</h2>
+<p>第一次接触Ceph或者longhorn的时候，很容易会错误的认为分布式存储本身就可以解决高可用的问题。</p>
+<p>比如sqlite，将它放在longhorn里，理论上pod在任意节点，都可以访问到这块pv.  longhorn自带的多副本策略也可以保证数据不丢失。如果宿主机节点挂掉，k8s自动调度pod到其他结点，原来的pv也依然可用。</p>
+<p>这一切很美好，但是有两个问题：</p>
+<ul>
+<li>IO性能会变差；</li>
+<li><strong>数据可能损坏</strong></li>
+</ul>
+<p>第一点是显而易见的，毕竟分布式存储是在文件系统的基础上又加了一层，肯定会影响性能。</p>
+<p>第二点就比较蛋疼了，分布式存储保证文件的高可用是通过类似Dropbox这种文件同步的思路来进行的，<strong>他并不理解文件的内容</strong>，所以文件有可能会损坏是很容易理解的。</p>
+<p>众所周知，MySQL主从的备份思路是通过binlog同步来增量进行的。当master节点宕机时，可能有一部分变更没来得及同步到slave节点，这就会造成数据<strong>回档</strong>的效果。但是如果是使用longhorn做同步，可能整个database都无法打开，导致数据完全损坏，这种肯定是完全无法接受的。</p>
+<p>另外，longhorn支持s3/minio/nfs二次备份，这个卷备份可以实现完全备份。当出现宕机等问题时，你可以向前回溯这个备份，总能找到可用的完整数据。当然，这个回档的时间可能有点长。</p>
+<p>所以，对于MySQL这种数据库，还是使用<strong>应用层自带的副本方案</strong>更靠谱。分布式存储只能用来存放一些不太重要的东西：比如文件之类的。甚至于，这个需求也可以使用minio之类的中间件来解决。可能像日志之类的数据比较适合使用，搞一块RWM的PV，所有应用都往里面写日志，方便集中查看应用日志，而且日志丢了一般影响也不大。</p>
+<p>当然，如果你是在云端，使用云厂商提供的分布式存储，一般并不需要关心这个问题，我们这里主要还是讨论边缘端这种不稳定的场景。</p>
+<h2 id="利用亲和性来部署statefulset">利用亲和性来部署StatefulSet</h2>
+<p>如果回到应用程序本身的副本方案——比如MySQL主从——那么就需要手动干涉k8s的调度。使其最终和你手动在各个节点部署的结果一致（也就是你自己用docker部署）。</p>
+<p>首先，主从应当尽量在不同的宿主机上：如果你有两台以上宿主机的话。这个主要通过Pod反亲和性来实现：如果这个节点已经有匹配的Pod，则尽量不要还在这个节点上部署第二个sts.</p>
+<p>其次，利用节点亲和性来选择宿主机：假设你手头的宿主机配置不太一样，那就在高配置的node上加上label，然后在sts的pod上加上节点亲和，选择匹配的标签。</p>
+<p>利用这两个方法，你可以决定pod最终被调度到哪个节点上。当然至于哪个是主哪个是从，这个仍然是随机的。如果你想保证主在某个节点，从在某个节点，那只能写两个sts，直接指定nodeName。一个sts配置2个replia，是无法实现这种需求的。</p>
+<h2 id="使用localpv">使用LocalPV</h2>
+<p>不使用分布式存储，那就只能用LocalPV了。如果使用k3s，使用自带的local-path就行。</p>
+<p>在sts里面指定VolumeClaimTemplate，k8s会延迟绑定PV直到Pod被调度。</p>
+<p>对于LocalPV，k8s在调度时就会考虑到Pod和PV必须在同一个节点，这是因为StorageClass的配置里有<code>volumeBindingMode: WaitForFirstConsumer</code>，这是LocalPV的标记。在第一次创建sts时，PV还不存在，这个流程是反过来的：k8s先根据亲和性和资源需求来决定Pod在哪个节点，然后再根据PVC来动态创建PV，将PVC绑定PV，在同一个节点创建Pod然后完成挂载。</p>
+<p>在第二次以及之后创建sts时，此时PVC/PV都已经存在，所以k8s在调度的时候就会自动将POD创建到对应的节点了。</p>
+<p>如果是直接用k8s，那可能没有支持动态创建PV的StorageClass. 此时需要手动创建PV，其他的流程是一样的。当然最终节点只会被调度到有PV的节点：换句话说，你无须在POD中指定节点亲和性，而是在创建PV时指定节点亲和性。</p>
 
         </div>
         
@@ -439,14 +345,11 @@ spec:
 <div class="flex flex-col md:flex-row md:justify-between -mx-2 mt-4 px-2 pt-4 border-t">
     <div>
         
-        <span class="block font-bold">上一页</span>
-        <a href="https://yiuterran.github.io/blog/posts/statefulset%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86/" class="block">StatefulSet使用思路梳理</a>
-        
     </div>
     <div class="md:text-right mt-4 md:mt-0">
         
         <span class="block font-bold">下一页</span>
-        <a href="https://yiuterran.github.io/blog/posts/sqlx%E5%A4%87%E5%BF%98%E5%BD%95/" class="block">Sqlx备忘录</a>
+        <a href="https://yiuterran.github.io/blog/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/" class="block">Configmap挂载的几种情况</a>
         
     </div>
 </div>
@@ -481,11 +384,10 @@ spec:
 <div class="sticky-toc hidden lg:block px-6 pb-6 ">
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#将某个key的值挂载为环境变量">将某个key的值挂载为环境变量</a></li>
-    <li><a href="#整个configmap挂载为目录">整个ConfigMap挂载为目录</a></li>
-    <li><a href="#将某个key挂载为文件">将某个key挂载为文件</a></li>
-    <li><a href="#多个configmap挂载到同一个目录">多个ConfigMap挂载到同一个目录</a></li>
-    <li><a href="#特殊情况">特殊情况</a></li>
+    <li><a href="#最简单的方法不要使用k8s来部署有状态应用">最简单的方法：不要使用k8s来部署有状态应用</a></li>
+    <li><a href="#不要太依赖分布式存储">不要太依赖分布式存储</a></li>
+    <li><a href="#利用亲和性来部署statefulset">利用亲和性来部署StatefulSet</a></li>
+    <li><a href="#使用localpv">使用LocalPV</a></li>
   </ul>
 </nav>
 </div>
@@ -504,6 +406,9 @@ spec:
         class="col-span-2  lg:col-span-6 bg-secondary-bg rounded p-6">
         <h2 class="text-lg font-semibold mb-4">相关</h2>
         <div class="content">
+            
+            <a href="https://yiuterran.github.io/blog/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/">Configmap挂载的几种情况</a>
+            <br />
             
             <a href="https://yiuterran.github.io/blog/posts/promql%E7%AC%94%E8%AE%B0/">PromQL笔记</a>
             <br />
