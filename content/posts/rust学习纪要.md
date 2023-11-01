@@ -313,7 +313,117 @@ mod pathutil;
 mod serde_impl;
 ```
 
-除了`core`之外，其他的文件夹也类似。core是二进制入口，`main.rs`显然是main函数的入口。
+除了`core`之外，其他的文件夹也类似。core是二进制入口，`main.rs`显然是main函数的入口。在cargo.toml里面你可以看到：
 
+```toml
+[[bin]]
+bench = false
+path = "crates/core/main.rs"
+name = "rg"
+```
 
+具体的配置方法参考[这里](https://course.rs/cargo/reference/workspaces.html)。
+
+## 内置数据结构
+
+类似C++，rust内置了常用的集合。
+
+`Vec`就是泛型的vector，可以使用`let v=vec![1,2,3]`这种宏来快速创建；
+
+rust支持在遍历时修改：
+
+```rust
+let mut v = vec![1,2,3];
+for i in &mut v {
+    *i += 10
+}
+```
+
+泛型里如何存储不同的类型：使用枚举，这类似C++中的联合。
+
+rust不支持**字符串索引**，应该使用字符串的`.chars`或者`.bytes`方法明确访问的是字节还是字符；
+
+内置的另一种数据结构是`Hashmap`。
+
+## 错误处理
+
+使用`Result<T, E>`优雅的处理错误，配合`?`表达式进一步消除样板代码，类似`swift`的设计，解决了go里面的样板代码问题。
+
+```rust
+use std::fs::File;
+use std::io::{self, Read};
+
+fn read_username_from_file() -> Result<String, io::Error> {
+    let mut username = String::new();
+
+    File::open("hello.txt")?.read_to_string(&mut username)?;
+
+    Ok(username)
+}
+```
+
+## 泛型与trait
+
+与C++类似，rust的泛型语法如下：
+
+```rust
+fn largest<T>(list: &[T]) -> &T
+```
+
+trait则是对泛型行为的约束，其实可以理解为接口，不过略有不同。
+
+```rust
+pub trait Summary {
+    fn summarize(&self) -> String;
+}
+```
+
+为类型实现接口的语法：
+
+```rust
+impl Summary for YourType {
+    
+}
+```
+
+另外trait也支持默认方法（类似java）。
+
+**Rust不支持函数重载、也不支持默认方法**，类似于go的设计，所以有时候写起来有点繁琐。go里面会用类似builder模式的`withXXX`来做初始化函数；rust也可以这么做。或者，使用`impl Default for YourType`，做一个默认值，配合上面提到的struct的`..`语法，也还能凑合用。当然还有一个邪门的方案（但是大量使用）就是用宏了。
+
+> 有一说一，我觉得没有函数重载还好，没有默认值真的很不方便啊。
+
+将trait作为参数：
+
+```rust
+pub fn notify(x: &impl Summary)
+```
+
+泛型配合trait：
+
+```rust
+pub fn notify<T: Summary>(x: &T)
+```
+
+上面两个实际上是等价的。
+
+如果想表达实现了多个接口，用`+`：
+
+```rust
+pub fn notify<T: Summary + Default>(x: &T)
+```
+
+或
+
+```rust
+pub fn notify(x: &(impl Summary + Default))
+```
+
+也等价于：
+
+```rust
+pub fn notify<T>(x &T)
+where T: Summary + Default
+```
+
+为泛型类型实现方法时，也可以加上额外的trait约束，表示这个方法并非对所有泛型实体生效。
 
