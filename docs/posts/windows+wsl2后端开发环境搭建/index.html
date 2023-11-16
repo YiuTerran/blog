@@ -66,7 +66,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
 
 <meta name="description"
-  content="2023/2/2 Update: wsl已经解决了systemd和网络问题，现在已经基本无障碍使用，移除了大部分无用的配置步骤。 就我个人而言，目前感觉最理想的后端开发环境还是Int">
+  content="2023/11/16 Update: wsl2 2.0通过镜像网络解决了所有网络问题，已经不用折腾了。 2023/2/2 Update: wsl已经解决了systemd和网络问题，现在已经基本无障碍使用，移除了大部分无用的配">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -95,7 +95,7 @@
     },
     "headline": "Windows\u002bwsl2后端开发环境搭建 | 应许之地","datePublished": "2022-03-04T20:54:01+08:00",
     "dateModified": "2022-03-04T20:54:01+08:00",
-    "wordCount":  3185 ,
+    "wordCount":  3014 ,
     "author": {
         "@type": "Person",
         "name": ["tryao"]
@@ -108,7 +108,7 @@
             "url": "https://yiuterran.github.io/blog/images/icon.png"
         }
         },
-    "description": "2023\/2\/2 Update: wsl已经解决了systemd和网络问题，现在已经基本无障碍使用，移除了大部分无用的配置步骤。 就我个人而言，目前感觉最理想的后端开发环境还是Int"
+    "description": "2023\/11\/16 Update: wsl2 2.0通过镜像网络解决了所有网络问题，已经不用折腾了。 2023\/2\/2 Update: wsl已经解决了systemd和网络问题，现在已经基本无障碍使用，移除了大部分无用的配"
 }
 </script><meta property="og:title" content="Windows&#43;wsl2后端开发环境搭建 | 应许之地" />
 <meta property="og:type" content="article" />
@@ -122,7 +122,7 @@
 
 
 
-<meta property="og:description" content="2023/2/2 Update: wsl已经解决了systemd和网络问题，现在已经基本无障碍使用，移除了大部分无用的配置步骤。 就我个人而言，目前感觉最理想的后端开发环境还是Int" />
+<meta property="og:description" content="2023/11/16 Update: wsl2 2.0通过镜像网络解决了所有网络问题，已经不用折腾了。 2023/2/2 Update: wsl已经解决了systemd和网络问题，现在已经基本无障碍使用，移除了大部分无用的配" />
 
 
 
@@ -256,7 +256,8 @@
         
 
         <div class="content">
-            <p>2023/2/2 Update: wsl已经解决了systemd和网络问题，现在已经基本无障碍使用，移除了大部分无用的配置步骤。</p>
+            <p>2023/11/16 Update: wsl2 2.0通过镜像网络解决了所有网络问题，已经不用折腾了。</p>
+<p>2023/2/2 Update: wsl已经解决了systemd和网络问题，现在已经基本无障碍使用，移除了大部分无用的配置步骤。</p>
 <p>就我个人而言，目前感觉最理想的后端开发环境还是Intel CPU的MacOS，基本所有常用的后端依赖都可以用homebrew安装，GUI和命令行的结合也是最方便的。不过Windows从10代之后添加了WSL/WSL2，将Linux命令行和Windows开发环境完美的结合起来，目前来说可用性还算不错了。</p>
 <h2 id="准备工作">准备工作</h2>
 <h3 id="网络准备">网络准备</h3>
@@ -339,7 +340,7 @@ Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
 <p>在oh-my-zsh中的z，可以在powershell中安装<a href="https://github.com/vors/ZLocation">ZLocation</a>来完成类似功能。</p>
 <h2 id="安装wsl2">安装wsl2</h2>
 <p>参考<a href="https://learn.microsoft.com/zh-cn/windows/wsl/install">WSL 安装</a>，新版wsl安装步骤非常简单，比之前手动安装容易的多。</p>
-<p>安装完成后可以运行<code>wsl --version</code>，结果中WSL版本应该&gt;1.0.</p>
+<p>安装完成后可以运行<code>wsl --version</code>，结果中WSL版本应该&gt;2.0了。</p>
 <h3 id="配置linux">配置linux</h3>
 <p>打开Windows Terminal，安装的linux发行版入口应该会自动加到下拉选单里，选中后进入。</p>
 <p>至于怎么配置Linux我就不写了，根据个人习惯来吧。几个点：</p>
@@ -351,29 +352,19 @@ Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
 <li>配置好vim等；</li>
 </ul>
 <h3 id="配置wsl">配置wsl</h3>
-<p>参考<a href="https://learn.microsoft.com/zh-cn/windows/wsl/wsl-config">这里</a>.</p>
 <p>激活systemd，先确定发行版里面已经安装了<code>systemd</code>，然后编辑<code>/etc/wsl.conf</code>添加：</p>
 <pre><code>[boot]
 systemd=true
 </code></pre>
-<p>然后重启wsl即可。</p>
-<p>然后是将网络改成桥接，在windows的home目录下添加<code>.wslconfig</code>文件，配置如下：</p>
-<pre><code>[wsl2]
-networkingMode=bridged
-vmSwitch=OUT
-ipv6=true
+<p>然后重启wsl即可，建议等下面操作结束之后再一起重启。</p>
+<p>配置网络，在windows的home目录下添加<code>.wslconfig</code>，里面内容是：</p>
+<pre><code>[experimental]
+networkingMode=mirrored
+dnsTunneling=true
+firewall=true
+autoProxy=true
 </code></pre>
-<p>这里的OUT，是自建的虚拟网卡。在Hyper-V的“虚拟交换机管理器”里，新建一个“外部”的虚拟机网络交换器，名字叫OUT，桥接到外部网络（用来上网的网卡），并勾选“允许管理操作系统共享此网络适配器”，点击确定即可，注意windows会离线一段时间。</p>
-<p>重启WSL即可。如果需要静态ip，需要在上面添加<code>dhcp=false</code>配置行，并在wsl里面配置<code>/lib/systemd/network/wsl_external.network</code>，内容如下：</p>
-<pre><code>[Match]
-Name=eth0
-[Network]
-Description=bridge
-DHCP=false
-Address=192.168.1.10/24 # 自行修改
-Gateway=192.168.0.1 # 自行修改
-</code></pre>
-<p>设置桥接网络之后，在windows中，或者局域网中，就可以直接访问wsl中的服务了（注意防火墙）。</p>
+<p>如果你是在windows中安装docker desktop，那么直接用就可以。如果是在wsl里面安装了docker，需要配置<code>/etc/docker/daemon.json</code>，在里面加入：<code>&quot;iptables&quot;:false</code>，否则docker可能无法正常使用。</p>
 <h2 id="注意事项">注意事项</h2>
 <ol>
 <li>wsl2和windows之间传输文件io性能很差；</li>
@@ -381,7 +372,6 @@ Gateway=192.168.0.1 # 自行修改
 <li>如果是本地开发，优先建议在windows下直接使用IDE开发，不要使用wslg，因为很难用；</li>
 <li>类似java/python/golang这种高级语言，直接在windows下写代码调试就行；</li>
 <li>如果是C++开发，推荐使用CLion+WSL工具链。现在CLion已经支持Makefile工程，所以linux下所有开发都已经无碍；2023版本的CLion甚至支持vcpkg集成，有一说一比rust也差不多了；</li>
-<li>如果是CMake工程，也可以使用VisualStudio+Resharper工具链，不过Makefile工程还不行；</li>
 <li>建议wsl直接用root账户，不然会经常遇到各种权限问题，比较迷惑；</li>
 <li>linux的PATH会自动继承windows的path，不过Linux系统里同名的文件优先级更高；所以像git这种软件到底装Windows还是装Linux要自己想清楚；全部在Linux下也可以，都装不是不行…就是要配置两遍；</li>
 <li>WSL的命令行可以直接调用windows PATH下的exe文件，如<code>code</code>，不过非<code>/mnt</code>路径下可能无法正常使用；</li>

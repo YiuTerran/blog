@@ -8,51 +8,42 @@
     <language>zh</language>
     <copyright>&amp;copy; 2021 &lt;a href=&#34;https://github.com/YiuTerran&#34;&gt;tryao&lt;/a&gt;
 </copyright>
-    <lastBuildDate>Tue, 12 Sep 2023 15:22:00 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/tags/golang/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 12 Sep 2023 15:22:00 +0800</lastBuildDate>
+    <atom:link href="https://yiuterran.github.io/blog/tags/golang/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Sqlx备忘录</title>
       <link>https://yiuterran.github.io/blog/posts/sqlx%E5%A4%87%E5%BF%98%E5%BD%95/</link>
       <pubDate>Tue, 12 Sep 2023 15:22:00 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/posts/sqlx%E5%A4%87%E5%BF%98%E5%BD%95/</guid>
       <description>很少用golang写增删改查，sqlx的用法和java差别很大，用的时候总是要从头看文档。这里写个备忘录方便以后查询，使用sqlx和go-sqlbui</description>
     </item>
-    
     <item>
       <title>Tinode源码解析</title>
       <link>https://yiuterran.github.io/blog/posts/tinode%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</link>
       <pubDate>Mon, 14 Nov 2022 19:21:38 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/posts/tinode%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</guid>
       <description>概述 有朋友需要做一个im，简单做了一下技术调研，开源的实现其实蛮多的，这里挑几个说一下： Synapse/dendrite，matrix系，客户端比较多</description>
     </item>
-    
     <item>
       <title>Ginkgo使用笔记</title>
       <link>https://yiuterran.github.io/blog/posts/ginkgo%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/</link>
       <pubDate>Mon, 05 Sep 2022 18:10:06 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/posts/ginkgo%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/</guid>
       <description>go自带的单元测试比较适合测一个小函数，如果要做一系列的流程测试，则显得较为繁琐。 推荐使用ginkgo来做流程测试，BDD风格写出来的测试代码非常容易</description>
     </item>
-    
     <item>
       <title>Influxdb Cluster集成</title>
       <link>https://yiuterran.github.io/blog/posts/influxdb-cluster%E9%9B%86%E6%88%90/</link>
       <pubDate>Thu, 01 Sep 2022 15:47:56 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/posts/influxdb-cluster%E9%9B%86%E6%88%90/</guid>
       <description>本文记录在golang项目中集成influxdb-cluster需要的知识储备。 术语 database 和MySQL中一致 batch \n分割的多行数据，用来批量写入。 influ</description>
     </item>
-    
     <item>
       <title>Golang定时器要点</title>
       <link>https://yiuterran.github.io/blog/posts/golang%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A6%81%E7%82%B9/</link>
       <pubDate>Thu, 07 Apr 2022 09:35:13 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/posts/golang%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A6%81%E7%82%B9/</guid>
       <description>golang内置的定时器是基于多个四叉堆封装调度的，增删定时器的效率是O(lgn)，所以大量定时器本身可能成为性能瓶颈。可以考虑使用开源的时间轮算法实</description>
     </item>
-    
   </channel>
 </rss>

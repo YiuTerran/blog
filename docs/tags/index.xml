@@ -8,213 +8,168 @@
     <language>zh</language>
     <copyright>&amp;copy; 2021 &lt;a href=&#34;https://github.com/YiuTerran&#34;&gt;tryao&lt;/a&gt;
 </copyright>
-    <lastBuildDate>Fri, 15 Sep 2023 14:57:05 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 15 Sep 2023 14:57:05 +0800</lastBuildDate>
+    <atom:link href="https://yiuterran.github.io/blog/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>k8s</title>
       <link>https://yiuterran.github.io/blog/tags/k8s/</link>
       <pubDate>Fri, 15 Sep 2023 14:57:05 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/tags/k8s/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>golang</title>
       <link>https://yiuterran.github.io/blog/tags/golang/</link>
       <pubDate>Tue, 12 Sep 2023 15:22:00 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/tags/golang/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>sqlx</title>
       <link>https://yiuterran.github.io/blog/tags/sqlx/</link>
       <pubDate>Tue, 12 Sep 2023 15:22:00 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/tags/sqlx/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>prometheus</title>
       <link>https://yiuterran.github.io/blog/tags/prometheus/</link>
       <pubDate>Mon, 24 Jul 2023 11:21:33 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/tags/prometheus/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>devops</title>
       <link>https://yiuterran.github.io/blog/tags/devops/</link>
       <pubDate>Mon, 06 Mar 2023 14:37:28 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/tags/devops/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>edge</title>
       <link>https://yiuterran.github.io/blog/tags/edge/</link>
       <pubDate>Mon, 06 Mar 2023 14:37:28 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/tags/edge/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>kotlin</title>
       <link>https://yiuterran.github.io/blog/tags/kotlin/</link>
       <pubDate>Sun, 05 Mar 2023 12:58:37 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/tags/kotlin/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>cpp</title>
       <link>https://yiuterran.github.io/blog/tags/cpp/</link>
       <pubDate>Wed, 25 Jan 2023 16:49:11 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/tags/cpp/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>gnu</title>
       <link>https://yiuterran.github.io/blog/tags/gnu/</link>
       <pubDate>Wed, 25 Jan 2023 16:49:11 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/tags/gnu/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>make</title>
       <link>https://yiuterran.github.io/blog/tags/make/</link>
       <pubDate>Wed, 25 Jan 2023 16:49:11 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/tags/make/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>c&#43;&#43;</title>
       <link>https://yiuterran.github.io/blog/tags/c&#43;&#43;/</link>
       <pubDate>Mon, 09 Jan 2023 16:42:44 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/tags/c&#43;&#43;/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>cmake</title>
       <link>https://yiuterran.github.io/blog/tags/cmake/</link>
       <pubDate>Mon, 09 Jan 2023 16:42:44 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/tags/cmake/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>im</title>
       <link>https://yiuterran.github.io/blog/tags/im/</link>
       <pubDate>Mon, 14 Nov 2022 19:21:38 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/tags/im/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>tinode</title>
       <link>https://yiuterran.github.io/blog/tags/tinode/</link>
       <pubDate>Mon, 14 Nov 2022 19:21:38 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/tags/tinode/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>sre</title>
       <link>https://yiuterran.github.io/blog/tags/sre/</link>
       <pubDate>Thu, 22 Sep 2022 10:01:11 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/tags/sre/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>test</title>
       <link>https://yiuterran.github.io/blog/tags/test/</link>
       <pubDate>Mon, 05 Sep 2022 18:10:06 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/tags/test/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>influxdb</title>
       <link>https://yiuterran.github.io/blog/tags/influxdb/</link>
       <pubDate>Thu, 01 Sep 2022 15:47:56 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/tags/influxdb/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>tsdb</title>
       <link>https://yiuterran.github.io/blog/tags/tsdb/</link>
       <pubDate>Thu, 01 Sep 2022 15:47:56 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/tags/tsdb/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>zabbix</title>
       <link>https://yiuterran.github.io/blog/tags/zabbix/</link>
       <pubDate>Wed, 13 Jul 2022 12:21:28 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/tags/zabbix/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>timer</title>
       <link>https://yiuterran.github.io/blog/tags/timer/</link>
       <pubDate>Thu, 07 Apr 2022 09:35:13 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/tags/timer/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>wsl</title>
       <link>https://yiuterran.github.io/blog/tags/wsl/</link>
       <pubDate>Fri, 04 Mar 2022 20:54:01 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/tags/wsl/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>gb28181</title>
       <link>https://yiuterran.github.io/blog/tags/gb28181/</link>
       <pubDate>Wed, 02 Mar 2022 09:46:50 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/tags/gb28181/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>multimedia</title>
       <link>https://yiuterran.github.io/blog/tags/multimedia/</link>
       <pubDate>Wed, 02 Mar 2022 09:46:50 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/tags/multimedia/</guid>
       <description></description>
     </item>
-    
   </channel>
 </rss>

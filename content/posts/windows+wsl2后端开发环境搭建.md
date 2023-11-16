@@ -13,6 +13,8 @@ featuredImage:
 draft: false
 ---
 
+2023/11/16 Update: wsl2 2.0通过镜像网络解决了所有网络问题，已经不用折腾了。
+
 2023/2/2 Update: wsl已经解决了systemd和网络问题，现在已经基本无障碍使用，移除了大部分无用的配置步骤。
 
 就我个人而言，目前感觉最理想的后端开发环境还是Intel CPU的MacOS，基本所有常用的后端依赖都可以用homebrew安装，GUI和命令行的结合也是最方便的。不过Windows从10代之后添加了WSL/WSL2，将Linux命令行和Windows开发环境完美的结合起来，目前来说可用性还算不错了。
@@ -148,7 +150,7 @@ Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
 
 参考[WSL 安装](https://learn.microsoft.com/zh-cn/windows/wsl/install)，新版wsl安装步骤非常简单，比之前手动安装容易的多。
 
-安装完成后可以运行`wsl --version`，结果中WSL版本应该>1.0.
+安装完成后可以运行`wsl --version`，结果中WSL版本应该>2.0了。
 
 ### 配置linux
 
@@ -164,8 +166,6 @@ Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
 
 ### 配置wsl
 
-参考[这里](https://learn.microsoft.com/zh-cn/windows/wsl/wsl-config).
-
 激活systemd，先确定发行版里面已经安装了`systemd`，然后编辑`/etc/wsl.conf`添加：
 
 ```
@@ -173,32 +173,19 @@ Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
 systemd=true
 ```
 
-然后重启wsl即可。
+然后重启wsl即可，建议等下面操作结束之后再一起重启。
 
-然后是将网络改成桥接，在windows的home目录下添加`.wslconfig`文件，配置如下：
-
-```
-[wsl2]
-networkingMode=bridged
-vmSwitch=OUT
-ipv6=true
-```
-
-这里的OUT，是自建的虚拟网卡。在Hyper-V的“虚拟交换机管理器”里，新建一个“外部”的虚拟机网络交换器，名字叫OUT，桥接到外部网络（用来上网的网卡），并勾选“允许管理操作系统共享此网络适配器”，点击确定即可，注意windows会离线一段时间。
-
-重启WSL即可。如果需要静态ip，需要在上面添加`dhcp=false`配置行，并在wsl里面配置`/lib/systemd/network/wsl_external.network`，内容如下：
+配置网络，在windows的home目录下添加`.wslconfig`，里面内容是：
 
 ```
-[Match]
-Name=eth0
-[Network]
-Description=bridge
-DHCP=false
-Address=192.168.1.10/24 # 自行修改
-Gateway=192.168.0.1 # 自行修改
+[experimental]
+networkingMode=mirrored
+dnsTunneling=true
+firewall=true
+autoProxy=true
 ```
 
-设置桥接网络之后，在windows中，或者局域网中，就可以直接访问wsl中的服务了（注意防火墙）。
+如果你是在windows中安装docker desktop，那么直接用就可以。如果是在wsl里面安装了docker，需要配置`/etc/docker/daemon.json`，在里面加入：`"iptables":false`，否则docker可能无法正常使用。
 
 ## 注意事项
 
@@ -207,7 +194,6 @@ Gateway=192.168.0.1 # 自行修改
 3. 如果是本地开发，优先建议在windows下直接使用IDE开发，不要使用wslg，因为很难用；
 4. 类似java/python/golang这种高级语言，直接在windows下写代码调试就行；
 5. 如果是C++开发，推荐使用CLion+WSL工具链。现在CLion已经支持Makefile工程，所以linux下所有开发都已经无碍；2023版本的CLion甚至支持vcpkg集成，有一说一比rust也差不多了；
-6. 如果是CMake工程，也可以使用VisualStudio+Resharper工具链，不过Makefile工程还不行；
 7. 建议wsl直接用root账户，不然会经常遇到各种权限问题，比较迷惑；
 8. linux的PATH会自动继承windows的path，不过Linux系统里同名的文件优先级更高；所以像git这种软件到底装Windows还是装Linux要自己想清楚；全部在Linux下也可以，都装不是不行…就是要配置两遍；
 9. WSL的命令行可以直接调用windows PATH下的exe文件，如`code`，不过非`/mnt`路径下可能无法正常使用；

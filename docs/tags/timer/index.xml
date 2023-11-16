@@ -8,15 +8,14 @@
     <language>zh</language>
     <copyright>&amp;copy; 2021 &lt;a href=&#34;https://github.com/YiuTerran&#34;&gt;tryao&lt;/a&gt;
 </copyright>
-    <lastBuildDate>Thu, 07 Apr 2022 09:35:13 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/tags/timer/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 07 Apr 2022 09:35:13 +0800</lastBuildDate>
+    <atom:link href="https://yiuterran.github.io/blog/tags/timer/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Golang定时器要点</title>
       <link>https://yiuterran.github.io/blog/posts/golang%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A6%81%E7%82%B9/</link>
       <pubDate>Thu, 07 Apr 2022 09:35:13 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/posts/golang%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A6%81%E7%82%B9/</guid>
       <description>golang内置的定时器是基于多个四叉堆封装调度的，增删定时器的效率是O(lgn)，所以大量定时器本身可能成为性能瓶颈。可以考虑使用开源的时间轮算法实</description>
     </item>
-    
   </channel>
 </rss>
