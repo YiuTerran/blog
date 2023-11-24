@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width">
 
 
-<title>文章列表 | 应许之地</title>
+<title>linux | 应许之地</title>
 
 <meta name="generator" content="Hugo Eureka 0.9.0" />
 <link rel="stylesheet" href="https://yiuterran.github.io/blog/css/eureka.min.css">
@@ -67,6 +67,21 @@
 
 <meta name="description"
   content="始于2022年初mbp2015归天之后...">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+      "@type": "ListItem",
+      "position": 1 ,
+      "name":"Tags",
+      "item":"https://yiuterran.github.io/blog/tags/"},{
+      "@type": "ListItem",
+      "position": 2 ,
+      "name":"linux",
+      "item":"https://yiuterran.github.io/blog/tags/linux/"}]
+}
+</script>
 
 
 
@@ -81,41 +96,17 @@
             "name": "DeepinLinux键盘映射",
             "description": "由于公司开始强制使用Linux桌面系统，所以最近安装了Deepin 20.9作为日常开发系统。 本来先尝试了Ubuntu 22.04和KDE Neon做为开发",
             "url": "https://yiuterran.github.io/blog/posts/deepinlinux%E9%94%AE%E7%9B%98%E6%98%A0%E5%B0%84/"
-        },{
-            "@type":"ListItem",
-            "position":  2 ,
-            "name": "ES和kibana简要笔记",
-            "description": "由于比赛需要用到es和kibana，重新复习一下这块的内容。 基础概念 ES的概念和其他数据库截然不同，虽然和mongodb同为文档型数据库，但是后者的很",
-            "url": "https://yiuterran.github.io/blog/posts/es%E5%92%8Ckibana%E7%AE%80%E8%A6%81%E7%AC%94%E8%AE%B0/"
-        },{
-            "@type":"ListItem",
-            "position":  3 ,
-            "name": "StatefulSet使用思路梳理",
-            "description": "一般服务都是使用deployment部署，deploy的使用非常简单，无状态，随意调度。但是各种需要持久化数据的中间件都需要使用StatefulSet",
-            "url": "https://yiuterran.github.io/blog/posts/statefulset%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86/"
-        },{
-            "@type":"ListItem",
-            "position":  4 ,
-            "name": "Configmap挂载的几种情况",
-            "description": "ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理： 将某个key的值挂载为环境变量 apiVersion: v1 kind: Pod metadata: name: dapi-test-pod spec: containers: - name: test-container image: gcr.io/google_containers/busybox command: [ \u0026quot;/bin/sh\u0026quot;, \u0026quot;-c\u0026quot;, \u0026quot;env\u0026quot; ] env: - name: SPECIAL_LEVEL_KEY valueFrom: configMapKeyRef:",
-            "url": "https://yiuterran.github.io/blog/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/"
-        },{
-            "@type":"ListItem",
-            "position":  5 ,
-            "name": "Sqlx备忘录",
-            "description": "很少用golang写增删改查，sqlx的用法和java差别很大，用的时候总是要从头看文档。这里写个备忘录方便以后查询，使用sqlx和go-sqlbui",
-            "url": "https://yiuterran.github.io/blog/posts/sqlx%E5%A4%87%E5%BF%98%E5%BD%95/"
         }
     ]
 }
-</script><meta property="og:title" content="文章列表 | 应许之地" />
+</script><meta property="og:title" content="linux | 应许之地" />
 <meta property="og:type" content="website" />
 
 
 <meta property="og:image" content="https://yiuterran.github.io/blog/images/icon.png">
 
 
-<meta property="og:url" content="https://yiuterran.github.io/blog/posts/" />
+<meta property="og:url" content="https://yiuterran.github.io/blog/tags/linux/" />
 
 
 
@@ -143,10 +134,10 @@
 
 
 
-<meta property="article:section" content="posts" />
+<meta property="article:section" content="tags" />
 
 
-<link rel="alternate" type="application/rss+xml" href="https://yiuterran.github.io/blog/posts/index.xml" title="应许之地" />
+<link rel="alternate" type="application/rss+xml" href="https://yiuterran.github.io/blog/tags/linux/index.xml" title="应许之地" />
 
 <body class="flex flex-col min-h-screen">
   <header class="fixed flex items-center w-full min-h-16 ps-scrollbar z-50 bg-secondary-bg shadow-sm">
@@ -166,7 +157,7 @@
         class="hidden block md:flex md:grow md:justify-between md:items-center w-full md:w-auto text-primary-text z-20">
         <div class="md:flex md:h-16 text-sm md:grow pb-4 md:pb-0 border-b md:border-b-0">
             <a href="https://yiuterran.github.io/blog/authors/tryao/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  border-transparent  me-4">作者</a>
-            <a href="https://yiuterran.github.io/blog/posts/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  selected-menu-item  me-4">文章</a>
+            <a href="https://yiuterran.github.io/blog/posts/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  border-transparent  me-4">文章</a>
         </div>
 
         <div class="flex">
@@ -218,7 +209,7 @@
     <div class="ps-scrollbar">
       <div class="w-full max-w-screen-xl lg:px-4 xl:px-8 mx-auto">
 <article class="mx-6 my-8">
-    <h1 class="font-bold text-3xl text-primary-text">文章列表</h1>
+    <h1 class="font-bold text-3xl text-primary-text">linux</h1>
     
 </article>
 <div class="bg-secondary-bg rounded px-6">
@@ -258,176 +249,11 @@
 </div>
   </div>
   
-  <div class="py-6">
-    <div class="flex flex-col-reverse lg:flex-row justify-between">
-  
-  <div class="w-full ">
-    <div class="mb-4">
-  <a href="https://yiuterran.github.io/blog/posts/es%E5%92%8Ckibana%E7%AE%80%E8%A6%81%E7%AC%94%E8%AE%B0/" class="font-bold text-xl hover:text-eureka">ES和kibana简要笔记</a>
-</div>
-<div class="content">
-  
-    由于比赛需要用到es和kibana，重新复习一下这块的内容。 基础概念 ES的概念和其他数据库截然不同，虽然和mongodb同为文档型数据库，但是后者的很
-  
-</div>
-
-<div class="flex flex-wrap flex-row items-center mt-2 text-tertiary-text">
-    <div class="me-6 my-2">
-        <i class="fas fa-calendar me-1"></i>
-        <span>2023-11-13</span>
-    </div>
-    <div class="me-6 my-2">
-        <i class="fas fa-clock me-1"></i>
-        <span>6分钟阅读时长</span>
-    </div>
-    
-    
-
-    
-</div>
-
-  </div>
-
-  
-</div>
-  </div>
-  
-  <div class="py-6">
-    <div class="flex flex-col-reverse lg:flex-row justify-between">
-  
-  <div class="w-full ">
-    <div class="mb-4">
-  <a href="https://yiuterran.github.io/blog/posts/statefulset%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86/" class="font-bold text-xl hover:text-eureka">StatefulSet使用思路梳理</a>
-</div>
-<div class="content">
-  
-    一般服务都是使用deployment部署，deploy的使用非常简单，无状态，随意调度。但是各种需要持久化数据的中间件都需要使用StatefulSet
-  
-</div>
-
-<div class="flex flex-wrap flex-row items-center mt-2 text-tertiary-text">
-    <div class="me-6 my-2">
-        <i class="fas fa-calendar me-1"></i>
-        <span>2023-09-15</span>
-    </div>
-    <div class="me-6 my-2">
-        <i class="fas fa-clock me-1"></i>
-        <span>4分钟阅读时长</span>
-    </div>
-    
-    
-
-    
-</div>
-
-  </div>
-
-  
-</div>
-  </div>
-  
-  <div class="py-6">
-    <div class="flex flex-col-reverse lg:flex-row justify-between">
-  
-  <div class="w-full ">
-    <div class="mb-4">
-  <a href="https://yiuterran.github.io/blog/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/" class="font-bold text-xl hover:text-eureka">Configmap挂载的几种情况</a>
-</div>
-<div class="content">
-  
-    ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理： 将某个key的值挂载为环境变量 apiVersion: v1 kind: Pod metadata: name: dapi-test-pod spec: containers: - name: test-container image: gcr.io/google_containers/busybox command: [ &#34;/bin/sh&#34;, &#34;-c&#34;, &#34;env&#34; ] env: - name: SPECIAL_LEVEL_KEY valueFrom: configMapKeyRef:
-  
-</div>
-
-<div class="flex flex-wrap flex-row items-center mt-2 text-tertiary-text">
-    <div class="me-6 my-2">
-        <i class="fas fa-calendar me-1"></i>
-        <span>2023-09-15</span>
-    </div>
-    <div class="me-6 my-2">
-        <i class="fas fa-clock me-1"></i>
-        <span>2分钟阅读时长</span>
-    </div>
-    
-    
-
-    
-</div>
-
-  </div>
-
-  
-</div>
-  </div>
-  
-  <div class="py-6">
-    <div class="flex flex-col-reverse lg:flex-row justify-between">
-  
-  <div class="w-full ">
-    <div class="mb-4">
-  <a href="https://yiuterran.github.io/blog/posts/sqlx%E5%A4%87%E5%BF%98%E5%BD%95/" class="font-bold text-xl hover:text-eureka">Sqlx备忘录</a>
-</div>
-<div class="content">
-  
-    很少用golang写增删改查，sqlx的用法和java差别很大，用的时候总是要从头看文档。这里写个备忘录方便以后查询，使用sqlx和go-sqlbui
-  
-</div>
-
-<div class="flex flex-wrap flex-row items-center mt-2 text-tertiary-text">
-    <div class="me-6 my-2">
-        <i class="fas fa-calendar me-1"></i>
-        <span>2023-09-12</span>
-    </div>
-    <div class="me-6 my-2">
-        <i class="fas fa-clock me-1"></i>
-        <span>4分钟阅读时长</span>
-    </div>
-    
-    
-
-    
-</div>
-
-  </div>
-
-  
-</div>
-  </div>
-  
 </div>
 
 
 </div>
 
-    <ul class="pagination pagination-default">
-      <li class="page-item disabled">
-        <a aria-disabled="true" aria-label="First" class="page-link" role="button" tabindex="-1"><span aria-hidden="true">&laquo;&laquo;</span></a>
-      </li>
-      <li class="page-item disabled">
-        <a aria-disabled="true" aria-label="Previous" class="page-link" role="button" tabindex="-1"><span aria-hidden="true">&laquo;</span></a>
-      </li>
-      <li class="page-item active">
-        <a aria-current="page" aria-label="Page 1" class="page-link" role="button">1</a>
-      </li>
-      <li class="page-item">
-        <a href="https://yiuterran.github.io/blog/posts/page/2/" aria-label="Page 2" class="page-link" role="button">2</a>
-      </li>
-      <li class="page-item">
-        <a href="https://yiuterran.github.io/blog/posts/page/3/" aria-label="Page 3" class="page-link" role="button">3</a>
-      </li>
-      <li class="page-item">
-        <a href="https://yiuterran.github.io/blog/posts/page/4/" aria-label="Page 4" class="page-link" role="button">4</a>
-      </li>
-      <li class="page-item">
-        <a href="https://yiuterran.github.io/blog/posts/page/5/" aria-label="Page 5" class="page-link" role="button">5</a>
-      </li>
-      <li class="page-item">
-        <a href="https://yiuterran.github.io/blog/posts/page/2/" aria-label="Next" class="page-link" role="button"><span aria-hidden="true">&raquo;</span></a>
-      </li>
-      <li class="page-item">
-        <a href="https://yiuterran.github.io/blog/posts/page/6/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
-      </li>
-    </ul>
 
       </div>
     </div>

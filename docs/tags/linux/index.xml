@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>linux on 应许之地</title>
+    <link>https://yiuterran.github.io/blog/tags/linux/</link>
+    <description>Recent content in linux on 应许之地</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <copyright>&amp;copy; 2021 &lt;a href=&#34;https://github.com/YiuTerran&#34;&gt;tryao&lt;/a&gt;
+</copyright>
+    <lastBuildDate>Fri, 24 Nov 2023 10:51:31 +0800</lastBuildDate>
+    <atom:link href="https://yiuterran.github.io/blog/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>DeepinLinux键盘映射</title>
+      <link>https://yiuterran.github.io/blog/posts/deepinlinux%E9%94%AE%E7%9B%98%E6%98%A0%E5%B0%84/</link>
+      <pubDate>Fri, 24 Nov 2023 10:51:31 +0800</pubDate>
+      <guid>https://yiuterran.github.io/blog/posts/deepinlinux%E9%94%AE%E7%9B%98%E6%98%A0%E5%B0%84/</guid>
+      <description>由于公司开始强制使用Linux桌面系统，所以最近安装了Deepin 20.9作为日常开发系统。 本来先尝试了Ubuntu 22.04和KDE Neon做为开发</description>
+    </item>
+  </channel>
+</rss>

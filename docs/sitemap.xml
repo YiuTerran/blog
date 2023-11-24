@@ -3,24 +3,36 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://yiuterran.github.io/blog/authors/</loc>
-    <lastmod>2023-09-15T14:57:05+08:00</lastmod>
+    <lastmod>2023-11-24T10:51:31+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/posts/deepinlinux%E9%94%AE%E7%9B%98%E6%98%A0%E5%B0%84/</loc>
+    <lastmod>2023-11-24T10:51:31+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/tags/linux/</loc>
+    <lastmod>2023-11-24T10:51:31+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/tags/</loc>
+    <lastmod>2023-11-24T10:51:31+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/authors/tryao/</loc>
+    <lastmod>2023-11-24T10:51:31+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/posts/</loc>
+    <lastmod>2023-11-24T10:51:31+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/</loc>
+    <lastmod>2023-11-24T10:51:31+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/tags/elasticsearch/</loc>
+    <lastmod>2023-11-13T10:11:35+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/posts/es%E5%92%8Ckibana%E7%AE%80%E8%A6%81%E7%AC%94%E8%AE%B0/</loc>
+    <lastmod>2023-11-13T10:11:35+08:00</lastmod>
   </url><url>
     <loc>https://yiuterran.github.io/blog/tags/k8s/</loc>
     <lastmod>2023-09-15T14:57:05+08:00</lastmod>
   </url><url>
     <loc>https://yiuterran.github.io/blog/posts/statefulset%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86/</loc>
-    <lastmod>2023-09-15T14:57:05+08:00</lastmod>
-  </url><url>
-    <loc>https://yiuterran.github.io/blog/tags/</loc>
-    <lastmod>2023-09-15T14:57:05+08:00</lastmod>
-  </url><url>
-    <loc>https://yiuterran.github.io/blog/authors/tryao/</loc>
-    <lastmod>2023-09-15T14:57:05+08:00</lastmod>
-  </url><url>
-    <loc>https://yiuterran.github.io/blog/posts/</loc>
-    <lastmod>2023-09-15T14:57:05+08:00</lastmod>
-  </url><url>
-    <loc>https://yiuterran.github.io/blog/</loc>
     <lastmod>2023-09-15T14:57:05+08:00</lastmod>
   </url><url>
     <loc>https://yiuterran.github.io/blog/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/</loc>
