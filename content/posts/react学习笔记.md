@@ -112,6 +112,8 @@ function HomePage(){
 
 可以配合lambda表达式简化语法。
 
+**注意**：props是只读的，不能修改这些参数。
+
 ### 状态
 
 state表示UI组件的状态，react是单向数据流，通过`useState`来获取组件的状态。
@@ -154,3 +156,76 @@ return (
 由于是声明式语法，react在渲染的时候并不一定和你想的一样，比如不同的button复用同一个textarea，切换button时需要清空数据，或者保留各自的数据。此时需要自行定义相关函数。
 
 给组件设置不同的key，react会将同一个组件视为不同的，从而重新渲染。
+
+除了`useState`之外，react还提供了更高级的`useReducer`来简化复杂状态管理，所谓`reducer`实际上就是一个状态机：`(state, action) => newState`，需要注意的是，reducer必须是一个幂等函数。举个例子：
+
+```jsx
+function example(state, action){
+    switch(action.type){
+        case 'add':
+            return {...state, count: state.count+1}
+        case 'sub':
+            return {...state, count: state.count-1}
+        default:
+            return state
+    }
+}
+```
+
+由于state经常是一个复杂的数据解构，所以用了js的解包语法，上面实际上等价于：
+
+```jsx
+function example(state, action){
+    switch(action.type){
+        case 'add':
+            state.count++
+        case 'sub':
+            state.count--
+    }
+    return state
+}
+```
+
+实际使用的方法：
+
+```jsx
+const [state, dispatch] = useReducer(reducer, initState)
+```
+
+右边第一个参数就是上面介绍的状态机函数，第二个是控件的初始状态，一般是一个复杂对象（因为简单state使用`useState`就可以了）。
+
+jsx那边只需要在事件触发的callback里调用dispatch就行，如`dispatch({type: 'add'})`。
+
+如果想在较深的父子组件间定义共享的状态，一般使用context，即：
+
+```jsx
+const LevelContext = createContext(0);
+```
+
+用的时候：
+
+```jsx
+import {LevelContext} from "./LevelContext.js"
+
+export default function Section({ children }) {
+    const level = useContext(LevelContext);
+    return (
+    	<section className="section">
+        	<LevelContext.Provider value={level+1}>{children}</LevelContext.Provider>
+        </section>
+    )
+}
+```
+
+结合Reducer和Context可以简化复杂组件的逻辑。
+
+## NextJS
+
+react只是一个UI框架，并不涉及到ajax、路由之类的东西，所以需要一个完整的框架来实现整个web项目，目前官方推荐的就是NextJS.
+
+NextJS默认使用**服务端**组件，如果想要使用客户端组件，需要将其独立成单独的文件，并在文件最前端加上`'use client';`
+
+NextJS默认使用文件路由，直接用文件夹路径就行，很简单。
+
+NextJS推荐使用tailwindcss，不过也支持css modules. 国内使用后者更多，前者适合初创团队使用。
+
