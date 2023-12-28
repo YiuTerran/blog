@@ -8,14 +8,15 @@
     <language>zh</language>
     <copyright>&amp;copy; 2021 &lt;a href=&#34;https://github.com/YiuTerran&#34;&gt;tryao&lt;/a&gt;
 </copyright>
-    <lastBuildDate>Wed, 02 Mar 2022 09:46:50 +0800</lastBuildDate>
-    <atom:link href="https://yiuterran.github.io/blog/tags/multimedia/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 02 Mar 2022 09:46:50 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/tags/multimedia/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Gb28181解析</title>
       <link>https://yiuterran.github.io/blog/posts/gb28181%E8%A7%A3%E6%9E%90/</link>
       <pubDate>Wed, 02 Mar 2022 09:46:50 +0800</pubDate>
+      
       <guid>https://yiuterran.github.io/blog/posts/gb28181%E8%A7%A3%E6%9E%90/</guid>
       <description>国标GB28181（以下简称国标或者gb）文档分析的文档我去年其实写过一版，但是由于原来的电脑炸了，文档还没来得及传上去就丢了（痛苦），所以还要重写一</description>
     </item>
+    
   </channel>
 </rss>
