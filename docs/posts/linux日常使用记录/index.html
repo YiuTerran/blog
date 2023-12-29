@@ -95,7 +95,7 @@
     },
     "headline": "linux日常使用记录 | 应许之地","datePublished": "2023-11-24T10:51:31+08:00",
     "dateModified": "2023-11-24T10:51:31+08:00",
-    "wordCount":  1724 ,
+    "wordCount":  1733 ,
     "author": {
         "@type": "Person",
         "name": ["tryao"]
@@ -332,14 +332,14 @@ local config = {
 
   window_decorations = &quot;INTEGRATED_BUTTONS|RESIZE&quot;,
 
-  font = wezterm.font 'FiraCode Nerd Font',
+  font = wezterm.font(&quot;FiraCode Nerd Font Mono&quot;, {weight=&quot;Regular&quot;, stretch=&quot;Normal&quot;, style=&quot;Normal&quot;}),
 
   color_scheme = 'MaterialDark',
 }
 
 return config
 </code></pre>
-<p>命令行提示工具推荐使用<a href="https://github.com/starship/starship"><code>starship</code></a>，可以配合zsh使用，也可以直接在bash使用。个人感觉比zsh+powerline10k体验更好，而且这个还能配合powershell使用。</p>
+<p>命令行提示工具推荐使用<a href="https://github.com/starship/starship"><code>starship</code></a>，可以配合zsh使用，也可以直接在bash使用。个人感觉比oh-my-zsh+powerline10k体验更好，而且这个还能配合powershell使用。</p>
 <p>全局字体推荐使用<a href="https://github.com/lxgw/LxgwNeoXiHei"><strong>霞鹜新晰黑</strong></a>，比较清晰。全局字体不推荐使用楷体，主要是太细了，如果想要用的话，可以用这个<a href="https://github.com/lxgw/LxgwWenKai-Screen">屏幕阅读版</a>，我的chrome字体和Android字体用的都是这个，感觉还不错。另外字体推荐放在<code>~/.fonts</code>里面，这样重装系统不会丢失。刷新字体使用<code>fc-cache -vf</code>即可。</p>
 <p>IDE的话，我买了正版的jetbrain全家桶，所以直接用<code>jetbrain toolbox</code>安装即可，而且默认是装在home目录下，重装系统不会丢失。</p>
 <p>剪贴板软件可以用<code>CopyQ</code>，快捷键绑定到命令<code>copyq toggle</code>即可（不要使用自带的全局快捷键，没用）。</p>

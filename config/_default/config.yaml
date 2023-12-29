@@ -44,4 +44,9 @@ taxonomies:
 build:
   useResourceCacheWhen: fallback
 
-module: proxy="direct"
+module:
+  proxy: https://goproxy.cn,direct
+
+security:
+  exec:
+    osEnv: ['(?i)^(PATH|PATHEXT|APPDATA|TMP|TEMP|TERM|HOME|SSH_AUTH_SOCK|USERPROFILE|XDG_CONFIG_HOME|HTTP_PROXY|HTTPS_PROXY)$']

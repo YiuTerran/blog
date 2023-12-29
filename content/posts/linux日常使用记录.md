@@ -110,7 +110,7 @@ local config = {
 
   window_decorations = "INTEGRATED_BUTTONS|RESIZE",
 
-  font = wezterm.font 'FiraCode Nerd Font',
+  font = wezterm.font("FiraCode Nerd Font Mono", {weight="Regular", stretch="Normal", style="Normal"}),
 
   color_scheme = 'MaterialDark',
 }
@@ -118,7 +118,7 @@ local config = {
 return config
 ```
 
-命令行提示工具推荐使用[`starship`](https://github.com/starship/starship)，可以配合zsh使用，也可以直接在bash使用。个人感觉比zsh+powerline10k体验更好，而且这个还能配合powershell使用。
+命令行提示工具推荐使用[`starship`](https://github.com/starship/starship)，可以配合zsh使用，也可以直接在bash使用。个人感觉比oh-my-zsh+powerline10k体验更好，而且这个还能配合powershell使用。
 
 全局字体推荐使用[**霞鹜新晰黑**](https://github.com/lxgw/LxgwNeoXiHei)，比较清晰。全局字体不推荐使用楷体，主要是太细了，如果想要用的话，可以用这个[屏幕阅读版](https://github.com/lxgw/LxgwWenKai-Screen)，我的chrome字体和Android字体用的都是这个，感觉还不错。另外字体推荐放在`~/.fonts`里面，这样重装系统不会丢失。刷新字体使用`fc-cache -vf`即可。
 
