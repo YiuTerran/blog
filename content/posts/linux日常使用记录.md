@@ -164,3 +164,12 @@ keymap:
 之后即可开机自启动了。
 
 实际体验很好，rust写的小软件性能很强，使用中基本没有延迟。
+
+上面的映射有个问题：在xterm中无法正常使用`home`, `end`，需要加一个配置(~/.Xresources):
+
+```
+XTerm*termName: xterm-256color
+URxvt*termName: rxvt-unicode
+```
+
+这样才行。

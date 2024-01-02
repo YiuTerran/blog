@@ -78,33 +78,33 @@
     "itemListElement":[{
             "@type":"ListItem",
             "position":  1 ,
+            "name": "Kcl试用",
+            "description": "kcl是蚂蚁金服开源的配置DSL，诞生比较晚，所以吸纳了已有的jsonnet、hcl、cue等方案的优点。 安装 对于linux： wget -q https://kcl-lang.io/script/install-cli.sh -O - | /bin/bash 这个脚本本",
+            "url": "https://yiuterran.github.io/blog/posts/kcl%E8%AF%95%E7%94%A8/"
+        },{
+            "@type":"ListItem",
+            "position":  2 ,
+            "name": "Ytt试用",
+            "description": "jsonnet最大的问题其实是：它支持的是json，而不是yaml. 其实这也不是什么问题，因为yaml是json的超集，json本身就是一个合法的ya",
+            "url": "https://yiuterran.github.io/blog/posts/ytt%E8%AF%95%E7%94%A8/"
+        },{
+            "@type":"ListItem",
+            "position":  3 ,
+            "name": "Jsonnet试用",
+            "description": "jsonnet这个语言很有意思，它存在的目的就是为了编辑配置。其实使用任何一门带有字符串模板的语言都能完成类似的目的，但是jsonnet的好处是它的封",
+            "url": "https://yiuterran.github.io/blog/posts/jsonnet%E8%AF%95%E7%94%A8/"
+        },{
+            "@type":"ListItem",
+            "position":  4 ,
             "name": "linux日常使用记录",
             "description": "由于公司开始强制使用Linux桌面系统，记录一下使用中遇到的问题。 发行版选择 本来先尝试了Ubuntu 22.04和KDE Neon做为开发环境，但是体验都",
             "url": "https://yiuterran.github.io/blog/posts/linux%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/"
         },{
             "@type":"ListItem",
-            "position":  2 ,
+            "position":  5 ,
             "name": "ES和kibana简要笔记",
             "description": "由于比赛需要用到es和kibana，重新复习一下这块的内容。 基础概念 ES的概念和其他数据库截然不同，虽然和mongodb同为文档型数据库，但是后者的很",
             "url": "https://yiuterran.github.io/blog/posts/es%E5%92%8Ckibana%E7%AE%80%E8%A6%81%E7%AC%94%E8%AE%B0/"
-        },{
-            "@type":"ListItem",
-            "position":  3 ,
-            "name": "StatefulSet使用思路梳理",
-            "description": "一般服务都是使用deployment部署，deploy的使用非常简单，无状态，随意调度。但是各种需要持久化数据的中间件都需要使用StatefulSet",
-            "url": "https://yiuterran.github.io/blog/posts/statefulset%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86/"
-        },{
-            "@type":"ListItem",
-            "position":  4 ,
-            "name": "Configmap挂载的几种情况",
-            "description": "ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理： 将某个key的值挂载为环境变量 apiVersion: v1 kind: Pod metadata: name: dapi-test-pod spec: containers: - name: test-container image: gcr.io/google_containers/busybox command: [ \u0026quot;/bin/sh\u0026quot;, \u0026quot;-c\u0026quot;, \u0026quot;env\u0026quot; ] env: - name: SPECIAL_LEVEL_KEY valueFrom: configMapKeyRef:",
-            "url": "https://yiuterran.github.io/blog/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/"
-        },{
-            "@type":"ListItem",
-            "position":  5 ,
-            "name": "Sqlx备忘录",
-            "description": "很少用golang写增删改查，sqlx的用法和java差别很大，用的时候总是要从头看文档。这里写个备忘录方便以后查询，使用sqlx和go-sqlbui",
-            "url": "https://yiuterran.github.io/blog/posts/sqlx%E5%A4%87%E5%BF%98%E5%BD%95/"
         }
     ]
 }
@@ -139,7 +139,7 @@
 
 
 
-<meta property="og:updated_time" content="2023-11-24T10:51:31&#43;08:00" />
+<meta property="og:updated_time" content="2024-01-02T09:26:30&#43;08:00" />
 
 
 
@@ -229,6 +229,108 @@
   
   <div class="w-full ">
     <div class="mb-4">
+  <a href="https://yiuterran.github.io/blog/posts/kcl%E8%AF%95%E7%94%A8/" class="font-bold text-xl hover:text-eureka">Kcl试用</a>
+</div>
+<div class="content">
+  
+    kcl是蚂蚁金服开源的配置DSL，诞生比较晚，所以吸纳了已有的jsonnet、hcl、cue等方案的优点。 安装 对于linux： wget -q https://kcl-lang.io/script/install-cli.sh -O - | /bin/bash 这个脚本本
+  
+</div>
+
+<div class="flex flex-wrap flex-row items-center mt-2 text-tertiary-text">
+    <div class="me-6 my-2">
+        <i class="fas fa-calendar me-1"></i>
+        <span>2024-01-02</span>
+    </div>
+    <div class="me-6 my-2">
+        <i class="fas fa-clock me-1"></i>
+        <span>4分钟阅读时长</span>
+    </div>
+    
+    
+
+    
+</div>
+
+  </div>
+
+  
+</div>
+  </div>
+  
+  <div class="py-6">
+    <div class="flex flex-col-reverse lg:flex-row justify-between">
+  
+  <div class="w-full ">
+    <div class="mb-4">
+  <a href="https://yiuterran.github.io/blog/posts/ytt%E8%AF%95%E7%94%A8/" class="font-bold text-xl hover:text-eureka">Ytt试用</a>
+</div>
+<div class="content">
+  
+    jsonnet最大的问题其实是：它支持的是json，而不是yaml. 其实这也不是什么问题，因为yaml是json的超集，json本身就是一个合法的ya
+  
+</div>
+
+<div class="flex flex-wrap flex-row items-center mt-2 text-tertiary-text">
+    <div class="me-6 my-2">
+        <i class="fas fa-calendar me-1"></i>
+        <span>2023-12-29</span>
+    </div>
+    <div class="me-6 my-2">
+        <i class="fas fa-clock me-1"></i>
+        <span>5分钟阅读时长</span>
+    </div>
+    
+    
+
+    
+</div>
+
+  </div>
+
+  
+</div>
+  </div>
+  
+  <div class="py-6">
+    <div class="flex flex-col-reverse lg:flex-row justify-between">
+  
+  <div class="w-full ">
+    <div class="mb-4">
+  <a href="https://yiuterran.github.io/blog/posts/jsonnet%E8%AF%95%E7%94%A8/" class="font-bold text-xl hover:text-eureka">Jsonnet试用</a>
+</div>
+<div class="content">
+  
+    jsonnet这个语言很有意思，它存在的目的就是为了编辑配置。其实使用任何一门带有字符串模板的语言都能完成类似的目的，但是jsonnet的好处是它的封
+  
+</div>
+
+<div class="flex flex-wrap flex-row items-center mt-2 text-tertiary-text">
+    <div class="me-6 my-2">
+        <i class="fas fa-calendar me-1"></i>
+        <span>2023-12-29</span>
+    </div>
+    <div class="me-6 my-2">
+        <i class="fas fa-clock me-1"></i>
+        <span>4分钟阅读时长</span>
+    </div>
+    
+    
+
+    
+</div>
+
+  </div>
+
+  
+</div>
+  </div>
+  
+  <div class="py-6">
+    <div class="flex flex-col-reverse lg:flex-row justify-between">
+  
+  <div class="w-full ">
+    <div class="mb-4">
   <a href="https://yiuterran.github.io/blog/posts/linux%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/" class="font-bold text-xl hover:text-eureka">linux日常使用记录</a>
 </div>
 <div class="content">
@@ -292,108 +394,6 @@
 </div>
   </div>
   
-  <div class="py-6">
-    <div class="flex flex-col-reverse lg:flex-row justify-between">
-  
-  <div class="w-full ">
-    <div class="mb-4">
-  <a href="https://yiuterran.github.io/blog/posts/statefulset%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86/" class="font-bold text-xl hover:text-eureka">StatefulSet使用思路梳理</a>
-</div>
-<div class="content">
-  
-    一般服务都是使用deployment部署，deploy的使用非常简单，无状态，随意调度。但是各种需要持久化数据的中间件都需要使用StatefulSet
-  
-</div>
-
-<div class="flex flex-wrap flex-row items-center mt-2 text-tertiary-text">
-    <div class="me-6 my-2">
-        <i class="fas fa-calendar me-1"></i>
-        <span>2023-09-15</span>
-    </div>
-    <div class="me-6 my-2">
-        <i class="fas fa-clock me-1"></i>
-        <span>4分钟阅读时长</span>
-    </div>
-    
-    
-
-    
-</div>
-
-  </div>
-
-  
-</div>
-  </div>
-  
-  <div class="py-6">
-    <div class="flex flex-col-reverse lg:flex-row justify-between">
-  
-  <div class="w-full ">
-    <div class="mb-4">
-  <a href="https://yiuterran.github.io/blog/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/" class="font-bold text-xl hover:text-eureka">Configmap挂载的几种情况</a>
-</div>
-<div class="content">
-  
-    ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理： 将某个key的值挂载为环境变量 apiVersion: v1 kind: Pod metadata: name: dapi-test-pod spec: containers: - name: test-container image: gcr.io/google_containers/busybox command: [ &#34;/bin/sh&#34;, &#34;-c&#34;, &#34;env&#34; ] env: - name: SPECIAL_LEVEL_KEY valueFrom: configMapKeyRef:
-  
-</div>
-
-<div class="flex flex-wrap flex-row items-center mt-2 text-tertiary-text">
-    <div class="me-6 my-2">
-        <i class="fas fa-calendar me-1"></i>
-        <span>2023-09-15</span>
-    </div>
-    <div class="me-6 my-2">
-        <i class="fas fa-clock me-1"></i>
-        <span>2分钟阅读时长</span>
-    </div>
-    
-    
-
-    
-</div>
-
-  </div>
-
-  
-</div>
-  </div>
-  
-  <div class="py-6">
-    <div class="flex flex-col-reverse lg:flex-row justify-between">
-  
-  <div class="w-full ">
-    <div class="mb-4">
-  <a href="https://yiuterran.github.io/blog/posts/sqlx%E5%A4%87%E5%BF%98%E5%BD%95/" class="font-bold text-xl hover:text-eureka">Sqlx备忘录</a>
-</div>
-<div class="content">
-  
-    很少用golang写增删改查，sqlx的用法和java差别很大，用的时候总是要从头看文档。这里写个备忘录方便以后查询，使用sqlx和go-sqlbui
-  
-</div>
-
-<div class="flex flex-wrap flex-row items-center mt-2 text-tertiary-text">
-    <div class="me-6 my-2">
-        <i class="fas fa-calendar me-1"></i>
-        <span>2023-09-12</span>
-    </div>
-    <div class="me-6 my-2">
-        <i class="fas fa-clock me-1"></i>
-        <span>4分钟阅读时长</span>
-    </div>
-    
-    
-
-    
-</div>
-
-  </div>
-
-  
-</div>
-  </div>
-  
 </div>
 
 
@@ -425,7 +425,7 @@
         <a href="https://yiuterran.github.io/blog/posts/page/2/" aria-label="Next" class="page-link" role="button"><span aria-hidden="true">&raquo;</span></a>
       </li>
       <li class="page-item">
-        <a href="https://yiuterran.github.io/blog/posts/page/6/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
+        <a href="https://yiuterran.github.io/blog/posts/page/7/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
       </li>
     </ul>
 

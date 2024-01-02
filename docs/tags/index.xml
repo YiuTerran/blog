@@ -8,7 +8,52 @@
     <language>zh</language>
     <copyright>&amp;copy; 2021 &lt;a href=&#34;https://github.com/YiuTerran&#34;&gt;tryao&lt;/a&gt;
 </copyright>
-    <lastBuildDate>Fri, 24 Nov 2023 10:51:31 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 02 Jan 2024 09:26:30 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>k8s</title>
+      <link>https://yiuterran.github.io/blog/tags/k8s/</link>
+      <pubDate>Tue, 02 Jan 2024 09:26:30 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/tags/k8s/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>json</title>
+      <link>https://yiuterran.github.io/blog/tags/json/</link>
+      <pubDate>Fri, 29 Dec 2023 16:13:12 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/tags/json/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>yaml</title>
+      <link>https://yiuterran.github.io/blog/tags/yaml/</link>
+      <pubDate>Fri, 29 Dec 2023 16:13:12 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/tags/yaml/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>ytt</title>
+      <link>https://yiuterran.github.io/blog/tags/ytt/</link>
+      <pubDate>Fri, 29 Dec 2023 16:13:12 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/tags/ytt/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>jsonnet</title>
+      <link>https://yiuterran.github.io/blog/tags/jsonnet/</link>
+      <pubDate>Fri, 29 Dec 2023 10:21:59 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/tags/jsonnet/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>linux</title>
       <link>https://yiuterran.github.io/blog/tags/linux/</link>
@@ -24,15 +69,6 @@
       <pubDate>Mon, 13 Nov 2023 10:11:35 +0800</pubDate>
       
       <guid>https://yiuterran.github.io/blog/tags/elasticsearch/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>k8s</title>
-      <link>https://yiuterran.github.io/blog/tags/k8s/</link>
-      <pubDate>Fri, 15 Sep 2023 14:57:05 +0800</pubDate>
-      
-      <guid>https://yiuterran.github.io/blog/tags/k8s/</guid>
       <description></description>
     </item>
     
