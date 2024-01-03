@@ -254,12 +254,12 @@
 <p>本来先尝试了Ubuntu 22.04和KDE Neon做为开发环境，但是体验都不太好：</p>
 <p>KDE Neon与日常使用的软件兼容性很差，主要是大部分软件都是GTK搞的；</p>
 <p>原生Ubuntu的蓝牙耳机连接经常断连；</p>
-<p>Deepin20.9的docker安装有问题，k3s也无法正常使用；Deepin 23就更离谱了，连安装界面都进不去。</p>
+<p>Deepin20.9的docker安装有问题，k3s也无法正常使用；Deepin 23就更离谱了，我的连安装界面都进不去。</p>
 <p>优麒麟版本的linux，系统快捷键不能改，很麻烦。</p>
 <p>Debian系还是推荐使用Linux mint Cinamon，或者直接用arch也行，常用软件也比较好装。</p>
 <h2 id="常用软件">常用软件</h2>
 <p>网易云官方的播放器不能用，建议改为<strong>YesPlayMusic音乐播放器</strong>这个开源的播放器。</p>
-<p>微信实际上有原生的版本，可以从deepin论坛下载，不过非deepin的debian系需要额外装一些依赖才能使用。也可以使用星火商店，不过依赖的deb包还是要手动安装（如果不是国产发行版）。<strong>注意</strong>，原生微信目前（v2.1.9）在LinuxMint下新消息没有提示，这个没办法，建议打开手机的消息提示配合使用：（</p>
+<p>微信实际上有原生的版本，可以从deepin论坛下载，不过非deepin的debian系需要额外装一些依赖才能使用。也可以使用星火商店，不过依赖的deb包还是要手动安装（如果不是国产发行版）。<strong>注意</strong>，原生微信目前（v2.1.9）在LinuxMint下新消息没有提示，这个没办法，可以考虑改用wine版本微信。</p>
 <p>输入法<strong>只推荐</strong>fcitx，ibus各种延迟卡顿，fcitx5和钉钉的兼容性很差。用的话可以考虑搜狗输入法，或者rime，我目前用的是后者。rime推荐使用<a href="https://github.com/Mark24Code/rime-auto-deploy">这个</a>脚本进行安装，还是很方便的。</p>
 <p>终端推荐<code>wezterm</code>，可以跨平台使用，配置文件使用lua，比较方便(~/.config/wezterm/wezterm.lua)：</p>
 <pre><code class="language-lua">local wezterm = require 'wezterm'
