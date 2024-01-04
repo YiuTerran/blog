@@ -2,25 +2,34 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://yiuterran.github.io/blog/tags/ansible/</loc>
+    <lastmod>2024-01-04T14:00:55+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/posts/ansible%E9%80%9F%E6%88%90/</loc>
+    <lastmod>2024-01-04T14:00:55+08:00</lastmod>
+  </url><url>
     <loc>https://yiuterran.github.io/blog/authors/</loc>
-    <lastmod>2024-01-02T09:26:30+08:00</lastmod>
+    <lastmod>2024-01-04T14:00:55+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/tags/devops/</loc>
+    <lastmod>2024-01-04T14:00:55+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/tags/</loc>
+    <lastmod>2024-01-04T14:00:55+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/authors/tryao/</loc>
+    <lastmod>2024-01-04T14:00:55+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/posts/</loc>
+    <lastmod>2024-01-04T14:00:55+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/</loc>
+    <lastmod>2024-01-04T14:00:55+08:00</lastmod>
   </url><url>
     <loc>https://yiuterran.github.io/blog/tags/k8s/</loc>
     <lastmod>2024-01-02T09:26:30+08:00</lastmod>
   </url><url>
     <loc>https://yiuterran.github.io/blog/posts/kcl%E8%AF%95%E7%94%A8/</loc>
-    <lastmod>2024-01-02T09:26:30+08:00</lastmod>
-  </url><url>
-    <loc>https://yiuterran.github.io/blog/tags/</loc>
-    <lastmod>2024-01-02T09:26:30+08:00</lastmod>
-  </url><url>
-    <loc>https://yiuterran.github.io/blog/authors/tryao/</loc>
-    <lastmod>2024-01-02T09:26:30+08:00</lastmod>
-  </url><url>
-    <loc>https://yiuterran.github.io/blog/posts/</loc>
-    <lastmod>2024-01-02T09:26:30+08:00</lastmod>
-  </url><url>
-    <loc>https://yiuterran.github.io/blog/</loc>
     <lastmod>2024-01-02T09:26:30+08:00</lastmod>
   </url><url>
     <loc>https://yiuterran.github.io/blog/tags/json/</loc>
@@ -85,9 +94,6 @@
   </url><url>
     <loc>https://yiuterran.github.io/blog/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/</loc>
     <lastmod>2023-06-12T09:20:20+08:00</lastmod>
-  </url><url>
-    <loc>https://yiuterran.github.io/blog/tags/devops/</loc>
-    <lastmod>2023-03-06T14:37:28+08:00</lastmod>
   </url><url>
     <loc>https://yiuterran.github.io/blog/tags/edge/</loc>
     <lastmod>2023-03-06T14:37:28+08:00</lastmod>

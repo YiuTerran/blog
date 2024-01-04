@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang='zh' dir='ltr' ><meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+<title>Ansible速成 | 应许之地</title>
+
+<meta name="generator" content="Hugo Eureka 0.9.0" />
+<link rel="stylesheet" href="https://yiuterran.github.io/blog/css/eureka.min.css">
+<script defer src="https://yiuterran.github.io/blog/js/eureka.min.js"></script>
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload"
+  href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Noto+Serif+SC:wght@400;600;700&display=swap"
+  as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/styles/solarized-light.min.css"
+   media="print"
+  onload="this.media='all';this.onload=null" crossorigin>
+<script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/highlight.min.js"
+   crossorigin></script>
+
+  <script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/languages/dart.min.js"
+     crossorigin></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/js/all.min.js"
+   integrity="sha256-uNYoXefWRqv&#43;PsIF/OflNmwtKM4lStn9yrz2gVl6ymo="  crossorigin></script>
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+   integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3&#43;Aro6EYUG4&#43;cU&#43;KJWu/X"  media="print"
+  onload="this.media='all';this.onload=null" crossorigin>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js" 
+  integrity="sha384-g7c&#43;Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI&#43;sEnkvrMWph2EDg4"  crossorigin></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
+   integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC&#43;Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa"  crossorigin></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: "$$", right: "$$", display: true },
+        { left: "$", right: "$", display: false },
+        { left: "\\(", right: "\\)", display: false },
+        { left: "\\[", right: "\\]", display: true }
+      ],
+    });
+  });
+</script>
+
+
+<script defer src="https://cdn.jsdelivr.net/npm/mermaid@8.9.2/dist/mermaid.min.js" 
+  integrity="sha256-Zmpaaj&#43;GXFsPF5WdPArSrnW3b30dovldeKsW00xBVwE="  crossorigin></script>
+<link rel="preconnect" href="https://www.google-analytics.com" crossorigin>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-C0R8DENDJ0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-C0R8DENDJ0');
+</script>
+
+
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
+
+<meta name="description"
+  content="虽然iac(infracture as code)流行以来，新的技术栈层出不穷，但是一般都是面向k8s或者云服务商的。传统的部署还是用ansible这种仅依">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+      "@type": "ListItem",
+      "position": 1 ,
+      "name":"文章列表",
+      "item":"https://yiuterran.github.io/blog/posts/"},{
+      "@type": "ListItem",
+      "position": 2 ,
+      "name":"Ansible速成",
+      "item":"https://yiuterran.github.io/blog/posts/ansible%E9%80%9F%E6%88%90/"}]
+}
+</script>
+
+
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://yiuterran.github.io/blog/posts/ansible%E9%80%9F%E6%88%90/"
+    },
+    "headline": "Ansible速成 | 应许之地","datePublished": "2024-01-04T14:00:55+08:00",
+    "dateModified": "2024-01-04T14:00:55+08:00",
+    "wordCount":  2641 ,
+    "author": {
+        "@type": "Person",
+        "name": ["tryao"]
+    },
+    "publisher": {
+        "@type": "Person",
+        "name": "C. Wang",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://yiuterran.github.io/blog/images/icon.png"
+        }
+        },
+    "description": "虽然iac(infracture as code)流行以来，新的技术栈层出不穷，但是一般都是面向k8s或者云服务商的。传统的部署还是用ansible这种仅依"
+}
+</script><meta property="og:title" content="Ansible速成 | 应许之地" />
+<meta property="og:type" content="article" />
+
+
+<meta property="og:image" content="https://yiuterran.github.io/blog/images/icon.png">
+
+
+<meta property="og:url" content="https://yiuterran.github.io/blog/posts/ansible%E9%80%9F%E6%88%90/" />
+
+
+
+
+<meta property="og:description" content="虽然iac(infracture as code)流行以来，新的技术栈层出不穷，但是一般都是面向k8s或者云服务商的。传统的部署还是用ansible这种仅依" />
+
+
+
+
+<meta property="og:locale" content="zh" />
+
+
+
+
+<meta property="og:site_name" content="应许之地" />
+
+
+
+
+
+
+<meta property="article:published_time" content="2024-01-04T14:00:55&#43;08:00" />
+
+
+<meta property="article:modified_time" content="2024-01-04T14:00:55&#43;08:00" />
+
+
+
+<meta property="article:section" content="posts" />
+
+
+<meta property="article:tag" content="devops" />
+
+<meta property="article:tag" content="ansible" />
+
+
+
+
+
+<meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/" />
+
+<meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/sre%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" />
+
+<meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/zabbix%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/" />
+
+
+
+<body class="flex flex-col min-h-screen">
+  <header class="fixed flex items-center w-full min-h-16 ps-scrollbar z-50 bg-secondary-bg shadow-sm">
+    <div class="w-full max-w-screen-xl mx-auto"><script>
+    let storageColorScheme = localStorage.getItem("lightDarkMode")
+    if (((storageColorScheme == 'Auto' || storageColorScheme == null) && window.matchMedia("(prefers-color-scheme: dark)").matches) || storageColorScheme == "Dark") {
+        document.getElementsByTagName('html')[0].classList.add('dark')
+    }
+</script>
+<nav class="flex items-center justify-between flex-wrap px-4 py-4 md:py-0">
+    <a href="https://yiuterran.github.io/blog/" class="me-6 text-primary-text text-xl font-bold">应许之地</a>
+    <button id="navbar-btn" class="md:hidden flex items-center px-3 py-2" aria-label="Open Navbar">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div id="target"
+        class="hidden block md:flex md:grow md:justify-between md:items-center w-full md:w-auto text-primary-text z-20">
+        <div class="md:flex md:h-16 text-sm md:grow pb-4 md:pb-0 border-b md:border-b-0">
+            <a href="https://yiuterran.github.io/blog/authors/tryao/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  border-transparent  me-4">作者</a>
+            <a href="https://yiuterran.github.io/blog/posts/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  selected-menu-item  me-4">文章</a>
+        </div>
+
+        <div class="flex">
+            <div class="relative pt-4 md:pt-0">
+                <div class="cursor-pointer hover:text-eureka" id="lightDarkMode">
+                    <i class="fas fa-adjust"></i>
+                </div>
+                <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-30" id="is-open">
+                </div>
+                <div class="absolute flex flex-col start-0 md:start-auto end-auto md:end-0 hidden bg-secondary-bg w-48 rounded py-2 border border-tertiary-bg cursor-pointer z-40"
+                    id='lightDarkOptions'>
+                    <span class="px-4 py-1 hover:text-eureka" name="Light">浅色</span>
+                    <span class="px-4 py-1 hover:text-eureka" name="Dark">深色</span>
+                    <span class="px-4 py-1 hover:text-eureka" name="Auto">自动</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-0" id="is-open-mobile">
+    </div>
+
+</nav>
+<script>
+    
+    let element = document.getElementById('lightDarkMode')
+    if (storageColorScheme == null || storageColorScheme == 'Auto') {
+        document.addEventListener('DOMContentLoaded', () => {
+            window.matchMedia("(prefers-color-scheme: dark)").addEventListener('change', switchDarkMode)
+        })
+    } else if (storageColorScheme == "Light") {
+        element.firstElementChild.classList.remove('fa-adjust')
+        element.firstElementChild.setAttribute("data-icon", 'sun')
+        element.firstElementChild.classList.add('fa-sun')
+    } else if (storageColorScheme == "Dark") {
+        element.firstElementChild.classList.remove('fa-adjust')
+        element.firstElementChild.setAttribute("data-icon", 'moon')
+        element.firstElementChild.classList.add('fa-moon')
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        getcolorscheme();
+        switchBurger();
+    });
+</script>
+</div>
+  </header>
+  <main class="grow pt-16">
+    <div class="ps-scrollbar">
+      <div class="w-full max-w-screen-xl lg:px-4 xl:px-8 mx-auto">
+
+
+<div class="grid grid-cols-2 lg:grid-cols-8 gap-4 lg:pt-12">
+    <div
+        class="col-span-2  lg:col-span-6 bg-secondary-bg rounded px-6 py-8">
+        <h1 class="font-bold text-3xl text-primary-text">Ansible速成</h1>
+        <div class="flex flex-wrap flex-row items-center mt-2 text-tertiary-text">
+    <div class="me-6 my-2">
+        <i class="fas fa-calendar me-1"></i>
+        <span>2024-01-04</span>
+    </div>
+    <div class="me-6 my-2">
+        <i class="fas fa-clock me-1"></i>
+        <span>6分钟阅读时长</span>
+    </div>
+    
+    
+
+    
+</div>
+        
+        
+        
+
+        <div class="content">
+            <p>虽然iac(infracture as code)流行以来，新的技术栈层出不穷，但是一般都是面向k8s或者云服务商的。传统的部署还是用ansible这种仅依赖ssh的最简单。</p>
+<p>数年前我还在主力写Python时，部署工具一般使用Python的一个库，叫<code>fabric</code>的来进行，它底层就是使用ssh远程登录运行命令而已。<code>ansible</code>其实是同样的原理，只不过它的抽象程度更高，可以通过配置文件来驱动，而不再是Python代码。这个配置文件就是所谓的<code>playbook</code>，也是yaml格式。</p>
+<h2 id="inventory文件">Inventory文件</h2>
+<p>即需要配置的主机、环境变量相关的配置文件，支持<code>ini</code>或者<code>yaml</code>格式，这里统一用<code>yaml</code>格式（因为其他配置也是yaml）。</p>
+<h3 id="语法">语法</h3>
+<p>例子：</p>
+<pre><code class="language-yaml">ungrouped:
+  hosts:
+    mail.example.com:
+webservers:
+  hosts:
+    foo.example.com:
+    bar.example.com:
+dbservers:
+  hosts:
+    one.example.com:
+    two.example.com:
+    three.example.com:
+east:
+  hosts:
+    foo.example.com:
+    one.example.com:
+    two.example.com:
+west:
+  hosts:
+    bar.example.com:
+    three.example.com:
+prod:
+  children:
+    east:
+test:
+  children:
+    west:
+</code></pre>
+<p>top key是组的名称，可以通过<code>children</code>配置父子组。</p>
+<p>host可以属于多个group，一个group也可以有复数个parent或者children。</p>
+<p>多个类似的host或者ip地址，可以用类似<code>www[01:50].example.com</code>或者<code>172.16.1.[1:100]</code>这种格式，避免写太多。</p>
+<p>可以写alias：</p>
+<pre><code class="language-yaml">ungrouped:
+  hosts:
+     node1:
+       ansible_port: 22
+       ansible_host: 172.16.11.200
+</code></pre>
+<p>除了上面这些字段外，可以给主机增加任意字段，相当于环境变量：</p>
+<pre><code class="language-yaml">ungrouped:
+  hosts:
+     node1:
+       ansible_port: 22
+       ansible_host: 172.16.11.200
+       ansible_user: user
+       ansible_password: 明文密码
+       ansible_ssh_private_key_file: 私钥文件
+       ansible_become_user: root #切换成高权限用户
+       ansible_become_password: 高权限用户密码
+       ansible_python_interpreter: # 远程python解释器地址
+       foo: bar
+</code></pre>
+<p>一组host也可以共享变量，使用<code>vars</code>：</p>
+<pre><code class="language-yaml">ungrouped:
+  hosts:
+     node1:
+       ansible_port: 22
+       ansible_host: 172.16.11.200
+       foo: bar
+  vars:
+    k: v
+</code></pre>
+<p>子分组亦然。</p>
+<p>如果变量太多，可以单独存放在独立的文件里。如<code>group_vars/group1.yml</code>，注意这里就仅支持yaml了。文件里面就是普通的yaml，如：</p>
+<pre><code class="language-yaml">---
+foo: bar
+</code></pre>
+<p>除了<code>group_vars</code>，也可以有<code>host_vars</code>文件夹。</p>
+<p>默认会生成<code>all</code>这个组，一个实例如下：</p>
+<pre><code class="language-bash">deploy:
+  hosts:
+    node1:
+      ansible_host: 172.16.11.200
+      ansible_port: 22
+      ansible_user: root
+    node2:
+      ansible_host: 172.16.11.125
+      ansible_port: 22
+      ansible_user: lab-dev
+    node3:
+      ansible_host: 172.16.11.126
+      ansible_port: 22
+      ansible_user: ubuntu
+</code></pre>
+<p>默认使用ssh私钥连接，有多个私钥的话需要在配置里面手动指定。</p>
+<pre><code class="language-bash">ansible all -m ping -i env/hosts.yml
+</code></pre>
+<p>这个命令用来检测所有host的连通性，适合用来测试。</p>
+<p><code>all</code>在这里可以替换<code>deploy</code>，此外如果有多个组，可以用<code>deploy:&amp;staging</code>这种集合计算方式，或者用<code>172.16.1.*</code>这种通配符；用<code>:</code>做分隔符。</p>
+<h3 id="文件组织">文件组织</h3>
+<p>可以直接使用<code>-i</code>传入多个配置文件，也可以直接传入一个配置文件夹。</p>
+<p>合并同名变量的逻辑是后导入的覆盖先导入的，对于文件夹而言，就是文件名的ASCII顺序。</p>
+<pre><code>inventory/
+  01-openstack.yml          # configure inventory plugin to get hosts from Openstack cloud
+  02-dynamic-inventory.py   # add additional hosts with dynamic inventory script
+  03-static-inventory       # add static hosts
+  group_vars/
+    all.yml                 # assign variables to all hosts
+</code></pre>
+<p>上面是一个文件夹的例子，在文件名前使用数字可以有效确定导入顺序。</p>
+<p>使用方法：<code>ansible-playbook playbook.yml -i inventory</code></p>
+<p>如果不指定<code>-i</code>，则默认使用<code>/etc/ansible/hosts</code>配置。</p>
+<h3 id="动态host">动态host</h3>
+<p>云服务厂商那边，可能使用动态的主机规划（虚拟机级别的自动扩容），此时可以考虑使用动态host.</p>
+<h2 id="playbook">Playbook</h2>
+<p>即要做的事情，一般的bash脚本都可以转成playbook，或者直接使用<code>shell</code>命令调用已经写好的bash脚本。</p>
+<h3 id="语法-1">语法</h3>
+<p>一个<code>playbook</code>对应一个yaml文件，里面含有若干个<code>play</code>。<code>play</code>是剧本的意思，里面可以含有若干个<code>task</code>，<code>task</code>里面再调用具体的<code>module</code>来执行命令。例如：</p>
+<pre><code class="language-yaml">---
+- hosts: webservers
+  vars:
+    http_port: 80
+    max_clients: 200
+  remote_user: root
+  tasks:
+  - name: ensure apache is at the latest version
+    yum: pkg=httpd state=latest
+  - name: write the apache config file
+    template: src=https://yiuterran.github.io/blog/srv/httpd.j2 dest=/etc/httpd.conf
+    notify:
+    - restart apache
+  - name: ensure apache is running
+    service: name=httpd state=started
+  handlers:
+    - name: restart apache
+      service: name=httpd state=restarted
+</code></pre>
+<p>上面是一个<code>play</code>的例子。<code>hosts</code>这里对应<code>inventory</code>里面的分组。</p>
+<p><code>template</code>命令用来将<code>jinja2</code>模板渲染成配置文件，渲染的时候会携带上下文变量。</p>
+<p><code>notify</code>用于触发事件，在<code>handler</code>那边处理。一般用来重启服务，方便复用。</p>
+<p>module除了<code>=</code>参数外，一般也支持用yaml的object来写。</p>
+<p>一般写playbook就是组合各种module，用来替换传统的bash.</p>
+<h3 id="文件组织-1">文件组织</h3>
+<p>如果我们希望在多个playbook中复用同一系列task，可以将task单独提取到文件里，如：</p>
+<pre><code class="language-yaml">---
+# possibly saved as tasks/foo.yml
+
+- name: placeholder foo
+  command: /bin/foo
+
+- name: placeholder bar
+  command: /bin/bar
+</code></pre>
+<p>然后在源文件里使用：</p>
+<pre><code>tasks:
+  - include: tasks/foo.yml
+    vars:
+      k: v
+      k2: [v2]
+</code></pre>
+<p>可以传递变量。</p>
+<p>更进一步的抽象则使用<code>roles</code>的概念，将文件组织如下：</p>
+<pre><code class="language-yml">site.yml
+webservers.yml
+fooservers.yml
+roles/
+   common/
+     files/
+     templates/
+     tasks/
+     handlers/
+     vars/
+     defaults/
+     meta/
+   webservers/
+     files/
+     templates/
+     tasks/
+     handlers/
+     vars/
+     defaults/
+     meta/
+</code></pre>
+<p>那么playbook可以简化如下：</p>
+<pre><code class="language-yml">---
+
+- hosts: webservers
+
+  pre_tasks:
+    - shell: echo 'hello'
+
+  roles:
+    - role: webservers
+      foo: bar
+
+  tasks:
+    - shell: echo 'still busy'
+
+  post_tasks:
+    - shell: echo 'goodbye'
+</code></pre>
+<p>并约定：</p>
+<ul>
+<li>如果 roles/x/tasks/main.yml 存在, 其中列出的 tasks 将被添加到 play 中</li>
+<li>如果 roles/x/handlers/main.yml 存在, 其中列出的 handlers 将被添加到 play 中</li>
+<li>如果 roles/x/vars/main.yml 存在, 其中列出的 variables 将被添加到 play 中</li>
+<li>如果 roles/x/meta/main.yml 存在, 其中列出的 “角色依赖” 将被添加到 roles 列表中 (1.3 and later)</li>
+<li>所有 copy tasks 可以引用 roles/x/files/ 中的文件，不需要指明文件的路径。</li>
+<li>所有 script tasks 可以引用 roles/x/files/ 中的脚本，不需要指明文件的路径。</li>
+<li>所有 template tasks 可以引用 roles/x/templates/ 中的文件，不需要指明文件的路径。</li>
+<li>所有 include tasks 可以引用 roles/x/tasks/ 中的文件，不需要指明文件的路径。</li>
+</ul>
+<h3 id="角色依赖">角色依赖</h3>
+<pre><code class="language-yaml">---
+dependencies:
+  - { role: common, some_parameter: 3 }
+  - { role: apache, port: 80 }
+  - { role: postgres, dbname: blarg, other_parameter: 12 }
+</code></pre>
+<p>可以在上面的组织结构里的<code>meta</code>文件夹下增加main.yml，声明模块依赖其他角色。</p>
+<h3 id="其他变量">其他变量</h3>
+<p>除了声明在yml文件里的变量，在命令行也可以通过<code>--extra-vars</code>传递变量，这个变量可以是json格式，或者<code>k=v</code>的文本，或者<code>@some_file.yml</code>文件。</p>
+<p>系统内置的变量包括：<code>hostvars</code>, <code>group_names</code>, <code>groups</code>和<code>environmen</code>等等，不要覆盖这些变量。</p>
+<h3 id="注册变量">注册变量</h3>
+<p>将命令的输出注册为变量，可以使用<code>register</code>关键字，例子：</p>
+<pre><code class="language-yaml">- name: test play
+  hosts: all
+
+  tasks:
+
+      - shell: cat /etc/motd
+        register: motd_contents
+
+      - shell: echo &quot;motd contains the word hi&quot;
+        when: motd_contents.stdout.find('hi') != -1
+</code></pre>
+<p><code>motd_contents</code>即为注册的变量，可以使用<code>.stdout_lines</code>进行分割，并使用<code>with_items</code>引用每一行：</p>
+<pre><code class="language-yaml">- name: registered variable usage as a with_items list
+  hosts: all
+
+  tasks:
+
+      - name: retrieve the list of home directories
+        command: ls /home
+        register: home_dirs
+
+      - name: add home dirs to the backup spooler
+        file: path=/mnt/bkspool/{{ item }} src=https://yiuterran.github.io/blog/home/{{ item }} state=link
+        with_items: home_dirs.stdout_lines
+        # same as with_items: home_dirs.stdout.split()
+</code></pre>
+<h3 id="循环">循环</h3>
+<p>上面写的<code>with_items</code>歧视是循环引用的一种通用方式，除此之外，还支持<code>with_nested</code>, <code>with_dict</code>, <code>with_fileglob</code>以及<code>with_together</code>.</p>
+<h2 id="总结">总结</h2>
+<p>我们可以看到playbook的高级语法已经相当于一门DSL了，如果只是为了生成yaml，完全可以用kcl这种配置语言来执行循环、条件等逻辑，还更灵活一点。</p>
+<p>playbook自带的使用jinja2渲染模板的功能比kcl更加通用，因为后者目前是专门用来渲染yaml的。如果需要渲染nginx或者emqx这种配置文件，还是需要jinja2这种通用模板的支持的。</p>
+<p>devops大部分时间都是面向配置编程，目前流行的技术栈实在是有点多，在一个项目里引入太多技术不利于推广和交接，还是需要谨慎。</p>
+
+        </div>
+        
+        <div class="my-4">
+    
+    <a href="https://yiuterran.github.io/blog/tags/devops/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#devops</a>
+    
+    <a href="https://yiuterran.github.io/blog/tags/ansible/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#ansible</a>
+    
+</div>
+        
+        
+        
+
+
+        
+        
+        <div class="py-2">
+    
+    <div class="flex flex-col md:flex-row items-center my-8">
+        <a href="https://yiuterran.github.io/blog/authors/tryao/" class="w-24 h-24 md:me-4">
+            
+            
+            <img src="https://yiuterran.github.io/blog/images/avatar.png" class="w-full bg-primary-bg rounded-full" alt="Avatar">
+            
+        </a>
+        <div class="w-full md:w-auto mt-4 md:mt-0">
+            <a href="https://yiuterran.github.io/blog/authors/tryao/" class="block font-bold text-lg pb-1 mb-2 border-b">个人介绍</a>
+            <span class="block pb-2">兴趣使然的程序员，博而不精，乐学不倦</span>
+            
+            
+            
+            
+            
+            <a href="mailto:yaotairan@gmail.com" class="me-1">
+                <i class="fas fa-envelope"></i>
+            </a>
+            
+            
+            
+            
+            
+            <a href="https://github.com/YiuTerran" class="me-1">
+                <i class="fab fa-github"></i>
+            </a>
+            
+        </div>
+    </div>
+    
+</div>
+        
+        
+        
+<div class="flex flex-col md:flex-row md:justify-between -mx-2 mt-4 px-2 pt-4 border-t">
+    <div>
+        
+    </div>
+    <div class="md:text-right mt-4 md:mt-0">
+        
+        <span class="block font-bold">下一页</span>
+        <a href="https://yiuterran.github.io/blog/posts/kcl%E8%AF%95%E7%94%A8/" class="block">Kcl试用</a>
+        
+    </div>
+</div>
+
+        
+
+
+
+  <script id="utterances" src="https://utteranc.es/client.js"
+            issue-term=title
+            repo=YiuTerran/blog-comment
+              theme=preferred-color-scheme
+        crossorigin="anonymous"
+        async>
+</script>
+<script>
+    if (storageColorScheme == "Light") {
+      document.getElementById('utterances').setAttribute('theme', 'github-light')
+    } else if (storageColorScheme == "Dark") {
+      document.getElementById('utterances').setAttribute('theme', 'github-dark')
+    }
+</script>
+
+    </div>
+    
+    <div class="col-span-2">
+        
+        
+        <div class="sticky top-16 z-10 hidden lg:block px-6 py-4  bg-primary-bg ">
+    <span class="text-lg font-semibold">本页内容</span>
+</div>
+<div class="sticky-toc hidden lg:block px-6 pb-6 ">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#inventory文件">Inventory文件</a>
+      <ul>
+        <li><a href="#语法">语法</a></li>
+        <li><a href="#文件组织">文件组织</a></li>
+        <li><a href="#动态host">动态host</a></li>
+      </ul>
+    </li>
+    <li><a href="#playbook">Playbook</a>
+      <ul>
+        <li><a href="#语法-1">语法</a></li>
+        <li><a href="#文件组织-1">文件组织</a></li>
+        <li><a href="#角色依赖">角色依赖</a></li>
+        <li><a href="#其他变量">其他变量</a></li>
+        <li><a href="#注册变量">注册变量</a></li>
+        <li><a href="#循环">循环</a></li>
+      </ul>
+    </li>
+    <li><a href="#总结">总结</a></li>
+  </ul>
+</nav>
+</div>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        enableStickyToc();
+    });
+</script>
+        
+    </div>
+    
+
+    
+    
+    <div
+        class="col-span-2  lg:col-span-6 bg-secondary-bg rounded p-6">
+        <h2 class="text-lg font-semibold mb-4">相关</h2>
+        <div class="content">
+            
+            <a href="https://yiuterran.github.io/blog/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/">边缘服务器管理工具选型</a>
+            <br />
+            
+            <a href="https://yiuterran.github.io/blog/posts/sre%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">SRE读书笔记</a>
+            <br />
+            
+            <a href="https://yiuterran.github.io/blog/posts/zabbix%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/">Zabbix配置记录</a>
+            <br />
+            
+        </div>
+    </div>
+    
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', ()=>{
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+
+      </div>
+    </div>
+    
+  </main>
+  <footer class="ps-scrollbar">
+    <div class="w-full max-w-screen-xl mx-auto"><div class="text-center p-6 pin-b">
+    <p class="text-sm text-tertiary-text">&copy; 2021 <a href="https://github.com/YiuTerran">tryao</a>
+ &middot;  Powered by the <a href="https://github.com/wangchucheng/hugo-eureka" class="hover:text-eureka">Eureka</a> theme for <a href="https://gohugo.io" class="hover:text-eureka">Hugo</a></p>
+</div></div>
+  </footer>
+</body>
+
+</html>
