@@ -78,33 +78,33 @@
     "itemListElement":[{
             "@type":"ListItem",
             "position":  1 ,
+            "name": "SRE读书笔记",
+            "description": "SRE相关的书籍，截止目前google出了2本，分别是2016年的的《Site Reliability Engineering: How Google Runs Production Systems》和2020年的《The Site Reliability Workbook》",
+            "url": "https://yiuterran.github.io/blog/posts/sre%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"
+        },{
+            "@type":"ListItem",
+            "position":  2 ,
             "name": "Ginkgo使用笔记",
             "description": "go自带的单元测试比较适合测一个小函数，如果要做一系列的流程测试，则显得较为繁琐。 推荐使用ginkgo来做流程测试，BDD风格写出来的测试代码非常容易",
             "url": "https://yiuterran.github.io/blog/posts/ginkgo%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/"
         },{
             "@type":"ListItem",
-            "position":  2 ,
+            "position":  3 ,
             "name": "Influxdb Cluster集成",
             "description": "本文记录在golang项目中集成influxdb-cluster需要的知识储备。 术语 database 和MySQL中一致 batch \\n分割的多行数据，用来批量写入。 influ",
             "url": "https://yiuterran.github.io/blog/posts/influxdb-cluster%E9%9B%86%E6%88%90/"
         },{
             "@type":"ListItem",
-            "position":  3 ,
+            "position":  4 ,
             "name": "Zabbix配置记录",
             "description": "安装服务 这里演示的是物理机环境监控场景，容器场景还是更推荐k8s+prom来搞。 版本是zabbix6.0 LTS，官方已经不提供CentOS7的安装包了",
             "url": "https://yiuterran.github.io/blog/posts/zabbix%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/"
         },{
             "@type":"ListItem",
-            "position":  4 ,
+            "position":  5 ,
             "name": "Golang定时器要点",
             "description": "golang内置的定时器是基于多个四叉堆封装调度的，增删定时器的效率是O(lgn)，所以大量定时器本身可能成为性能瓶颈。可以考虑使用开源的时间轮算法实",
             "url": "https://yiuterran.github.io/blog/posts/golang%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A6%81%E7%82%B9/"
-        },{
-            "@type":"ListItem",
-            "position":  5 ,
-            "name": "Windows+wsl2后端开发环境搭建",
-            "description": "2023/11/16 Update: wsl2 2.0通过镜像网络解决了所有网络问题，已经不用折腾了。 2023/2/2 Update: wsl已经解决了systemd和网络问题，现在已经基本无障碍使用，移除了大部分无用的配",
-            "url": "https://yiuterran.github.io/blog/posts/windows+wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"
         }
     ]
 }
@@ -139,7 +139,7 @@
 
 
 
-<meta property="og:updated_time" content="2024-01-04T14:00:55&#43;08:00" />
+<meta property="og:updated_time" content="2024-01-05T08:55:48&#43;08:00" />
 
 
 
@@ -223,6 +223,40 @@
 </article>
 <div class="bg-secondary-bg rounded px-6">
     <div class="overflow-hidden divide-y">
+  
+  <div class="py-6">
+    <div class="flex flex-col-reverse lg:flex-row justify-between">
+  
+  <div class="w-full ">
+    <div class="mb-4">
+  <a href="https://yiuterran.github.io/blog/posts/sre%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" class="font-bold text-xl hover:text-eureka">SRE读书笔记</a>
+</div>
+<div class="content">
+  
+    SRE相关的书籍，截止目前google出了2本，分别是2016年的的《Site Reliability Engineering: How Google Runs Production Systems》和2020年的《The Site Reliability Workbook》
+  
+</div>
+
+<div class="flex flex-wrap flex-row items-center mt-2 text-tertiary-text">
+    <div class="me-6 my-2">
+        <i class="fas fa-calendar me-1"></i>
+        <span>2022-09-22</span>
+    </div>
+    <div class="me-6 my-2">
+        <i class="fas fa-clock me-1"></i>
+        <span>11分钟阅读时长</span>
+    </div>
+    
+    
+
+    
+</div>
+
+  </div>
+
+  
+</div>
+  </div>
   
   <div class="py-6">
     <div class="flex flex-col-reverse lg:flex-row justify-between">
@@ -349,47 +383,6 @@
         <span>2分钟阅读时长</span>
     </div>
     
-    
-
-    
-</div>
-
-  </div>
-
-  
-</div>
-  </div>
-  
-  <div class="py-6">
-    <div class="flex flex-col-reverse lg:flex-row justify-between">
-  
-  <div class="w-full ">
-    <div class="mb-4">
-  <a href="https://yiuterran.github.io/blog/posts/windows&#43;wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" class="font-bold text-xl hover:text-eureka">Windows&#43;wsl2后端开发环境搭建</a>
-</div>
-<div class="content">
-  
-    2023/11/16 Update: wsl2 2.0通过镜像网络解决了所有网络问题，已经不用折腾了。 2023/2/2 Update: wsl已经解决了systemd和网络问题，现在已经基本无障碍使用，移除了大部分无用的配
-  
-</div>
-
-<div class="flex flex-wrap flex-row items-center mt-2 text-tertiary-text">
-    <div class="me-6 my-2">
-        <i class="fas fa-calendar me-1"></i>
-        <span>2022-03-04</span>
-    </div>
-    <div class="me-6 my-2">
-        <i class="fas fa-clock me-1"></i>
-        <span>7分钟阅读时长</span>
-    </div>
-    
-    
-    <div class="me-6 my-2">
-        <i class="fas fa-folder me-1"></i>
-        
-        <a href="https://yiuterran.github.io/blog/categories/%E7%9E%8E%E6%8A%98%E8%85%BE/" class="hover:text-eureka">瞎折腾</a>
-        
-    </div>
     
 
     

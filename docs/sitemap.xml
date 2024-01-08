@@ -2,28 +2,31 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://yiuterran.github.io/blog/authors/</loc>
+    <lastmod>2024-01-05T08:55:48+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/tags/devops/</loc>
+    <lastmod>2024-01-05T08:55:48+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/posts/jinja2%E5%B0%8F%E7%BB%93/</loc>
+    <lastmod>2024-01-05T08:55:48+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/tags/</loc>
+    <lastmod>2024-01-05T08:55:48+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/authors/tryao/</loc>
+    <lastmod>2024-01-05T08:55:48+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/posts/</loc>
+    <lastmod>2024-01-05T08:55:48+08:00</lastmod>
+  </url><url>
+    <loc>https://yiuterran.github.io/blog/</loc>
+    <lastmod>2024-01-05T08:55:48+08:00</lastmod>
+  </url><url>
     <loc>https://yiuterran.github.io/blog/tags/ansible/</loc>
     <lastmod>2024-01-04T14:00:55+08:00</lastmod>
   </url><url>
     <loc>https://yiuterran.github.io/blog/posts/ansible%E9%80%9F%E6%88%90/</loc>
-    <lastmod>2024-01-04T14:00:55+08:00</lastmod>
-  </url><url>
-    <loc>https://yiuterran.github.io/blog/authors/</loc>
-    <lastmod>2024-01-04T14:00:55+08:00</lastmod>
-  </url><url>
-    <loc>https://yiuterran.github.io/blog/tags/devops/</loc>
-    <lastmod>2024-01-04T14:00:55+08:00</lastmod>
-  </url><url>
-    <loc>https://yiuterran.github.io/blog/tags/</loc>
-    <lastmod>2024-01-04T14:00:55+08:00</lastmod>
-  </url><url>
-    <loc>https://yiuterran.github.io/blog/authors/tryao/</loc>
-    <lastmod>2024-01-04T14:00:55+08:00</lastmod>
-  </url><url>
-    <loc>https://yiuterran.github.io/blog/posts/</loc>
-    <lastmod>2024-01-04T14:00:55+08:00</lastmod>
-  </url><url>
-    <loc>https://yiuterran.github.io/blog/</loc>
     <lastmod>2024-01-04T14:00:55+08:00</lastmod>
   </url><url>
     <loc>https://yiuterran.github.io/blog/tags/k8s/</loc>
