@@ -199,7 +199,10 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 
 这里面内容有点多，还是直接看官方文档吧。
 
-## Playwright
+## RPA
 
+即机器自动化，我感觉算是爬虫的超集吧，所有自动化的都算是RPA，这块新的框架很多，比如playwright、robot framework之类的。更新的技术会引入AIGC，比如验证码识别之类的。
 
+对于web而言，实际上底层的技术大部分还是无头浏览器和页面元素解析，不过新的框架的易用性比Puppeteer等早期框架更好一些。
 
+但是对于爬虫而言，最难的是各种反爬策略的应对，比如Cloudflare，这个一般需要投入一些资金搞ip池才能解决了。
