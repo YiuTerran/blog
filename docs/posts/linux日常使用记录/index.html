@@ -95,7 +95,7 @@
     },
     "headline": "linux日常使用记录 | 应许之地","datePublished": "2023-11-24T10:51:31+08:00",
     "dateModified": "2023-11-24T10:51:31+08:00",
-    "wordCount":  1797 ,
+    "wordCount":  1895 ,
     "author": {
         "@type": "Person",
         "name": ["tryao"]
@@ -347,13 +347,16 @@ return config
 <p>办公软件使用wps 2019，这个没啥说的，自带的那个office可以用apt卸载掉。另外xmind也支持Linux，当然你也可以使用wps里面自带的processOn工具。</p>
 <p>番茄钟软件，可以用<a href="https://github.com/RoderickQiu/wnr"><strong>wnr</strong></a>，同样支持Windows。</p>
 <p>梯子可以用<code>cfw</code>或者<code>clash verge</code>，星火商店里面可以直接下载…</p>
+<h3 id="ssh">SSH</h3>
+<p>wezterm的问题是不支持zmodem，也就是lrzsz的上传下载，可以用<code>trzsz</code>来代替。</p>
+<p>具体方法是在本地安装<a href="https://github.com/trzsz/trzsz-ssh/tree/main">tssh</a>，并打开<a href="https://github.com/trzsz/trzsz-ssh/blob/main/README.cn.md#%E6%94%AF%E6%8C%81-zmodem">zmodem支持</a>，这样就可以正常在服务器使用<code>rz</code>/<code>sz</code>命令了。</p>
 <h2 id="键盘映射">键盘映射</h2>
 <p>我是一个改键党：必须使用Emacs的一些快捷键， 改键的开源软件其实很多，我先后尝试了几个，其中keyd的设置最简单，但是不知道为啥我设置之后没有生效…</p>
 <p>最后能用的是<code>xremap</code>这个rust写的小软件，使用cargo安装即可。配置文件如下：</p>
 <pre><code class="language-yaml">keymap:
   - name: Emacs
     application:
-      not: [Emacs]
+      not: [Emacs, wezterm-gui]
     remap:
       C-a: { with_mark: home }
       C-e: { with_mark: end }
@@ -469,7 +472,11 @@ URxvt*termName: rxvt-unicode
     <nav id="TableOfContents">
   <ul>
     <li><a href="#发行版选择">发行版选择</a></li>
-    <li><a href="#常用软件">常用软件</a></li>
+    <li><a href="#常用软件">常用软件</a>
+      <ul>
+        <li><a href="#ssh">SSH</a></li>
+      </ul>
+    </li>
     <li><a href="#键盘映射">键盘映射</a></li>
   </ul>
 </nav>

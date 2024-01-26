@@ -134,6 +134,12 @@ IDE的话，我买了正版的jetbrain全家桶，所以直接用`jetbrain toolb
 
 梯子可以用`cfw`或者`clash verge`，星火商店里面可以直接下载…
 
+### SSH
+
+wezterm的问题是不支持zmodem，也就是lrzsz的上传下载，可以用`trzsz`来代替。
+
+具体方法是在本地安装[tssh](https://github.com/trzsz/trzsz-ssh/tree/main)，并打开[zmodem支持](https://github.com/trzsz/trzsz-ssh/blob/main/README.cn.md#%E6%94%AF%E6%8C%81-zmodem)，这样就可以正常在服务器使用`rz`/`sz`命令了。
+
 ## 键盘映射
 
 我是一个改键党：必须使用Emacs的一些快捷键， 改键的开源软件其实很多，我先后尝试了几个，其中keyd的设置最简单，但是不知道为啥我设置之后没有生效…
@@ -144,7 +150,7 @@ IDE的话，我买了正版的jetbrain全家桶，所以直接用`jetbrain toolb
 keymap:
   - name: Emacs
     application:
-      not: [Emacs]
+      not: [Emacs, wezterm-gui]
     remap:
       C-a: { with_mark: home }
       C-e: { with_mark: end }
