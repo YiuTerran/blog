@@ -95,7 +95,7 @@
     },
     "headline": "linux日常使用记录 | 应许之地","datePublished": "2023-11-24T10:51:31+08:00",
     "dateModified": "2023-11-24T10:51:31+08:00",
-    "wordCount":  1895 ,
+    "wordCount":  2077 ,
     "author": {
         "@type": "Person",
         "name": ["tryao"]
@@ -237,7 +237,7 @@
     </div>
     <div class="me-6 my-2">
         <i class="fas fa-clock me-1"></i>
-        <span>4分钟阅读时长</span>
+        <span>5分钟阅读时长</span>
     </div>
     
     
@@ -257,6 +257,9 @@
 <p>Deepin20.9的docker安装有问题，k3s也无法正常使用；Deepin 23就更离谱了，我的连安装界面都进不去。</p>
 <p>优麒麟版本的linux，系统快捷键不能改，很麻烦。</p>
 <p>Debian系还是推荐使用Linux mint Cinamon，或者直接用arch也行，常用软件也比较好装。</p>
+<h2 id="软件源">软件源</h2>
+<p>除了发行版自带的软件源之外，还有几个流行的安装方式，比如snap、linuxbrew和flathub.</p>
+<p>国产的还有星火商店，也可以安装一些常用软件。上面这些都是跨发行版的。</p>
 <h2 id="常用软件">常用软件</h2>
 <p>网易云官方的播放器不能用，建议改为<strong>YesPlayMusic音乐播放器</strong>这个开源的播放器。</p>
 <p>微信实际上有原生的版本，可以从deepin论坛下载，不过非deepin的debian系需要额外装一些依赖才能使用。也可以使用星火商店，不过依赖的deb包还是要手动安装（如果不是国产发行版）。<strong>注意</strong>，原生微信目前（v2.1.9）在LinuxMint下新消息没有提示，这个没办法，可以考虑改用wine版本微信。</p>
@@ -350,6 +353,33 @@ return config
 <h3 id="ssh">SSH</h3>
 <p>wezterm的问题是不支持zmodem，也就是lrzsz的上传下载，可以用<code>trzsz</code>来代替。</p>
 <p>具体方法是在本地安装<a href="https://github.com/trzsz/trzsz-ssh/tree/main">tssh</a>，并打开<a href="https://github.com/trzsz/trzsz-ssh/blob/main/README.cn.md#%E6%94%AF%E6%8C%81-zmodem">zmodem支持</a>，这样就可以正常在服务器使用<code>rz</code>/<code>sz</code>命令了。</p>
+<p>一个参考的<code>~/.ssh/config</code>配置如下：</p>
+<pre><code>Host *
+ServerAliveInterval 60
+#!! EnableZmodem Yes
+
+Host github.com
+User git
+Port 22
+Hostname github.com
+TCPKeepAlive yes
+ProxyCommand nc -v -x 127.0.0.1:7890 %h %p
+
+Host ssh.github.com
+Hostname ssh.github.com
+Port 443
+User git
+TCPKeepAlive yes
+
+Host prod
+HostName zzzz.bastionhost.aliyuncs.com
+Port 60022
+User zzzz
+#!! encPassword zzzzzzzz
+PubkeyAcceptedKeyTypes +ssh-rsa
+HostKeyAlgorithms +ssh-rsa
+</code></pre>
+<p>这里以<code>#!!</code>开头的配置都是供<code>tssh</code>使用的.</p>
 <h2 id="键盘映射">键盘映射</h2>
 <p>我是一个改键党：必须使用Emacs的一些快捷键， 改键的开源软件其实很多，我先后尝试了几个，其中keyd的设置最简单，但是不知道为啥我设置之后没有生效…</p>
 <p>最后能用的是<code>xremap</code>这个rust写的小软件，使用cargo安装即可。配置文件如下：</p>
@@ -472,6 +502,7 @@ URxvt*termName: rxvt-unicode
     <nav id="TableOfContents">
   <ul>
     <li><a href="#发行版选择">发行版选择</a></li>
+    <li><a href="#软件源">软件源</a></li>
     <li><a href="#常用软件">常用软件</a>
       <ul>
         <li><a href="#ssh">SSH</a></li>

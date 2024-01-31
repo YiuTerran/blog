@@ -29,6 +29,14 @@ Deepin20.9的docker安装有问题，k3s也无法正常使用；Deepin 23就更�
 
 Debian系还是推荐使用Linux mint Cinamon，或者直接用arch也行，常用软件也比较好装。
 
+## 软件源
+
+除了发行版自带的软件源之外，还有几个流行的安装方式，比如snap、linuxbrew和flathub.
+
+国产的还有星火商店，也可以安装一些常用软件。上面这些都是跨发行版的。
+
+
+
 ## 常用软件
 
 网易云官方的播放器不能用，建议改为**YesPlayMusic音乐播放器**这个开源的播放器。
@@ -139,6 +147,37 @@ IDE的话，我买了正版的jetbrain全家桶，所以直接用`jetbrain toolb
 wezterm的问题是不支持zmodem，也就是lrzsz的上传下载，可以用`trzsz`来代替。
 
 具体方法是在本地安装[tssh](https://github.com/trzsz/trzsz-ssh/tree/main)，并打开[zmodem支持](https://github.com/trzsz/trzsz-ssh/blob/main/README.cn.md#%E6%94%AF%E6%8C%81-zmodem)，这样就可以正常在服务器使用`rz`/`sz`命令了。
+
+一个参考的`~/.ssh/config`配置如下：
+
+```
+Host *
+ServerAliveInterval 60
+#!! EnableZmodem Yes
+
+Host github.com
+User git
+Port 22
+Hostname github.com
+TCPKeepAlive yes
+ProxyCommand nc -v -x 127.0.0.1:7890 %h %p
+
+Host ssh.github.com
+Hostname ssh.github.com
+Port 443
+User git
+TCPKeepAlive yes
+
+Host prod
+HostName zzzz.bastionhost.aliyuncs.com
+Port 60022
+User zzzz
+#!! encPassword zzzzzzzz
+PubkeyAcceptedKeyTypes +ssh-rsa
+HostKeyAlgorithms +ssh-rsa
+```
+
+这里以`#!!`开头的配置都是供`tssh`使用的.
 
 ## 键盘映射
 
