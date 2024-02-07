@@ -35,8 +35,6 @@ Debian系还是推荐使用Linux mint Cinamon，或者直接用arch也行，常�
 
 国产的还有星火商店，也可以安装一些常用软件。上面这些都是跨发行版的。
 
-
-
 ## 常用软件
 
 网易云官方的播放器不能用，建议改为**YesPlayMusic音乐播放器**这个开源的播放器。
@@ -179,6 +177,203 @@ HostKeyAlgorithms +ssh-rsa
 
 这里以`#!!`开头的配置都是供`tssh`使用的.
 
+### Rime的配置
+
+主要修改`~/.config/fcitx/rime/default.yaml`文件，注意删除掉`default.custom.yaml`，不然会被那边的覆盖掉：
+
+```yaml
+# 要比共享目录的同名文件的 config_version 大才可以生效
+config_version: '2024-02-07'
+
+
+# 方案列表
+schema_list:
+  # 可以直接删除或注释不需要的方案，对应的 *.schema.yaml 方案文件也可以直接删除
+  # 除了 t9，它依赖于 rime_ice，用九宫格别删 rime_ice.schema.yaml
+  - schema: rime_ice               # 雾凇拼音（全拼）
+
+
+# 菜单
+menu:
+  page_size: 9  # 候选词个数
+
+
+# 方案选单相关
+switcher:
+  caption: 「方案选单」
+  hotkeys:
+    - F4
+  save_options:  # 开关记忆（方案中的 switches），从方案选单（而非快捷键）切换时会记住的选项，需要记忆的开关不能设定 reset
+    - ascii_punct
+    - traditionalization
+    - emoji
+    - full_shape
+  fold_options: false            # 呼出时是否折叠，多方案时建议折叠 true ，一个方案建议展开 false
+  abbreviate_options: true      # 折叠时是否缩写选项
+  option_list_separator: ' / '  # 折叠时的选项分隔符
+
+
+# 中西文切换
+#
+# good_old_caps_lock:
+# true   切换大写
+# false  切换中英
+# macOS 偏好设置的优先级更高，如果勾选【使用大写锁定键切换“ABC”输入法】则始终会切换输入法。
+#
+# 切换中英：
+# 不同的选项表示：打字打到一半时按下了 CapsLock、Shift、Control 后：
+# commit_code  上屏原始的编码，然后切换到英文
+# commit_text  上屏拼出的词句，然后切换到英文
+# clear        清除未上屏内容，然后切换到英文
+# inline_ascii 切换到临时英文模式，按回车上屏后回到中文状态
+# noop         屏蔽快捷键，不切换中英，但不要屏蔽 CapsLock
+ascii_composer:
+  good_old_caps_lock: true  # true | false
+  switch_key:
+    Caps_Lock: clear      # commit_code | commit_text | clear
+    Shift_L: commit_code  # commit_code | commit_text | inline_ascii | clear | noop
+    Shift_R: noop         # commit_code | commit_text | inline_ascii | clear | noop
+    Control_L: noop       # commit_code | commit_text | inline_ascii | clear | noop
+    Control_R: noop       # commit_code | commit_text | inline_ascii | clear | noop
+
+
+###################################################################################
+
+
+# 下面的 punctuator recognizer key_binder 写了一些所有方案通用的配置项。
+# 写在 default.yaml 里，方便多个方案引用，就是不用每个方案都写一遍了。
+
+
+# 标点符号
+# 设置为一个映射，就自动上屏；设置为多个映射，如 '/' : [ '/', ÷ ] 则进行复选。
+#   full_shape: 全角没改，使用预设值
+#   half_shape: 标点符号全部直接上屏，和 macOS 自带输入法的区别是
+#              '|' 是半角的，
+#              '~' 是半角的，
+#              '`'（反引号）没有改成 '·'（间隔号）。
+punctuator:
+  full_shape:
+    ' ' : { commit: '　' }
+    ',' : { commit: ， }
+    '.' : { commit: 。 }
+    '<' : [ 《, 〈, «, ‹ ]
+    '>' : [ 》, 〉, », › ]
+    '/' : [ ／, ÷ ]
+    '?' : { commit: ？ }
+    ';' : { commit: ； }
+    ':' : { commit: ： }
+    '''' : { pair: [ '‘', '’' ] }
+    '"' : { pair: [ '“', '”' ] }
+    '\' : [ 、, ＼ ]
+    '|' : [ ·, ｜, '§', '¦' ]
+    '`' : ｀
+    '~' : ～
+    '!' : { commit: ！ }
+    '@' : [ ＠, ☯ ]
+    '#' : [ ＃, ⌘ ]
+    '%' : [ ％, '°', '℃' ]
+    '$' : [ ￥, '$', '€', '£', '¥', '¢', '¤' ]
+    '^' : { commit: …… }
+    '&' : ＆
+    '*' : [ ＊, ·, ・, ×, ※, ❂ ]
+    '(' : （
+    ')' : ）
+    '-' : －
+    '_' : ——
+    '+' : ＋
+    '=' : ＝
+    '[' : [ 「, 【, 〔, ［ ]
+    ']' : [ 」, 】, 〕, ］ ]
+    '{' : [ 『, 〖, ｛ ]
+    '}' : [ 』, 〗, ｝ ]
+  half_shape:
+    ',' : '，'
+    '.' : '。'
+    '<' : '《'
+    '>' : '》'
+    '/' : '/'
+    '?' : '？'
+    ';' : '；'
+    ':' : '：'
+    '''' : { pair: [ '‘', '’' ] }
+    '"' : { pair: [ '“', '”' ] }
+    '\' : '、'
+    '|' : '|'
+    '`' : '`'
+    '~' : '~'
+    '!' : '！'
+    '@' : '@'
+    '#' : '#'
+    '%' : '%'
+    '$' : '¥'
+    '^' : '……'
+    '&' : '&'
+    '*' : '*'
+    '(' : '（'
+    ')' : '）'
+    '-' : '-'
+    '_' : ——
+    '+' : '+'
+    '=' : '='
+    '[' : '【'
+    ']' : '】'
+    '{' : '「'
+    '}' : '」'
+
+
+# 处理符合特定规则的输入码，如网址、反查
+# 此处配置所有方案通用的；各方案中另设专有的，比如全拼的拼字用 u，双拼的拼字用 L
+recognizer:
+  patterns:
+    email: "^[A-Za-z][-_.0-9A-Za-z]*@.*$"   # 自带的，email 正则
+    # uppercase: "[A-Z][-_+.'0-9A-Za-z]*$"  # 自带的，大写字母开头后，可以输入[-_+.'0-9A-Za-z]这些字符（和雾凇有些冲突，关闭了）
+    url: "^(www[.]|https?:|ftp[.:]|mailto:|file:).*$|^[a-z]+[.].+$"  # 自带的，URL 正则
+    # 一些不直接上屏的配置示例：
+    # url_2: "^[A-Za-z]+[.].*"     # 句号不上屏，支持 google.com abc.txt 等网址或文件名，使用句号翻页时需要注释掉
+    # colon: "^[A-Za-z]+:.*"       # 冒号不上屏
+    # underscore: "^[A-Za-z]+_.*"  # 下划线不上屏
+
+
+# 快捷键
+key_binder:
+  # Lua 配置: 以词定字（上屏当前词句的第一个或最后一个字），和中括号翻页有冲突
+  select_first_character: "bracketleft"  # 左中括号 [
+  select_last_character: "bracketright"  # 右中括号 ]
+
+  bindings:
+    # 翻页 , .
+    - { when: paging, accept: comma, send: Page_Up }
+    - { when: has_menu, accept: period, send: Page_Down }
+
+    # optimized_mode_switch:
+    # - { when: always, accept: Control+Shift+space, select: .next }
+    # - { when: always, accept: Shift+space, toggle: ascii_mode }
+    # - { when: always, accept: Control+comma, toggle: full_shape }
+    # - { when: always, accept: Control+period, toggle: ascii_punct }
+    # - { when: always, accept: Control+slash, toggle: traditionalization }
+
+    # 将小键盘 0~9 . 映射到主键盘，数字金额大写的 Lua 如 R1234.5678 可使用小键盘输入
+    - {accept: KP_0, send: 0, when: composing}
+    - {accept: KP_1, send: 1, when: composing}
+    - {accept: KP_2, send: 2, when: composing}
+    - {accept: KP_3, send: 3, when: composing}
+    - {accept: KP_4, send: 4, when: composing}
+    - {accept: KP_5, send: 5, when: composing}
+    - {accept: KP_6, send: 6, when: composing}
+    - {accept: KP_7, send: 7, when: composing}
+    - {accept: KP_8, send: 8, when: composing}
+    - {accept: KP_9, send: 9, when: composing}
+    - {accept: KP_Decimal, send: period, when: composing}
+```
+
+大部分配置都可以删掉，只保留必要的快捷键和映射。个人习惯使用逗号和句号翻页，所以仅保留了这个。
+
+右键点击托盘的输入法图标，**重新启动**，让配置文件生效。
+
+我在使用输入法的时候，经常会遇到卡死的问题，具体表现就是输入框卡住了，键盘输入没有反应，此时只能等待，或者杀掉窗口。
+
+具体原因还未知晓，fcitx已经很久没有更新，推测可能有bug.
+
 ## 键盘映射
 
 我是一个改键党：必须使用Emacs的一些快捷键， 改键的开源软件其实很多，我先后尝试了几个，其中keyd的设置最简单，但是不知道为啥我设置之后没有生效…
@@ -198,7 +393,7 @@ keymap:
       M-v: { with_mark: C-v }
 ```
 
-我常用的只有这些，其他的都被我删掉了。
+我常用的只有这些，其他的都被我删掉了。不知道为什么，在wezterm中有时候还是无法使用ctrl+a，似乎有什么冲突。
 
 在root的cronjob里加入：
 
