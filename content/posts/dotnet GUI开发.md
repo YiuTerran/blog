@@ -283,3 +283,151 @@ Binding有个属性是`Mode`，可以指定数据流向，包括：
 
 WPF里面有**Source**参数，用以指定数据源，但是Avalonia并没有这个属性。
 
+## 实战
+
+直接看官方的[sample](https://github.com/AvaloniaUI/Avalonia.Samples)代码学习是最快的。
+
+### BasicMvvmSample
+
+这是个最基础的例子，主要展示了ReactiveUI和一般的Event驱动的区别。
+
+普通的VM是继承`INotifyPropertyChanged`，然后在属性改变时，手动出发UI变动：
+
+```csharp
+public class SimpleViewModel: INotifyPropertyChanged
+{
+    public event PropertyChangedEventHandler? PropertyChanged;
+    
+    private void Raise([CallerMemberName] string? property=null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+}
+```
+
+而ReactiveUI则是通过订阅属性变更的方式来执行回调：
+
+```csharp
+public class ReactiveViewModel: ReactiveObject
+{
+    private string _x;
+    public string X
+    {
+        get
+        {
+            if (string.isNullOrEmpty(_x))
+            {
+                return "default";
+            }
+            else
+            {
+                return $"Hello {_x}"
+            }
+        }
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _x, value);
+        }
+    }
+    public ReactiveViewModel()
+    {
+        this.WhenAnyValue(o=>o.Name)
+            .Subscribe(o=>this.Raise(nameof(X)))
+    }
+}
+```
+
+除了`ReactiveUI`之外，C#中还有不少其他的MVVM框架，比如微软官方的`CommunityToolkit.MVVM`等。
+
+### Commands Sample
+
+这个例子展示了`Command`的使用，这里举例了三种Command的场景，一种是直接绑定函数：
+
+```xml
+<!-- This button will ask HAL to open the doors -->
+<Button Command="{Binding OpenThePodBayDoorsDirectCommand}"
+        Content="Open the pod bay doors, HAL." />
+```
+
+对应的方法是：
+
+```csharp
+public ICommand OpenThePodBayDoorsDirectCommand { get; }
+OpenThePodBayDoorsDirectCommand = ReactiveCommand.Create(OpenThePodBayDoors);
+private void OpenThePodBayDoors()
+{    
+    ConversationLog.Clear();
+    AddToConvo( "I'm sorry, Dave, I'm afraid I can't do that.");
+}
+```
+
+第二种是将命令的参数从输入控件中读取并传入方法：
+
+```xml
+<TextBox Text="{Binding RobotName}" Watermark="Robot Name" />
+<Button Command="{Binding OpenThePodBayDoorsFellowRobotCommand}"
+        Content="{Binding RobotName, StringFormat='Open the Pod Bay for {0}'}"
+        CommandParameter="{Binding RobotName}" />
+```
+
+相关属性和方法：
+
+```csharp
+public ICommand OpenThePodBayDoorsFellowRobotCommand { get; }
+private void OpenThePodBayDoorsFellowRobot(string? robotName)
+{
+    ConversationLog.Clear();    
+    AddToConvo( $"Hello {robotName}, the Pod Bay is open :-)");
+}
+```
+
+初始化代码在构造函数中：
+```c#
+// Init OpenThePodBayDoorsFellowRobotCommand
+// The IObservable<bool> is needed to enable or disable the command depending on valid parameters
+// The Observable listens to RobotName and will enable the Command if the name is not empty.
+IObservable<bool> canExecuteFellowRobotCommand =
+    this.WhenAnyValue(vm => vm.RobotName, (name) => !string.IsNullOrEmpty(name));
+
+OpenThePodBayDoorsFellowRobotCommand = 
+    ReactiveCommand.Create<string?>(name => OpenThePodBayDoorsFellowRobot(name), canExecuteFellowRobotCommand);
+```
+
+`canExecuteFellowRobotCommand`是用来判断命名是否可用的谓词，换言之就是按钮是否可点击，这里是通过ReactiveUI生成的，对应的逻辑其实就是`RobotName`是否为空。
+
+最后一种是将Command关联到异步方法上，避免阻塞UI主线程：
+
+```c#
+<Button Command="{Binding OpenThePodBayDoorsAsyncCommand}"
+        Content="Start Pod Bay Opening Sequence" />
+```
+
+相关初始化代码：
+
+```c#
+OpenThePodBayDoorsAsyncCommand = ReactiveCommand.CreateFromTask(OpenThePodBayDoorsAsync);
+```
+
+而`openThePodBayDoorsAsync`则是一段异步代码：
+
+```csharp
+private async Task OpenThePodBayDoorsAsync()
+{
+    ConversationLog.Clear();
+    AddToConvo( "Preparing to open the Pod Bay...");
+    // wait a second
+    await Task.Delay(1000);
+
+    AddToConvo( "Depressurizing Airlock...");
+    // wait 2 seconds
+    await Task.Delay(2000);
+
+    AddToConvo( "Retracting blast doors...");
+    // wait 2 more seconds
+    await Task.Delay(2000);
+
+    AddToConvo("Pod Bay is open to space!");
+}    
+```
+
+运行的时候可以看到，在这段阻塞代码执行的时候，界面的其他元素仍然可以操作，但是对应的按钮则变为灰色不可用状态。
