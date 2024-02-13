@@ -331,8 +331,9 @@ public class ReactiveViewModel: ReactiveObject
     }
     public ReactiveViewModel()
     {
+        //这里的RaisePropertyChanged是ReactiveObject自带的
         this.WhenAnyValue(o=>o.Name)
-            .Subscribe(o=>this.Raise(nameof(X)))
+            .Subscribe(o=>this.RaisePropertyChanged(nameof(X)))
     }
 }
 ```
@@ -431,3 +432,53 @@ private async Task OpenThePodBayDoorsAsync()
 ```
 
 运行的时候可以看到，在这段阻塞代码执行的时候，界面的其他元素仍然可以操作，但是对应的按钮则变为灰色不可用状态。
+
+### ValueConversionSample
+
+顾名思义，这个是展示UI到VM/M层数据转换的。
+
+`Converter`这个文件夹里面有三种不同的Converter，分别是：
+
+```c#
+//基于函数的转换器
+public static FuncValueConverter<string?, Brush?> StringToBrushConverter{get;}
+//单值转换器接口
+public class MathAddConverter: IvalueConverter
+{
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture);
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture);
+}
+//多值转换器接口
+public class MathMultiConverter: IMultiValueConverter
+{
+    public object? Convert(IList<object>? values, Type targetType, object? parameter, CultureInfo culture);
+}
+```
+
+在xaml里面通过resource引用这几个转换器，其中`MathAddConverter`和`MathMultiConverter`是直接通过`x:Key`来引用的；而`FuncValueConverter`由于是static函数，所以直接通过`x:Static`即可引用。
+
+Converter的作用机理也很简单，将控件绑定到某个属性，指定converter即可，也可以通过`ConverterParameter`传递相关的参数。当属性变更时，会按converter来修改控件的值；如果是IValueConverter，也需要调用反向的变更：当UI变更时，会调用`ConverterBack`来计算对应属性的值。【注意，这个转换不支持抛出异常，而是使用返回`BindingOperations`的值来替代】。
+
+对于计算字段，应当是readonly的，此时通过属性计算出UI应当显示的值即可。可以通过`MultiBinding Converter="{StaticResource}" Mode="OneWay"`，来进行多值绑定（将需要计算的控件值全部传进去）。
+
+### Validation Sample
+
+顾名思义，这个例子讲的是如何进行输入的智能判断，这个我们在前端和后端都有类似的逻辑。
+
+首先是最常用的，类似jsr303的注解：
+
+```csharp
+using System.ComponentModel.DataAnnotations;
+
+[Required]
+[EmailAddress]
+public string? EMail
+{
+    get {return _Email;}
+    set {this.RaiseAndSetIfChanged(ref _Email, value);}
+}
+```
+
+其次是你可以直接在set里面写校验逻辑，不正确就抛出对应的异常，
+
+最后就是要自己实现`INotifyDataErrorInfo`这个接口，维护错误信息，并触发`ErrorsChanged`这个event.
