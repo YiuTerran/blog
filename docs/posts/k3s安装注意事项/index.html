@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang='zh' dir='ltr' ><meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+<title>K3s安装注意事项 | 应许之地</title>
+
+<meta name="generator" content="Hugo Eureka 0.9.0" />
+<link rel="stylesheet" href="https://yiuterran.github.io/blog/css/eureka.min.css">
+<script defer src="https://yiuterran.github.io/blog/js/eureka.min.js"></script>
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload"
+  href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Noto+Serif+SC:wght@400;600;700&display=swap"
+  as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/styles/solarized-light.min.css"
+   media="print"
+  onload="this.media='all';this.onload=null" crossorigin>
+<script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/highlight.min.js"
+   crossorigin></script>
+
+  <script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.0/build/languages/dart.min.js"
+     crossorigin></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/js/all.min.js"
+   integrity="sha256-uNYoXefWRqv&#43;PsIF/OflNmwtKM4lStn9yrz2gVl6ymo="  crossorigin></script>
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+   integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3&#43;Aro6EYUG4&#43;cU&#43;KJWu/X"  media="print"
+  onload="this.media='all';this.onload=null" crossorigin>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js" 
+  integrity="sha384-g7c&#43;Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI&#43;sEnkvrMWph2EDg4"  crossorigin></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
+   integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC&#43;Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa"  crossorigin></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: "$$", right: "$$", display: true },
+        { left: "$", right: "$", display: false },
+        { left: "\\(", right: "\\)", display: false },
+        { left: "\\[", right: "\\]", display: true }
+      ],
+    });
+  });
+</script>
+
+
+<script defer src="https://cdn.jsdelivr.net/npm/mermaid@8.9.2/dist/mermaid.min.js" 
+  integrity="sha256-Zmpaaj&#43;GXFsPF5WdPArSrnW3b30dovldeKsW00xBVwE="  crossorigin></script>
+<link rel="preconnect" href="https://www.google-analytics.com" crossorigin>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-C0R8DENDJ0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-C0R8DENDJ0');
+</script>
+
+
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
+
+<meta name="description"
+  content="k3s自带了containerd作为CRI实现，不过我们一般习惯上还是使用docker作为运行时。但是两者结合使用有一些坑，这里做一下记录。 不用con">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+      "@type": "ListItem",
+      "position": 1 ,
+      "name":"文章列表",
+      "item":"https://yiuterran.github.io/blog/posts/"},{
+      "@type": "ListItem",
+      "position": 2 ,
+      "name":"K3s安装注意事项",
+      "item":"https://yiuterran.github.io/blog/posts/k3s%E5%AE%89%E8%A3%85%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/"}]
+}
+</script>
+
+
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://yiuterran.github.io/blog/posts/k3s%E5%AE%89%E8%A3%85%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/"
+    },
+    "headline": "K3s安装注意事项 | 应许之地","datePublished": "2024-02-19T09:08:10+08:00",
+    "dateModified": "2024-02-19T09:08:10+08:00",
+    "wordCount":  4084 ,
+    "publisher": {
+        "@type": "Person",
+        "name": "C. Wang",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://yiuterran.github.io/blog/images/icon.png"
+        }
+        },
+    "description": "k3s自带了containerd作为CRI实现，不过我们一般习惯上还是使用docker作为运行时。但是两者结合使用有一些坑，这里做一下记录。 不用con"
+}
+</script><meta property="og:title" content="K3s安装注意事项 | 应许之地" />
+<meta property="og:type" content="article" />
+
+
+<meta property="og:image" content="https://yiuterran.github.io/blog/images/icon.png">
+
+
+<meta property="og:url" content="https://yiuterran.github.io/blog/posts/k3s%E5%AE%89%E8%A3%85%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/" />
+
+
+
+
+<meta property="og:description" content="k3s自带了containerd作为CRI实现，不过我们一般习惯上还是使用docker作为运行时。但是两者结合使用有一些坑，这里做一下记录。 不用con" />
+
+
+
+
+<meta property="og:locale" content="zh" />
+
+
+
+
+<meta property="og:site_name" content="应许之地" />
+
+
+
+
+
+
+<meta property="article:published_time" content="2024-02-19T09:08:10&#43;08:00" />
+
+
+<meta property="article:modified_time" content="2024-02-19T09:08:10&#43;08:00" />
+
+
+
+<meta property="article:section" content="posts" />
+
+
+
+
+<body class="flex flex-col min-h-screen">
+  <header class="fixed flex items-center w-full min-h-16 ps-scrollbar z-50 bg-secondary-bg shadow-sm">
+    <div class="w-full max-w-screen-xl mx-auto"><script>
+    let storageColorScheme = localStorage.getItem("lightDarkMode")
+    if (((storageColorScheme == 'Auto' || storageColorScheme == null) && window.matchMedia("(prefers-color-scheme: dark)").matches) || storageColorScheme == "Dark") {
+        document.getElementsByTagName('html')[0].classList.add('dark')
+    }
+</script>
+<nav class="flex items-center justify-between flex-wrap px-4 py-4 md:py-0">
+    <a href="https://yiuterran.github.io/blog/" class="me-6 text-primary-text text-xl font-bold">应许之地</a>
+    <button id="navbar-btn" class="md:hidden flex items-center px-3 py-2" aria-label="Open Navbar">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div id="target"
+        class="hidden block md:flex md:grow md:justify-between md:items-center w-full md:w-auto text-primary-text z-20">
+        <div class="md:flex md:h-16 text-sm md:grow pb-4 md:pb-0 border-b md:border-b-0">
+            <a href="https://yiuterran.github.io/blog/authors/tryao/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  border-transparent  me-4">作者</a>
+            <a href="https://yiuterran.github.io/blog/posts/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  selected-menu-item  me-4">文章</a>
+        </div>
+
+        <div class="flex">
+            <div class="relative pt-4 md:pt-0">
+                <div class="cursor-pointer hover:text-eureka" id="lightDarkMode">
+                    <i class="fas fa-adjust"></i>
+                </div>
+                <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-30" id="is-open">
+                </div>
+                <div class="absolute flex flex-col start-0 md:start-auto end-auto md:end-0 hidden bg-secondary-bg w-48 rounded py-2 border border-tertiary-bg cursor-pointer z-40"
+                    id='lightDarkOptions'>
+                    <span class="px-4 py-1 hover:text-eureka" name="Light">浅色</span>
+                    <span class="px-4 py-1 hover:text-eureka" name="Dark">深色</span>
+                    <span class="px-4 py-1 hover:text-eureka" name="Auto">自动</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-0" id="is-open-mobile">
+    </div>
+
+</nav>
+<script>
+    
+    let element = document.getElementById('lightDarkMode')
+    if (storageColorScheme == null || storageColorScheme == 'Auto') {
+        document.addEventListener('DOMContentLoaded', () => {
+            window.matchMedia("(prefers-color-scheme: dark)").addEventListener('change', switchDarkMode)
+        })
+    } else if (storageColorScheme == "Light") {
+        element.firstElementChild.classList.remove('fa-adjust')
+        element.firstElementChild.setAttribute("data-icon", 'sun')
+        element.firstElementChild.classList.add('fa-sun')
+    } else if (storageColorScheme == "Dark") {
+        element.firstElementChild.classList.remove('fa-adjust')
+        element.firstElementChild.setAttribute("data-icon", 'moon')
+        element.firstElementChild.classList.add('fa-moon')
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        getcolorscheme();
+        switchBurger();
+    });
+</script>
+</div>
+  </header>
+  <main class="grow pt-16">
+    <div class="ps-scrollbar">
+      <div class="w-full max-w-screen-xl lg:px-4 xl:px-8 mx-auto">
+
+
+<div class="grid grid-cols-2 lg:grid-cols-8 gap-4 lg:pt-12">
+    <div
+        class="col-span-2  lg:col-span-6 bg-secondary-bg rounded px-6 py-8">
+        <h1 class="font-bold text-3xl text-primary-text">K3s安装注意事项</h1>
+        <div class="flex flex-wrap flex-row items-center mt-2 text-tertiary-text">
+    <div class="me-6 my-2">
+        <i class="fas fa-calendar me-1"></i>
+        <span>2024-02-19</span>
+    </div>
+    <div class="me-6 my-2">
+        <i class="fas fa-clock me-1"></i>
+        <span>9分钟阅读时长</span>
+    </div>
+    
+    
+
+    
+</div>
+        
+        
+        
+
+        <div class="content">
+            <p>k3s自带了containerd作为CRI实现，不过我们一般习惯上还是使用docker作为运行时。但是两者结合使用有一些坑，这里做一下记录。</p>
+<blockquote>
+<p>不用containerd的主要原因是它的命令太难记，ctr/ctictl做的什么jb玩意儿。还有一个原因是，如果只想用容器不想用k8s，docker的功能是最完善的。</p>
+<p>如果你选择使用containerd，那么可以考虑安装nerdctl，它的命令格式与docker基本一致，具体使用方法可以参考<a href="http://kingsd.top/2021/09/30/nerdctl/">这里</a>。</p>
+</blockquote>
+<h2 id="安装docker">安装docker</h2>
+<p>需要注意的是，<strong>k3s并不是与docker的所有版本都兼容</strong>！一般来说，最好不要使用最新的版本，大版本号降低一级更好。比如这篇博客发布的时候，最新的docker是25.0.3，但是k3s只能兼容到24.0.9，因此安装docker的时候，就不能安装最新的版本，否则k3s无法正常启动！</p>
+<p>安装脚本参考：</p>
+<details><summary>展开查看详情</summary>
+<h3 id="指定docker的版本安装适配常见发行版">指定docker的版本安装，适配常见发行版</h3>
+<pre><code class="language-bash">#!/bin/sh
+set -e
+SCRIPT_COMMIT_SHA=&quot;a8a6b338bdfedd7ddefb96fe3e7fe7d4036d945a&quot;
+
+CHANNEL=&quot;stable&quot;
+DOWNLOAD_URL=&quot;https://download.docker.com&quot;
+REPO_FILE=&quot;docker-ce.repo&quot;
+VERSION=&quot;24.0.9&quot;
+DIND_TEST_WAIT=${DIND_TEST_WAIT:-3s} # Wait time until docker start at dind test env
+
+# Issue https://github.com/rancher/rancher/issues/29246
+adjust_repo_releasever() {
+	DOWNLOAD_URL=&quot;https://download.docker.com&quot;
+	case $1 in
+	7*)
+		releasever=7
+		;;
+	8*)
+		releasever=8
+		;;
+	*)
+		# fedora, or unsupported
+		return
+		;;
+	esac
+
+	for channel in &quot;stable&quot; &quot;test&quot; &quot;nightly&quot;; do
+		$sh_c &quot;$config_manager --setopt=docker-ce-${channel}.baseurl=${DOWNLOAD_URL}/linux/centos/${releasever}/\\\$basearch/${channel} --save&quot;
+		$sh_c &quot;$config_manager --setopt=docker-ce-${channel}-debuginfo.baseurl=${DOWNLOAD_URL}/linux/centos/${releasever}/debug-\\\$basearch/${channel} --save&quot;
+		$sh_c &quot;$config_manager --setopt=docker-ce-${channel}-source.baseurl=${DOWNLOAD_URL}/linux/centos/${releasever}/source/${channel} --save&quot;
+	done
+}
+
+mirror=''
+DRY_RUN=${DRY_RUN:-}
+while [ $# -gt 0 ]; do
+	case &quot;$1&quot; in
+	--mirror)
+		mirror=&quot;$2&quot;
+		shift
+		;;
+	--dry-run)
+		DRY_RUN=1
+		;;
+	--*)
+		echo &quot;Illegal option $1&quot;
+		;;
+	esac
+	shift $(($# &gt; 0 ? 1 : 0))
+done
+
+case &quot;$mirror&quot; in
+Aliyun)
+	DOWNLOAD_URL=&quot;https://mirrors.aliyun.com/docker-ce&quot;
+	;;
+AzureChinaCloud)
+	DOWNLOAD_URL=&quot;https://mirror.azure.cn/docker-ce&quot;
+	;;
+esac
+
+start_docker() {
+	if [ ! -z &quot;$DIND_TEST&quot; ]; then
+		# Starting dockerd manually due to dind env is not using systemd
+		dockerd &amp;
+		sleep &quot;$DIND_TEST_WAIT&quot;
+	elif [ -d '/run/systemd/system' ]; then
+		$sh_c 'systemctl start docker'
+	else
+		$sh_c 'service docker start'
+	fi
+}
+
+command_exists() {
+	command -v &quot;$@&quot; &gt;/dev/null 2&gt;&amp;1
+}
+
+# version_gte checks if the version specified in $VERSION is at least
+# the given CalVer (YY.MM) version. returns 0 (success) if $VERSION is either
+# unset (=latest) or newer or equal than the specified version. Returns 1 (fail)
+# otherwise.
+#
+# examples:
+#
+# VERSION=20.10
+# version_gte 20.10 // 0 (success)
+# version_gte 19.03 // 0 (success)
+# version_gte 21.10 // 1 (fail)
+version_gte() {
+	if [ -z &quot;$VERSION&quot; ]; then
+		return 0
+	fi
+	eval calver_compare &quot;$VERSION&quot; &quot;$1&quot;
+}
+
+# calver_compare compares two CalVer (YY.MM) version strings. returns 0 (success)
+# if version A is newer or equal than version B, or 1 (fail) otherwise. Patch
+# releases and pre-release (-alpha/-beta) are not taken into account
+#
+# examples:
+#
+# calver_compare 20.10 19.03 // 0 (success)
+# calver_compare 20.10 20.10 // 0 (success)
+# calver_compare 19.03 20.10 // 1 (fail)
+calver_compare() (
+	set +x
+
+	yy_a=&quot;$(echo &quot;$1&quot; | cut -d'.' -f1)&quot;
+	yy_b=&quot;$(echo &quot;$2&quot; | cut -d'.' -f1)&quot;
+	if [ &quot;$yy_a&quot; -lt &quot;$yy_b&quot; ]; then
+		return 1
+	fi
+	if [ &quot;$yy_a&quot; -gt &quot;$yy_b&quot; ]; then
+		return 0
+	fi
+	mm_a=&quot;$(echo &quot;$1&quot; | cut -d'.' -f2)&quot;
+	mm_b=&quot;$(echo &quot;$2&quot; | cut -d'.' -f2)&quot;
+	if [ &quot;${mm_a#0}&quot; -lt &quot;${mm_b#0}&quot; ]; then
+		return 1
+	fi
+	
+	return 0
+)
+
+is_dry_run() {
+	if [ -z &quot;$DRY_RUN&quot; ]; then
+		return 1
+	else
+		return 0
+	fi
+}
+
+is_wsl() {
+	case &quot;$(uname -r)&quot; in
+	*microsoft*) true ;; # WSL 2
+	*Microsoft*) true ;; # WSL 1
+	*) false ;;
+	esac
+}
+
+is_darwin() {
+	case &quot;$(uname -s)&quot; in
+	*darwin*) true ;;
+	*Darwin*) true ;;
+	*) false ;;
+	esac
+}
+
+deprecation_notice() {
+	distro=$1
+	distro_version=$2
+	echo
+	printf &quot;\033[91;1mDEPRECATION WARNING\033[0m\n&quot;
+	printf &quot;    This Linux distribution (\033[1m%s %s\033[0m) reached end-of-life and is no longer supported by this script.\n&quot; &quot;$distro&quot; &quot;$distro_version&quot;
+	echo &quot;    No updates or security fixes will be released for this distribution, and users are recommended&quot;
+	echo &quot;    to upgrade to a currently maintained version of $distro.&quot;
+	echo
+	printf &quot;Press \033[1mCtrl+C\033[0m now to abort this script, or wait for the installation to continue.&quot;
+	echo
+	sleep 10
+}
+
+get_distribution() {
+	lsb_dist=&quot;&quot;
+	# Every system that we officially support has /etc/os-release
+	if [ -r /etc/os-release ]; then
+		lsb_dist=&quot;$(. /etc/os-release &amp;&amp; echo &quot;$ID&quot;)&quot;
+	fi
+	# Returning an empty string here should be alright since the
+	# case statements don't act unless you provide an actual value
+	echo &quot;$lsb_dist&quot;
+}
+
+echo_docker_as_nonroot() {
+	if is_dry_run; then
+		return
+	fi
+	if command_exists docker &amp;&amp; [ -e /var/run/docker.sock ]; then
+		(
+			set -x
+			$sh_c 'docker version'
+		) || true
+	fi
+
+	# intentionally mixed spaces and tabs here -- tabs are stripped by &quot;&lt;&lt;-EOF&quot;, spaces are kept in the output
+	echo
+	echo &quot;================================================================================&quot;
+	echo
+	if version_gte &quot;20.10&quot;; then
+		echo &quot;To run Docker as a non-privileged user, consider setting up the&quot;
+		echo &quot;Docker daemon in rootless mode for your user:&quot;
+		echo
+		echo &quot;    dockerd-rootless-setuptool.sh install&quot;
+		echo
+		echo &quot;Visit https://docs.docker.com/go/rootless/ to learn about rootless mode.&quot;
+		echo
+	fi
+	echo
+	echo &quot;To run the Docker daemon as a fully privileged service, but granting non-root&quot;
+	echo &quot;users access, refer to https://docs.docker.com/go/daemon-access/&quot;
+	echo
+	echo &quot;WARNING: Access to the remote API on a privileged Docker daemon is equivalent&quot;
+	echo &quot;         to root access on the host. Refer to the 'Docker daemon attack surface'&quot;
+	echo &quot;         documentation for details: https://docs.docker.com/go/attack-surface/&quot;
+	echo
+	echo &quot;================================================================================&quot;
+	echo
+}
+
+# Check if this is a forked Linux distro
+check_forked() {
+
+	# Check for lsb_release command existence, it usually exists in forked distros
+	if command_exists lsb_release; then
+		# Check if the `-u` option is supported
+		set +e
+		lsb_release -a -u &gt;/dev/null 2&gt;&amp;1
+		lsb_release_exit_code=$?
+		set -e
+	
+		# Check if the command has exited successfully, it means we're in a forked distro
+		if [ &quot;$lsb_release_exit_code&quot; = &quot;0&quot; ]; then
+			# Print info about current distro
+			cat &lt;&lt;-EOF
+				You're using '$lsb_dist' version '$dist_version'.
+			EOF
+	
+			# Get the upstream release info
+			lsb_dist=$(lsb_release -a -u 2&gt;&amp;1 | tr '[:upper:]' '[:lower:]' | grep -E 'id' | cut -d ':' -f 2 | tr -d '[:space:]')
+			dist_version=$(lsb_release -a -u 2&gt;&amp;1 | tr '[:upper:]' '[:lower:]' | grep -E 'codename' | cut -d ':' -f 2 | tr -d '[:space:]')
+	
+			# Print info about upstream distro
+			cat &lt;&lt;-EOF
+				Upstream release is '$lsb_dist' version '$dist_version'.
+			EOF
+		else
+			if [ -r /etc/debian_version ] &amp;&amp; [ &quot;$lsb_dist&quot; != &quot;ubuntu&quot; ] &amp;&amp; [ &quot;$lsb_dist&quot; != &quot;raspbian&quot; ]; then
+				if [ &quot;$lsb_dist&quot; = &quot;osmc&quot; ]; then
+					# OSMC runs Raspbian
+					lsb_dist=raspbian
+				else
+					# We're Debian and don't even know it!
+					lsb_dist=debian
+				fi
+				dist_version=&quot;$(sed 's/\/.*//' /etc/debian_version | sed 's/\..*//')&quot;
+				case &quot;$dist_version&quot; in
+				12)
+					dist_version=&quot;bookworm&quot;
+					;;
+				11)
+					dist_version=&quot;bullseye&quot;
+					;;
+				10)
+					dist_version=&quot;buster&quot;
+					;;
+				9)
+					dist_version=&quot;stretch&quot;
+					;;
+				8)
+					dist_version=&quot;jessie&quot;
+					;;
+				esac
+			fi
+		fi
+	fi
+}
+
+do_install() {
+	echo &quot;# Executing docker install script, commit: $SCRIPT_COMMIT_SHA&quot;
+
+	if command_exists docker; then
+		cat &gt;&amp;2 &lt;&lt;-'EOF'
+			Warning: the &quot;docker&quot; command appears to already exist on this system.
+	
+			If you already have Docker installed, this script can cause trouble, which is
+			why we're displaying this warning and provide the opportunity to cancel the
+			installation.
+	
+			If you installed the current Docker package using this script and are using it
+			again to update Docker, you can safely ignore this message.
+	
+			You may press Ctrl+C now to abort this script.
+		EOF
+		(
+			set -x
+			sleep 20
+		)
+	fi
+	
+	user=&quot;$(id -un 2&gt;/dev/null || true)&quot;
+	
+	sh_c='sh -c'
+	if [ &quot;$user&quot; != 'root' ]; then
+		if command_exists sudo; then
+			sh_c='sudo -E sh -c'
+		elif command_exists su; then
+			sh_c='su -c'
+		else
+			cat &gt;&amp;2 &lt;&lt;-'EOF'
+				Error: this installer needs the ability to run commands as root.
+				We are unable to find either &quot;sudo&quot; or &quot;su&quot; available to make this happen.
+			EOF
+			exit 1
+		fi
+	fi
+	
+	if is_dry_run; then
+		sh_c=&quot;echo&quot;
+	fi
+	
+	# perform some very rudimentary platform detection
+	lsb_dist=$(get_distribution)
+	lsb_dist=&quot;$(echo &quot;$lsb_dist&quot; | tr '[:upper:]' '[:lower:]')&quot;
+	
+	if is_wsl; then
+		echo
+		echo &quot;WSL DETECTED: We recommend using Docker Desktop for Windows.&quot;
+		echo &quot;Please get Docker Desktop from https://www.docker.com/products/docker-desktop&quot;
+		echo
+		cat &gt;&amp;2 &lt;&lt;-'EOF'
+	
+			You may press Ctrl+C now to abort this script.
+		EOF
+		(
+			set -x
+			sleep 20
+		)
+	fi
+	
+	case &quot;$lsb_dist&quot; in
+	
+	ubuntu)
+		if command_exists lsb_release; then
+			dist_version=&quot;$(lsb_release --codename | cut -f2)&quot;
+		fi
+		if [ -z &quot;$dist_version&quot; ] &amp;&amp; [ -r /etc/lsb-release ]; then
+			dist_version=&quot;$(. /etc/lsb-release &amp;&amp; echo &quot;$DISTRIB_CODENAME&quot;)&quot;
+		fi
+		;;
+	
+	debian | raspbian)
+		dist_version=&quot;$(sed 's/\/.*//' /etc/debian_version | sed 's/\..*//')&quot;
+		case &quot;$dist_version&quot; in
+		12)
+			dist_version=&quot;bookworm&quot;
+			;;
+		11)
+			dist_version=&quot;bullseye&quot;
+			;;
+		10)
+			dist_version=&quot;buster&quot;
+			;;
+		9)
+			dist_version=&quot;stretch&quot;
+			;;
+		8)
+			dist_version=&quot;jessie&quot;
+			;;
+		esac
+		;;
+	
+	centos | rhel | sles | rocky)
+		if [ -z &quot;$dist_version&quot; ] &amp;&amp; [ -r /etc/os-release ]; then
+			dist_version=&quot;$(. /etc/os-release &amp;&amp; echo &quot;$VERSION_ID&quot;)&quot;
+		fi
+	
+		;;
+	
+	oracleserver | ol)
+		lsb_dist=&quot;ol&quot;
+		# need to switch lsb_dist to match yum repo URL
+		dist_version=&quot;$(rpm -q --whatprovides redhat-release --queryformat &quot;%{VERSION}\n&quot; | sed 's/\/.*//' | sed 's/\..*//' | sed 's/Server*//')&quot;
+		;;
+	
+	*)
+		if command_exists lsb_release; then
+			dist_version=&quot;$(lsb_release --release | cut -f2)&quot;
+		fi
+		if [ -z &quot;$dist_version&quot; ] &amp;&amp; [ -r /etc/os-release ]; then
+			dist_version=&quot;$(. /etc/os-release &amp;&amp; echo &quot;$VERSION_ID&quot;)&quot;
+		fi
+		;;
+	
+	esac
+	
+	# Check if this is a forked Linux distro
+	check_forked
+	
+	# Print deprecation warnings for distro versions that recently reached EOL,
+	# but may still be commonly used (especially LTS versions).
+	case &quot;$lsb_dist.$dist_version&quot; in
+	debian.stretch | debian.jessie)
+		deprecation_notice &quot;$lsb_dist&quot; &quot;$dist_version&quot;
+		;;
+	raspbian.stretch | raspbian.jessie)
+		deprecation_notice &quot;$lsb_dist&quot; &quot;$dist_version&quot;
+		;;
+	ubuntu.xenial | ubuntu.trusty)
+		deprecation_notice &quot;$lsb_dist&quot; &quot;$dist_version&quot;
+		;;
+	fedora.*)
+		if [ &quot;$dist_version&quot; -lt 36 ]; then
+			deprecation_notice &quot;$lsb_dist&quot; &quot;$dist_version&quot;
+		fi
+		;;
+	esac
+	
+	# Run setup for each distro accordingly
+	case &quot;$lsb_dist&quot; in
+	ubuntu | debian | raspbian)
+		pre_reqs=&quot;apt-transport-https ca-certificates curl&quot;
+		if ! command -v gpg &gt;/dev/null; then
+			pre_reqs=&quot;$pre_reqs gnupg&quot;
+		fi
+		apt_repo=&quot;deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] $DOWNLOAD_URL/linux/$lsb_dist $dist_version $CHANNEL&quot;
+		(
+			if ! is_dry_run; then
+				set -x
+			fi
+			$sh_c 'apt-get update -qq &gt;/dev/null'
+			$sh_c &quot;DEBIAN_FRONTEND=noninteractive apt-get install -y -qq $pre_reqs &gt;/dev/null&quot;
+			$sh_c 'mkdir -p /etc/apt/keyrings &amp;&amp; chmod -R 0755 /etc/apt/keyrings'
+			$sh_c &quot;curl -fsSL \&quot;$DOWNLOAD_URL/linux/$lsb_dist/gpg\&quot; | gpg --dearmor --yes -o /etc/apt/keyrings/docker.gpg&quot;
+			$sh_c &quot;chmod a+r /etc/apt/keyrings/docker.gpg&quot;
+			$sh_c &quot;echo \&quot;$apt_repo\&quot; &gt; /etc/apt/sources.list.d/docker.list&quot;
+			$sh_c 'apt-get update -qq &gt;/dev/null'
+		)
+		pkg_version=&quot;&quot;
+		if [ -n &quot;$VERSION&quot; ]; then
+			if is_dry_run; then
+				echo &quot;# WARNING: VERSION pinning is not supported in DRY_RUN&quot;
+			else
+				# Will work for incomplete versions IE (17.12), but may not actually grab the &quot;latest&quot; if in the test channel
+				pkg_pattern=&quot;$(echo &quot;$VERSION&quot; | sed &quot;s/-ce-/~ce~.*/g&quot; | sed &quot;s/-/.*/g&quot;)&quot;
+				search_command=&quot;apt-cache madison 'docker-ce' | grep '$pkg_pattern' | head -1 | awk '{\$1=\$1};1' | cut -d' ' -f 3&quot;
+				pkg_version=&quot;$($sh_c &quot;$search_command&quot;)&quot;
+				echo &quot;INFO: Searching repository for VERSION '$VERSION'&quot;
+				echo &quot;INFO: $search_command&quot;
+				if [ -z &quot;$pkg_version&quot; ]; then
+					echo
+					echo &quot;ERROR: '$VERSION' not found amongst apt-cache madison results&quot;
+					echo
+					exit 1
+				fi
+				if version_gte &quot;18.09&quot;; then
+					search_command=&quot;apt-cache madison 'docker-ce-cli' | grep '$pkg_pattern' | head -1 | awk '{\$1=\$1};1' | cut -d' ' -f 3&quot;
+					echo &quot;INFO: $search_command&quot;
+					cli_pkg_version=&quot;=$($sh_c &quot;$search_command&quot;)&quot;
+				fi
+				pkg_version=&quot;=$pkg_version&quot;
+			fi
+		fi
+		(
+			pkgs=&quot;docker-ce${pkg_version%=}&quot;
+			if version_gte &quot;18.09&quot;; then
+				# older versions didn't ship the cli and containerd as separate packages
+				pkgs=&quot;$pkgs docker-ce-cli${cli_pkg_version%=} containerd.io&quot;
+			fi
+			if version_gte &quot;20.10&quot;; then
+				pkgs=&quot;$pkgs docker-compose-plugin docker-ce-rootless-extras$pkg_version&quot;
+			fi
+			if version_gte &quot;23.0&quot;; then
+				pkgs=&quot;$pkgs docker-buildx-plugin&quot;
+			fi
+			if ! is_dry_run; then
+				set -x
+			fi
+			$sh_c &quot;DEBIAN_FRONTEND=noninteractive apt-get install -y -qq $pkgs &gt;/dev/null&quot;
+			start_docker
+		)
+		echo_docker_as_nonroot
+		exit 0
+		;;
+	centos | fedora | rhel | ol | rocky)
+		# set vault.centos.or repo as CentOS8 is now EOL
+		if [ &quot;$lsb_dist&quot; = &quot;centos&quot; ] &amp;&amp; [ &quot;$dist_version&quot; -ge &quot;8&quot; ]; then
+			$sh_c &quot;find /etc/yum.repos.d -type f -exec sed -i 's/mirrorlist=http:\/\/mirrorlist.centos.org/\#mirrorlist=http:\/\/mirrorlist.centos.org/g' {} \;&quot;
+			$sh_c &quot;find /etc/yum.repos.d -type f -exec sed -i 's/\#baseurl=http:\/\/mirror.centos.org/baseurl=http:\/\/vault.centos.org/g' {} \;&quot;
+			$sh_c &quot;dnf swap centos-linux-repos centos-stream-repos -y&quot;
+		fi
+		if [ &quot;$lsb_dist&quot; = &quot;fedora&quot; ]; then
+			pkg_manager=&quot;dnf&quot;
+			config_manager=&quot;dnf config-manager&quot;
+			enable_channel_flag=&quot;--set-enabled&quot;
+			disable_channel_flag=&quot;--set-disabled&quot;
+			pre_reqs=&quot;dnf-plugins-core&quot;
+			pkg_suffix=&quot;fc$dist_version&quot;
+		else
+			pkg_manager=&quot;yum&quot;
+			config_manager=&quot;yum-config-manager&quot;
+			enable_channel_flag=&quot;--enable&quot;
+			disable_channel_flag=&quot;--disable&quot;
+			pre_reqs=&quot;yum-utils&quot;
+			pkg_suffix=&quot;el&quot;
+		fi
+		repo_file_url=&quot;$DOWNLOAD_URL/linux/$lsb_dist/$REPO_FILE&quot;
+		if [ &quot;$lsb_dist&quot; = &quot;ol&quot; ] || [ &quot;$lsb_dist&quot; = &quot;rocky&quot; ] || [ &quot;$lsb_dist&quot; = &quot;rhel&quot; ]; then
+			repo_file_url=&quot;$DOWNLOAD_URL/linux/centos/$REPO_FILE&quot;
+		fi
+		(
+			if ! is_dry_run; then
+				set -x
+			fi
+			$sh_c &quot;$pkg_manager install -y -q $pre_reqs&quot;
+			$sh_c &quot;$config_manager --add-repo $repo_file_url&quot;
+	
+			if [ &quot;$CHANNEL&quot; != &quot;stable&quot; ]; then
+				$sh_c &quot;$config_manager $disable_channel_flag docker-ce-*&quot;
+				$sh_c &quot;$config_manager $enable_channel_flag docker-ce-$CHANNEL&quot;
+			fi
+			if [ &quot;$lsb_dist&quot; = &quot;rhel&quot; ] || [ &quot;$lsb_dist&quot; = &quot;ol&quot; ]; then
+				adjust_repo_releasever &quot;$dist_version&quot;
+				# Add extra repo for version 7.x
+				if [[ &quot;$dist_version&quot; =~ &quot;7.&quot; ]] || [ &quot;$dist_version&quot; == &quot;7&quot; ]; then
+					if [ &quot;$lsb_dist&quot; = &quot;rhel&quot; ]; then
+						$sh_c &quot;$config_manager $enable_channel_flag rhui-REGION-rhel-server-extras&quot;
+						$sh_c &quot;$config_manager $enable_channel_flag rhui-rhel-7-server-rhui-extras-rpms&quot;
+						$sh_c &quot;$config_manager $enable_channel_flag rhui-rhel-7-for-arm-64-extras-rhui-rpms&quot;
+						$sh_c &quot;$config_manager $enable_channel_flag rhel-7-server-rhui-extras-rpms&quot;
+						$sh_c &quot;$config_manager $enable_channel_flag rhel-7-server-extras-rpms&quot;
+					else
+						$sh_c &quot;$config_manager $enable_channel_flag ol7_addons&quot;
+						# Adding OL7 developer repo if doesn't exist
+						if [ &quot;$(yum repolist | grep yum.oracle.com_repo_OracleLinux_OL7_developer &gt;/dev/null || echo add)&quot; == &quot;add&quot; ]; then
+							$sh_c &quot;$config_manager --add-repo https://yum.oracle.com/repo/OracleLinux/OL7/developer/x86_64&quot;
+						fi
+					fi
+				fi
+			fi
+			$sh_c &quot;$pkg_manager makecache&quot;
+		)
+		pkg_version=&quot;&quot;
+		if [ -n &quot;$VERSION&quot; ]; then
+			if is_dry_run; then
+				echo &quot;# WARNING: VERSION pinning is not supported in DRY_RUN&quot;
+			else
+				pkg_pattern=&quot;$(echo &quot;$VERSION&quot; | sed &quot;s/-ce-/\\\\.ce.*/g&quot; | sed &quot;s/-/.*/g&quot;).*$pkg_suffix&quot;
+				search_command=&quot;$pkg_manager list --showduplicates 'docker-ce' | grep '$pkg_pattern' | tail -1 | awk '{print \$2}'&quot;
+				pkg_version=&quot;$($sh_c &quot;$search_command&quot;)&quot;
+				echo &quot;INFO: Searching repository for VERSION '$VERSION'&quot;
+				echo &quot;INFO: $search_command&quot;
+				if [ -z &quot;$pkg_version&quot; ]; then
+					echo
+					echo &quot;ERROR: '$VERSION' not found amongst $pkg_manager list results&quot;
+					echo
+					exit 1
+				fi
+				if version_gte &quot;18.09&quot;; then
+					# older versions don't support a cli package
+					search_command=&quot;$pkg_manager list --showduplicates 'docker-ce-cli' | grep '$pkg_pattern' | tail -1 | awk '{print \$2}'&quot;
+					cli_pkg_version=&quot;$($sh_c &quot;$search_command&quot; | cut -d':' -f 2)&quot;
+				fi
+				# Cut out the epoch and prefix with a '-'
+				pkg_version=&quot;-$(echo &quot;$pkg_version&quot; | cut -d':' -f 2)&quot;
+			fi
+		fi
+		(
+			pkgs=&quot;docker-ce$pkg_version&quot;
+			if version_gte &quot;18.09&quot;; then
+				# older versions didn't ship the cli and containerd as separate packages
+				if [ -n &quot;$cli_pkg_version&quot; ]; then
+					pkgs=&quot;$pkgs docker-ce-cli-$cli_pkg_version containerd.io&quot;
+				else
+					pkgs=&quot;$pkgs docker-ce-cli containerd.io&quot;
+				fi
+			fi
+			if version_gte &quot;20.10&quot;; then
+				pkgs=&quot;$pkgs docker-compose-plugin docker-ce-rootless-extras$pkg_version&quot;
+			fi
+			if version_gte &quot;23.0&quot;; then
+				pkgs=&quot;$pkgs docker-buildx-plugin&quot;
+			fi
+			if ! is_dry_run; then
+				set -x
+			fi
+			$sh_c &quot;$pkg_manager install -y -q $pkgs&quot;
+		)
+		echo_docker_as_nonroot
+		exit 0
+		;;
+	sles)
+		if [ &quot;$(uname -m)&quot; != &quot;s390x&quot; ]; then
+			echo &quot;Packages for SLES are currently only available for s390x&quot;
+			exit 1
+		fi
+		if [ &quot;$dist_version&quot; = &quot;15.3&quot; ]; then
+			sles_version=&quot;SLE_15_SP3&quot;
+		else
+			sles_version=&quot;SLE_15_SP2&quot;
+		fi
+		opensuse_repo=&quot;https://download.opensuse.org/repositories/security:SELinux/$sles_version/security:SELinux.repo&quot;
+		repo_file_url=&quot;$DOWNLOAD_URL/linux/$lsb_dist/$REPO_FILE&quot;
+		pre_reqs=&quot;ca-certificates curl libseccomp2 awk&quot;
+		(
+			if ! is_dry_run; then
+				set -x
+			fi
+			$sh_c &quot;zypper install -y $pre_reqs&quot;
+			$sh_c &quot;zypper addrepo $repo_file_url&quot;
+			if ! is_dry_run; then
+				cat &gt;&amp;2 &lt;&lt;-'EOF'
+					WARNING!!
+					openSUSE repository (https://download.opensuse.org/repositories/security:SELinux) will be enabled now.
+					Do you wish to continue?
+					You may press Ctrl+C now to abort this script.
+				EOF
+				(
+					set -x
+					sleep 30
+				)
+			fi
+			$sh_c &quot;zypper addrepo $opensuse_repo&quot;
+			$sh_c &quot;zypper --gpg-auto-import-keys refresh&quot;
+			$sh_c &quot;zypper lr -d&quot;
+		)
+		pkg_version=&quot;&quot;
+		if [ -n &quot;$VERSION&quot; ]; then
+			if is_dry_run; then
+				echo &quot;# WARNING: VERSION pinning is not supported in DRY_RUN&quot;
+			else
+				pkg_pattern=&quot;$(echo &quot;$VERSION&quot; | sed &quot;s/-ce-/\\\\.ce.*/g&quot; | sed &quot;s/-/.*/g&quot;)&quot;
+				search_command=&quot;zypper search -s --match-exact 'docker-ce' | grep '$pkg_pattern' | tail -1 | awk '{print \$6}'&quot;
+				pkg_version=&quot;$($sh_c &quot;$search_command&quot;)&quot;
+				echo &quot;INFO: Searching repository for VERSION '$VERSION'&quot;
+				echo &quot;INFO: $search_command&quot;
+				if [ -z &quot;$pkg_version&quot; ]; then
+					echo
+					echo &quot;ERROR: '$VERSION' not found amongst zypper list results&quot;
+					echo
+					exit 1
+				fi
+				search_command=&quot;zypper search -s --match-exact 'docker-ce-cli' | grep '$pkg_pattern' | tail -1 | awk '{print \$6}'&quot;
+				# It's okay for cli_pkg_version to be blank, since older versions don't support a cli package
+				cli_pkg_version=&quot;$($sh_c &quot;$search_command&quot;)&quot;
+				pkg_version=&quot;-$pkg_version&quot;
+			fi
+		fi
+		(
+			pkgs=&quot;docker-ce$pkg_version&quot;
+			if version_gte &quot;18.09&quot;; then
+				if [ -n &quot;$cli_pkg_version&quot; ]; then
+					# older versions didn't ship the cli and containerd as separate packages
+					pkgs=&quot;$pkgs docker-ce-cli-$cli_pkg_version containerd.io&quot;
+				else
+					pkgs=&quot;$pkgs docker-ce-cli containerd.io&quot;
+				fi
+			fi
+			if version_gte &quot;20.10&quot;; then
+				pkgs=&quot;$pkgs docker-compose-plugin docker-ce-rootless-extras$pkg_version&quot;
+			fi
+			if version_gte &quot;23.0&quot;; then
+				pkgs=&quot;$pkgs docker-buildx-plugin&quot;
+			fi
+			if ! is_dry_run; then
+				set -x
+			fi
+			$sh_c &quot;zypper -q install -y $pkgs&quot;
+			if ! command_exists iptables; then
+				$sh_c &quot;$pkg_manager install -y -q iptables&quot;
+			fi
+			start_docker
+		)
+		echo_docker_as_nonroot
+		exit 0
+		;;
+	rancheros)
+		(
+			set -x
+			$sh_c &quot;sleep 3;ros engine list --update&quot;
+			engine_version=&quot;$(sudo ros engine list | awk '{print $2}' | grep &quot;${docker_version}&quot; | tail -n 1)&quot;
+			if [ &quot;$engine_version&quot; != &quot;&quot; ]; then
+				$sh_c &quot;ros engine switch -f $engine_version&quot;
+			fi
+		)
+		exit 0
+		;;
+	*)
+		if [ -z &quot;$lsb_dist&quot; ]; then
+			if is_darwin; then
+				echo
+				echo &quot;ERROR: Unsupported operating system 'macOS'&quot;
+				echo &quot;Please get Docker Desktop from https://www.docker.com/products/docker-desktop&quot;
+				echo
+				exit 1
+			fi
+		fi
+		echo
+		echo &quot;ERROR: Unsupported distribution '$lsb_dist'&quot;
+		echo
+		exit 1
+		;;
+	esac
+	exit 1
+}
+
+# wrapped up in a function so that we have some protection against only getting
+# half the file during &quot;curl | sh&quot;
+do_install
+</code></pre>
+</details>
+<p>为了防止安装后自动升级覆盖了docker，Ubuntu可以使用<code>sudo apt-mark hold docker-ce docker-ce-cli docker-ce-rootless-extras</code>锁定版本，其他发行版也有类似的命令。</p>
+<h2 id="自动化配置docker">自动化配置docker</h2>
+<p>将上面的脚本另存为<code>docker-install-24.0.9.sh</code>，然后再写一个脚本来完成docker的安装和配置：</p>
+<pre><code class="language-bash">#!/usr/bin/env bash
+# init docker with composed
+
+if ! type docker &gt;/dev/null 2&gt;&amp;1; then
+    max_try=3
+    while true; do
+        sudo bash docker-install-24.0.9.sh --mirror Aliyun
+        if [ $? -eq 0 ]; then
+            echo &quot;succ to install docker&quot;
+            break
+        else
+            max_try=$((max_try - 1))
+            if [ $max_try -eq 0 ]; then
+                echo &quot;can't install docker, exit&quot;
+                exit 1
+            fi
+            echo &quot;fail to install docker, sleeping 5s before retrying&quot;
+            sleep 5
+        fi
+    done
+fi
+
+sudo mkdir -p /etc/docker
+sudo rm /etc/docker/daemon.json &gt;/dev/null 2&gt;&amp;1
+sudo tee /etc/docker/daemon.json &lt;&lt;-'EOF'
+{
+    &quot;registry-mirrors&quot;: [
+        &quot;https://docker.nju.edu.cn/&quot;,
+        &quot;https://mirror.baidubce.com&quot;
+    ],
+    &quot;live-restore&quot;: true,
+    &quot;log-driver&quot;:&quot;json-file&quot;,
+    &quot;log-opts&quot;: {&quot;max-size&quot;:&quot;50m&quot;, &quot;max-file&quot;:&quot;3&quot;}
+}
+EOF
+sudo systemctl daemon-reload
+sudo systemctl stop docker
+systemctl enable docker
+
+while true; do
+    sudo systemctl start docker
+    if [ $? -eq 0 ]; then
+        echo &quot;Docker start successfully&quot;
+        break
+    else
+        echo &quot;Failed to restart Docker, sleeping for 5s before retrying...&quot;
+        sleep 5
+    fi
+done
+</code></pre>
+<p>这里主要是安装docker，配置国内镜像源和日志大小限制，然后重启docker服务。如果是在国外的机器上，可以不用配置镜像，但是日志大小限制一般还是需要配置的，否则服务日志可能会逐渐塞满硬盘。</p>
+<h3 id="安装k3s">安装k3s</h3>
+<p>参考如下脚本，需要注意的是<code>--docker</code>必须放在安装命令的最后面，否则不生效。</p>
+<pre><code class="language-bash">#!/usr/bin/env bash
+
+MAX_POD_CNT=0
+DATA_PATH=&quot;&quot;
+AGENT_MODE=0
+SERVER_TOKEN=&quot;&quot;
+SERVER_IP=&quot;&quot;
+K3S_VERSION=&quot;v1.26.13+k3s2&quot;
+# 如果升级了k3s的版本，这里可以也跟着升级
+HELM_VERSION=&quot;v3.12.3&quot;
+# 分布式存储插件
+LONGHORN_VERSION=&quot;1.5.1&quot;
+NEED_LONGHORN=0
+INIT_INSTALL=0
+FORCE=0
+export DEBIAN_FRONTEND=noninteractive
+
+help() {
+    echo &quot;install script for k3s, you can run 'k3s-uninstall.sh' to uninstall&quot;
+    echo &quot;Usage:&quot;
+    echo &quot;  k3s_install.sh [-a] [-s server_url] [-t server_token] [-p max_pod_cnt] [-d data_path]&quot;
+    echo &quot;  -a: install k3s as agent. Use it with -t &lt;server token&gt; and -s &lt;server url&gt;&quot;
+    echo &quot;  -l: install longhorn&quot;
+    echo &quot;  -t: token, for server or agent join cluster&quot;
+    echo &quot;  -s: server ip&quot;
+    echo &quot;  -f: force install&quot;
+    echo &quot;  -p: max pod count, default is 110&quot;
+    echo &quot;  -d: data path, default is ${DATA_PATH}&quot;
+    echo &quot;  -v: k3s version, default is ${K3S_VERSION}&quot;
+    exit 0
+}
+
+while getopts 's:l:t:p:v:d:afh' OPT; do
+    case $OPT in
+    a) AGENT_MODE=1 ;;
+    l) NEED_LONGHORN=1 ;;
+    f) FORCE=1 ;;
+    t) SERVER_TOKEN=&quot;$OPTARG&quot; ;;
+    s) SERVER_IP=&quot;$OPTARG&quot; ;;
+    p) MAX_POD_CNT=&quot;$OPTARG&quot; ;;
+    d) DATA_PATH=&quot;$OPTARG&quot; ;;
+    v) K3S_VERSION=&quot;$OPTARG&quot; ;;
+    h) help ;;
+    ?) help ;;
+    esac
+done
+
+# check if static ip
+if ! ip route list default | grep static &gt;/dev/null; then
+    echo &quot;you must set static ip before init env&quot;
+    exit 1
+fi
+
+# Check parameters
+if [ $AGENT_MODE -eq 1 ] &amp;&amp; { [ -z &quot;$SERVER_IP&quot; ] || [ -z &quot;$SERVER_TOKEN&quot; ]; }; then
+    echo &quot;miss server_ip or server_token for agent mode, exit&quot;
+    exit 1
+fi
+
+if [ -z &quot;$SERVER_TOKEN&quot; ] || [ -z &quot;$SERVER_IP&quot; ]; then
+    INIT_INSTALL=1
+fi
+
+if [ $FORCE -eq 1 ] &amp;&amp; type k3s &gt;/dev/null 2&gt;&amp;1; then
+    if k3s-uninstall.sh &gt;/dev/null 2&gt;&amp;1; then
+        echo &quot;k3s uninstalled&quot;
+    else
+        k3s-agent-uninstall.sh &gt;/dev/null 2&gt;&amp;1
+        echo &quot;k3s agent uninstalled&quot;
+    fi
+fi
+
+# install k3s if not exist
+if ! type k3s &gt;/dev/null 2&gt;&amp;1; then
+    # install k3s from now
+    opts=&quot;K3S_KUBECONFIG_MODE=\&quot;644\&quot;&quot;
+    cmd=&quot;&quot;
+    server_url=&quot;https://$SERVER_IP:6443&quot;
+    if [ $AGENT_MODE -eq 1 ]; then
+        echo &quot;install k3s as agent, server url is $server_url&quot;
+        opts=&quot;$opts K3S_URL=$server_url K3S_TOKEN=$SERVER_TOKEN&quot;
+    else
+        if [ $INIT_INSTALL -eq 1 ]; then
+            cmd=&quot;server --cluster-init&quot;
+        else
+            opts=&quot;$opts K3S_TOKEN=$SERVER_TOKEN&quot;
+            cmd=&quot;server --server $server_url&quot;
+        fi
+    fi
+    # set to `--kube-proxy-arg=proxy-mode=ipvs`, if you want ipvs mode
+    exec_opts=&quot;&quot;
+    if [ &quot;$MAX_POD_CNT&quot; -gt 0 ]; then
+        exec_opts=&quot;$exec_opts --kubelet-arg=max-pods=$MAX_POD_CNT&quot;
+    fi
+    if [ -n &quot;$DATA_PATH&quot; ] &amp;&amp; [ $AGENT_MODE -eq 0 ]; then
+        exec_opts=&quot;$exec_opts --default-local-storage-path=$DATA_PATH&quot;
+    fi
+    if [ -n &quot;$exec_opts&quot; ]; then
+        exec_opts=$(echo &quot;$exec_opts&quot; | xargs)
+        opts=&quot;$opts INSTALL_K3S_EXEC='$exec_opts'&quot;
+    fi
+    echo &quot;install k3s online...&quot;
+    opts=&quot;$opts INSTALL_K3S_MIRROR=cn&quot;
+    if [ -n &quot;$K3S_VERSION&quot; ]; then
+        opts=&quot;$opts INSTALL_K3S_VERSION=$K3S_VERSION&quot;
+    fi
+    # --docker must at end!!!
+    cmd=&quot;curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | $opts sh -s - $cmd --docker&quot;
+    echo &quot;$cmd&quot;
+    eval &quot;$cmd&quot;
+    if type k3s &gt;/dev/null 2&gt;&amp;1; then
+        echo &quot;succ to install k3s&quot;
+    else
+        echo &quot;fail to install k3s&quot;
+        exit 1
+    fi
+else
+    echo &quot;skip k3s install...&quot;
+fi
+
+if [ $AGENT_MODE -eq 0 ]; then
+    echo &quot;restart every 9 month for certificate rotate in server node&quot;
+    grep 'systemctl restart k3s' /etc/crontab || echo '0 2 1 */9 * systemctl restart k3s &gt;/dev/null 2&gt;&amp;1' &gt;&gt;/etc/crontab
+fi
+
+if grep -q &quot;KUBECONFIG&quot; ~/.bashrc; then
+    sed -i 's/export KUBECONFIG=.*/export KUBECONFIG=\/etc\/rancher\/k3s\/k3s.yaml/' ~/.bashrc
+else
+    echo &quot;export KUBECONFIG=/etc/rancher/k3s/k3s.yaml&quot; &gt;&gt;~/.bashrc
+fi
+
+if ! grep -q &quot;alias k='kubectl'&quot; ~/.bashrc; then
+    echo &quot;alias k='kubectl'&quot; &gt;&gt;~/.bashrc
+fi
+
+if ! type helm &gt;/dev/null 2&gt;&amp;1; then
+    echo &quot;install helm...&quot;
+    curl https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/helm-install.sh | bash /dev/stdin -v $HELM_VERSION
+    helm repo add bitnami https://charts.bitnami.com/bitnami
+    helm repo add longhorn https://charts.longhorn.io
+    helm repo update
+fi
+
+if [ $AGENT_MODE -eq 1 ]; then
+    echo &quot;all done&quot;
+    exit 0
+fi
+
+export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+# wait node ready
+while true; do
+    node_status=$(kubectl get node &quot;$(hostname)&quot; -o jsonpath='{.status.conditions[?(@.type==&quot;Ready&quot;)].status}')
+    if [[ &quot;$node_status&quot; == &quot;True&quot; ]]; then
+        break
+    else
+        echo &quot;wait until current node ready...&quot;
+        sleep 5
+    fi
+done
+
+# new cluster
+if [ $INIT_INSTALL -eq 1 ]; then
+    # install longhorn
+    if [ $NEED_LONGHORN -eq 1 ]; then
+        helm install longhorn longhorn/longhorn --namespace longhorn-system --create-namespace --version $LONGHORN_VERSION
+        kubectl patch sc longhorn -p '{&quot;metadata&quot;: {&quot;annotations&quot;:{&quot;storageclass.kubernetes.io/is-default-class&quot;:&quot;false&quot;}}}'
+        kubectl apply -f - &lt;&lt;EOF
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: longhorn-ingress
+  namespace: longhorn-system
+  annotations:
+    traefik.ingress.kubernetes.io/router.middlewares: longhorn-system-middleware@kubernetescrd
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /longhorn
+        pathType: Prefix
+        backend:
+          service:
+            name: longhorn-frontend
+            port:
+              number: 80
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: middleware
+  namespace: longhorn-system
+spec:
+  replacePathRegex:
+    regex: &quot;^/longhorn(/|$)(.*)&quot;
+    replacement: &quot;/${2}&quot;
+EOF
+    fi
+fi
+
+echo &quot;all done&quot;
+</code></pre>
+<h3 id="使用时注意">使用时注意</h3>
+<p>k3s安装到了root用户下，个人用户如果想要使用<code>kubectl</code>命令，建议<code>cp /etc/rancher/k3s/k3s.yaml ~/.kube/config</code>，如果使用<code>export KUBECONFIG</code>的方式，可能会提示权限问题，比较烦人。</p>
+
+        </div>
+        
+        
+        
+
+
+        
+        
+        
+        
+<div class="flex flex-col md:flex-row md:justify-between -mx-2 mt-4 px-2 pt-4 border-t">
+    <div>
+        
+    </div>
+    <div class="md:text-right mt-4 md:mt-0">
+        
+        <span class="block font-bold">下一页</span>
+        <a href="https://yiuterran.github.io/blog/posts/python%E6%8A%80%E6%9C%AF%E6%A0%88%E6%9B%B4%E6%96%B0/" class="block">Python技术栈更新</a>
+        
+    </div>
+</div>
+
+        
+
+
+
+  <script id="utterances" src="https://utteranc.es/client.js"
+            issue-term=title
+            repo=YiuTerran/blog-comment
+              theme=preferred-color-scheme
+        crossorigin="anonymous"
+        async>
+</script>
+<script>
+    if (storageColorScheme == "Light") {
+      document.getElementById('utterances').setAttribute('theme', 'github-light')
+    } else if (storageColorScheme == "Dark") {
+      document.getElementById('utterances').setAttribute('theme', 'github-dark')
+    }
+</script>
+
+    </div>
+    
+    <div class="col-span-2">
+        
+        
+        <div class="sticky top-16 z-10 hidden lg:block px-6 py-4  bg-primary-bg ">
+    <span class="text-lg font-semibold">本页内容</span>
+</div>
+<div class="sticky-toc hidden lg:block px-6 pb-6 ">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#安装docker">安装docker</a>
+      <ul>
+        <li><a href="#指定docker的版本安装适配常见发行版">指定docker的版本安装，适配常见发行版</a></li>
+      </ul>
+    </li>
+    <li><a href="#自动化配置docker">自动化配置docker</a>
+      <ul>
+        <li><a href="#安装k3s">安装k3s</a></li>
+        <li><a href="#使用时注意">使用时注意</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+</div>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        enableStickyToc();
+    });
+</script>
+        
+    </div>
+    
+
+    
+    
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', ()=>{
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+
+      </div>
+    </div>
+    
+  </main>
+  <footer class="ps-scrollbar">
+    <div class="w-full max-w-screen-xl mx-auto"><div class="text-center p-6 pin-b">
+    <p class="text-sm text-tertiary-text">&copy; 2021 <a href="https://github.com/YiuTerran">tryao</a>
+ &middot;  Powered by the <a href="https://github.com/wangchucheng/hugo-eureka" class="hover:text-eureka">Eureka</a> theme for <a href="https://gohugo.io" class="hover:text-eureka">Hugo</a></p>
+</div></div>
+  </footer>
+</body>
+
+</html>
