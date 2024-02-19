@@ -23,11 +23,10 @@ k3s自带了containerd作为CRI实现，不过我们一般习惯上还是使用d
 
 需要注意的是，**k3s并不是与docker的所有版本都兼容**！一般来说，最好不要使用最新的版本，大版本号降低一级更好。比如这篇博客发布的时候，最新的docker是25.0.3，但是k3s只能兼容到24.0.9，因此安装docker的时候，就不能安装最新的版本，否则k3s无法正常启动！
 
-安装脚本参考：
+安装脚本是根据[官方脚本](https://releases.rancher.com/install-docker/19.03.sh)修改的，适配了常见的发行版，参考：
 
-<details><summary>展开查看详情</summary>
+<details><summary>点击折叠</summary>
 
-### 指定docker的版本安装，适配常见发行版
 ```bash
 #!/bin/sh
 set -e
@@ -148,7 +147,7 @@ calver_compare() (
 	if [ "${mm_a#0}" -lt "${mm_b#0}" ]; then
 		return 1
 	fi
-	
+
 	return 0
 )
 
@@ -247,18 +246,18 @@ check_forked() {
 		lsb_release -a -u >/dev/null 2>&1
 		lsb_release_exit_code=$?
 		set -e
-	
+
 		# Check if the command has exited successfully, it means we're in a forked distro
 		if [ "$lsb_release_exit_code" = "0" ]; then
 			# Print info about current distro
 			cat <<-EOF
 				You're using '$lsb_dist' version '$dist_version'.
 			EOF
-	
+
 			# Get the upstream release info
 			lsb_dist=$(lsb_release -a -u 2>&1 | tr '[:upper:]' '[:lower:]' | grep -E 'id' | cut -d ':' -f 2 | tr -d '[:space:]')
 			dist_version=$(lsb_release -a -u 2>&1 | tr '[:upper:]' '[:lower:]' | grep -E 'codename' | cut -d ':' -f 2 | tr -d '[:space:]')
-	
+
 			# Print info about upstream distro
 			cat <<-EOF
 				Upstream release is '$lsb_dist' version '$dist_version'.
@@ -301,14 +300,14 @@ do_install() {
 	if command_exists docker; then
 		cat >&2 <<-'EOF'
 			Warning: the "docker" command appears to already exist on this system.
-	
+
 			If you already have Docker installed, this script can cause trouble, which is
 			why we're displaying this warning and provide the opportunity to cancel the
 			installation.
-	
+
 			If you installed the current Docker package using this script and are using it
 			again to update Docker, you can safely ignore this message.
-	
+
 			You may press Ctrl+C now to abort this script.
 		EOF
 		(
@@ -316,9 +315,9 @@ do_install() {
 			sleep 20
 		)
 	fi
-	
+
 	user="$(id -un 2>/dev/null || true)"
-	
+
 	sh_c='sh -c'
 	if [ "$user" != 'root' ]; then
 		if command_exists sudo; then
@@ -333,22 +332,22 @@ do_install() {
 			exit 1
 		fi
 	fi
-	
+
 	if is_dry_run; then
 		sh_c="echo"
 	fi
-	
+
 	# perform some very rudimentary platform detection
 	lsb_dist=$(get_distribution)
 	lsb_dist="$(echo "$lsb_dist" | tr '[:upper:]' '[:lower:]')"
-	
+
 	if is_wsl; then
 		echo
 		echo "WSL DETECTED: We recommend using Docker Desktop for Windows."
 		echo "Please get Docker Desktop from https://www.docker.com/products/docker-desktop"
 		echo
 		cat >&2 <<-'EOF'
-	
+
 			You may press Ctrl+C now to abort this script.
 		EOF
 		(
@@ -356,9 +355,9 @@ do_install() {
 			sleep 20
 		)
 	fi
-	
+
 	case "$lsb_dist" in
-	
+
 	ubuntu)
 		if command_exists lsb_release; then
 			dist_version="$(lsb_release --codename | cut -f2)"
@@ -367,7 +366,7 @@ do_install() {
 			dist_version="$(. /etc/lsb-release && echo "$DISTRIB_CODENAME")"
 		fi
 		;;
-	
+
 	debian | raspbian)
 		dist_version="$(sed 's/\/.*//' /etc/debian_version | sed 's/\..*//')"
 		case "$dist_version" in
@@ -388,20 +387,20 @@ do_install() {
 			;;
 		esac
 		;;
-	
+
 	centos | rhel | sles | rocky)
 		if [ -z "$dist_version" ] && [ -r /etc/os-release ]; then
 			dist_version="$(. /etc/os-release && echo "$VERSION_ID")"
 		fi
-	
+
 		;;
-	
+
 	oracleserver | ol)
 		lsb_dist="ol"
 		# need to switch lsb_dist to match yum repo URL
 		dist_version="$(rpm -q --whatprovides redhat-release --queryformat "%{VERSION}\n" | sed 's/\/.*//' | sed 's/\..*//' | sed 's/Server*//')"
 		;;
-	
+
 	*)
 		if command_exists lsb_release; then
 			dist_version="$(lsb_release --release | cut -f2)"
@@ -410,12 +409,12 @@ do_install() {
 			dist_version="$(. /etc/os-release && echo "$VERSION_ID")"
 		fi
 		;;
-	
+
 	esac
-	
+
 	# Check if this is a forked Linux distro
 	check_forked
-	
+
 	# Print deprecation warnings for distro versions that recently reached EOL,
 	# but may still be commonly used (especially LTS versions).
 	case "$lsb_dist.$dist_version" in
@@ -434,7 +433,7 @@ do_install() {
 		fi
 		;;
 	esac
-	
+
 	# Run setup for each distro accordingly
 	case "$lsb_dist" in
 	ubuntu | debian | raspbian)
@@ -533,7 +532,7 @@ do_install() {
 			fi
 			$sh_c "$pkg_manager install -y -q $pre_reqs"
 			$sh_c "$config_manager --add-repo $repo_file_url"
-	
+
 			if [ "$CHANNEL" != "stable" ]; then
 				$sh_c "$config_manager $disable_channel_flag docker-ce-*"
 				$sh_c "$config_manager $enable_channel_flag docker-ce-$CHANNEL"
@@ -789,7 +788,7 @@ done
 
 这里主要是安装docker，配置国内镜像源和日志大小限制，然后重启docker服务。如果是在国外的机器上，可以不用配置镜像，但是日志大小限制一般还是需要配置的，否则服务日志可能会逐渐塞满硬盘。
 
-### 安装k3s
+## 安装k3s
 
 参考如下脚本，需要注意的是`--docker`必须放在安装命令的最后面，否则不生效。
 
@@ -996,6 +995,9 @@ fi
 echo "all done"
 ```
 
-### 使用时注意
+## 使用时注意
 
-k3s安装到了root用户下，个人用户如果想要使用`kubectl`命令，建议`cp /etc/rancher/k3s/k3s.yaml ~/.kube/config`，如果使用`export KUBECONFIG`的方式，可能会提示权限问题，比较烦人。
+* k3s安装到了root用户下，个人用户如果想要使用`kubectl`命令，建议`cp /etc/rancher/k3s/k3s.yaml ~/.kube/config`，如果使用`export KUBECONFIG`的方式，可能会提示权限问题，比较烦人；
+* k3s自带了kubectl命令，不过你也可以自己安装一个标准的[kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/)；
+* k3s有时候会莫名其妙的挂掉，建议用`systemctl restart k3s`重启一下；
+* 卸载k3s使用`k3s-uninstall.sh`即可；
