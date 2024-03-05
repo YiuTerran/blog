@@ -1,2 +1,5 @@
+github.com/FortAwesome/Font-Awesome v0.0.0-20210804190922-7d3d774145ac/go.mod h1:IUgezN/MFpCDIlFezw3L8j83oeiIuYoj28Miwr/KUYo=
 wangchucheng.com/hugo-eureka v0.9.0 h1:Fw7YmYdzCPOkxNOq1vW9+uzPeKAydZZBHZg4DX+A3fU=
 wangchucheng.com/hugo-eureka v0.9.0/go.mod h1:ldj7VHYXeNEnMDom+qe4ZwOP8BJkD+Rj+Uum6WTgGCA=
+wangchucheng.com/hugo-eureka v0.9.3 h1:wQnWQxMW4jy6M/FOvAay13f5OD+UXPKBtkagdS0Fjys=
+wangchucheng.com/hugo-eureka v0.9.3/go.mod h1:vz1B81+UwcYXu6uOJ3aCt4PPa5gikq3OxLlqpjBnHDY=

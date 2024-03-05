@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-<title>Jsonnet试用 | 应许之地</title>
+<title>K8s应用调试技巧 | 应许之地</title>
 
 <meta name="generator" content="Hugo Eureka 0.9.3" />
 <link rel="stylesheet" href="https://yiuterran.github.io/blog/css/eureka.css">
@@ -83,7 +83,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
 
 <meta name="description"
-  content="jsonnet这个语言很有意思，它存在的目的就是为了编辑配置。其实使用任何一门带有字符串模板的语言都能完成类似的目的，但是jsonnet的好处是它的封">
+  content="注意： 谨慎使用本文所述的工具，尤其是不要直接修改生产环境数据，风险自负！！！ rancher只读账号也可以登录服务pod的终端，而能登录到pod里就可以">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -95,8 +95,8 @@
       "item":"https://yiuterran.github.io/blog/posts/"},{
       "@type": "ListItem",
       "position": 2 ,
-      "name":"Jsonnet试用",
-      "item":"https://yiuterran.github.io/blog/posts/jsonnet%E8%AF%95%E7%94%A8/"}]
+      "name":"K8s应用调试技巧",
+      "item":"https://yiuterran.github.io/blog/posts/k8s%E5%BA%94%E7%94%A8%E8%B0%83%E8%AF%95%E6%8A%80%E5%B7%A7/"}]
 }
 </script>
 
@@ -108,15 +108,11 @@
     "@type": "Article",
     "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": "https://yiuterran.github.io/blog/posts/jsonnet%E8%AF%95%E7%94%A8/"
+        "@id": "https://yiuterran.github.io/blog/posts/k8s%E5%BA%94%E7%94%A8%E8%B0%83%E8%AF%95%E6%8A%80%E5%B7%A7/"
     },
-    "headline": "Jsonnet试用 | 应许之地","datePublished": "2023-12-29T10:21:59+08:00",
-    "dateModified": "2023-12-29T10:21:59+08:00",
-    "wordCount":  1683 ,
-    "author": {
-        "@type": "Person",
-        "name": ["tryao"]
-    },
+    "headline": "K8s应用调试技巧 | 应许之地","datePublished": "2024-03-05T14:09:31+08:00",
+    "dateModified": "2024-03-05T14:09:31+08:00",
+    "wordCount":  1038 ,
     "publisher": {
         "@type": "Person",
         "name": "C. Wang",
@@ -125,21 +121,21 @@
             "url": "https://yiuterran.github.io/blog/images/icon.png"
         }
         },
-    "description": "jsonnet这个语言很有意思，它存在的目的就是为了编辑配置。其实使用任何一门带有字符串模板的语言都能完成类似的目的，但是jsonnet的好处是它的封"
+    "description": "注意： 谨慎使用本文所述的工具，尤其是不要直接修改生产环境数据，风险自负！！！ rancher只读账号也可以登录服务pod的终端，而能登录到pod里就可以"
 }
-</script><meta property="og:title" content="Jsonnet试用 | 应许之地" />
+</script><meta property="og:title" content="K8s应用调试技巧 | 应许之地" />
 <meta property="og:type" content="article" />
 
 
 <meta property="og:image" content="https://yiuterran.github.io/blog/images/icon.png">
 
 
-<meta property="og:url" content="https://yiuterran.github.io/blog/posts/jsonnet%E8%AF%95%E7%94%A8/" />
+<meta property="og:url" content="https://yiuterran.github.io/blog/posts/k8s%E5%BA%94%E7%94%A8%E8%B0%83%E8%AF%95%E6%8A%80%E5%B7%A7/" />
 
 
 
 
-<meta property="og:description" content="jsonnet这个语言很有意思，它存在的目的就是为了编辑配置。其实使用任何一门带有字符串模板的语言都能完成类似的目的，但是jsonnet的好处是它的封" />
+<meta property="og:description" content="注意： 谨慎使用本文所述的工具，尤其是不要直接修改生产环境数据，风险自负！！！ rancher只读账号也可以登录服务pod的终端，而能登录到pod里就可以" />
 
 
 
@@ -156,20 +152,14 @@
 
 
 
-<meta property="article:published_time" content="2023-12-29T10:21:59&#43;08:00" />
+<meta property="article:published_time" content="2024-03-05T14:09:31&#43;08:00" />
 
 
-<meta property="article:modified_time" content="2023-12-29T10:21:59&#43;08:00" />
+<meta property="article:modified_time" content="2024-03-05T14:09:31&#43;08:00" />
 
 
 
 <meta property="article:section" content="posts" />
-
-
-<meta property="article:tag" content="jsonnet" />
-
-<meta property="article:tag" content="json" />
-
 
 
 
@@ -253,7 +243,7 @@
       class=" bg-secondary-bg col-span-2 rounded px-6 py-8 lg:col-span-6"
     >
       <article class="prose">
-  <h1 class="mb-4">Jsonnet试用</h1>
+  <h1 class="mb-4">K8s应用调试技巧</h1>
 
   <div
   class="text-tertiary-text not-prose mt-2 flex flex-row flex-wrap items-center"
@@ -261,12 +251,12 @@
   <div class="me-6 my-2">
     <i class="fas fa-calendar me-1"></i>
     <span
-      >2023-12-29</span
+      >2024-03-05</span
     >
   </div>
   <div class="me-6 my-2">
     <i class="fas fa-clock me-1"></i>
-    <span>4分钟阅读时长</span>
+    <span>3分钟阅读时长</span>
   </div>
 
   
@@ -278,197 +268,81 @@
   
   
 
-  <p><code>jsonnet</code>这个语言很有意思，它存在的目的就是为了编辑配置。其实使用任何一门带有字符串模板的语言都能完成类似的目的，但是<code>jsonnet</code>的好处是它的封闭性：不要使用额外的依赖完成配置。</p>
-<h2 id="安装">安装</h2>
-<p><code>jsonnet</code>有两个版本的编译器，一个是C++的，一个是Go的，推荐使用Go的，安装比较简单：</p>
-<pre><code class="language-bash">go install github.com/google/go-jsonnet/cmd/jsonnet@latest
+  <blockquote>
+<p><strong>注意：</strong>
+谨慎使用本文所述的工具，尤其是不要直接修改生产环境数据，风险自负！！！</p>
+</blockquote>
+<p>rancher只读账号也可以登录服务pod的终端，而能登录到pod里就可以访问生产环境的所有组件。</p>
+<h2 id="tips">TIPS</h2>
+<p>下面需要下载github上的文件，在服务器上可以使用<code>https://mirror.ghproxy.com/</code>辅助下载，方法是将github release里面linux amd64对应的文件的链接前面加上这个地址。</p>
+<p>例如，usql的下载地址为：<code>https://github.com/xo/usql/releases/download/v0.17.5/usql-0.17.5-linux-amd64.tar.bz2</code>，可以在服务器上使用</p>
+<pre><code class="language-bash">curl -O https://mirror.ghproxy.com/https://github.com/xo/usql/releases/download/v0.17.5/usql-0.17.5-linux-amd64.tar.bz2
 </code></pre>
-<p>如果你使用go语言写脚本，可以直接代码里使用：</p>
-<pre><code class="language-go">import &quot;github.com/google/go-jsonnet&quot;
+<p>进行下载.</p>
+<h2 id="pod无法启动">pod无法启动</h2>
+<p>如果遇到<code>CrashLoopBackOff</code>，可以看一下<code>kubectl logs &lt;pod-name&gt; -n &lt;namespace&gt; --previous</code>的输出，指定前一个pod。</p>
+<p>如果还是无法确认问题，需要进pod里面进行调试，可以修改pod的启动命令：</p>
+<pre><code class="language-yaml">spec:
+  containers:
+  - image: &lt;your-image&gt;
+    command: [ &quot;/bin/bash&quot;, &quot;-ec&quot;]
+    args: [ while true; do sleep 20; done;]
 </code></pre>
-<h2 id="语法">语法</h2>
-<p>jsonnet的语法和json是一致的，但是增加了很多扩展：</p>
-<ul>
-<li>支持C/Python风格的注释支持；</li>
-<li>允许使用<code>|||</code>增加多行字符串，类似Python中的<code>'''</code>；</li>
-<li>可以在行尾使用多余的逗号；</li>
-<li>类似yaml，支持单引号和双引号；</li>
-<li>类似js/yaml，key可以不加引号；</li>
-</ul>
-<h3 id="变量">变量</h3>
-<p>变量使用<code>local</code>关键字，类似lua，需要注意的是：</p>
-<ul>
-<li>如果变量定义在json里面（挨着字段），尾部要使用逗号；</li>
-<li>否则，使用分号；</li>
-</ul>
-<p>引用其他变量：</p>
-<ul>
-<li>使用<code>self</code>引用当前结构中的变量，也可以直接使用变量名字；</li>
-<li>使用<code>$</code>引用根中的变量（从json的根节点开始算）；</li>
-<li>引用其他字段的变量可以用<code>.foo</code>或者<code>['foo']</code>的格式，如<code>$.foo</code>或者<code>$['foo']</code>；有点类似<code>jquery</code>；</li>
-<li>允许使用数组或者字符串切片（类似Python）；</li>
-</ul>
-<p>变量计算：</p>
-<ul>
-<li>强类型：<code>1 == '1'</code>返回false；</li>
-<li>但是使用<code>+</code>连接时，如果有一个是字符串，则会全部转为字符串拼接；</li>
-<li><code>==</code>是深层值比较；</li>
-<li>支持Python风格的字符串格式化；</li>
-<li>支持C风格的位计算、逻辑计算、数学计算；</li>
-<li>支持Python 风格的 <code>in</code>操作符；</li>
-<li>变量转bool原则和Python类似，即<code>if x</code>的计算；</li>
-</ul>
-<p>另外，jsonnet还支持一种特殊风格的字符串格式化：</p>
-<pre><code class="language-json">{
-    ex1: 1+2,
-    str: |||
-    s=%(ex1)0.2f
-   ||| % self,
-}
+<p>这样pod就不会退出，可以进入pod中手动执行正常的启动命令，查看无法启动的原因</p>
+<h2 id="nacos">Nacos</h2>
+<p>你可以使用nacos的openAPI获取配置，例如：</p>
+<pre><code class="language-bash">curl -XPOST 'http://127.0.0.1:8848/nacos/v1/auth/login' -d 'username=nacos&amp;password=nacos'
+# 结果里有accessToken，然后用
+curl 'http://127.0.0.1:8848/nacos/v1/cs/configs?tenant=sim-test&amp;dataId=hermes-api-test.yaml&amp;group=DEFAULT_GROUP&amp;accessToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuYWNvcyIsImV4cCI6MTYwNTYyMzkyM30.O-s2yWfDSUZ7Svd3Vs7jy9tsfDNHs1SuebJB4KlNY8Q'
+# 获取到yaml配置
 </code></pre>
-<p>这里把<code>self</code>当作变量传进去，然后在字符串里面提取出字段用来渲染，有点类似python里面的<code>.format</code>，但是语法不一样。</p>
-<h3 id="函数">函数</h3>
-<p>jsonnet是一门图灵完备的语言，所以它也有函数，语法有点类似js中的<code>function</code>:</p>
-<pre><code>local fuc(k1, k2=3) = 
-  local k3 = k1 + k2;
-  [k1, k2, k3];
+<p>甚至于，你可以通过<a href="https://nacos.io/zh-cn/docs/open-api.html">API</a>直接修改nacos配置，<strong>但是一定不要这么做</strong>。</p>
+<h2 id="redis">Redis</h2>
+<p>redis可以直接用netcat连接，无须redis-cli，例如<code>nc redis-test-master.tools.svc.cluster.local 6379</code>，然后输入<code>auth &lt;passwd&gt;</code>进行认证即可。
+centos可以用<code>yum install -y nc</code>安装。</p>
+<h2 id="mysql">MySQL</h2>
+<p>mysql可以使用<code>usql</code>进行连接，下载地址<a href="https://github.com/xo/usql/releases">点这里</a></p>
+<p>连接方法：</p>
+<pre><code class="language-sql">usql 'mysql://root:123456$@172.16.11.200:3306/hermes'
 </code></pre>
-<p>注意：函数必然会返回一个值，所以最后一个值标示函数的结束。</p>
-<h3 id="条件语句">条件语句</h3>
-<p>支持类似Python的<code>if xx then zz else yy</code>的语法，默认<code>else null</code></p>
-<h3 id="动态key">动态key</h3>
-<p>如果key也需要动态计算，可以使用：</p>
-<pre><code class="language-python">{
-    [if x then 'k1']: 'v',
-}
+<h2 id="kafka">Kafka</h2>
+<p>使用<code>kaf</code>连接，下载地址<a href="https://github.com/birdayz/kaf/releases">点这里</a>.</p>
+<p>使用方法，先配置集群地址：</p>
+<pre><code class="language-bash">kaf config add-cluster local -b localhost:9092
+kaf config use-cluster local
 </code></pre>
-<p>上面如果x是false，则key是<code>null</code>，此时会排除对应的key.</p>
-<p>需要注意的是，key里面无法使用<code>self</code>或者需要运行时计算的变量，这是因为需要先构建key才能生成object，此时<code>self</code>还不存在。</p>
-<h3 id="列表生成">列表生成</h3>
-<p>支持Python风格的列表生成表达式，官网的例子：</p>
-<pre><code class="language-python">local arr = std.range(5, 8);
-{
-  array_comprehensions: {
-    higher: [x + 3 for x in arr],
-    lower: [x - 3 for x in arr],
-    evens: [x for x in arr if x % 2 == 0],
-    odds: [x for x in arr if x % 2 == 1],
-    evens_and_odds: [
-      '%d-%d' % [x, y]
-      for x in arr
-      if x % 2 == 0
-      for y in arr
-      if y % 2 == 1
-    ],
-  },
-  object_comprehensions: {
-    evens: {
-      ['f' + x]: true
-      for x in arr
-      if x % 2 == 0
-    },
-    // Use object composition (+) to add in
-    // static fields:
-    mixture: {
-      f: 1,
-      g: 2,
-    } + {
-      [x]: 0
-      for x in ['a', 'b', 'c']
-    },
-  },
-}
+<p>常用命令：</p>
+<pre><code class="language-bash"># 查看group消费lag
+kaf group describe &lt;group_name&gt;
+# 模拟消费端，查看数据
+kaf consume &lt;topic_name&gt; -f --offset newest --output json
 </code></pre>
-<h3 id="文件导入">文件导入</h3>
-<p>被导入的文件习惯上使用<code>.libsonnet</code>后缀，但是实际上任意后缀都可以。</p>
-<p>文件的内容是纯文本、json文件或者jsonnet文件都可以。如果是<code>yaml</code>，可以用<code>std.parseYaml</code>将其转为json。</p>
-<h3 id="异常">异常</h3>
-<p>直接使用<code>error</code>抛出异常，或者使用<code>assert xxx: message</code>抛出断言异常。</p>
-<p>出现error会立即中断配置文件生成。</p>
-<h3 id="外部变量">外部变量</h3>
-<p>可以通过</p>
-<pre><code class="language-bash">jsonnet --ext-str x=y --ext-code z=true
+<h2 id="emqx">emqx</h2>
+<p>使用emqx官方出的<a href="https://mqttx.app/cli">mqttx cli</a>, 使用方法：</p>
+<pre><code class="language-bash"># Connect
+mqttx conn -h 'broker.emqx.io' -p 1883 -u 'admin' -P 'public'
+# Subscribe
+mqttx sub -t 'hello' -h 'broker.emqx.io' -p 1883
+# Publish a single message
+mqttx pub -t 'hello' -h 'broker.emqx.io' -p 1883 -m 'from MQTTX CLI'
+# Publish multiple messages (multiline)
+mqttx pub -t 'hello' -h 'broker.emqx.io' -p 1883 -s -M
 </code></pre>
-<p>传入外部变量进行渲染，代码里面使用<code>std.extVar('x')</code>获取传进来的参数值。</p>
-<p>也可以通过</p>
-<pre><code class="language-bash">jsonnet --tla-str x=y --tla-code z=true
-</code></pre>
-<p>传入外部变量，此时生成配置的top level需要是一个function，用来接受传过来的数据：</p>
-<pre><code class="language-js">function(x, z=false){
-    //object content
-}
-</code></pre>
-<h3 id="面向对象">面向对象</h3>
-<p>jsonnet支持object的继承（显然jsonnet并没有class），实际上就是用新的object的值覆盖旧的。</p>
-<p>有一些特殊语法：</p>
-<ul>
-<li><code>::</code>，标示这个key不会在最终生成的object里，但是可以用来引用或者计算；也可以用来移除super中的字段；</li>
-<li><code>+:</code>，覆盖super object这个字段的部分值；或者如果super中这个字段是一个列表的话，往里面添加一个值；</li>
-<li><code>super</code>，引用父变量中的字段；</li>
-<li>两个object相加，<code>+</code>是可以省略的；</li>
-</ul>
-<p>之所以说有面向对象的特性，是因为<code>self</code>是动态解释的。</p>
+<h2 id="influxdb">influxdb</h2>
+<p>influxdb不需要客户端，直接调用curl即可调试。</p>
+<h2 id="rabbitmq">rabbitmq</h2>
+<p>想使用rabbitmqctl命令，必须登录到rabbitmq所在pod或者机器节点.</p>
+<p><strong>注意</strong>：与kafka不一样，你不应该试图消费rabbitmq中的消息，即使是<code>peak</code>消息（即消费后重新放入），也可能会因为消息顺序错乱导致不可预测的后果（比如设备短时间在离线切换）。</p>
+<p>如果需要手动生产消息（<strong>最好不要这么干</strong>），可以使用<a href="https://github.com/streamdal/plumber">这个工具</a>。</p>
 
 </article>
 
 
       
-        <div class="my-4">
-    
-    <a href="https://yiuterran.github.io/blog/tags/jsonnet/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#jsonnet</a>
-    
-    <a href="https://yiuterran.github.io/blog/tags/json/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#json</a>
-    
-</div>
-      
 
       
 
 
-
-      
-        <div class="py-2">
-  
-    <div class="my-8 flex flex-col items-center md:flex-row">
-      <a href="https://yiuterran.github.io/blog/authors/tryao/" class="md:me-4 text-primary-text h-24 w-24">
-        
-        
-          <img
-            src="https://yiuterran.github.io/blog/images/avatar.png"
-            class="bg-primary-bg w-full rounded-full"
-            alt="Avatar"
-          />
-        
-      </a>
-      <div class="mt-4 w-full md:mt-0 md:w-auto">
-        <a
-          href="https://yiuterran.github.io/blog/authors/tryao/"
-          class="mb-2 block border-b pb-1 text-lg font-bold"
-        >
-          <h3>个人介绍</h3>
-        </a>
-        <span class="block pb-2">兴趣使然的程序员，博而不精，乐学不倦</span>
-        
-          
-          
-          
-          
-          <a href="mailto:yaotairan@gmail.com" class="me-2">
-            <i class="fas fa-envelope"></i>
-          </a>
-        
-          
-          
-          
-          
-          <a href="https://github.com/YiuTerran" class="me-2">
-            <i class="fab fa-github"></i>
-          </a>
-        
-      </div>
-    </div>
-  
-</div>
 
       
 
@@ -478,16 +352,11 @@
   >
     <div>
       
-        <span class="text-primary-text block font-bold"
-          >上一页</span
-        >
-        <a href="https://yiuterran.github.io/blog/posts/ytt%E8%AF%95%E7%94%A8/" class="block">Ytt试用</a>
-      
     </div>
     <div class="mt-4 md:mt-0 md:text-right">
       
         <span class="text-primary-text block font-bold">下一页</span>
-        <a href="https://yiuterran.github.io/blog/posts/linux%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/" class="block">linux日常使用记录</a>
+        <a href="https://yiuterran.github.io/blog/posts/k3s%E5%AE%89%E8%A3%85%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/" class="block">K3s安装注意事项</a>
       
     </div>
   </div>
@@ -529,20 +398,15 @@
 >
   <nav id="TableOfContents">
   <ul>
-    <li><a href="#安装">安装</a></li>
-    <li><a href="#语法">语法</a>
-      <ul>
-        <li><a href="#变量">变量</a></li>
-        <li><a href="#函数">函数</a></li>
-        <li><a href="#条件语句">条件语句</a></li>
-        <li><a href="#动态key">动态key</a></li>
-        <li><a href="#列表生成">列表生成</a></li>
-        <li><a href="#文件导入">文件导入</a></li>
-        <li><a href="#异常">异常</a></li>
-        <li><a href="#外部变量">外部变量</a></li>
-        <li><a href="#面向对象">面向对象</a></li>
-      </ul>
-    </li>
+    <li><a href="#tips">TIPS</a></li>
+    <li><a href="#pod无法启动">pod无法启动</a></li>
+    <li><a href="#nacos">Nacos</a></li>
+    <li><a href="#redis">Redis</a></li>
+    <li><a href="#mysql">MySQL</a></li>
+    <li><a href="#kafka">Kafka</a></li>
+    <li><a href="#emqx">emqx</a></li>
+    <li><a href="#influxdb">influxdb</a></li>
+    <li><a href="#rabbitmq">rabbitmq</a></li>
   </ul>
 </nav>
 </div>
