@@ -1,76 +1,63 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>k8s on 应许之地</title>
+    <title>K8s on 应许之地</title>
     <link>https://yiuterran.github.io/blog/tags/k8s/</link>
-    <description>Recent content in k8s on 应许之地</description>
+    <description>Recent content in K8s on 应许之地</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>&amp;copy; 2021 &lt;a href=&#34;https://github.com/YiuTerran&#34;&gt;tryao&lt;/a&gt;
 </copyright>
-    <lastBuildDate>Tue, 02 Jan 2024 09:26:30 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/tags/k8s/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 02 Jan 2024 09:26:30 +0800</lastBuildDate>
+    <atom:link href="https://yiuterran.github.io/blog/tags/k8s/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Kcl试用</title>
       <link>https://yiuterran.github.io/blog/posts/kcl%E8%AF%95%E7%94%A8/</link>
       <pubDate>Tue, 02 Jan 2024 09:26:30 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/posts/kcl%E8%AF%95%E7%94%A8/</guid>
       <description>kcl是蚂蚁金服开源的配置DSL，诞生比较晚，所以吸纳了已有的jsonnet、hcl、cue等方案的优点。 安装 对于linux： wget -q https://kcl-lang.io/script/install-cli.sh -O - | /bin/bash 这个脚本本</description>
     </item>
-    
     <item>
       <title>StatefulSet使用思路梳理</title>
       <link>https://yiuterran.github.io/blog/posts/statefulset%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86/</link>
       <pubDate>Fri, 15 Sep 2023 14:57:05 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/posts/statefulset%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86/</guid>
       <description>一般服务都是使用deployment部署，deploy的使用非常简单，无状态，随意调度。但是各种需要持久化数据的中间件都需要使用StatefulSet</description>
     </item>
-    
     <item>
       <title>Configmap挂载的几种情况</title>
       <link>https://yiuterran.github.io/blog/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/</link>
       <pubDate>Fri, 15 Sep 2023 09:33:41 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/</guid>
       <description>ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理： 将某个key的值挂载为环境变量 apiVersion: v1 kind: Pod metadata: name: dapi-test-pod spec: containers: - name: test-container image: gcr.io/google_containers/busybox command: [ &amp;quot;/bin/sh&amp;quot;, &amp;quot;-c&amp;quot;, &amp;quot;env&amp;quot; ] env: - name: SPECIAL_LEVEL_KEY valueFrom: configMapKeyRef:</description>
     </item>
-    
     <item>
       <title>PromQL笔记</title>
       <link>https://yiuterran.github.io/blog/posts/promql%E7%AC%94%E8%AE%B0/</link>
       <pubDate>Mon, 24 Jul 2023 11:21:33 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/posts/promql%E7%AC%94%E8%AE%B0/</guid>
       <description>格式 类似influxdb，prometheus也有自己的line protocol： &amp;lt;--------------- metric ---------------------&amp;gt;&amp;lt;-timestamp -&amp;gt;&amp;lt;-value-&amp;gt; &amp;lt;---metric name---&amp;gt;{labelname=labelvalue,....} http_request_total{status=&amp;quot;200&amp;quot;, method=&amp;quot;GET&amp;quot;}@1434417560938 =&amp;gt; 94355 http_request_total{status=&amp;quot;200&amp;quot;, method=&amp;quot;GET&amp;quot;}@1434417561287 =&amp;gt; 94334 上面就表示在某个时间戳系统http GET</description>
     </item>
-    
     <item>
       <title>K3s存储插件使用笔记</title>
       <link>https://yiuterran.github.io/blog/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/</link>
       <pubDate>Mon, 12 Jun 2023 09:20:20 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/</guid>
       <description>原理 k8s存储主要依赖PV和PVC的机制，前者由运维人员声明可用的存储，如： apiVersion: v1 kind: PersistentVolume metadata: name: nfs spec: storageClassName: manual capacity: storage: 10Gi accessModes: - ReadWriteMany nfs: server: 10.244.1.4 path: &amp;quot;/&amp;quot; 后者是用户（开发人员）声明的需求</description>
     </item>
-    
     <item>
       <title>KubeEdge要点笔记</title>
       <link>https://yiuterran.github.io/blog/posts/kubeedge%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/</link>
       <pubDate>Tue, 21 Feb 2023 15:07:54 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/posts/kubeedge%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/</guid>
       <description>安装流程 首先要在云端安装k8s，理论上只需要master节点，可以没有worker，换句话说可以是一个单节点集群（但是要关闭NoSchedule的ta</description>
     </item>
-    
     <item>
       <title>K8s要点简记</title>
       <link>https://yiuterran.github.io/blog/posts/k8s%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/</link>
       <pubDate>Fri, 10 Feb 2023 09:30:19 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/posts/k8s%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/</guid>
       <description>22年的时候需要使用CICD的时候，看了一遍k8s相关的知识点。买了一本《深入剖析Kubernetes》，大致熟悉了常用的概念。 最近因为工作调动需要做</description>
     </item>
-    
   </channel>
 </rss>

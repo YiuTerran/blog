@@ -10,7 +10,7 @@
 <title>监控平台调研报告 | 应许之地</title>
 
 <meta name="generator" content="Hugo Eureka 0.9.3" />
-<link rel="stylesheet" href="https://yiuterran.github.io/blog/css/eureka.css">
+<link rel="stylesheet" href="https://yiuterran.github.io/blog/css/eureka.min.30cfa2a7d2b5754cd246875caad26d69af1d8567ea53339f6729fe1d0ceee8917d33fcd191d4284da2a5da6359d79cb7.css">
 <script defer src="https://yiuterran.github.io/blog/js/eureka.min.e8043b71b627e3cfd9b2a5de56adf007f5af83dee672ca0c186aa2e29a10d6f648632064d0c00b2fa4d1b11e0f196af3.js"></script>
 
 
@@ -43,7 +43,7 @@
 <link rel="stylesheet" href="https://yiuterran.github.io/blog/css/highlightjs.min.2958991528e43eb6fc9b8c4f2b8e052f79c4010718e1d1e888a777620e9ee63021c2c57ec7417a3108019bb8c41943e6.css" media="print" onload="this.media='all';this.onload=null">
 
 
-<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.a975d08212c5439f29e6074e7ad58e159ae1ef5efb6a31962fa3b6885557e794dd9315f4a8a16d705066d023f4eaaf07.js"></script>
+<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.9e48e61ee118f32e5693a91858e5f921e76994ec4100feb4853db924a2b3362e41fc93e126df148ee12b77a24e60b700.js"></script>
 
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
@@ -269,7 +269,7 @@
   
 
   <p>广义的监控又称为Application Performance Monitoring(APM)，即应用性能监控。其数据类型主要包括：指标数据（Metrics），日志文本（Logs），分布式追踪（Traces），这又称为可观测性三支柱。</p>
-<p><img src="https://s2.loli.net/2022/10/11/bZ6wfGOpQXHdeUz.webp" alt="img"></p>
+<p><img alt="img" src="https://s2.loli.net/2022/10/11/bZ6wfGOpQXHdeUz.webp"></p>
 <p>其中，Metric是监控系统的核心，其又可以细分为os/container/service/middleware的Metric，实现方式一般是周期性采样，并进行计算聚合；</p>
 <p>Trace一般用于调试和定位问题。Trace的重要性要稍微差一点，一方面可以通过Log实现简单的Trace，另一方面它会对应用的性能造成一定的影响。如果可以重放用户的请求，用Arthas这种线上诊断工具代替也勉强可以；</p>
 <p>Log则比较零散，可以包括各种信息，比如用来提取Metric，以及记录各种Event. 此外，客户端埋点上报的数据一般是用来统计用户行为的，也可以视为一种Log；</p>
@@ -303,12 +303,12 @@
 <p>Traces：院内目前在k8s里布置了一套skywalking；</p>
 <h2 id="架构设计">架构设计</h2>
 <h3 id="夜莺jaegerefk">夜莺+Jaeger+EFK</h3>
-<p><img src="https://s2.loli.net/2022/10/11/CXp5N1PTbxHLif6.png" alt="image-20221011110835433"></p>
+<p><img alt="image-20221011110835433" src="https://s2.loli.net/2022/10/11/CXp5N1PTbxHLif6.png"></p>
 <p>这是jaeger的架构，目前推荐使用OpenTelemetry的SDK。只有Trace功能，也是push模型。</p>
-<p><img src="https://s2.loli.net/2022/10/09/59ctoAJqfyvSPhR.png" alt="image-20221009092410380"></p>
+<p><img alt="image-20221009092410380" src="https://s2.loli.net/2022/10/09/59ctoAJqfyvSPhR.png"></p>
 <p>这个是夜莺的架构图，它主要是代替Prometheus+AlertManager+Grafana，所以主要是pull模型，不过也支持Telegraf这种push模型。</p>
 <p>由于我们部分服务在k8s外面，所以push模型的server最好部署在k8s外（在k8s里面要开NodePort暴露到ECS内网），pull模型的则必须部署在k8s里。</p>
-<p><img src="https://s2.loli.net/2022/10/11/lIbVHTw7jLXO8WN.png" alt="image-20221011174746989"></p>
+<p><img alt="image-20221011174746989" src="https://s2.loli.net/2022/10/11/lIbVHTw7jLXO8WN.png"></p>
 <p>上图是IoT目前的服务生态，这里给出一种可能的架构：</p>
 <ol>
 <li>prometheus或者说Nightingale部署在k8s里：
@@ -347,7 +347,7 @@
 </ol>
 <h3 id="使用elastic-observability">使用Elastic Observability</h3>
 <p>ES可观测性方案基于ES做了全链路可观测，集成度非常高。</p>
-<p><img src="https://s2.loli.net/2022/10/11/7f1p3lhEQ4bBMWK.png" alt="image-20221011180610698"></p>
+<p><img alt="image-20221011180610698" src="https://s2.loli.net/2022/10/11/7f1p3lhEQ4bBMWK.png"></p>
 <p>Filebeat和Metricbeat都是push模型，所以类似zabbix，将ElasticSearch、kibana和Elastic APM部署在ECS上。在k8s集群/边缘侧部署MetricBeat作为采集器，将信息推送到ES即可。另外，值得一提的是MetricBeat支持windows事件日志采集。</p>
 <p>考虑到人力成本，这里推荐使用Elastic Stack技术栈，下面按该技术栈进行分析。</p>
 <h2 id="告警自愈">告警自愈</h2>
@@ -422,7 +422,7 @@
 <p>高性能服务还要考虑饱和度与吞吐量之间的比例关系，这个适合作为内部SLO，无须对外。</p>
 <p>SLO需要一个时间窗口，根据业务性质的不同，也可以指定自然月，甚至季度作为时间窗口。Google推荐按4周的滚动周期作为时间窗口：比如最近4周hermes HTTP API的成功率（非5xx）在99.9%. 那么系统允许有0.1%的错误，这被称为错误预算。理想情况下，如果系统的流量均匀，那么每天的错误响应不高于0.1%，就不应该触发告警。但是实际情况往往非常复杂，Google推荐设置基于SLO的多个时间窗口、多个燃烧率阈值作为告警的条件，可以参考<a href="https://juejin.cn/post/7048830093698793480">这里</a>。</p>
 <p>此外，告警需要区分等级，很多时候大问题是从小问题开始的，但是小问题不一定引起大问题。下面是99.9%SLO的推荐报警设置：</p>
-<p><img src="https://s2.loli.net/2022/10/10/aA3Wqf4kQTyXYzN.webp" alt="image-20220103122300705"></p>
+<p><img alt="image-20220103122300705" src="https://s2.loli.net/2022/10/10/aA3Wqf4kQTyXYzN.webp"></p>
 
 </article>
 

@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>prometheus on 应许之地</title>
+    <title>Prometheus on 应许之地</title>
     <link>https://yiuterran.github.io/blog/tags/prometheus/</link>
-    <description>Recent content in prometheus on 应许之地</description>
+    <description>Recent content in Prometheus on 应许之地</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>&amp;copy; 2021 &lt;a href=&#34;https://github.com/YiuTerran&#34;&gt;tryao&lt;/a&gt;
 </copyright>
-    <lastBuildDate>Mon, 24 Jul 2023 11:21:33 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/tags/prometheus/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 24 Jul 2023 11:21:33 +0800</lastBuildDate>
+    <atom:link href="https://yiuterran.github.io/blog/tags/prometheus/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>PromQL笔记</title>
       <link>https://yiuterran.github.io/blog/posts/promql%E7%AC%94%E8%AE%B0/</link>
       <pubDate>Mon, 24 Jul 2023 11:21:33 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/posts/promql%E7%AC%94%E8%AE%B0/</guid>
       <description>格式 类似influxdb，prometheus也有自己的line protocol： &amp;lt;--------------- metric ---------------------&amp;gt;&amp;lt;-timestamp -&amp;gt;&amp;lt;-value-&amp;gt; &amp;lt;---metric name---&amp;gt;{labelname=labelvalue,....} http_request_total{status=&amp;quot;200&amp;quot;, method=&amp;quot;GET&amp;quot;}@1434417560938 =&amp;gt; 94355 http_request_total{status=&amp;quot;200&amp;quot;, method=&amp;quot;GET&amp;quot;}@1434417561287 =&amp;gt; 94334 上面就表示在某个时间戳系统http GET</description>
     </item>
-    
   </channel>
 </rss>
