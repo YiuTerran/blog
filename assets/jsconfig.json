@@ -3,9 +3,9 @@
   "baseUrl": ".",
   "paths": {
    "*": [
-    "../../../Library/Caches/hugo_cache/modules/filecache/modules/pkg/mod/wangchucheng.com/hugo-eureka@v0.9.3/_vendor/github.com/FortAwesome/Font-Awesome/js-packages/@fortawesome/fontawesome-svg-core/*",
-    "../../../Library/Caches/hugo_cache/modules/filecache/modules/pkg/mod/wangchucheng.com/hugo-eureka@v0.9.3/_vendor/github.com/FortAwesome/Font-Awesome/js-packages/@fortawesome/free-brands-svg-icons/*",
-    "../../../Library/Caches/hugo_cache/modules/filecache/modules/pkg/mod/wangchucheng.com/hugo-eureka@v0.9.3/_vendor/github.com/FortAwesome/Font-Awesome/js-packages/@fortawesome/free-solid-svg-icons/*"
+    "../../../../../../tmp/hugo_cache/modules/filecache/modules/pkg/mod/wangchucheng.com/hugo-eureka@v0.9.3/_vendor/github.com/FortAwesome/Font-Awesome/js-packages/@fortawesome/fontawesome-svg-core/*",
+    "../../../../../../tmp/hugo_cache/modules/filecache/modules/pkg/mod/wangchucheng.com/hugo-eureka@v0.9.3/_vendor/github.com/FortAwesome/Font-Awesome/js-packages/@fortawesome/free-brands-svg-icons/*",
+    "../../../../../../tmp/hugo_cache/modules/filecache/modules/pkg/mod/wangchucheng.com/hugo-eureka@v0.9.3/_vendor/github.com/FortAwesome/Font-Awesome/js-packages/@fortawesome/free-solid-svg-icons/*"
    ]
   }
  }

@@ -168,7 +168,7 @@ HostKeyAlgorithms +ssh-rsa
 
 ## 输入法
 
-输入法框架**只推荐**fcitx，ibus各种延迟卡顿，fcitx5和钉钉的兼容性很差。
+输入法框架**只推荐**fcitx，ibus各种延迟卡顿，fcitx5和钉钉的兼容性很差。另外如果用的机械硬盘，换成ssd之后输入法卡顿会有很大改善。
 
 我目前用的是rime输入法，推荐使用[这个](https://github.com/Mark24Code/rime-auto-deploy)脚本进行安装，还是很方便的。个性化配置可以修改`~/.config/fcitx/rime/default.yaml`文件，可以删除掉`default.custom.yaml`，不然会被那边的覆盖掉。
 

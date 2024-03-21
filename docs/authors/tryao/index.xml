@@ -1,49 +1,274 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>“Tryao&#34; on 应许之地</title>
+    <title>个人介绍 on 应许之地</title>
     <link>https://yiuterran.github.io/blog/authors/tryao/</link>
-    <description>Recent content in “Tryao&#34; on 应许之地</description>
+    <description>Recent content in 个人介绍 on 应许之地</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>&amp;copy; 2021 &lt;a href=&#34;https://github.com/YiuTerran&#34;&gt;tryao&lt;/a&gt;
 </copyright>
-    <lastBuildDate>Fri, 15 Sep 2023 14:57:05 +0800</lastBuildDate>
-    <atom:link href="https://yiuterran.github.io/blog/authors/tryao/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 09 Jan 2024 09:35:01 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/authors/tryao/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Python技术栈更新</title>
+      <link>https://yiuterran.github.io/blog/posts/python%E6%8A%80%E6%9C%AF%E6%A0%88%E6%9B%B4%E6%96%B0/</link>
+      <pubDate>Tue, 09 Jan 2024 09:35:01 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/posts/python%E6%8A%80%E6%9C%AF%E6%A0%88%E6%9B%B4%E6%96%B0/</guid>
+      <description>有段时间没用Python写工程了，基本都是写脚本，最近接了个活帮忙搞个爬虫相关项目，需要更新一下技术栈，做个笔记。 web开发：fastapi, 其实还可</description>
+    </item>
+    
+    <item>
+      <title>Jinja2小结</title>
+      <link>https://yiuterran.github.io/blog/posts/jinja2%E5%B0%8F%E7%BB%93/</link>
+      <pubDate>Fri, 05 Jan 2024 08:55:48 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/posts/jinja2%E5%B0%8F%E7%BB%93/</guid>
+      <description>之前写Python的时候其实有接触过一些jinja2，不过没有怎么用过实际上。毕竟前后端分离之后，这些模板语言在web开发上用处并不大。不过ansib</description>
+    </item>
+    
+    <item>
+      <title>Ansible速成</title>
+      <link>https://yiuterran.github.io/blog/posts/ansible%E9%80%9F%E6%88%90/</link>
+      <pubDate>Thu, 04 Jan 2024 14:00:55 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/posts/ansible%E9%80%9F%E6%88%90/</guid>
+      <description>虽然iac(infracture as code)流行以来，新的技术栈层出不穷，但是一般都是面向k8s或者云服务商的。传统的部署还是用ansible这种仅依</description>
+    </item>
+    
+    <item>
+      <title>Kcl试用</title>
+      <link>https://yiuterran.github.io/blog/posts/kcl%E8%AF%95%E7%94%A8/</link>
+      <pubDate>Tue, 02 Jan 2024 09:26:30 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/posts/kcl%E8%AF%95%E7%94%A8/</guid>
+      <description>kcl是蚂蚁金服开源的配置DSL，诞生比较晚，所以吸纳了已有的jsonnet、hcl、cue等方案的优点。 安装 对于linux： wget -q https://kcl-lang.io/script/install-cli.sh -O - | /bin/bash 这个脚本本</description>
+    </item>
+    
+    <item>
+      <title>Ytt试用</title>
+      <link>https://yiuterran.github.io/blog/posts/ytt%E8%AF%95%E7%94%A8/</link>
+      <pubDate>Fri, 29 Dec 2023 16:13:12 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/posts/ytt%E8%AF%95%E7%94%A8/</guid>
+      <description>jsonnet最大的问题其实是：它支持的是json，而不是yaml. 其实这也不是什么问题，因为yaml是json的超集，json本身就是一个合法的ya</description>
+    </item>
+    
+    <item>
+      <title>Jsonnet试用</title>
+      <link>https://yiuterran.github.io/blog/posts/jsonnet%E8%AF%95%E7%94%A8/</link>
+      <pubDate>Fri, 29 Dec 2023 10:21:59 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/posts/jsonnet%E8%AF%95%E7%94%A8/</guid>
+      <description>jsonnet这个语言很有意思，它存在的目的就是为了编辑配置。其实使用任何一门带有字符串模板的语言都能完成类似的目的，但是jsonnet的好处是它的封</description>
+    </item>
+    
+    <item>
+      <title>linux日常使用记录</title>
+      <link>https://yiuterran.github.io/blog/posts/linux%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</link>
+      <pubDate>Fri, 24 Nov 2023 10:51:31 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/posts/linux%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</guid>
+      <description>由于公司开始强制使用Linux桌面系统，记录一下使用中遇到的问题。 发行版选择 本来先尝试了Ubuntu 22.04和KDE Neon做为开发环境，但是体验都</description>
+    </item>
+    
+    <item>
+      <title>ES和kibana简要笔记</title>
+      <link>https://yiuterran.github.io/blog/posts/es%E5%92%8Ckibana%E7%AE%80%E8%A6%81%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Mon, 13 Nov 2023 10:11:35 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/posts/es%E5%92%8Ckibana%E7%AE%80%E8%A6%81%E7%AC%94%E8%AE%B0/</guid>
+      <description>由于比赛需要用到es和kibana，重新复习一下这块的内容。 基础概念 ES的概念和其他数据库截然不同，虽然和mongodb同为文档型数据库，但是后者的很</description>
+    </item>
+    
     <item>
       <title>StatefulSet使用思路梳理</title>
       <link>https://yiuterran.github.io/blog/posts/statefulset%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86/</link>
       <pubDate>Fri, 15 Sep 2023 14:57:05 +0800</pubDate>
+      
       <guid>https://yiuterran.github.io/blog/posts/statefulset%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86/</guid>
       <description>一般服务都是使用deployment部署，deploy的使用非常简单，无状态，随意调度。但是各种需要持久化数据的中间件都需要使用StatefulSet</description>
     </item>
+    
     <item>
       <title>Configmap挂载的几种情况</title>
       <link>https://yiuterran.github.io/blog/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/</link>
       <pubDate>Fri, 15 Sep 2023 09:33:41 +0800</pubDate>
+      
       <guid>https://yiuterran.github.io/blog/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/</guid>
       <description>ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理： 将某个key的值挂载为环境变量 apiVersion: v1 kind: Pod metadata: name: dapi-test-pod spec: containers: - name: test-container image: gcr.io/google_containers/busybox command: [ &amp;quot;/bin/sh&amp;quot;, &amp;quot;-c&amp;quot;, &amp;quot;env&amp;quot; ] env: - name: SPECIAL_LEVEL_KEY valueFrom: configMapKeyRef:</description>
     </item>
+    
     <item>
       <title>Sqlx备忘录</title>
       <link>https://yiuterran.github.io/blog/posts/sqlx%E5%A4%87%E5%BF%98%E5%BD%95/</link>
       <pubDate>Tue, 12 Sep 2023 15:22:00 +0800</pubDate>
+      
       <guid>https://yiuterran.github.io/blog/posts/sqlx%E5%A4%87%E5%BF%98%E5%BD%95/</guid>
       <description>很少用golang写增删改查，sqlx的用法和java差别很大，用的时候总是要从头看文档。这里写个备忘录方便以后查询，使用sqlx和go-sqlbui</description>
     </item>
+    
     <item>
       <title>边侧高可用解决方案</title>
       <link>https://yiuterran.github.io/blog/posts/%E8%BE%B9%E4%BE%A7%E9%AB%98%E5%8F%AF%E7%94%A8%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/</link>
       <pubDate>Tue, 01 Aug 2023 14:57:03 +0800</pubDate>
+      
       <guid>https://yiuterran.github.io/blog/posts/%E8%BE%B9%E4%BE%A7%E9%AB%98%E5%8F%AF%E7%94%A8%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/</guid>
       <description>边侧服务高可用其实就是当年服务还没上云的时候，使用的那套技术栈。不过稍微有些不同的是，边缘计算需要考虑完全封闭的局域网，有点像组态软件的场景。 基于域名</description>
     </item>
+    
     <item>
       <title>PromQL笔记</title>
       <link>https://yiuterran.github.io/blog/posts/promql%E7%AC%94%E8%AE%B0/</link>
       <pubDate>Mon, 24 Jul 2023 11:21:33 +0800</pubDate>
+      
       <guid>https://yiuterran.github.io/blog/posts/promql%E7%AC%94%E8%AE%B0/</guid>
       <description>格式 类似influxdb，prometheus也有自己的line protocol： &amp;lt;--------------- metric ---------------------&amp;gt;&amp;lt;-timestamp -&amp;gt;&amp;lt;-value-&amp;gt; &amp;lt;---metric name---&amp;gt;{labelname=labelvalue,....} http_request_total{status=&amp;quot;200&amp;quot;, method=&amp;quot;GET&amp;quot;}@1434417560938 =&amp;gt; 94355 http_request_total{status=&amp;quot;200&amp;quot;, method=&amp;quot;GET&amp;quot;}@1434417561287 =&amp;gt; 94334 上面就表示在某个时间戳系统http GET</description>
     </item>
+    
+    <item>
+      <title>解决k8s的javaSDK与jackson不兼容问题</title>
+      <link>https://yiuterran.github.io/blog/posts/%E8%A7%A3%E5%86%B3k8s%E7%9A%84javasdk%E4%B8%8Ejackson%E4%B8%8D%E5%85%BC%E5%AE%B9%E9%97%AE%E9%A2%98/</link>
+      <pubDate>Mon, 10 Jul 2023 12:29:45 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/posts/%E8%A7%A3%E5%86%B3k8s%E7%9A%84javasdk%E4%B8%8Ejackson%E4%B8%8D%E5%85%BC%E5%AE%B9%E9%97%AE%E9%A2%98/</guid>
+      <description>k8s的java sdk中json序列化使用了google自家的gosn，但是springboot中默认使用Jackson，我们的业务代码里面也习惯上使</description>
+    </item>
+    
+    <item>
+      <title>K3s存储插件使用笔记</title>
+      <link>https://yiuterran.github.io/blog/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Mon, 12 Jun 2023 09:20:20 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/</guid>
+      <description>原理 k8s存储主要依赖PV和PVC的机制，前者由运维人员声明可用的存储，如： apiVersion: v1 kind: PersistentVolume metadata: name: nfs spec: storageClassName: manual capacity: storage: 10Gi accessModes: - ReadWriteMany nfs: server: 10.244.1.4 path: &amp;quot;/&amp;quot; 后者是用户（开发人员）声明的需求</description>
+    </item>
+    
+    <item>
+      <title>边缘服务器管理工具选型</title>
+      <link>https://yiuterran.github.io/blog/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/</link>
+      <pubDate>Mon, 06 Mar 2023 14:37:28 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/</guid>
+      <description>这里我们主要的需求是能够穿透内网管理服务器，服务器大部分情况下应当是linux，但是也可能是windows。我们的服务要通过API和这个服务器管理软件</description>
+    </item>
+    
+    <item>
+      <title>Kotlin要点笔记</title>
+      <link>https://yiuterran.github.io/blog/posts/kotlin%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Sun, 05 Mar 2023 12:58:37 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/posts/kotlin%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/</guid>
+      <description>实际上学习kotlin的动力一直不足，因为java is enough. 不过最近打算写一个QQ机器人玩，现在流行的框架是基于kotlin的，虽然可以用HTTP API进行</description>
+    </item>
+    
+    <item>
+      <title>KubeEdge要点笔记</title>
+      <link>https://yiuterran.github.io/blog/posts/kubeedge%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Tue, 21 Feb 2023 15:07:54 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/posts/kubeedge%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/</guid>
+      <description>安装流程 首先要在云端安装k8s，理论上只需要master节点，可以没有worker，换句话说可以是一个单节点集群（但是要关闭NoSchedule的ta</description>
+    </item>
+    
+    <item>
+      <title>K8s要点简记</title>
+      <link>https://yiuterran.github.io/blog/posts/k8s%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/</link>
+      <pubDate>Fri, 10 Feb 2023 09:30:19 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/posts/k8s%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/</guid>
+      <description>22年的时候需要使用CICD的时候，看了一遍k8s相关的知识点。买了一本《深入剖析Kubernetes》，大致熟悉了常用的概念。 最近因为工作调动需要做</description>
+    </item>
+    
+    <item>
+      <title>Makefile要点简记</title>
+      <link>https://yiuterran.github.io/blog/posts/makefile%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/</link>
+      <pubDate>Wed, 25 Jan 2023 16:49:11 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/posts/makefile%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/</guid>
+      <description>虽然现代C/CPP一般使用cmake作为工具链，但是如果要看陈年老项目，makefile相关的知识还是要掌握一些的，不然估计很难理清编译逻辑。这也是c</description>
+    </item>
+    
+    <item>
+      <title>CMake速记</title>
+      <link>https://yiuterran.github.io/blog/posts/cmake%E9%80%9F%E8%AE%B0/</link>
+      <pubDate>Mon, 09 Jan 2023 16:42:44 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/posts/cmake%E9%80%9F%E8%AE%B0/</guid>
+      <description>主要参考书籍《Modern CMake for C++》，以及《CMake Best Practices》，使用CMake版本3.25. 建议先看第一本，再看第二本。 使用 一般而言，</description>
+    </item>
+    
+    <item>
+      <title>Tinode源码解析</title>
+      <link>https://yiuterran.github.io/blog/posts/tinode%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</link>
+      <pubDate>Mon, 14 Nov 2022 19:21:38 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/posts/tinode%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</guid>
+      <description>概述 有朋友需要做一个im，简单做了一下技术调研，开源的实现其实蛮多的，这里挑几个说一下： Synapse/dendrite，matrix系，客户端比较多</description>
+    </item>
+    
+    <item>
+      <title>SRE读书笔记</title>
+      <link>https://yiuterran.github.io/blog/posts/sre%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Thu, 22 Sep 2022 10:01:11 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/posts/sre%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/</guid>
+      <description>SRE相关的书籍，截止目前google出了2本，分别是2016年的的《Site Reliability Engineering: How Google Runs Production Systems》和2020年的《The Site Reliability Workbook》</description>
+    </item>
+    
+    <item>
+      <title>Ginkgo使用笔记</title>
+      <link>https://yiuterran.github.io/blog/posts/ginkgo%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Mon, 05 Sep 2022 18:10:06 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/posts/ginkgo%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/</guid>
+      <description>go自带的单元测试比较适合测一个小函数，如果要做一系列的流程测试，则显得较为繁琐。 推荐使用ginkgo来做流程测试，BDD风格写出来的测试代码非常容易</description>
+    </item>
+    
+    <item>
+      <title>Influxdb Cluster集成</title>
+      <link>https://yiuterran.github.io/blog/posts/influxdb-cluster%E9%9B%86%E6%88%90/</link>
+      <pubDate>Thu, 01 Sep 2022 15:47:56 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/posts/influxdb-cluster%E9%9B%86%E6%88%90/</guid>
+      <description>本文记录在golang项目中集成influxdb-cluster需要的知识储备。 术语 database 和MySQL中一致 batch \n分割的多行数据，用来批量写入。 influ</description>
+    </item>
+    
+    <item>
+      <title>Zabbix配置记录</title>
+      <link>https://yiuterran.github.io/blog/posts/zabbix%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/</link>
+      <pubDate>Wed, 13 Jul 2022 12:21:28 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/posts/zabbix%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/</guid>
+      <description>安装服务 这里演示的是物理机环境监控场景，容器场景还是更推荐k8s+prom来搞。 版本是zabbix6.0 LTS，官方已经不提供CentOS7的安装包了</description>
+    </item>
+    
+    <item>
+      <title>Golang定时器要点</title>
+      <link>https://yiuterran.github.io/blog/posts/golang%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A6%81%E7%82%B9/</link>
+      <pubDate>Thu, 07 Apr 2022 09:35:13 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/posts/golang%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A6%81%E7%82%B9/</guid>
+      <description>golang内置的定时器是基于多个四叉堆封装调度的，增删定时器的效率是O(lgn)，所以大量定时器本身可能成为性能瓶颈。可以考虑使用开源的时间轮算法实</description>
+    </item>
+    
+    <item>
+      <title>Windows&#43;wsl2后端开发环境搭建</title>
+      <link>https://yiuterran.github.io/blog/posts/windows&#43;wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</link>
+      <pubDate>Fri, 04 Mar 2022 20:54:01 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/posts/windows&#43;wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</guid>
+      <description>2023/11/16 Update: wsl2 2.0通过镜像网络解决了所有网络问题，已经不用折腾了。 2023/2/2 Update: wsl已经解决了systemd和网络问题，现在已经基本无障碍使用，移除了大部分无用的配</description>
+    </item>
+    
+    <item>
+      <title>Gb28181解析</title>
+      <link>https://yiuterran.github.io/blog/posts/gb28181%E8%A7%A3%E6%9E%90/</link>
+      <pubDate>Wed, 02 Mar 2022 09:46:50 +0800</pubDate>
+      
+      <guid>https://yiuterran.github.io/blog/posts/gb28181%E8%A7%A3%E6%9E%90/</guid>
+      <description>国标GB28181（以下简称国标或者gb）文档分析的文档我去年其实写过一版，但是由于原来的电脑炸了，文档还没来得及传上去就丢了（痛苦），所以还要重写一</description>
+    </item>
+    
   </channel>
 </rss>

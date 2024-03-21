@@ -43,7 +43,7 @@
 <link rel="stylesheet" href="https://yiuterran.github.io/blog/css/highlightjs.min.2958991528e43eb6fc9b8c4f2b8e052f79c4010718e1d1e888a777620e9ee63021c2c57ec7417a3108019bb8c41943e6.css" media="print" onload="this.media='all';this.onload=null">
 
 
-<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.9e48e61ee118f32e5693a91858e5f921e76994ec4100feb4853db924a2b3362e41fc93e126df148ee12b77a24e60b700.js"></script>
+<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.a975d08212c5439f29e6074e7ad58e159ae1ef5efb6a31962fa3b6885557e794dd9315f4a8a16d705066d023f4eaaf07.js"></script>
 
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
@@ -112,7 +112,7 @@
     },
     "headline": "linux日常使用记录 | 应许之地","datePublished": "2023-11-24T10:51:31+08:00",
     "dateModified": "2023-11-24T10:51:31+08:00",
-    "wordCount":  6077 ,
+    "wordCount":  6149 ,
     "author": {
         "@type": "Person",
         "name": ["tryao"]
@@ -403,7 +403,7 @@ HostKeyAlgorithms +ssh-rsa
 </code></pre>
 <p>这里以<code>#!!</code>开头的配置都是供<code>tssh</code>使用的.</p>
 <h2 id="输入法">输入法</h2>
-<p>输入法框架<strong>只推荐</strong>fcitx，ibus各种延迟卡顿，fcitx5和钉钉的兼容性很差。</p>
+<p>输入法框架<strong>只推荐</strong>fcitx，ibus各种延迟卡顿，fcitx5和钉钉的兼容性很差。另外如果用的机械硬盘，换成ssd之后输入法卡顿会有很大改善。</p>
 <p>我目前用的是rime输入法，推荐使用<a href="https://github.com/Mark24Code/rime-auto-deploy">这个</a>脚本进行安装，还是很方便的。个性化配置可以修改<code>~/.config/fcitx/rime/default.yaml</code>文件，可以删除掉<code>default.custom.yaml</code>，不然会被那边的覆盖掉。</p>
 <p>参考配置如下：</p>
 <pre><code class="language-yaml"># 要比共享目录的同名文件的 config_version 大才可以生效
@@ -841,8 +841,9 @@ URxvt*termName: rxvt-unicode
 <p>这样才行。</p>
 <h2 id="其他">其他</h2>
 <p>网易云官方的播放器不能用，建议改为<strong>YesPlayMusic音乐播放器</strong>这个开源的播放器。</p>
-<p>微信实际上有原生的版本，可以从deepin论坛下载，不过非deepin的debian系需要额外装一些依赖才能使用。也可以使用星火商店，不过依赖的deb包还是要手动安装（如果不是国产发行版）。</p>
-<p><strong>注意</strong>，原生微信目前（v2.1.9）在LinuxMint下新消息没有提示，这个没办法，可以考虑改用wine版本微信。</p>
+<p><del>微信实际上有原生的版本，可以从deepin论坛下载，不过非deepin的debian系需要额外装一些依赖才能使用。也可以使用星火商店，不过依赖的deb包还是要手动安装（如果不是国产发行版）。</del></p>
+<p><del><strong>注意</strong>，原生微信目前（v2.1.9）在LinuxMint下新消息没有提示，这个没办法，可以考虑改用wine版本微信。</del></p>
+<p>2024.03更新：微信重构了原生的版本，现在已经可以正常使用了，星火商店可以下载。</p>
 <p>命令行提示工具推荐使用<a href="https://github.com/starship/starship"><code>starship</code></a>，可以配合zsh使用，也可以直接在bash使用。个人感觉比oh-my-zsh+powerline10k体验更好，而且这个还能配合powershell使用。</p>
 <p>IDE的话，我买了正版的jetbrain全家桶，所以直接用<code>jetbrain toolbox</code>安装即可，而且默认是装在home目录下，重装系统不会丢失。vscode也是能正常使用的。</p>
 <p>剪贴板软件可以用<code>CopyQ</code>，快捷键绑定到命令<code>copyq toggle</code>即可（不要使用自带的全局快捷键，没用）。</p>
@@ -857,7 +858,7 @@ URxvt*termName: rxvt-unicode
       
         <div class="my-4">
     
-    <a href="https://yiuterran.github.io/blog/tags/linux/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#Linux</a>
+    <a href="https://yiuterran.github.io/blog/tags/linux/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#linux</a>
     
 </div>
       

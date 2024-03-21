@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Wsl on 应许之地</title>
+    <title>wsl on 应许之地</title>
     <link>https://yiuterran.github.io/blog/tags/wsl/</link>
-    <description>Recent content in Wsl on 应许之地</description>
+    <description>Recent content in wsl on 应许之地</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>&amp;copy; 2021 &lt;a href=&#34;https://github.com/YiuTerran&#34;&gt;tryao&lt;/a&gt;
 </copyright>
-    <lastBuildDate>Fri, 04 Mar 2022 20:54:01 +0800</lastBuildDate>
-    <atom:link href="https://yiuterran.github.io/blog/tags/wsl/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 04 Mar 2022 20:54:01 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/tags/wsl/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Windows&#43;wsl2后端开发环境搭建</title>
       <link>https://yiuterran.github.io/blog/posts/windows&#43;wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</link>
       <pubDate>Fri, 04 Mar 2022 20:54:01 +0800</pubDate>
+      
       <guid>https://yiuterran.github.io/blog/posts/windows&#43;wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</guid>
       <description>2023/11/16 Update: wsl2 2.0通过镜像网络解决了所有网络问题，已经不用折腾了。 2023/2/2 Update: wsl已经解决了systemd和网络问题，现在已经基本无障碍使用，移除了大部分无用的配</description>
     </item>
+    
   </channel>
 </rss>

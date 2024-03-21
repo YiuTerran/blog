@@ -43,7 +43,7 @@
 <link rel="stylesheet" href="https://yiuterran.github.io/blog/css/highlightjs.min.2958991528e43eb6fc9b8c4f2b8e052f79c4010718e1d1e888a777620e9ee63021c2c57ec7417a3108019bb8c41943e6.css" media="print" onload="this.media='all';this.onload=null">
 
 
-<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.9e48e61ee118f32e5693a91858e5f921e76994ec4100feb4853db924a2b3362e41fc93e126df148ee12b77a24e60b700.js"></script>
+<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.a975d08212c5439f29e6074e7ad58e159ae1ef5efb6a31962fa3b6885557e794dd9315f4a8a16d705066d023f4eaaf07.js"></script>
 
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
@@ -395,7 +395,7 @@ server.publicBaseUrl: &quot;http://&lt;out-ip&gt;:5601&quot;
 <p>通过浏览器访问该地址的5601端口，即可打开登录页。使用内置elastic账户+超管密码登陆即可进行后续操作。</p>
 <h2 id="安装fleet-server">安装Fleet Server</h2>
 <p>Fleet Server是接受Elastic Agent或者各种Beat发送过来的数据并存储到ES的服务。比较蛋疼的是，FleetServer是集成在ElasticAgent这个二进制文件里面的，所以agent体积巨大。</p>
-<p><img alt="Fleet Server on-premises deployment model" src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/fleet-server-on-prem-deployment-20230307194341712.png"></p>
+<p><img src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/fleet-server-on-prem-deployment-20230307194341712.png" alt="Fleet Server on-premises deployment model"></p>
 <p>MetricBeats等beats工具则比较轻量一些，可以直接传输数据到ES，不过此类工具就无法通过kibana直接进行配置升级等管理了。</p>
 <p>这里还是先使用Agent+Fleet的方式安装，方便后续升级管理：</p>
 <ol>
@@ -659,7 +659,7 @@ systemctl start filebeat
 <p>使用journalctl查看日志即可。</p>
 <p>另外kibana所在的机器还要打开kibana的日志收集，配置方法类似。</p>
 <p>在ES所在机器安装了MetricBeat和Filebeat之后，就可以在kibana的<strong>堆栈监测</strong>里面看到es相关信息，差不多就是下图的样子：</p>
-<p><img alt="image-20221017104832361" src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/crdIyuoa97LKDjJ-20230307194342564.png"></p>
+<p><img src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/crdIyuoa97LKDjJ-20230307194342564.png" alt="image-20221017104832361"></p>
 <p>如果仅仅使用es自带的monitor，则不会有下面的beats部分，<strong>同时也不会有log的监控</strong>。</p>
 <h2 id="数据生命周期管理ilm">数据生命周期管理(ILM)</h2>
 <p>在<strong>Stack Management</strong>-<strong>索引生命周期管理</strong>里管理index的生命周期策略，这里默认就会有filebeat和metricbeat自动创建index的生命周期，可以根据需求进行修改。冷阶段不支持搜索，除非有企业许可证。</p>
@@ -731,7 +731,7 @@ systemctl start filebeat
 <h3 id="配置索引模板">配置索引模板</h3>
 <p>我们需要将上面的grok转换后的格式关联一个索引模板。</p>
 <p>先创建一个组件模板以供复用，到<code>Stack Management</code>-<code>索引管理</code>下面，点击<strong>组件模板</strong>tab页下<strong>创建</strong>相关按钮，填入名称（如custom-logs@mapping），在mapping页面做好映射：</p>
-<p><img alt="image-20221102111708534" src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/iOIGgqcJyrnQf1P-20230307194343074.png"></p>
+<p><img src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/iOIGgqcJyrnQf1P-20230307194343074.png" alt="image-20221102111708534"></p>
 <p>对应json如下：</p>
 <pre><code class="language-json">{
   &quot;@timestamp&quot;: &quot;Date&quot;,
@@ -754,7 +754,7 @@ systemctl start filebeat
 <p>由于默认的<code>logs-*</code>的匹配优先级是100，我们创建了优先级更高的模板，就自动将形如<code>logs-golang*</code>的索引自动关联到新的索引模板和生命周期策略上了。</p>
 <p>另外提一下，golang的panic日志一般不需要采集，直接用<code>File Integrity Monitoring Integration</code>这个集成进行文件监测即可。</p>
 <h3 id="配置采集器fleet">配置采集器(Fleet)</h3>
-<p><img alt="image-20221026180330634" src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/WRYNswyo1d3qrJV-20230307194343541.png"></p>
+<p><img src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/WRYNswyo1d3qrJV-20230307194343541.png" alt="image-20221026180330634"></p>
 <p>在<code>Custom Logs</code>的添加界面上，命名空间配置当前环境(如<code>dev</code>)，点击高级配置，dataset填入服务的名字，如<code>golang_video</code>，这样最后index的名字就是<code>logs-golang_video-dev</code>，由于这里已经指定中划线作为分隔符，所以dataset中不能出现<code>-</code>. 建议这里将同一个格式的日志放在一个配置里（不同命名空间的需要分开），方便修改，可以从log.path里分辨出日志具体属于哪个服务。</p>
 <p>通过名称匹配，这个索引会自动关联上文创建的索引模板。pipeline则需要手动关联，在<code>Custom configurations</code>下面，填入如下yaml：</p>
 <pre><code class="language-yaml">pipeline: golang-common-log-parser
@@ -816,14 +816,14 @@ systemctl start filebeat
 <p>在安全里可以安装Elastic预构建的几百个规则，不过不是很建议全部导入，因为大部分都没啥用。可以考虑激活k8s，linux之内tag的规则，如果使用云厂商自带的监控，则一般不必再使用这里的告警功能，相当于重复监测了，而且<strong>有性能损耗</strong>。</p>
 <h4 id="observability使用示例">Observability使用示例</h4>
 <p>如果只是简单的创建一个error日志告警，可以在Observability点击创建规则，选择日志阈值，然后创建一个如下的规则：</p>
-<p><img alt="image-20221020141946295" src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/chDWbTyCmFlVs2f-20230307194344056.png"></p>
+<p><img src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/chDWbTyCmFlVs2f-20230307194344056.png" alt="image-20221020141946295"></p>
 <p>由于我们在上面的数据预处理里面已经将log.level映射出来，所以这里使用这个字段判断一下就行。连接器选择刚才创建的webhook，在Fired和Recovered两种条件下创建两个不同的告警提示即可。</p>
-<p><img alt="image-20221020142216332" src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/lIORdb4Dt6GwngU-20230307194344606.png"></p>
+<p><img src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/lIORdb4Dt6GwngU-20230307194344606.png" alt="image-20221020142216332"></p>
 <p>右侧可以看到这里可以使用的变量。可以注意到这里并<strong>没有字段可以拿到日志的详情</strong>，这是因为这里只能做聚合查询，肯定是拿不到具体日志的详情的，不过可以通过group by source.ip之类的方式获取到具体的主机。如果需要直接提示详细的错误，需要用其他方案；</p>
 <h4 id="告警与洞见使用示例推荐">告警与洞见使用示例（推荐）</h4>
 <p>点击<strong>创建规则</strong>，选择<strong>Elasticsearch查询</strong>，选择KQL查询，创建一个视图<code>logs-golang*</code>作为索引，这样就自动匹配所有golang服务。</p>
 <p>如果不想这么粗放的创建告警，也可以用<code>logs-golang_sip_server*</code>，作为匹配，这样就匹配到单个服务的所有日志。所以index的名字很重要，不要随便取。</p>
-<p><img alt="image-20221021090656229" src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/EqnO2xCD1f6Hb8R-20230307194345086.png"></p>
+<p><img src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/EqnO2xCD1f6Hb8R-20230307194345086.png" alt="image-20221021090656229"></p>
 <p>查询条件仍然是日志等级为ERROR（这里是区分大小写的，可以在预处理里统一转换成大写），这里就是过去5分钟出现任意错误日志则触发。这里在body里面可以拿到<code>{{context.hits}}</code>，我们可以通过<a href="http://mustache.github.io/mustache.5.html">mustache</a>这个模板语言对其内容进行解析。</p>
 <p>告警模板：</p>
 <pre><code>{
@@ -849,7 +849,7 @@ systemctl start filebeat
 }
 </code></pre>
 <p>效果如图：</p>
-<p><img alt="image-20221021112827617" src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/iFZBmhLjnrRbNAG-20230307194345363.png"></p>
+<p><img src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/iFZBmhLjnrRbNAG-20230307194345363.png" alt="image-20221021112827617"></p>
 <h4 id="安全告警使用示例">安全告警使用示例</h4>
 <p>这里其实不太建议使用，非安全问题用这里的规则不太符合ES本身的设计，具体使用方法请自己摸索。</p>
 <h4 id="watcher使用示例">watcher使用示例</h4>

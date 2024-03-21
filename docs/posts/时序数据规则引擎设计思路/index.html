@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-<title>make | 应许之地</title>
+<title>时序数据规则引擎设计思路 | 应许之地</title>
 
 <meta name="generator" content="Hugo Eureka 0.9.3" />
 <link rel="stylesheet" href="https://yiuterran.github.io/blog/css/eureka.min.30cfa2a7d2b5754cd246875caad26d69af1d8567ea53339f6729fe1d0ceee8917d33fcd191d4284da2a5da6359d79cb7.css">
@@ -83,7 +83,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
 
 <meta name="description"
-  content="始于2022年初mbp2015归天之后...">
+  content="规则引擎的大致组成包括： 触发条件：如某个设备某种消息在某个时间点内到达；或周期性，每隔多久触发一次； 触发响应：即触发条件后要做什么，一般是告警、通知、">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -91,46 +91,51 @@
   "itemListElement": [{
       "@type": "ListItem",
       "position": 1 ,
-      "name":"Tags",
-      "item":"https://yiuterran.github.io/blog/tags/"},{
+      "name":"文章列表",
+      "item":"https://yiuterran.github.io/blog/posts/"},{
       "@type": "ListItem",
       "position": 2 ,
-      "name":"make",
-      "item":"https://yiuterran.github.io/blog/tags/make/"}]
+      "name":"时序数据规则引擎设计思路",
+      "item":"https://yiuterran.github.io/blog/posts/%E6%97%B6%E5%BA%8F%E6%95%B0%E6%8D%AE%E8%A7%84%E5%88%99%E5%BC%95%E6%93%8E%E8%AE%BE%E8%AE%A1%E6%80%9D%E8%B7%AF/"}]
 }
 </script>
 
 
 
-
 <script type="application/ld+json">
 {
-    "@context":"https://schema.org",
-    "@type":"ItemList",
-    "itemListElement":[{
-            "@type":"ListItem",
-            "position":  1 ,
-            "name": "Makefile要点简记",
-            "description": "虽然现代C/CPP一般使用cmake作为工具链，但是如果要看陈年老项目，makefile相关的知识还是要掌握一些的，不然估计很难理清编译逻辑。这也是c",
-            "url": "https://yiuterran.github.io/blog/posts/makefile%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/"
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://yiuterran.github.io/blog/posts/%E6%97%B6%E5%BA%8F%E6%95%B0%E6%8D%AE%E8%A7%84%E5%88%99%E5%BC%95%E6%93%8E%E8%AE%BE%E8%AE%A1%E6%80%9D%E8%B7%AF/"
+    },
+    "headline": "时序数据规则引擎设计思路 | 应许之地","datePublished": "2024-03-08T09:02:16+08:00",
+    "dateModified": "2024-03-08T09:02:16+08:00",
+    "wordCount":  1100 ,
+    "publisher": {
+        "@type": "Person",
+        "name": "C. Wang",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://yiuterran.github.io/blog/images/icon.png"
         }
-    ]
+        },
+    "description": "规则引擎的大致组成包括： 触发条件：如某个设备某种消息在某个时间点内到达；或周期性，每隔多久触发一次； 触发响应：即触发条件后要做什么，一般是告警、通知、"
 }
-</script><meta property="og:title" content="make | 应许之地" />
-<meta property="og:type" content="website" />
+</script><meta property="og:title" content="时序数据规则引擎设计思路 | 应许之地" />
+<meta property="og:type" content="article" />
 
 
 <meta property="og:image" content="https://yiuterran.github.io/blog/images/icon.png">
 
 
-<meta property="og:url" content="https://yiuterran.github.io/blog/tags/make/" />
+<meta property="og:url" content="https://yiuterran.github.io/blog/posts/%E6%97%B6%E5%BA%8F%E6%95%B0%E6%8D%AE%E8%A7%84%E5%88%99%E5%BC%95%E6%93%8E%E8%AE%BE%E8%AE%A1%E6%80%9D%E8%B7%AF/" />
 
 
 
 
-
-<meta property="og:description" content="始于2022年初mbp2015归天之后..." />
-
+<meta property="og:description" content="规则引擎的大致组成包括： 触发条件：如某个设备某种消息在某个时间点内到达；或周期性，每隔多久触发一次； 触发响应：即触发条件后要做什么，一般是告警、通知、" />
 
 
 
@@ -147,14 +152,17 @@
 
 
 
-<meta property="og:updated_time" content="2023-01-25T16:49:11&#43;08:00" />
+<meta property="article:published_time" content="2024-03-08T09:02:16&#43;08:00" />
+
+
+<meta property="article:modified_time" content="2024-03-08T09:02:16&#43;08:00" />
 
 
 
-<meta property="article:section" content="tags" />
+<meta property="article:section" content="posts" />
 
 
-<link rel="alternate" type="application/rss+xml" href="https://yiuterran.github.io/blog/tags/make/index.xml" title="应许之地" />
+
 
 
   <body class="flex min-h-screen flex-col">
@@ -177,7 +185,7 @@
         class="hidden block md:flex md:grow md:justify-between md:items-center w-full md:w-auto text-primary-text z-20">
         <div class="md:flex md:h-16 text-sm md:grow pb-4 md:pb-0 border-b md:border-b-0">
             <a href="https://yiuterran.github.io/blog/authors/tryao/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  border-transparent  me-4">作者</a>
-            <a href="https://yiuterran.github.io/blog/posts/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  border-transparent  me-4">文章</a>
+            <a href="https://yiuterran.github.io/blog/posts/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  selected-menu-item  me-4">文章</a>
         </div>
 
         <div class="flex">
@@ -228,34 +236,22 @@
     <main class="grow pt-16">
         <div class="pl-scrollbar">
           <div class="mx-auto w-full max-w-screen-xl lg:px-4 xl:px-8">
-  <article class="prose mx-6 my-8">
-  <h1>make</h1>
   
-</article>
-
-  <div class="bg-secondary-bg rounded px-6">
-    <div class="overflow-hidden divide-y">
   
-  <div class="py-6">
-    <div class="flex flex-col-reverse lg:flex-row justify-between">
-  
-  <div class="w-full ">
-    <div class="prose">
-  <a href="https://yiuterran.github.io/blog/posts/makefile%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/" class="no-underline">
-    <h3 class="mt-0">Makefile要点简记</h3>
-  </a>
-  
-    虽然现代C/CPP一般使用cmake作为工具链，但是如果要看陈年老项目，makefile相关的知识还是要掌握一些的，不然估计很难理清编译逻辑。这也是c
-  
-
-  
+  <div class="grid grid-cols-2 gap-4 lg:grid-cols-8 lg:pt-12">
     <div
+      class=" bg-secondary-bg col-span-2 rounded px-6 py-8 lg:col-span-6"
+    >
+      <article class="prose">
+  <h1 class="mb-4">时序数据规则引擎设计思路</h1>
+
+  <div
   class="text-tertiary-text not-prose mt-2 flex flex-row flex-wrap items-center"
 >
   <div class="me-6 my-2">
     <i class="fas fa-calendar me-1"></i>
     <span
-      >2023-01-25</span
+      >2024-03-08</span
     >
   </div>
   <div class="me-6 my-2">
@@ -268,20 +264,126 @@
   
 </div>
 
-  
-</div>
 
+  
+  
+
+  <p>规则引擎的大致组成包括：</p>
+<ol>
+<li>触发条件：如某个设备某种消息在某个时间点内到达；或周期性，每隔多久触发一次；</li>
+<li>触发响应：即触发条件后要做什么，一般是告警、通知、联动其他设备、联动其他系统等；</li>
+<li>边界情况：重复触发如何处理、回调频率控制等细节；</li>
+</ol>
+<p>实现思路大致包括以下几种：</p>
+<h2 id="基于消息回调">基于消息回调</h2>
+<p>即在消息到达服务器时，执行指定回调。常见的有webhook、执行脚本文件（如js）、或执行java的jar包等等。</p>
+<p><strong>该方案在消息频繁触达时性能较差</strong>，并且容易造成重复计算，但是理论上也能满足一般的计算需求。回调方可以调用数据接口查询相关的数据做任意运算，再根据结果来触发告警或其他行为。</p>
+<p>目前墨斗平台内置的规则引擎即基于此架构，不过触发响应是写死的几种，还不包括上面这些更灵活的方式。<strong>理论上来说</strong>，客户基于rabbitmq自己订阅消息来实现对应的逻辑也是一样的。</p>
+<h2 id="基于周期性计算">基于周期性计算</h2>
+<p>比如kibana、zabbix等，使用SQL或其他DSL创建告警条件，服务器会周期性地运行这些条件，判断满足则触发动作。</p>
+<p><img src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/EqnO2xCD1f6Hb8R.png" alt="image-20221021090656229"></p>
+<p>上图是kibana的一个基于日志等级预警的例子，可以看出来其实大概就是<code>select count(*) from logs-golang* where log.level='ERROR' and ts &gt; now()-1m</code>的结果与1进行比较的意思。</p>
+<p>每分钟运行上述规则一次，即可以判断是否发生预警。</p>
+<p>数据先入库，然后再定时计算，这样做的好处是架构比较简单，基于SQL或类SQL的DSL来写表达式即可，同时可以提供类似上面的图形界面，用于简化配置，对于使用者的要求不高。坏处是不够即时，kibana这里要求间隔至少是1分钟1次，所以告警可能会延迟1分钟。此外，频繁的周期性调度，对性能影响也比较大。</p>
+<p>此外，这种方式计算的数据并不会入库。当然如果是时序数据，可以基于ts定时计算后再入库，因为时序数据是不变的。如果是一般的数据，需要计算入库就必须用流式计算来进行了。</p>
+<h2 id="基于实时流计算">基于实时流计算</h2>
+<p>即类似FlinkCDC的思路来做。thingsboard的规则引擎是基于消息到来时进行触发，但是只能处理单条消息，没有使用时间窗口技术，所以是个半成品。真正的流计算必须使用类似Flink的时间窗口技术，并允许跨多条消息进行处理。</p>
+<p>与基于消息回调不同，实时流计算可以将需要计算的数据缓存在内存中，通过时间窗口来维护变量的生命周期，其性能比回调时去查询数据库要高的多。</p>
+<h2 id="建议实施步骤">建议实施步骤</h2>
+<p>基于单条数据的实时处理、或回调触发最为简单，可以优先实现，满足5成以上的需求；</p>
+<p>基于周期性计算的规则引擎更容易图形化，实现起来也相对简单（但是要采用一种DSL），非即时计算的场景可以采用该方案；</p>
+<p>基于CDC的方案最为灵活，但是对使用者的要求较高，实现起来也有一些技术难度，在对实时性要求极强的场景下可以采用该方案；</p>
+
+</article>
+
+
+      
+
+      
+
+
+
+      
+
+      
+  <div
+    class="-mx-2 mt-4 flex flex-col border-t px-2 pt-4 md:flex-row md:justify-between"
+  >
+    <div>
+      
+    </div>
+    <div class="mt-4 md:mt-0 md:text-right">
+      
+        <span class="text-primary-text block font-bold">下一页</span>
+        <a href="https://yiuterran.github.io/blog/posts/k8s%E5%BA%94%E7%94%A8%E8%B0%83%E8%AF%95%E6%8A%80%E5%B7%A7/" class="block">K8s应用调试技巧</a>
+      
+    </div>
+  </div>
+
+
+      
+
+
+
+  <script id="utterances" src="https://utteranc.es/client.js"
+            issue-term=title
+            repo=YiuTerran/blog-comment
+              theme=preferred-color-scheme
+        crossorigin="anonymous"
+        async>
+</script>
+<script>
+    if (storageColorScheme == "Light") {
+      document.getElementById('utterances').setAttribute('theme', 'github-light')
+    } else if (storageColorScheme == "Dark") {
+      document.getElementById('utterances').setAttribute('theme', 'github-dark')
+    }
+</script>
+
+    </div>
+    
+      <div class="col-span-2">
+        
+        
+          <div
+  class="
+    bg-primary-bg
+   prose sticky top-16 z-10 hidden px-6 py-4 lg:block"
+>
+  <h3>本页内容</h3>
+</div>
+<div
+  class="sticky-toc  hidden px-6 pb-6 lg:block"
+>
+  <nav id="TableOfContents">
+  <ul>
+    <li><a href="#基于消息回调">基于消息回调</a></li>
+    <li><a href="#基于周期性计算">基于周期性计算</a></li>
+    <li><a href="#基于实时流计算">基于实时流计算</a></li>
+    <li><a href="#建议实施步骤">建议实施步骤</a></li>
+  </ul>
+</nav>
+</div>
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
+    enableStickyToc();
+  });
+</script>
+
+        
+      </div>
+    
+
+    
+    
   </div>
 
   
-</div>
-  </div>
-  
-</div>
-
-
-  </div>
-  
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        hljs.highlightAll();
+      });
+    </script>
 
           </div>
         </div>
