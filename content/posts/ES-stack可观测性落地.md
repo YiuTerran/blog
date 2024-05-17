@@ -15,537 +15,252 @@ draft: false
 
 随着ES v8.4的发布，es对于可观测性三支柱（Metric/Trace/Log）都具有较为完备的支持，Alert功能也能满足一般需求，kibana的看板功能经过这么多年的迭代，可用性也比较好了。最重要的是，**兼容OpenTelemetry的标准**也保证如果用的不爽也可以用其他开源组件替换，所以项目组目前搭建监控平台，经过评估还是决定优先用这一套。
 
+这里更新为docker安装方式，使用的版本是8.13.
+
 ## ElasticSearch部分
 
-### 安装ES
+## 第一个节点
 
-目前公司用的还是CentOS，所以用RPM安装就行，官方指南[地址](https://www.elastic.co/guide/en/elasticsearch/reference/current/install-elasticsearch.html).
+首先需要优化内核，修改`/etc/sysctl.conf`，如下：
 
-另外ES已经支持k8s安装，有需要的话建议[使用](https://www.elastic.co/guide/en/cloud-on-k8s/current/index.html).
-
-```sh
-rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch
-
-cat>/etc/yum.repos.d/elasticsearch.repo<<EOF
-[elasticsearch]
-name=Elasticsearch repository for 8.x packages
-baseurl=https://artifacts.elastic.co/packages/8.x/yum
-gpgcheck=1
-gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
-enabled=0
-autorefresh=1
-type=rpm-md
-EOF
-
-sudo yum install -y --enablerepo=elasticsearch elasticsearch 
+```
+ vm.swappiness = 0
+ vm.max_map_count=262144
 ```
 
-es应该是有中国的CDN，所以下载很快。在安装过程中会自动生成超管密码：
+运行`sysctl -p`应用配置。
 
-> The generated password for the elastic built-in superuser is : <xxxx>
-
-默认安装的es是单机模式，如果想要加入已有的集群，则在该集群任意节点生成token：
+在宿主机的挂载卷下，找一个文件夹用来存放数据，假设为`/data/elasticsearch`，放入以下脚本：
 
 ```bash
-/usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token -s node
+ version='8.13.0'
+ name='elastic1'
+ 
+ sudo docker pull elasticsearch:$version
+ 
+ sudo docker run -itd --name "$name" --network host -m 4GB elasticsearch:$version
+ sleep 60
+ sudo docker logs "$name" | tail -n 30 > password.txt
+ sudo docker cp $name:/usr/share/elasticsearch/data data/
+ sudo docker cp $name:/usr/share/elasticsearch/config config/
+ sudo chown -Rh 1000:root data/
+ sudo chown -Rh 1000:root config/
+ echo "Copy files success."
+ 
+ echo "Creating elasticsearch"
+ sudo docker stop $name
+ sudo docker rm $name
+ sudo docker run -itd \
+         --name $name  \
+         --restart always \
+         --network host \
+         -m 4GB \
+         -v $(pwd)/data:/usr/share/elasticsearch/data \
+         -v $(pwd)/config:/usr/share/elasticsearch/config \
+         -v $(pwd)/crack/x-pack-core-$version.crack.jar:/usr/share/elasticsearch/modules/x-pack-core/x-pack-core-$version.jar \
+         elasticsearch:$version
+ echo "Create elasticsearch done"
+ 
+ sleep 30
 ```
 
-然后在这个新安装的节点上配置生成的token:
+其中`crack.jar对应的是白金版破解，参考这里。`
+
+这里用了host网络，直接暴露出9200和9300端口，之所以用host网络，是因为**docker网络下自动生成的enrollment token里面的ip地址是错误的**。
+
+运行结束之后，当前目录下会生成`password.txt`，这里面是供kibana和其他node加入需要的token信息，内容参考如下：
+
+```
+ ✅ Elasticsearch security features have been automatically configured!
+ ✅ Authentication is enabled and cluster connections are encrypted.
+ 
+ ℹ️  Password for the elastic user (reset with `bin/elasticsearch-reset-password -u elastic`):
+   <自动生成的超管密码>
+ 
+ ℹ️  HTTP CA certificate SHA-256 fingerprint:
+   <your ca fingerprint>
+ 
+ ℹ️  Configure Kibana to use this cluster:
+ • Run Kibana and click the configuration link in the terminal when Kibana starts.
+ • Copy the following enrollment token and paste it into Kibana in your browser (valid for the next 30 minutes):
+   <kibana enrollment token>
+ 
+ ℹ️ Configure other nodes to join this cluster:
+ • Copy the following enrollment token and start new Elasticsearch nodes with `bin/elasticsearch --enrollment-token <token>` (valid for the next 30 minutes):
+   <其他es节点加入的enrollment token>
+ 
+   If you're running in Docker, copy the enrollment token and run:
+   `docker run -e "ENROLLMENT_TOKEN=<token>" docker.elastic.co/elasticsearch/elasticsearch:8.13.0`
+```
+
+上面`<>`里面就是自动生成的核心信息，其他节点需要使用的token是最后一个`<>`内的，30分钟有效。如果超时未使用也可以使用
 
 ```bash
-/usr/share/elasticsearch/bin/elasticsearch-reconfigure-node --enrollment-token <enrollment-token>
+ docker exec -it elastic1 /usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token -s node
 ```
 
-接着就可以启动服务了：
+重新生成。最后的`node`也可以换成`kibana`，重新生成上面第3个关键信息给kibana使用。
+
+最后要注意的是上面限制了内存4GB，可以根据机器配置调整该数值，但是不要超过32GB.
+
+## 其他节点
+
+第一个节点建立之后，其他节点使用token即可加入。不过受限依然需要优化内核，方法同第一个节点，不再赘述。
+
+其他节点的启动脚本如下：
 
 ```bash
-sudo systemctl daemon-reload
-sudo systemctl enable elasticsearch.service
-sudo systemctl start elasticsearch.service
+ #!/usr/bin/env bash
+ version=8.13.0
+ name='elastic3'
+ docker pull elasticsearch:$version
+ mkdir -p data
+ chown -Rh 1000:root data/
+ 
+ echo "Creating elasticsearch"
+ docker rm -f $name >/dev/null 2>&1 || true
+ docker run -itd \
+         --name $name \
+         --restart always \
+         --network host \
+         -e "ENROLLMENT_TOKEN=<上面的token>" \
+         -m 4GB \
+         -v $(pwd)/data:/usr/share/elasticsearch/data \
+         -v $(pwd)/crack/x-pack-core-$version.crack.jar:/usr/share/elasticsearch/modules/x-pack-core/x-pack-core-$version.jar \
+         elasticsearch:$version
 ```
 
-可以用以下命令确认es运行状态：
+将上面的token换成真实token即可。
 
-```bash
-curl --cacert /etc/elasticsearch/certs/http_ca.crt -u elastic https://localhost:9200 
-```
+## 注意事项
 
-这里就输入刚才自动生成的密码即可。
-
-如果是从旧版ES进行升级，ES只保证一个大版本的兼容性，所以从6.x只能先升级到7.x，然后再升级到8.x。甚至7.17之前的版本还要先升级到7.17才行。每个结点独立升级一般不影响服务可用性。特别注意的是大版本升级可能会影响Rest API的兼容性，所以一定要非常谨慎。
-
-### 配置ES
-
-所有配置集中在`/etc/elasticsearch`下面，该文件夹以及所有子文件的权限默认都是`root:elasticsearch`。JVM相关的配置在`/etc/sysconfig/elasticsearch`下，其他的配置则集中在`/etc/elasticsearch/elasticsearch.yml`中。二进制文件在`/usr/share/elasticsearch/bin`下，可以考虑加到PATH里。
-
-使用systemd启动的服务，则需要配置systemd的资源限制，打开`/usr/lib/systemd/system/elasticsearch.service`可以看到默认的资源限制。如果不满足需求，可以通过`sudo systemctl edit elasticsearch`来生成覆盖配置，完事之后通过`sudo systemctl daemon-reload`重新加载配置即可生效。
-
-es在安装时会自动生成CA证书，在`/etc/elasticsearch/certs`下，客户端所在的机器需要copy证书并信任，才能正常进行HTTPS通信。**注意需要在`xpack.security.http.ssl`下增加一个配置：`verification_mode: certificate`**，这个默认没有写。
-
-ES可以通过`PUT /_cluster/settings`的API直接修改整个集群的配置，不必一台一台去改配置文件，当然kibana上修改也行。只有一小部分需要通过手动修改配置文件指定（如集群的名字等）。es的配置项非常多，不过大部分保持默认即可，需要注意的主要是[这里](https://www.elastic.co/guide/en/elasticsearch/reference/current/important-settings.html).
-
-尤其注意，一旦打开集群模式，即将`network.host`配置打开，es启动时就会进行严格自检，如果有不满足的配置，则无法正常启动。**需要注意的点包括**：
-
-* 修改文件描述符限制；
-* 关闭swap；
-* 在`sysctl.conf`里面设置`vm.max_map_count=262144`；
-* 调整最大线程数限制；
-* 根据需求调整jvm、dns设置，以及tcp重传超时设置；
-* 确认/tmp文件夹允许执行二进制文件；
-
-在配置完成之后，**需要删除掉配置文件中的`cluster.initial_master_nodes`**，再重新启动。
-
-另外，如果是单机启动，可以加上`discovery.type: single-node`。
-
-可以通过设置
-
-```yaml
-xpack.security.http.ssl.enabled: false
-xpack.security.transport.ssl.enabled: false
-```
-
-关闭ssl加密通信，**但是最好别这么做**，因为下面的Fleet会强制使用SSL。
-
-重启之后使用curl命令重新测试一下，保证配置文件没改错。
-
-### 集群管理
-
-建议先在单节点上搭建kibana，之后再修改配置成为集群。
-
-1. 修改原来的单点es，主要修改如下配置：
-
-```yaml
-cluster.name: your-cluster
-node.name: node-1
-# 最重要的
-network.host: your-LAN-addr
-# 本地，以及其他节点的内网地址
-discovery.seed_hosts: ["127.0.0.1"]
-# master备选
-cluster.initial_master_nodes: ["node-1", "node-2", "node-3"]
-transport.host: 0.0.0.0
-```
-
-然后将`elasticsearch.yml`, `elasticsearch.keystore`和`certs`文件夹copy到其他节点。
-
-2. 先重启第一个节点，让节点自检配置文件，无误后再操作其他节点加入集群；
-3. 将copy过来的文件移动到`/etc/elasticsearch`下面，并修改owner为`root:elasticsearch`，这里假设用root操作；
-4. certs下的`p12`文件，需要修改权限为660；
-5. 新节点的sysctl.conf以及limits.conf也要配置，参考单点时的描述；
-6. 新节点需要修改yaml中的`node.name`以及`network.host`配置；并修改`discovery.seed_hosts`加入第一个节点的内网地址；
-7. 使用`systemctl start`启动服务；或者使用官网提示的`token` enroll方式加入（仅适用于第一次启动进程）；
-8. 注意：**如果需要修改集群配置，直接删除配置的data目录下的所有文件**；
-9. 修改kibana以及其他组件的配置，指向整个es集群；
-10. 进入kibana，打开堆栈监测，可以看到有3个结点；
-
-整个集群的逻辑就是有个初始master节点作为种子，然后其他结点通过seed_hosts连接这个初始节点，最终组成集群。初始的种子节点如果需要重启，也需要在seed_hosts里面加入其他节点。如果整个集群全部都宕机了，就要重复一遍这个流程了。
+1. 上面的节点启动之后，重启容器会报错，这是因为ENROLLMENT_TOKEN只有第一次启动需要，后面再启动就可以删掉这个参数了。
+2. 可以删除掉data文件夹下的内容，使用`ENROLLMENT_TOKEN`重新加入节点。
+3. 可以通过增加环境变量修改`elasticsearch.yml`中的配置，方法是将所有字母变成大写，`.`变为`_`，`_`变成`__`，如：`k1.k2.k_3`对应的环境变量就是：`K1_K2_K__3`，其实和emqx的环境变量配置方式比较像。
+4. 如果要重置密码，可以使用`elasticsearch-reset-password`工具。
 
 ## Kibana部分
 
-### 安装kibana
-
-kibana版本要和es一致，方法也差不多，这里还是用rpm安装：
+kibana的启动方式类似加入集群的节点，但是有一些需要额外设置的环境变量：
 
 ```bash
-yum install --enablerepo=elasticsearch kibana
+ #!/usr/bin/env bash
+ version=8.13.0
+ name='kibana'
+ docker pull kibana:$version
+ 
+ docker rm -f $name >/dev/null 2>&1 || true
+ docker run -itd \
+         --name $name \
+         --restart always \
+         -p 5601:5601 \
+         -e "SERVER_PUBLICBASE_URL=http://10.147.147.191:5601" \
+         -e "XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY=<key1>" \
+         -e "XPACK_REPORTING_ENCRYPTIONKEY=<key2>" \
+         -e "XPACK_SECURITY_ENCRYPTIONKEY=<key3>" \
+         -e "I18N_LOCALE=zh-CN" \
+         -v "$(pwd)/config:/usr/share/kibana/config \
+         -v "$(pwd)/data:/usr/share/kibana/data" \
+         -m 2GB \
+         kibana:$version
 ```
 
-repo的地址和es是一致的，我们这里在同一台设备上安装，所以直接安装就行。
+`SERVER_PUBLICBASE_URL`根据服务器外网连接进行配置；key1/2/3可以使用随机密码生成器生成32位数字和小写字母混合的随机值。
 
-这里可以为kibana生成token，也可以生成用户名密码。推荐使用token。
+**如果是从以前的kibana进行迁移，这几个key必须和以前一致**，否则导出的数据无法导入。
 
-token生成：
+用浏览器打开配置的baseurl，填入kibana对应的token即可配置完毕，后面的配置密码可以通过`docker logs kibana`看到，最后使用elastic账户密码登录即完成安装。
 
-```bash
-/usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token -s kibana
-# 复制生成的token并
-/usr/share/kibana/bin/kibana-setup --enrollment-token <token>
-```
+生成的配置文件在config文件夹里，有需要可以修改。
 
-如果要设置`kibana_system`的密码：
-
-```bash
-bin/elasticsearch-reset-password -u kibana_system
-```
-
-这里会生成一个随机密码。
-
-### 配置kibana
-
-配置文件在/etc/kibana下，需要配置的一般包括：
-
-```yaml
-server.port: 5601
-server.host: "0.0.0.0"
-server.name: "your-system-name"
-elasticsearch.hosts: []
-# 用户名和密码或者token设置一个就可以
-elasticsearch.username: "kibana_system"
-# 刚才生成的密码
-elasticsearch.password: "xxxx"
-# 或：刚才复制的token
-# elasticsearch.serviceAccountToken: ""
-# 语言改成中文，不过中文翻译实际上有点问题……可以的话用英文更好
-i18n.locale: "zh-CN"
-# 外网访问地址，如果是有域名则配置域名，或者一般配置反代的地址
-server.publicBaseUrl: "http://<out-ip>:5601"
-```
-
-改好之后通过`systemctl start kibana`启动服务，通过`journalctl -u kibana`查看日志，如果看到`Kibana is now available`，那就是启动完成了。也可以通过netstat查看端口5601是否启动。
-
-通过浏览器访问该地址的5601端口，即可打开登录页。使用内置elastic账户+超管密码登陆即可进行后续操作。
-
-## 安装Fleet Server
+## Fleet Server
 
 Fleet Server是接受Elastic Agent或者各种Beat发送过来的数据并存储到ES的服务。比较蛋疼的是，FleetServer是集成在ElasticAgent这个二进制文件里面的，所以agent体积巨大。
 
-![Fleet Server on-premises deployment model](https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/fleet-server-on-prem-deployment-20230307194341712.png)
-
 MetricBeats等beats工具则比较轻量一些，可以直接传输数据到ES，不过此类工具就无法通过kibana直接进行配置升级等管理了。
 
-这里还是先使用Agent+Fleet的方式安装，方便后续升级管理：
+这里还是先使用Agent+Fleet的方式安装，方便后续升级管理。在kibana的`Management-Fleet页面上点击“添加Fleet服务器”即可添加代理服务。`
 
-1. 先在kibana的`Management-Fleet-设置`里，设置安装fleet的主机。由于是无状态服务，所以可以有一个或者多个地址（多个的话使用负载均衡地址）。我们这里都装一起，所以Fleet地址就是es这台机器的内网地址。注意这里**只能用HTTPS**；
+在此之前需要准备fleet-server通信用的HTTPS证书（**如果全部是内网监控，也可以使用`–insecure`参数跳过TLS认证，这样就没必要安装证书了**）。
 
-2. 切到代理策略的tab中，创建一个代理策略，填好名称并同样收集这台设备本身的收集，**注意一台主机只能分配一个代理策略，虽然感觉不太合理，但是勉强也够用**；
+进入es节点的docker容器内，依次输入下面的命令：
 
-3. 创建之后，点“添加集成”，进去搜`FleetServer`，配置服务的Host和Port，可以配置一个最大流量。注意**命名空间**那里填的是环境，一般是`dev`,`test`之类的；高级设置的地址里填`0.0.0.0`，端口可以用默认的；
-
-4. 登陆ES所在的机器，通过
-
-`/usr/share/elasticsearch/bin/elasticsearch-keystore show xpack.security.http.ssl.keystore.secure_password`
-
-可以看到`http.p12`的密码。
-
-5. 然后切到`/etc/elasticsearch/certs`下面，输入：
-
-`openssl pkcs12 -in http.p12 -out http_cert.crt -clcerts -nokeys`，根据提示输入上面获得的密码，生成crt文件；
-
-6. `openssl pkcs12 -in http.p12 -out http.key -nocerts -nodes`，重复输入密码，生成key文件；
-7. 这样我们就凑够了安装Fleet要的所有资料。切到代理的tab页，点击advanced，选择第2步创建的策略，部署模式选择生产，主机选择在第1步中创建的那个。然后选择主机平台，将对应的cli语句copy下来，并修改`<>`里的内容，最后的形式大概如下：
-
-```bash
-sudo ./elastic-agent install --url=https://10.20.121.2:8220 \
-  --fleet-server-es=https://10.20.121.2:9200 \
-  --fleet-server-service-token=<your token> \
-  --fleet-server-policy=4e3a7e30-4b70-11ed-bea5-2fb24f0ee1fa \
-  --certificate-authorities=/etc/elasticsearch/certs/http_ca.crt \
-  --fleet-server-es-ca=/etc/elasticsearch/certs/http_ca.crt \
-  --fleet-server-cert=/etc/elasticsearch/certs/http_cert.crt \
-  --fleet-server-cert-key=/etc/elasticsearch/certs/http.key
 ```
+elasticsearch-certutil ca --pemunzip elastic-stack-ca.zipcd` `caelasticsearch-certutil cert --name fleet-server --ca-cert /usr/share/elasticsearch/config/ca/ca.crt --ca-key /usr/share/elasticsearch/config/ca/ca.key --ip 10.147.147.189,10.147.147.190,10.147.147.191,10.147.147.192 --pemunzip certificate-bundle.zipcd` `fleet-server
+```
+
+上面的ip地址需要替换成fleet-server的地址，如果是允许公网访问的，最好把公网ip也加进去。
+
+将ca文件夹中的`ca.crt`文件和`fleet-server.crt`、`fleet-server.key`放到一个文件夹下，假设为`/data/iot/fleet`。
+
+回到安装流程，点击advanced，选择第2步创建的策略，部署模式选择生产，主机选择在第1步中创建的那个。然后选择主机平台，将对应的cli语句copy下来，并修改`<>`里的内容，最后的形式大概如下：
+
+```
+ sudo` `./elastic-agent` `install` `--url=https://10.20.121.2:8220 \  --fleet-server-es=https://10.20.121.2:9200 \  --fleet-server-service-token=<your token> \  --fleet-server-policy=4e3a7e30-4b70-11ed-bea5-2fb24f0ee1fa \  --fleet-server-es-ca-trusted-fingerprint=<your fingerprint> \  --fleet-server-es-ca=/data/iot/fleet/ca.crt \  --fleet-server-cert=/data/iot/fleet/fleet-server.crt \  --fleet-server-cert-key=/data/iot/fleet/fleet-server.key
+```
+
+
 
 如果在FleetServer前面挂了一个负载均衡的反代，那`--url`后面就要改成反向代理的地址了，实际上`es`的地址也可以改成反代的地址。
 
-这里的es和fleet用了同一个ca文件，官方建议是为每个fleet-server生成不同的ca以及key/cert，这太麻烦了，所以我们这里共用了同一套。
+如果需要卸载Fleet(或者说Elastic Agent)，可以在kibana界面上操作。
 
-如果害怕泄露ca文件导致的安全问题，可以为fleet-server单独生成一套，生成方法是：
-
-```bash
-/usr/share/elasticsearch/bin/elasticsearch-certutil cert \
-  --name fleet-server \
-  --ca-cert /path/to/ca/ca.crt \
-  --ca-key /path/to/ca/ca.key \
-  --dns your.host.name.here \
-  --ip 192.0.2.1 \
-  --pem
-```
-
-把dns和ip换成fleet server所在的机器名和ip就行。
-
-如果需要卸载Fleet(或者说Elastic Agent)，运行`/opt/Elastic/Agent/elastic-agent uninstall`即可。
-
-## 安装Elastic Agent
+## Elastic Agent
 
 由于FleetServer和ElasticAgent实际上是同一个二进制文件，所在FleetServer所在的机器就没必要再装agent了。这里另外找一台主机来安装agent.
 
-**非k8s环境：**
+### 代理策略
 
-1. 登陆要安装agent的机器，先配置ca证书（适用于centos）：
+切换到代理策略页面，先创建一个代理策略。注意默认情况下，fleet和es的地址都是内网的，**可以在设置页面里面分别增加一个外网入口**，供远程监控时使用：
 
-```bash
-yum install -y ca-certificates
-update-ca-trust enable
-# 把es生成的ca证书copy到agent所在的设备
-mv http_ca.crt /etc/pki/ca-trust/source/anchors/
-update-ca-trust extract
+![image-2024-5-10_18-42-50](https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/image-2024-5-10_18-42-50.png)
+
+然后在创建代理策略时，滚动到下面，可以选择外网接入：
+
+![image-2024-5-10_18-43-30](https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/image-2024-5-10_18-43-30.png)
+
+**特别注意：**
+
+**默认生成的证书只适用于内网通信，如果要外网通信，CA证书需要留空，且需要在高级配置部分增加：**
+
+```
+ssl.verification_mode: none
 ```
 
-2. 切到代理策略页面，点击添加代理，选择在Fleet中注册，然后copy下面生成的命令行代码，到要监控的机器上执行；
-3. 如果Fleet有多个Server，且没有使用反向代理，这里会默认使用第一个的地址，可以手动修改一下再执行；
-4. 一切正常的话，主机就会显示在代理页面上；
+关闭ssl校验，否则无法正常通信。
 
-**k8s环境：**
+如果新建的代理策略和之前的配置非常类似，则可以直接复制原来的策略避免重复配置。
 
-1. 实际上仍然是在宿主机上安装，不过是通过DaemonSet与k8s整合；
-2. 具体流程请参考[这里](https://www.elastic.co/guide/en/fleet/current/running-on-kubernetes-managed-by-fleet.html)；
-3. 仍然推荐先在宿主机上信任证书；
+### 非k8s环境
 
-## 安装Metricbeat(ECS/可选)
+​    0. 【可选】登陆要安装agent的机器，先配置ca证书（适用于centos）：
 
-### 基础配置
-
-对ES的简单监控可以用es自带的monitor，将`xpack.monitoring.collection.enabled`打开即可，可以在kibana上面操作完成。
-
-Elastic Agent虽然设计的是ALL-IN-ONE，但是很多功能都还没集成进去(v8.4)，比如监控ElasticSearch自身。所以如果不用ES自带的监控，就需要安装MetricBeat来完成该功能。
-
-> MetricBeat也无法监控FleetServer和ElasticAgent，所以如果你在一台设备上同时安装了FleetServer和ElasticSearch本身，那么要安装三个Agent。
->
-> 不过估计到v9的时候ElasticAgent就会集成所有常见的功能了，现在处于过渡时期。
-
-MetricBeat就是完全单独安装了，通过rpm下载或者直接yum安装。
-
-打开`/etc/metricbeat/`下的配置文件修改如下配置：
-
-```yaml
-output.elasticsearch:
-  # Array of hosts to connect to.
-  hosts: ["https://localhost:9200"]
-
-  # Protocol - either `http` (default) or `https`.
-  protocol: "https"
-
-  # Authentication credentials - either API key or username/password.
-  #api_key: "id:api_key"
-  username: "elastic"
-  password: "${ES_PWD}"
-  ssl:
-    enabled: true
-    ca_trusted_fingerprint: "${ES_PRINT}"
+```
+ yum install -y ca-certificates
+ update-ca-trust enable
+ # 把上面生成的ca.crt copy到agent所在的设备
+ mv http_ca.crt /etc/pki/ca-trust/source/anchors/
+ update-ca-trust extract
 ```
 
-es的密码最好不要明文写在配置文件里，通过
+1. 切到代理策略页面，点击添加代理，选择在Fleet中注册，然后copy下面生成的命令行代码，到要监控的机器上执行；**也可以跳过上面的证书安装，在尾部添加`--insecure`参数。**
+2. 如果Fleet有多个Server，且没有使用反向代理，这里会默认使用第一个的地址，可以手动修改一下再执行；
+3. 一切正常的话，主机就会显示在代理页面上；
 
-```bash
-metricbeat keystore create
-metricbeat keystore add ES_PWD --force
-metricbeat keystore add ES_PRINT
+### k8s环境
+
+点击添加代理，选择Kubernetes环境，会下载到一个yaml文件。
+
+里面namespace可以随意更换，挂载的卷也可以根据需求增减，需要注意两个环境变量：
+
+```
+- name: FLEET_INSECURE
+  value: "true"
+- name: FLEET_SERVER_ELASTICSEARCH_INSECURE
+  value: "true"
 ```
 
-将敏感信息保存在钥匙链里。
-
-其中ES_PRINT就是es那个ca证书的指纹，通过`openssl x509 -fingerprint -sha256 -in /etc/elasticsearch/certs/http_ca.crt`可以看到，**特别注意的是需要去掉其中的冒号`:`**，将其转为一个16进制字符串。
-
-> 这里建议将monitor的配置也打开，监控自身：monitor.enabled=true
-
-### 采集ES信息
-
-然后到kibana的堆栈管理（这里翻译有点问题…），修改内置账户`remote_monitoring_user`的密码，记下来。
-
-然后激活metricbeat的es采集功能：
-
-```bash
-metricbeat modules enable elasticsearch-xpack
-```
-
-配置`modules.d/elasticsearch-xpack.yml`，修改如下内容：
-
-```yaml
-- module: elasticsearch
-  xpack.enabled: true
-  period: 10s
-  hosts: ["https://localhost:9200"]
-  # 上面设置的账户
-  username: "internal_metric"
-  #上面设置的密码
-  password: "xxxx"
-```
-
-另外就是把ca证书标记为系统信任，这样就不需要再配置ssl了。
-
-由于agent那边已经采集了system，所以这边最好用`metricbeat modules disable system`关掉避免重复采集。
-
-### 启动服务
-
-然后启动MetricBeat：
-
-```bash
-# 该步骤较慢，请耐心等待
-metricbeat setup
-systemctl enable metricbeat
-systemctl start metricbeat
-```
-
-可以通过`journalctl -u metricbeat`查看日志，如果没有ERROR应该就是OK了（日志很长，可以用左右箭头移动看具体错误）。
-
-## 安装Metricbeat(k8s)
-
-### 基础配置
-
-下载metricbeat配置文件，使用命令
-
-```bash
-curl -L -O https://raw.githubusercontent.com/elastic/beats/8.4/deploy/kubernetes/metricbeat-kubernetes.yaml
-```
-
-> 配置文件下载之后，首先将文件中所有的namespace修改为metricbeat
-
-找到Metricbeat配置ES信息的位置，将`ELASTICSEARCH_HOST`和`ELASTICSEARCH_PORT`修改为对应ElasticSearch的IP和端口，将`ELASTICSEARCH_USERNAME`和`ELASTICSEARCH_PASSWORD`修改为对应的ElasticSearch用户名和密码
-
-```yml
-        env:
-        - name: ELASTICSEARCH_HOST
-          value: 10.20.121.2
-        - name: ELASTICSEARCH_PORT
-          value: "9200"
-        - name: ELASTICSEARCH_USERNAME
-          value: elastic
-        - name: ELASTICSEARCH_PASSWORD
-          value: a-WxDYOh65KAIPSx1O6s
-```
-
-另外，metricbeat默认的内存配置太小，需要改大，这里将`limits`调整为500MB
-
-```yml
-        resources:
-          limits:
-            memory: 500Mi
-          requests:
-            cpu: 100m
-            memory: 100Mi
-```
-
-如果es没有启用ssl，那么到这里基础配置就结束了，如果启用了ssl，还需要配置ssl信息
-找到配置文件中的`output.elasticsearch`部分，将其修改为
-
-```yml
-output.elasticsearch:
-  hosts: ['${ELASTICSEARCH_HOST:elasticsearch}:${ELASTICSEARCH_PORT:9200}']
-  username: ${ELASTICSEARCH_USERNAME}
-  password: ${ELASTICSEARCH_PASSWORD}
-  protocol: https
-  ssl:
-      enabled: true
-      ca_trusted_fingerprint: "${ES_PRINT}"
-```
-
-其中ES_PRINT就是es那个ca证书的指纹，使用同ECS中的metricbeat配置，参考上文.
-
-### 服务监控配置
-
-首先确保各k8s中的服务都已引入prometheus并以通过http接口暴露metric。
-找到配置文件中的`metricbeat.autodiscover`配置项，将其修改为：
-
-```yml
-metricbeat.autodiscover:
-  providers:
-    - type: kubernetes
-      include_labels: ["app"]
-      templates:
-        - condition:
-            contains:
-              kubernetes.labels.app: "sim-iotgateway"
-          config:
-            - module: prometheus
-              metricsets: ["collector"]
-              hosts: "${data.host}:${data.port}"
-              metrics_path: /metrics/prometheus
-              period: 30s      
-```
-
-上面使用的是metricbeat的自动探测功能，自动监控了iot的iotgateway服务，其中的`metrics_path`是服务暴露的metric接口路径，period是metric采集周期。下面这一段代表的是要采集那个服务的metric。
-
-```yml
-templates:
-        - condition:
-            contains:
-              kubernetes.labels.app: "sim-iotgateway"
-```
-
-这里使用了metricbeat的标签过滤功能，要配置哪个服务，就过滤哪个服务的标签即可。
-
-如果要新增hermes服务的监控，只需新增对应的配置
-
-```yml
-metricbeat.autodiscover:
-  providers:
-    - type: kubernetes
-      include_labels: ["app"]
-      templates:
-        - condition:
-            contains:
-              kubernetes.labels.app: "sim-iothermes"
-          config:
-            - module: prometheus
-              metricsets: ["collector"]
-              hosts: "${data.host}:${data.port}"
-              metrics_path: /metrics/prometheus
-              period: 30s
-    - type: kubernetes
-      include_labels: ["app"]
-      templates:
-        - condition:
-            contains:
-              kubernetes.labels.app: "sim-iotgateway"
-          config:
-            - module: prometheus
-              metricsets: ["collector"]
-              hosts: "${data.host}:${data.port}"
-              metrics_path: /metrics/prometheus
-              period: 30s    
-```
-
-每个服务的标签labels，可以在对应服务k8s的yaml中找到，例如：
-
-```yml
-apiVersion: v1
-kind: Pod
-metadata:
-  annotations:
-    cattle.io/timestamp: "2022-10-18T09:48:42Z"
-    kubernetes.io/psp: ack.privileged
-  creationTimestamp: "2022-10-21T09:31:34Z"
-  generateName: deploy-sim-iothermes-5bc86c5bb7-
-  labels:
-    app: sim-iothermes
-    pod-template-hash: 5bc86c5bb7
-```
-
-### 部署
-
-修改完`metricbeat-kubernetes.yaml`之后，在k8s机器上执行下述命令即可
-
-> 注意，这里采用的是DaemonSet模式
-
-```bash
-kubectl create -f metricbeat-kubernetes.yaml
-```
-
-部署完成后，也可在configmap中的metricbeat.yml中进行监控服务的增删.
-
-## 安装Filebeat
-
-同样，如果不想使用ElasticAgent的custom logs，out-of-box地收集elasticsearch的日志还是要装filebeat，流程也很类似：
-
-```bash
-filebeat keystore create
-filebeat keystore add ES_PWD
-filebeat keystore add ES_PRINT
-```
-
-然后修改`filebeat.yml`，将`output.elasticsearch`设置为类似MetricBeat的配置。inputs那边不用管，因为我们使用modules配置。
-
-> 另外这里可以将moniter的enable打开，监控自身的metric
-
-然后`filebeat modules enable elasticsearch`，修改`elasticsearch.yml`，设置`enabled=true`。
-
-最后：
-
-```bash
-filebeat setup
-systemctl enable filebeat
-systemctl start filebeat
-```
-
-使用journalctl查看日志即可。
-
-另外kibana所在的机器还要打开kibana的日志收集，配置方法类似。
-
-在ES所在机器安装了MetricBeat和Filebeat之后，就可以在kibana的**堆栈监测**里面看到es相关信息，差不多就是下图的样子：
-
-![image-20221017104832361](https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/crdIyuoa97LKDjJ-20230307194342564.png)
-
-如果仅仅使用es自带的monitor，则不会有下面的beats部分，**同时也不会有log的监控**。
+这样设置之后无须在k8s每台机器上安装fleet的ca证书，内网使用的时候可以简化配置，外网的话为了数据安全可以装上。
 
 ## 数据生命周期管理(ILM)
 
@@ -567,41 +282,82 @@ Elastic Agent采集的Metric，则是默认使用`metrics`策略管理，即所�
 
 在`索引模板`里面搜索`agent`，可以看到所有elastic agent自动创建的模板，可以看到`metrcis-`开头的默认的ILM都是`metrics`，建议根据自己的使用情况全部改成自定义的ILM。感觉这个设计不是很合理，期望后续的版本使用非托管策略方便修改。
 
-## Prometheus Metrics采集(Fleet)
+我们可以手动创建一个名为common-logs-policy的策略供后面日志收集时使用，可以根据硬盘大小确定保留几天的数据。
 
-Elastic Agent已经集成了Prometheus Metric采集功能（还是beta），当然我们也可以使用MetricBeat来完成。
+## Prometheus Metrics采集
 
-生产环境推荐使用filebeat+metricbeat的方式采集日志和系统信息，等到Elastic Agent稳定之后再替换掉。而且beat目前采集信息可以送到kafka，避免把es压垮。这里为了方便还是直接用Fleet，毕竟我们的服务产生的数据量没那么大。
-
-进入Fleet，选择代理策略，选择**添加集成**，搜索`Prometheus Metrics`，出来的是MetricBeat版本，点进去之后会提示你有agent版本，切换过去。我这边用的时候最新版是`0.13.0`，点击`添加Prometheus Metrics`按钮即可一键部署。
+进入Fleet，选择代理策略，选择**添加集成**，搜索`Prometheus Metrics`，点击`添加Prometheus Metrics`按钮即可一键部署。
 
 注意点击**修改默认值**，去修改服务的地址。
 
-在discover那边，将索引切换到`metrics-*`，搜索`prometheus*:*`应该可以看到有数据采集过来。不过MetricBeat采集的数据使用的索引是`metricbeat-*`,两者默认使用不同的ILM，上文已经通过手动修改将二者都改成`metricbeat`的ILM了.
+在discover那边，将索引切换到`metrics-*`，搜索`prometheus*:*`应该可以看到有数据采集过来。
 
-## Uptime监控
+如果是在k8s里面监控，则比较复杂。首先k8s里面必须安装[kube-state-metric](https://github.com/kubernetes/kube-state-metrics)，否则无法正常采集pod数据。
 
-可以使用heartbeat或者新的uptime app(在Observability-Uptime-Monitor右上角有个`监测管理`的入口)来监控接口或者主机的可用性，支持进行模拟浏览器/HTTP/TCP/ICMP的探测。
+如果pod的数量只有1个，可以通过service直接访问，比如iot-iotwebgateway.prod.svc.cluster.local，但是多余1个pod就不行了，此时需要使用autodiscover功能，如下图：
 
-对于自建的服务，一般情况下，设置metrics就可以判断服务的存活性了。云主机的存活性一般不需要关心，边缘端或者自建机房可以考虑加一个ping探测。
+![截屏2024-05-14 21.17.48](https://global.discourse-cdn.com/elastic/optimized/3X/8/1/819bbce240960e670e3a8d12abcb63cf508e55d9_2_566x500.png)
 
-不过，Uptime还可以是对第三方服务的，甚至可以用浏览器行为来进行前端自动化探测，如果**服务依赖第三方接口**，可以考虑加上相关探测。自建服务如果需要供外网访问，也可以将heartbeat安装在外网机器，从而进行端到端的探测。
+condition里面通过label筛选满足条件的pod，hosts使用对应的变量访问。
 
-由于暂时没有啥必须监控的东西，这里我们就先不进行配置了。
+## 黑盒(Blackbox)监控
+
+在Observability-Synthetics-Monitor里有个入口可以配置黑盒探测来监控接口或者主机的可用性，支持进行模拟浏览器/HTTP/TCP/ICMP的探测。
+
+端到端的监测一般还是挺重要的，配置方法也比较简单。
+
+先点击右上角的设置，到**位置**这里配置探测客户端所在的机器。
+
+然后点击创建监测，选择合适的探测方式（一般用HTTP Ping或者TCP Ping即可）。
+
+然后点击右上角的告警与规则，可以创建统一的告警。
 
 ## 应用日志采集
 
-前面配置filebeat采集日志的流程已经写了，当然也可以用来收集自定义日志，只要配置yaml配置一下路径就行。
+在Fleet中集成`Custom Logs`，配置上日志路径就OK了，但是还需要做一些额外的设置。
 
-这里使用Elastic Agent来进行采集，其实流程差不多：简单来说，在Fleet中集成`Custom Logs`，配置上日志路径就OK了。
+### 命名空间
 
-不过一般我们并不采集所有应用日志（因为大部分都是辣鸡信息），正确的做法是把重要信息先结构化成json日志，然后再采集那些结构化日志。ES规定了一份详细的日志规范，简称ECS，文档请参考[这里](https://www.elastic.co/guide/en/ecs/current/ecs-reference.html)。保证所有的应用使用同样的字段才能更好的过滤信息，这其实是一种管理策略。
+展开高级设置，命名空间默认继承父级（也就是代理策略的），但是也可以修改。比如如果测试环境和开发环境混部在同一台机器上，就需要手动修改了。
 
-这里演示一下另外一个常用的场景，采集ERROR日志用来告警，这个一般并不需要结构化日志，直接提取日志中的ERROR行即可。
+### 数据集
 
-### 数据预处理
+Dataset name非常重要，理论上格式相同的一类日志使用同一个数据集，这样他们会自动重用同一套数据处理和数据映射，比如java的日志可以都叫java_iot，需要注意的是名字里不能有"-"。
 
-在数据传入es之前可以使用管道对数据进行预处理，在`Stack Management`-`采集`-`采集管道`里面建立处理流程即可。注意映射的字段尽量遵守上面的ECS规范。
+如果采用上面的命名，且命名空间为dev，则对应的数据流即为logs-java_iot-dev，可以在discover中建立对应的视图。
+
+### 多行日志捕捉
+
+java的堆栈往往是多行日志，需要在Custom configurations里面额外增加一些配置，例如：
+
+```
+multiline.type: pattern
+multiline.pattern: '[0-9]{4}-[0-9]{2}-[0-9]{2}'
+multiline.negate: true
+multiline.match: after
+```
+
+其中：
+
+pattern：正则表达式 
+
+negate：正则表达式是否正向生效。 true：符合正则表达式的为一个基准行， false：不符合表达式的为一个基准行。
+
+match：基准行和后面after或前面before划分为一组。
+
+我们的日志一般是日期开头，可以用上面的配置进行捕捉。
+
+到这里，可以先点保存，看日志能不能正常采集上来。如果你需要对日志进行一些处理再入库，可以看下面的采集管道配置。
+
+### 采集管道
+
+默认日志采集后都在message字段，一般我们需要进行一些预处理再入库，比如将log.level提取出来成为单独的字段等。
+
+在采集管道处点击“定制采集管道”，会自动新增一个名为**`logs-{dataset}@custom`**的管道，**后面所有同名数据集都会自动应用这个pipeline**。
+
+实际上你自己按着这个命名规则创建pipeline也行，会自动应用到对应的dataset的。如果dataset为java_iot，手动创建一个logs-java_iot@custom的采集管道就行。
+
+下面开始配置：
 
 对于plain text日志，最常用的processor是`dissect`（中文翻译是分解），`grok`和`script`三种，用来提取字段，其中grok用的其实就是正则匹配。
 
@@ -645,71 +401,71 @@ Elastic Agent已经集成了Prometheus Metric采集功能（还是beta），当�
 
 添加完成之后可以点击**添加文档**，在pipeline里再测试一次。同时也可以在后面添加别的pipeline进一步处理，比如添加新字段等。该功能的详细使用步骤可以参考[这里](https://juejin.cn/post/7129767885177618463)。
 
+java错误日志的捕捉可以使用这个表达式：
+
+```
+%{TIMESTAMP_ISO8601:@timestamp} \[%{DATA:process.thread.name}\] \[%{DATA:trace.id}\] %{LOGLEVEL:log.level} %{DATA:package.name} %{INT:log.origin.file.line:long} - %{TOEND:message}
+```
+
+在下面的模式定义里面增加：
+
+```json
+{
+  "TOEND": """(.|\r|\n)*"""
+}
+```
+
+这个自定义的正则会捕获多行message直到消息的结束。
+
+特别需要注意的是，@timestamp必须转为正确的日期格式，对于java而言就是`yyyy-MM-dd HH:mm:ss,SSS`，还需要正确设置时区，如下图：
+
+![截屏2024-05-08 21.23.46](https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/截屏2024-05-08 21.23.46.png)
+
 部分预处理需要使用[painless脚本](https://www.elastic.co/guide/en/elasticsearch/painless/current/painless-ingest-processor-context.html)，比如某些服务没有区分error日志与普通日志，那么需要drop掉warn等级以下的日志，可以用`ctx.log.level != 'WARN' && ctx.log.level != 'ERROR'`。
 
 一般同一种语言使用相同的日志格式，这里假设添加管道的名字为`golang-common-log-parser`，并创建一个`common-logs-policy`的策略，对所有应用日志生命周期进行统一管理。
 
 **NOTE**: 建议加一个处理失败则drop的处理器，避免部分数据格式问题导致的发送失败。
 
-### 配置索引模板
+### 字段映射
 
-我们需要将上面的grok转换后的格式关联一个索引模板。
+保存上面的pipeline，会自动回到Custom Logs的设置页面，下面需要对刚才通过pipeline增加的字段做类型定义，点击映射下面的“添加定制映射”，会自动创建一个和定制采集管道同名的组件模版。
 
-先创建一个组件模板以供复用，到`Stack Management`-`索引管理`下面，点击**组件模板**tab页下**创建**相关按钮，填入名称（如custom-logs@mapping），在mapping页面做好映射：
+同样的，你也可以先按着上面的命名手动创建一个组件模板，也会自动应用到数据流的处理中。
 
-![image-20221102111708534](https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/iOIGgqcJyrnQf1P-20230307194343074.png)
-
-对应json如下：
+先到第2步索引设置里，加上生命周期设置：
 
 ```json
 {
-  "@timestamp": "Date",
-  "log": {
-      "level": "Keyword"
-  },
-  "message": {"Other: match_only_text"}
-}
-```
-
-然后点击**索引模板**tab页上的按钮，创建一个索引模板，假设名为`golang-logs-template`，在`index patterns`下面填入**日志索引的格式，如`logs_golang*`**，打开`Create data stream`，并将**优先级设置为>100的数值**。点击下一步，添加刚才创建的组件模板，添加，在`index settings`中关联ILM：
-
-```json
-{
-    "index":{
-        "lifecycle":{
-            "name": "common-logs-policy"
-        }
+  "index": {
+    "lifecycle": {
+      "name": "common-logs-policy"
     }
+  }
 }
 ```
 
-然后一路next，创建完毕。
+然后配置字段映射。
 
-由于默认的`logs-*`的匹配优先级是100，我们创建了优先级更高的模板，就自动将形如`logs-golang*`的索引自动关联到新的索引模板和生命周期策略上了。
+java的可以参考下面的字段配置，其他语言类似。
+
+![截屏2024-05-08 21.35.45](https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/截屏2024-05-08 21.35.45.png)
+
+然后一路点下一步，保存，创建完毕。
+
+可以去索引模版里检索dataset复核一下。
 
 另外提一下，golang的panic日志一般不需要采集，直接用`File Integrity Monitoring Integration`这个集成进行文件监测即可。
 
-### 配置采集器(Fleet)
+### 调试
 
-![image-20221026180330634](https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/WRYNswyo1d3qrJV-20230307194343541.png)
+如果一切顺利，至此你应该能在discover里面看到处理好的日志了。
 
-在`Custom Logs`的添加界面上，命名空间配置当前环境(如`dev`)，点击高级配置，dataset填入服务的名字，如`golang_video`，这样最后index的名字就是`logs-golang_video-dev`，由于这里已经指定中划线作为分隔符，所以dataset中不能出现`-`. 建议这里将同一个格式的日志放在一个配置里（不同命名空间的需要分开），方便修改，可以从log.path里分辨出日志具体属于哪个服务。
+如果很不幸没有任何日志，一般都是你的pipeline有问题。可以先clone pipeline做个备份，然后把pipeline删了，看日志能不能正常上来。
 
-通过名称匹配，这个索引会自动关联上文创建的索引模板。pipeline则需要手动关联，在`Custom configurations`下面，填入如下yaml：
+如果肉眼调试pipeline太困难，可以进入fleet，点击主机名，点击日志，将页面滚动到最下方，有个代理日志等级调节的下拉框，改成debug，点应用配置。
 
-```yaml
-pipeline: golang-common-log-parser
-```
-
-日志路径可以添加多个，可以使用通配符。
-
-### 确认配置
-
-一切正常的话，在Observablity里面正常应该可以看到刚添加的应用日志了，也可以在`Discover`里面自己过滤查询。
-
-可以用`event.dataset`搜索上面添加的`golang_sip_server`，看到对应的日志。
-
-如果没有日志，一般在Fleet的代理日志里可以看到相关信息。或者去所在机器的`/opt/Elastic/Agent`目录下，查看采集侧的`njson`日志。
+这样filebeat会打印出来到底为啥上传失败。
 
 ## KQL简单学习
 
