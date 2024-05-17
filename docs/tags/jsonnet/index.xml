@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>jsonnet on 应许之地</title>
+    <title>Jsonnet on 应许之地</title>
     <link>https://yiuterran.github.io/blog/tags/jsonnet/</link>
-    <description>Recent content in jsonnet on 应许之地</description>
+    <description>Recent content in Jsonnet on 应许之地</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>&amp;copy; 2021 &lt;a href=&#34;https://github.com/YiuTerran&#34;&gt;tryao&lt;/a&gt;
 </copyright>
-    <lastBuildDate>Fri, 29 Dec 2023 10:21:59 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/tags/jsonnet/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 29 Dec 2023 10:21:59 +0800</lastBuildDate>
+    <atom:link href="https://yiuterran.github.io/blog/tags/jsonnet/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Jsonnet试用</title>
       <link>https://yiuterran.github.io/blog/posts/jsonnet%E8%AF%95%E7%94%A8/</link>
       <pubDate>Fri, 29 Dec 2023 10:21:59 +0800</pubDate>
-      
       <guid>https://yiuterran.github.io/blog/posts/jsonnet%E8%AF%95%E7%94%A8/</guid>
       <description>jsonnet这个语言很有意思，它存在的目的就是为了编辑配置。其实使用任何一门带有字符串模板的语言都能完成类似的目的，但是jsonnet的好处是它的封</description>
     </item>
-    
   </channel>
 </rss>

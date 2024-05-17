@@ -43,7 +43,7 @@
 <link rel="stylesheet" href="https://yiuterran.github.io/blog/css/highlightjs.min.2958991528e43eb6fc9b8c4f2b8e052f79c4010718e1d1e888a777620e9ee63021c2c57ec7417a3108019bb8c41943e6.css" media="print" onload="this.media='all';this.onload=null">
 
 
-<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.a975d08212c5439f29e6074e7ad58e159ae1ef5efb6a31962fa3b6885557e794dd9315f4a8a16d705066d023f4eaaf07.js"></script>
+<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.949238bba008115a27fbffb62d803c5ebad5dd8516b4c6a5d9b1cc4252acf9e1a936d4e8cc1220d5a61aac817970d314.js"></script>
 
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
@@ -281,7 +281,7 @@
 <p>目前墨斗平台内置的规则引擎即基于此架构，不过触发响应是写死的几种，还不包括上面这些更灵活的方式。<strong>理论上来说</strong>，客户基于rabbitmq自己订阅消息来实现对应的逻辑也是一样的。</p>
 <h2 id="基于周期性计算">基于周期性计算</h2>
 <p>比如kibana、zabbix等，使用SQL或其他DSL创建告警条件，服务器会周期性地运行这些条件，判断满足则触发动作。</p>
-<p><img src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/EqnO2xCD1f6Hb8R.png" alt="image-20221021090656229"></p>
+<p><img alt="image-20221021090656229" src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/EqnO2xCD1f6Hb8R.png"></p>
 <p>上图是kibana的一个基于日志等级预警的例子，可以看出来其实大概就是<code>select count(*) from logs-golang* where log.level='ERROR' and ts &gt; now()-1m</code>的结果与1进行比较的意思。</p>
 <p>每分钟运行上述规则一次，即可以判断是否发生预警。</p>
 <p>数据先入库，然后再定时计算，这样做的好处是架构比较简单，基于SQL或类SQL的DSL来写表达式即可，同时可以提供类似上面的图形界面，用于简化配置，对于使用者的要求不高。坏处是不够即时，kibana这里要求间隔至少是1分钟1次，所以告警可能会延迟1分钟。此外，频繁的周期性调度，对性能影响也比较大。</p>
