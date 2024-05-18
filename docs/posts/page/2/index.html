@@ -43,7 +43,7 @@
 <link rel="stylesheet" href="https://yiuterran.github.io/blog/css/highlightjs.min.2958991528e43eb6fc9b8c4f2b8e052f79c4010718e1d1e888a777620e9ee63021c2c57ec7417a3108019bb8c41943e6.css" media="print" onload="this.media='all';this.onload=null">
 
 
-<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.949238bba008115a27fbffb62d803c5ebad5dd8516b4c6a5d9b1cc4252acf9e1a936d4e8cc1220d5a61aac817970d314.js"></script>
+<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.78e494ccd35d494929874dc88a1c7963e597460caafa2ea0b64b9f5cd2ed626a7348522a90f0b37886181ab1ed34301f.js"></script>
 
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
@@ -95,33 +95,33 @@
     "itemListElement":[{
             "@type":"ListItem",
             "position":  1 ,
+            "name": "Jinja2小结",
+            "description": "之前写Python的时候其实有接触过一些jinja2，不过没有怎么用过实际上。毕竟前后端分离之后，这些模板语言在web开发上用处并不大。不过ansib",
+            "url": "https://yiuterran.github.io/blog/posts/jinja2%E5%B0%8F%E7%BB%93/"
+        },{
+            "@type":"ListItem",
+            "position":  2 ,
             "name": "Ansible速成",
             "description": "虽然iac(infracture as code)流行以来，新的技术栈层出不穷，但是一般都是面向k8s或者云服务商的。传统的部署还是用ansible这种仅依",
             "url": "https://yiuterran.github.io/blog/posts/ansible%E9%80%9F%E6%88%90/"
         },{
             "@type":"ListItem",
-            "position":  2 ,
+            "position":  3 ,
             "name": "Kcl试用",
             "description": "kcl是蚂蚁金服开源的配置DSL，诞生比较晚，所以吸纳了已有的jsonnet、hcl、cue等方案的优点。 安装 对于linux： wget -q https://kcl-lang.io/script/install-cli.sh -O - | /bin/bash 这个脚本本",
             "url": "https://yiuterran.github.io/blog/posts/kcl%E8%AF%95%E7%94%A8/"
         },{
             "@type":"ListItem",
-            "position":  3 ,
+            "position":  4 ,
             "name": "Ytt试用",
             "description": "jsonnet最大的问题其实是：它支持的是json，而不是yaml. 其实这也不是什么问题，因为yaml是json的超集，json本身就是一个合法的ya",
             "url": "https://yiuterran.github.io/blog/posts/ytt%E8%AF%95%E7%94%A8/"
         },{
             "@type":"ListItem",
-            "position":  4 ,
+            "position":  5 ,
             "name": "Jsonnet试用",
             "description": "jsonnet这个语言很有意思，它存在的目的就是为了编辑配置。其实使用任何一门带有字符串模板的语言都能完成类似的目的，但是jsonnet的好处是它的封",
             "url": "https://yiuterran.github.io/blog/posts/jsonnet%E8%AF%95%E7%94%A8/"
-        },{
-            "@type":"ListItem",
-            "position":  5 ,
-            "name": "linux日常使用记录",
-            "description": "由于公司开始强制使用Linux桌面系统，记录一下使用中遇到的问题。 发行版选择 本来先尝试了Ubuntu 22.04和KDE Neon做为开发环境，但是体验都",
-            "url": "https://yiuterran.github.io/blog/posts/linux%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/"
         }
     ]
 }
@@ -156,7 +156,7 @@
 
 
 
-<meta property="og:updated_time" content="2024-03-16T09:44:24&#43;08:00" />
+<meta property="og:updated_time" content="2024-04-14T09:25:27&#43;08:00" />
 
 
 
@@ -244,6 +244,47 @@
 
   <div class="bg-secondary-bg rounded px-6">
     <div class="overflow-hidden divide-y">
+  
+  <div class="py-6">
+    <div class="flex flex-col-reverse lg:flex-row justify-between">
+  
+  <div class="w-full ">
+    <div class="prose">
+  <a href="https://yiuterran.github.io/blog/posts/jinja2%E5%B0%8F%E7%BB%93/" class="no-underline">
+    <h3 class="mt-0">Jinja2小结</h3>
+  </a>
+  
+    之前写Python的时候其实有接触过一些jinja2，不过没有怎么用过实际上。毕竟前后端分离之后，这些模板语言在web开发上用处并不大。不过ansib
+  
+
+  
+    <div
+  class="text-tertiary-text not-prose mt-2 flex flex-row flex-wrap items-center"
+>
+  <div class="me-6 my-2">
+    <i class="fas fa-calendar me-1"></i>
+    <span
+      >2024-01-05</span
+    >
+  </div>
+  <div class="me-6 my-2">
+    <i class="fas fa-clock me-1"></i>
+    <span>2分钟阅读时长</span>
+  </div>
+
+  
+
+  
+</div>
+
+  
+</div>
+
+  </div>
+
+  
+</div>
+  </div>
   
   <div class="py-6">
     <div class="flex flex-col-reverse lg:flex-row justify-between">
@@ -393,47 +434,6 @@
   <div class="me-6 my-2">
     <i class="fas fa-clock me-1"></i>
     <span>4分钟阅读时长</span>
-  </div>
-
-  
-
-  
-</div>
-
-  
-</div>
-
-  </div>
-
-  
-</div>
-  </div>
-  
-  <div class="py-6">
-    <div class="flex flex-col-reverse lg:flex-row justify-between">
-  
-  <div class="w-full ">
-    <div class="prose">
-  <a href="https://yiuterran.github.io/blog/posts/linux%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/" class="no-underline">
-    <h3 class="mt-0">linux日常使用记录</h3>
-  </a>
-  
-    由于公司开始强制使用Linux桌面系统，记录一下使用中遇到的问题。 发行版选择 本来先尝试了Ubuntu 22.04和KDE Neon做为开发环境，但是体验都
-  
-
-  
-    <div
-  class="text-tertiary-text not-prose mt-2 flex flex-row flex-wrap items-center"
->
-  <div class="me-6 my-2">
-    <i class="fas fa-calendar me-1"></i>
-    <span
-      >2023-11-24</span
-    >
-  </div>
-  <div class="me-6 my-2">
-    <i class="fas fa-clock me-1"></i>
-    <span>13分钟阅读时长</span>
   </div>
 
   

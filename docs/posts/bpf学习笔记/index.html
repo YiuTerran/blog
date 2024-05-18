@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-<title>应许之地</title>
+<title>eBPF学习笔记 | 应许之地</title>
 
 <meta name="generator" content="Hugo Eureka 0.9.3" />
 <link rel="stylesheet" href="https://yiuterran.github.io/blog/css/eureka.min.30cfa2a7d2b5754cd246875caad26d69af1d8567ea53339f6729fe1d0ceee8917d33fcd191d4284da2a5da6359d79cb7.css">
@@ -83,7 +83,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
 
 <meta name="description"
-  content="始于2022年初mbp2015归天之后...">
+  content="eBPF的理论看起来有点抽象，实际上就是注册到内核的回调函数，可以拦截系统调用，然后用来完成自己的事情。 只是这个回调函数在内核空间只能用C来写，门槛还">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -91,46 +91,51 @@
   "itemListElement": [{
       "@type": "ListItem",
       "position": 1 ,
-      "name":"Tags",
-      "item":"https://yiuterran.github.io/blog/tags/"},{
+      "name":"文章列表",
+      "item":"https://yiuterran.github.io/blog/posts/"},{
       "@type": "ListItem",
       "position": 2 ,
-      "name":"Im",
-      "item":"https://yiuterran.github.io/blog/tags/im/"}]
+      "name":"eBPF学习笔记",
+      "item":"https://yiuterran.github.io/blog/posts/bpf%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"}]
 }
 </script>
 
 
 
-
 <script type="application/ld+json">
 {
-    "@context":"https://schema.org",
-    "@type":"ItemList",
-    "itemListElement":[{
-            "@type":"ListItem",
-            "position":  1 ,
-            "name": "Tinode源码解析",
-            "description": "概述 有朋友需要做一个im，简单做了一下技术调研，开源的实现其实蛮多的，这里挑几个说一下： Synapse/dendrite，matrix系，客户端比较多",
-            "url": "https://yiuterran.github.io/blog/posts/tinode%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/"
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://yiuterran.github.io/blog/posts/bpf%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"
+    },
+    "headline": "eBPF学习笔记 | 应许之地","datePublished": "2024-04-14T09:25:27+08:00",
+    "dateModified": "2024-04-14T09:25:27+08:00",
+    "wordCount":  579 ,
+    "publisher": {
+        "@type": "Person",
+        "name": "C. Wang",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://yiuterran.github.io/blog/images/icon.png"
         }
-    ]
+        },
+    "description": "eBPF的理论看起来有点抽象，实际上就是注册到内核的回调函数，可以拦截系统调用，然后用来完成自己的事情。 只是这个回调函数在内核空间只能用C来写，门槛还"
 }
-</script><meta property="og:title" content="应许之地" />
-<meta property="og:type" content="website" />
+</script><meta property="og:title" content="eBPF学习笔记 | 应许之地" />
+<meta property="og:type" content="article" />
 
 
 <meta property="og:image" content="https://yiuterran.github.io/blog/images/icon.png">
 
 
-<meta property="og:url" content="https://yiuterran.github.io/blog/tags/im/" />
+<meta property="og:url" content="https://yiuterran.github.io/blog/posts/bpf%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" />
 
 
 
 
-
-<meta property="og:description" content="始于2022年初mbp2015归天之后..." />
-
+<meta property="og:description" content="eBPF的理论看起来有点抽象，实际上就是注册到内核的回调函数，可以拦截系统调用，然后用来完成自己的事情。 只是这个回调函数在内核空间只能用C来写，门槛还" />
 
 
 
@@ -147,14 +152,17 @@
 
 
 
-<meta property="og:updated_time" content="2022-11-14T19:21:38&#43;08:00" />
+<meta property="article:published_time" content="2024-04-14T09:25:27&#43;08:00" />
+
+
+<meta property="article:modified_time" content="2024-04-14T09:25:27&#43;08:00" />
 
 
 
-<meta property="article:section" content="tags" />
+<meta property="article:section" content="posts" />
 
 
-<link rel="alternate" type="application/rss+xml" href="https://yiuterran.github.io/blog/tags/im/index.xml" title="应许之地" />
+
 
 
   <body class="flex min-h-screen flex-col">
@@ -177,7 +185,7 @@
         class="hidden block md:flex md:grow md:justify-between md:items-center w-full md:w-auto text-primary-text z-20">
         <div class="md:flex md:h-16 text-sm md:grow pb-4 md:pb-0 border-b md:border-b-0">
             <a href="https://yiuterran.github.io/blog/authors/tryao/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  border-transparent  me-4">作者</a>
-            <a href="https://yiuterran.github.io/blog/posts/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  border-transparent  me-4">文章</a>
+            <a href="https://yiuterran.github.io/blog/posts/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  selected-menu-item  me-4">文章</a>
         </div>
 
         <div class="flex">
@@ -228,39 +236,27 @@
     <main class="grow pt-16">
         <div class="pl-scrollbar">
           <div class="mx-auto w-full max-w-screen-xl lg:px-4 xl:px-8">
-  <article class="prose mx-6 my-8">
-  <h1>Im</h1>
   
-</article>
-
-  <div class="bg-secondary-bg rounded px-6">
-    <div class="overflow-hidden divide-y">
   
-  <div class="py-6">
-    <div class="flex flex-col-reverse lg:flex-row justify-between">
-  
-  <div class="w-full ">
-    <div class="prose">
-  <a href="https://yiuterran.github.io/blog/posts/tinode%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="no-underline">
-    <h3 class="mt-0">Tinode源码解析</h3>
-  </a>
-  
-    概述 有朋友需要做一个im，简单做了一下技术调研，开源的实现其实蛮多的，这里挑几个说一下： Synapse/dendrite，matrix系，客户端比较多
-  
-
-  
+  <div class="grid grid-cols-2 gap-4 lg:grid-cols-8 lg:pt-12">
     <div
+      class=" bg-secondary-bg col-span-2 rounded px-6 py-8 lg:col-span-6"
+    >
+      <article class="prose">
+  <h1 class="mb-4">eBPF学习笔记</h1>
+
+  <div
   class="text-tertiary-text not-prose mt-2 flex flex-row flex-wrap items-center"
 >
   <div class="me-6 my-2">
     <i class="fas fa-calendar me-1"></i>
     <span
-      >2022-11-14</span
+      >2024-04-14</span
     >
   </div>
   <div class="me-6 my-2">
     <i class="fas fa-clock me-1"></i>
-    <span>12分钟阅读时长</span>
+    <span>2分钟阅读时长</span>
   </div>
 
   
@@ -268,20 +264,139 @@
   
 </div>
 
-  
-</div>
 
+  
+  
+
+  <p>eBPF的理论看起来有点抽象，实际上就是注册到内核的回调函数，可以拦截系统调用，然后用来完成自己的事情。</p>
+<p>只是这个回调函数在内核空间只能用C来写，门槛还是有点高的，除了C之外其他的语言可以写用户空间部分。</p>
+<p>tcpdump和strace等常用程序就是基于eBPF来实现的。</p>
+<h2 id="bcc程序集">bcc程序集</h2>
+<p>eBPF常用的利用方式是直接使用其他人贡献的bcc程序集，就和你直接用tcpdump一样。</p>
+<p>安装程序集的方法参考<a href="https://github.com/iovisor/bcc/blob/master/INSTALL.md">这里</a>，Ubuntu最新版需要使用非官方PPA：</p>
+<pre><code class="language-bash">sudo add-apt-repository ppa:hadret/libbpf
+sudo add-apt-repository ppa:hadret/bpftrace
+sudo add-apt-repository ppa:hadret/bpfcc
+sudo apt-get install bpfcc-tools linux-headers-$(uname -r)
+</code></pre>
+<p>Ubuntu里这些二进制文件的名字会添加<code>-bpfbcc</code>的后缀，比如<code>exesnoop-bpfbcc</code>.</p>
+<p>bcc用户态的代码是用Python写的。</p>
+<h3 id="execsnoop">execsnoop</h3>
+<p>监控系统新进程的产生，那些会消耗系统资源，但很短暂的进程，它们甚至不会出现在 <code>top</code> 命令或其它工具中的显示之中，此时使用该命令可以有效监控。</p>
+<p>这个名字的来源是它实际监控<code>exec</code>的系统调用。</p>
+<h3 id="opensnoop">opensnoop</h3>
+<p>类似地，用来监控文件打开。</p>
+<h3 id="biosnoop">biosnoop</h3>
+<p>根据块设备io，并打印延迟。</p>
+<p>一般使用biolatency -D找到延迟大的磁盘，然后使用biosnoop找到延迟大的进程。</p>
+<h3 id="biotop">biotop</h3>
+<p>可以迅速定位占用大量io的进程。</p>
+<h3 id="ext4slower">ext4slower</h3>
+<p>检测ext4系统上，文件io较慢的进程和文件名。</p>
+<p>其他文件系统也有对应的工具，修改前缀匹配即可。</p>
+<h3 id="biolatency">biolatency</h3>
+<p>块设备io延迟跟踪，以直方图显示。</p>
+<p>比iostat的输出更加直观。</p>
+<h3 id="cachestat">cachestat</h3>
+<p>查看文件系统的缓存命中率。</p>
+
+</article>
+
+
+      
+
+      
+
+
+
+      
+
+      
+  <div
+    class="-mx-2 mt-4 flex flex-col border-t px-2 pt-4 md:flex-row md:justify-between"
+  >
+    <div>
+      
+    </div>
+    <div class="mt-4 md:mt-0 md:text-right">
+      
+        <span class="text-primary-text block font-bold">下一页</span>
+        <a href="https://yiuterran.github.io/blog/posts/%E6%97%B6%E5%BA%8F%E6%95%B0%E6%8D%AE%E8%A7%84%E5%88%99%E5%BC%95%E6%93%8E%E8%AE%BE%E8%AE%A1%E6%80%9D%E8%B7%AF/" class="block">时序数据规则引擎设计思路</a>
+      
+    </div>
+  </div>
+
+
+      
+
+
+
+  <script id="utterances" src="https://utteranc.es/client.js"
+            issue-term=title
+            repo=YiuTerran/blog-comment
+              theme=preferred-color-scheme
+        crossorigin="anonymous"
+        async>
+</script>
+<script>
+    if (storageColorScheme == "Light") {
+      document.getElementById('utterances').setAttribute('theme', 'github-light')
+    } else if (storageColorScheme == "Dark") {
+      document.getElementById('utterances').setAttribute('theme', 'github-dark')
+    }
+</script>
+
+    </div>
+    
+      <div class="col-span-2">
+        
+        
+          <div
+  class="
+    bg-primary-bg
+   prose sticky top-16 z-10 hidden px-6 py-4 lg:block"
+>
+  <h3>本页内容</h3>
+</div>
+<div
+  class="sticky-toc  hidden px-6 pb-6 lg:block"
+>
+  <nav id="TableOfContents">
+  <ul>
+    <li><a href="#bcc程序集">bcc程序集</a>
+      <ul>
+        <li><a href="#execsnoop">execsnoop</a></li>
+        <li><a href="#opensnoop">opensnoop</a></li>
+        <li><a href="#biosnoop">biosnoop</a></li>
+        <li><a href="#biotop">biotop</a></li>
+        <li><a href="#ext4slower">ext4slower</a></li>
+        <li><a href="#biolatency">biolatency</a></li>
+        <li><a href="#cachestat">cachestat</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+</div>
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
+    enableStickyToc();
+  });
+</script>
+
+        
+      </div>
+    
+
+    
+    
   </div>
 
   
-</div>
-  </div>
-  
-</div>
-
-
-  </div>
-  
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        hljs.highlightAll();
+      });
+    </script>
 
           </div>
         </div>
