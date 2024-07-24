@@ -27,10 +27,11 @@ draft: false
 8. lambda表达式的格式非常类似函数声明：`func f (x:Int,y:Int)->Int={x,y->x+y}`，或者更简单点`val f ={x:Int,y:Int: x+y}`；即用`{}`括起来的表达式；
 9. 单个参数可以不声明，隐式的为`it`；
 10. func与lambda的区别：
-   1. fun在没有等号，只有花括号时，就是最常见的函数实现，必须带return；
-   2. fun有等号，没有花括号时，表示单表达式函数体，此时无须带return；
-   3. 如果是等号同时有花括号，无论使用val还是fun，都表示lambda表达式；
-   4. lambda可以定义接收者，语法是`val sum: Int.(int) -> Int = {other->plus(other)}`;
+    1. fun在没有等号，只有花括号时，就是最常见的函数实现，必须带return；
+    2. fun有等号，没有花括号时，表示单表达式函数体，此时无须带return；
+    3. 如果是等号同时有花括号，无论使用val还是fun，都表示lambda表达式；
+    4. lambda可以定义接收者，语法是`val sum: Int.(int) -> Int = {other->plus(other)}`;
+
 11. kotlin的闭包是可以修改外部变量的，比java合理；
 12. 如果一个函数只有一个参数，且参数是函数，则调用该函数时，无须传入外层的括号：
 
