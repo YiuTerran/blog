@@ -59,7 +59,7 @@ function HomePage(){
     return (
     	<div>
         	<Header title="world"></Header>
-        </div>
+      </div>
     )
 }
 ```
@@ -103,7 +103,7 @@ function HomePage(){
             <ul>
             	{names.map((name)=>{
                     <li key={name}>{name}</li>
-                })}
+              })}
             </ul>
         </div>
     );
@@ -128,7 +128,7 @@ function handleClick(){
 return (
 	<div>
     	<button onClick={handleClick}>Likes ({likes})</button>
-    </div>
+  </div>
 )
 ```
 
@@ -210,7 +210,7 @@ export default function Section({ children }) {
     return (
     	<section className="section">
         	<LevelContext.Provider value={level+1}>{children}</LevelContext.Provider>
-        </section>
+      </section>
     )
 }
 ```
@@ -227,3 +227,6 @@ NextJS默认使用文件路由，直接用文件夹路径就行，很简单。
 
 NextJS推荐使用tailwindcss，不过也支持css modules. 国内使用后者更多，前者适合初创团队使用。
 
+## UmiJS
+
+国内一般还是mako + umijsv4 + antd，做纯客户端模式比较简单。
