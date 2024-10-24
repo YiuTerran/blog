@@ -32,7 +32,7 @@ draft: true
 react中组件就是一个function，返回UI元素（即jsx片段）。jsx需要注意以下几点：
 
 * 必须是一个完整的元素，即有根节点。可以考虑加一个`<div>`或者空节点：`<></>`；
-* jsx内部使用驼峰明明而不是下划线（但是`data-*`除外）；
+* jsx内部使用驼峰命名而不是下划线（但是`data-*`除外）；
 * 避开js关键词冲突，如class对应className；
 * 组件名称首字母必须大写；
 
@@ -132,7 +132,7 @@ return (
 )
 ```
 
-上例就是初始化一个state，初始值是0，likes对应值，setLikes对应修改UI的函数。
+上例就是初始化一个state，**初始值是0**，likes对应值，setLikes对应修改UI的函数。
 
 onClick是点击回调，后者调用`setLikes`更新likes的值，react会自动进行元素的渲染。
 
@@ -153,9 +153,7 @@ return (
 
 如果x和y关联到一个输入框，回调的时候重新设置，那么z的值是会随之改变的（也就是说看起来是const，但是实际上并不是）。
 
-由于是声明式语法，react在渲染的时候并不一定和你想的一样，比如不同的button复用同一个textarea，切换button时需要清空数据，或者保留各自的数据。此时需要自行定义相关函数。
-
-给组件设置不同的key，react会将同一个组件视为不同的，从而重新渲染。
+由于是声明式语法，react在渲染的时候的行为并不一定和你想的一样。比如不同的button复用同一个textarea，切换button时需要清空数据，或者保留各自的数据：此时需要自行定义相关函数，给组件设置不同的key。当key变化时，react会将同一个组件视为不同的，进而重新渲染。
 
 除了`useState`之外，react还提供了更高级的`useReducer`来简化复杂状态管理，所谓`reducer`实际上就是一个状态机：`(state, action) => newState`，需要注意的是，reducer必须是一个幂等函数。举个例子：
 
