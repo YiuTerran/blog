@@ -33,40 +33,47 @@ draft: false
 在宿主机的挂载卷下，找一个文件夹用来存放数据，假设为`/data/elasticsearch`，放入以下脚本：
 
 ```bash
- version='8.13.0'
- name='elastic1'
+version='8.15.0'
+name='elastic1'
  
- sudo docker pull elasticsearch:$version
+sudo docker pull elasticsearch:$version
  
- sudo docker run -itd --name "$name" --network host -m 4GB elasticsearch:$version
- sleep 60
- sudo docker logs "$name" | tail -n 30 > password.txt
- sudo docker cp $name:/usr/share/elasticsearch/data data/
- sudo docker cp $name:/usr/share/elasticsearch/config config/
- sudo chown -Rh 1000:root data/
- sudo chown -Rh 1000:root config/
- echo "Copy files success."
+sudo docker run -itd --name "$name" \
+    -p 9200:9200 \
+    -p 9300:9300 \
+    -e 'network.host=0.0.0.0' \
+    -e 'network.publish_host=172.19.3.209' \
+    -m 4GB elasticsearch:$version
+sleep 60
+sudo docker logs "$name" | tail -n 30 > password.txt
+sudo docker cp $name:/usr/share/elasticsearch/data data/
+sudo docker cp $name:/usr/share/elasticsearch/config config/
+sudo chown -Rh 1000:root data/
+sudo chown -Rh 1000:root config/
+echo "Copy files success."
  
- echo "Creating elasticsearch"
- sudo docker stop $name
- sudo docker rm $name
- sudo docker run -itd \
-         --name $name  \
-         --restart always \
-         --network host \
-         -m 4GB \
-         -v $(pwd)/data:/usr/share/elasticsearch/data \
-         -v $(pwd)/config:/usr/share/elasticsearch/config \
-         -v $(pwd)/crack/x-pack-core-$version.crack.jar:/usr/share/elasticsearch/modules/x-pack-core/x-pack-core-$version.jar \
-         elasticsearch:$version
- echo "Create elasticsearch done"
+echo "Creating elasticsearch"
+sudo docker stop $name
+sudo docker rm $name
+sudo docker run -itd \
+        --name $name  \
+        --restart always \
+        -p 9200:9200 \
+        -p 9300:9300 \
+        -e 'network.host=0.0.0.0' \
+        -e 'network.publish_host=172.19.3.209' \
+        -m 4GB \
+        -v $(pwd)/data:/usr/share/elasticsearch/data \
+        -v $(pwd)/config:/usr/share/elasticsearch/config \
+        -v $(pwd)/crack/x-pack-core-$version.crack.jar:/usr/share/elasticsearch/modules/x-pack-core/x-pack-core-$version.jar \
+        elasticsearch:$version
+echo "Create elasticsearch done"
  
- sleep 30
+sleep 30
+cat password.txt
 ```
 
-其中`crack.jar对应的是白金版破解，参考这里。`
-
-这里用了host网络，直接暴露出9200和9300端口，之所以用host网络，是因为**docker网络下自动生成的enrollment token里面的ip地址是错误的**。
+其中`crack.jar`对应的是白金版破解，参考[这里](https://github.com/wolfbolin/crack-elasticsearch-by-docker)。注意修改`network.publish_host`为当前节点的内网ip地址。
 
 运行结束之后，当前目录下会生成`password.txt`，这里面是供kibana和其他node加入需要的token信息，内容参考如下：
 
@@ -101,7 +108,7 @@ draft: false
 
 重新生成。最后的`node`也可以换成`kibana`，重新生成上面第3个关键信息给kibana使用。
 
-最后要注意的是上面限制了内存4GB，可以根据机器配置调整该数值，但是不要超过32GB.
+最后要注意的是上面限制了内存4GB，可以根据机器配置调整该数值，但是**不要超过32GB**.
 
 ## 其他节点
 
@@ -110,19 +117,23 @@ draft: false
 其他节点的启动脚本如下：
 
 ```bash
- #!/usr/bin/env bash
- version=8.13.0
- name='elastic3'
+
+#!/usr/bin/env bash
+ version=8.15.0
+ name='elastic2'
  docker pull elasticsearch:$version
  mkdir -p data
  chown -Rh 1000:root data/
- 
+ ​
  echo "Creating elasticsearch"
  docker rm -f $name >/dev/null 2>&1 || true
  docker run -itd \
          --name $name \
          --restart always \
-         --network host \
+          -p 9200:9200 \
+          -p 9300:9300 \
+          -e "network.host=0.0.0.0" \
+          -e "network.publish_host=<节点IP>" \
          -e "ENROLLMENT_TOKEN=<上面的token>" \
          -m 4GB \
          -v $(pwd)/data:/usr/share/elasticsearch/data \
@@ -136,7 +147,7 @@ draft: false
 
 1. 上面的节点启动之后，重启容器会报错，这是因为ENROLLMENT_TOKEN只有第一次启动需要，后面再启动就可以删掉这个参数了。
 2. 可以删除掉data文件夹下的内容，使用`ENROLLMENT_TOKEN`重新加入节点。
-3. 可以通过增加环境变量修改`elasticsearch.yml`中的配置，方法是将所有字母变成大写，`.`变为`_`，`_`变成`__`，如：`k1.k2.k_3`对应的环境变量就是：`K1_K2_K__3`，其实和emqx的环境变量配置方式比较像。
+3. 可以通过增加环境变量修改`elasticsearch.yml`中的配置，方法是将所有字母变成大写，`.`变为`_`，`_`变成`__`，如：`k1.k2.k_3`对应的环境变量就是：`K1_K2_K__3`，和emqx的环境变量配置方式比较像。
 4. 如果要重置密码，可以使用`elasticsearch-reset-password`工具。
 
 ## Kibana部分
@@ -186,7 +197,12 @@ MetricBeats等beats工具则比较轻量一些，可以直接传输数据到ES�
 进入es节点的docker容器内，依次输入下面的命令：
 
 ```
-elasticsearch-certutil ca --pemunzip elastic-stack-ca.zipcd` `caelasticsearch-certutil cert --name fleet-server --ca-cert /usr/share/elasticsearch/config/ca/ca.crt --ca-key /usr/share/elasticsearch/config/ca/ca.key --ip 10.147.147.189,10.147.147.190,10.147.147.191,10.147.147.192 --pemunzip certificate-bundle.zipcd` `fleet-server
+elasticsearch-certutil ca --pem
+unzip elastic-stack-ca.zip
+cd ca
+elasticsearch-certutil cert --name fleet-server --ca-cert /usr/share/elasticsearch/config/ca/ca.crt --ca-key /usr/share/elasticsearch/config/ca/ca.key --ip 10.147.147.189,10.147.147.190,10.147.147.191,10.147.147.192 --pem
+unzip certificate-bundle.zip
+cd fleet-server
 ```
 
 上面的ip地址需要替换成fleet-server的地址，如果是允许公网访问的，最好把公网ip也加进去。
@@ -196,10 +212,15 @@ elasticsearch-certutil ca --pemunzip elastic-stack-ca.zipcd` `caelasticsearch-ce
 回到安装流程，点击advanced，选择第2步创建的策略，部署模式选择生产，主机选择在第1步中创建的那个。然后选择主机平台，将对应的cli语句copy下来，并修改`<>`里的内容，最后的形式大概如下：
 
 ```
- sudo` `./elastic-agent` `install` `--url=https://10.20.121.2:8220 \  --fleet-server-es=https://10.20.121.2:9200 \  --fleet-server-service-token=<your token> \  --fleet-server-policy=4e3a7e30-4b70-11ed-bea5-2fb24f0ee1fa \  --fleet-server-es-ca-trusted-fingerprint=<your fingerprint> \  --fleet-server-es-ca=/data/iot/fleet/ca.crt \  --fleet-server-cert=/data/iot/fleet/fleet-server.crt \  --fleet-server-cert-key=/data/iot/fleet/fleet-server.key
+ sudo ./elastic-agent install --url=https://10.20.121.2:8220 \
+   --fleet-server-es=https://10.20.121.2:9200 \
+   --fleet-server-service-token=<your token> \
+   --fleet-server-policy=4e3a7e30-4b70-11ed-bea5-2fb24f0ee1fa \
+   --fleet-server-es-ca-trusted-fingerprint=<your fingerprint> \
+   --fleet-server-es-ca=/data/iot/fleet/ca.crt \
+   --fleet-server-cert=/data/iot/fleet/fleet-server.crt \
+   --fleet-server-cert-key=/data/iot/fleet/fleet-server.key
 ```
-
-
 
 如果在FleetServer前面挂了一个负载均衡的反代，那`--url`后面就要改成反向代理的地址了，实际上`es`的地址也可以改成反代的地址。
 
@@ -266,7 +287,7 @@ ssl.verification_mode: none
 
 在**Stack Management**-**索引生命周期管理**里管理index的生命周期策略，这里默认就会有filebeat和metricbeat自动创建index的生命周期，可以根据需求进行修改。冷阶段不支持搜索，除非有企业许可证。
 
-Elastic Agent采集的Metric，则是默认使用`metrics`策略管理，即所有数据都在hot阶段，这里肯定需要自定义存储策略。
+Elastic Agent采集的Metric，则是默认使用`metrics`策略管理，即所有数据都在hot阶段，这里可以自定义存储策略。
 
 进入**索引管理**-**数据流**，搜索prometheus可以看到`metrics-prometheus.collector-test`，点击可以看到索引模板是`metrics-prometheus.collector`。到索引模板里clone这个模板，将优先级改到250（或者直接改这个索引模板的配置也可以），在**索引配置**页面加上：
 
@@ -280,9 +301,7 @@ Elastic Agent采集的Metric，则是默认使用`metrics`策略管理，即所�
 
 点击保存。回到数据流tab，再次点击刚才的数据流，就会发现索引模板已经变成新的了，而且生命周期策略也改成`metricbeat`了。
 
-在`索引模板`里面搜索`agent`，可以看到所有elastic agent自动创建的模板，可以看到`metrcis-`开头的默认的ILM都是`metrics`，建议根据自己的使用情况全部改成自定义的ILM。感觉这个设计不是很合理，期望后续的版本使用非托管策略方便修改。
-
-我们可以手动创建一个名为common-logs-policy的策略供后面日志收集时使用，可以根据硬盘大小确定保留几天的数据。
+**实际上，也可以直接修改metrics以及logs的策略**，虽然kibana会提示你最好不要修改，但是实际上是可以修改的。
 
 ## Prometheus Metrics采集
 
@@ -320,9 +339,11 @@ condition里面通过label筛选满足条件的pod，hosts使用对应的变量�
 
 展开高级设置，命名空间默认继承父级（也就是代理策略的），但是也可以修改。比如如果测试环境和开发环境混部在同一台机器上，就需要手动修改了。
 
+![截屏2024-05-08 21.08.34](https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/截屏2024-05-08 21.08.34.png)
+
 ### 数据集
 
-Dataset name非常重要，理论上格式相同的一类日志使用同一个数据集，这样他们会自动重用同一套数据处理和数据映射，比如java的日志可以都叫java_iot，需要注意的是名字里不能有"-"。
+Dataset name非常重要，理论上格式相同的一类日志使用同一个数据集，这样他们会自动重用同一套数据处理和数据映射，比如java的日志可以都叫java_iot，需要注意的是**名字里不能有"-"**。
 
 如果采用上面的命名，且命名空间为dev，则对应的数据流即为logs-java_iot-dev，可以在discover中建立对应的视图。
 
@@ -355,7 +376,7 @@ match：基准行和后面after或前面before划分为一组。
 
 在采集管道处点击“定制采集管道”，会自动新增一个名为**`logs-{dataset}@custom`**的管道，**后面所有同名数据集都会自动应用这个pipeline**。
 
-实际上你自己按着这个命名规则创建pipeline也行，会自动应用到对应的dataset的。如果dataset为java_iot，手动创建一个logs-java_iot@custom的采集管道就行。
+实际上你自己按着这个命名规则创建pipeline也行，会自动应用到对应的dataset的。如果dataset为java_iot，手动创建一个`logs-java_iot@custom`的采集管道就行。
 
 下面开始配置：
 
@@ -431,21 +452,7 @@ java错误日志的捕捉可以使用这个表达式：
 
 保存上面的pipeline，会自动回到Custom Logs的设置页面，下面需要对刚才通过pipeline增加的字段做类型定义，点击映射下面的“添加定制映射”，会自动创建一个和定制采集管道同名的组件模版。
 
-同样的，你也可以先按着上面的命名手动创建一个组件模板，也会自动应用到数据流的处理中。
-
-先到第2步索引设置里，加上生命周期设置：
-
-```json
-{
-  "index": {
-    "lifecycle": {
-      "name": "common-logs-policy"
-    }
-  }
-}
-```
-
-然后配置字段映射。
+下面主要配置字段映射：
 
 java的可以参考下面的字段配置，其他语言类似。
 
@@ -466,6 +473,12 @@ java的可以参考下面的字段配置，其他语言类似。
 如果肉眼调试pipeline太困难，可以进入fleet，点击主机名，点击日志，将页面滚动到最下方，有个代理日志等级调节的下拉框，改成debug，点应用配置。
 
 这样filebeat会打印出来到底为啥上传失败。
+
+### 迁移pipeline
+
+如果你需要将迁移kibana的配置，仅仅使用"已保存的对象"进行导出是不够的，pipeline和模板都不会迁移。
+
+pipeline可以到详情页右下角，点击“显示请求”，然后到控制台上运行命令。
 
 ## KQL简单学习
 
@@ -596,7 +609,7 @@ sdk提供了propagate相关的API，用来Inject和Extract trace上下文，使�
 
 #### 安全告警使用示例
 
-这里其实不太建议使用，非安全问题用这里的规则不太符合ES本身的设计，具体使用方法请自己摸索。
+这里不太建议使用，非安全问题用这里的规则不太符合ES本身的设计，具体使用方法请自己摸索。
 
 #### watcher使用示例
 
@@ -634,6 +647,24 @@ watcher属于高级用法，需要自己写全量的JSON来拼凑出表达式，
 
 其他的指标都在`custom metric`选项里，如磁盘空间使用，可以用`system.filesystem.used.pct`. 建议根据自己的需求阅读官方文档中[system](https://www.elastic.co/guide/en/beats/metricbeat/current/metricbeat-module-system.html)和[linux](https://www.elastic.co/guide/en/beats/metricbeat/current/metricbeat-module-linux.html)这两个采集模块的相关字段解释。
 
+## ES Monitor监控周期
+
+如果使用metricbeat来监控es/kibana，可以使用ILM控制存储周期，但是如果用es自带的监控，必须要手动修改存储周期，方法是在控制台里面输入：
+
+```
+PUT /_cluster/settings
+{
+ "persistent" : {
+   "xpack.monitoring.collection.enabled": true,
+   "xpack.monitoring.history.duration" : "3d"
+ }
+}
+```
+
+这里将周期改为3天减少日志存储消耗。
+
+新版本可以通过elastic agent监控es了，只是界面上没有提示。
+
 ## 看板配置
 
 在`kibana`的`Analytics`部分，可以创建各种看板。
@@ -648,25 +679,226 @@ Canvas部分则可以通过灵活地拖曳完成各种图表的数据、样式�
 
 大部分中间件都集成在fleet里了，如果不能满足需求，可以点开custom这一栏。已经有官方集成的这里就不写了，包括MySQL、Redis、kafka、rabbitMQ和Nginx。
 
+## Docker
+
+所有通过docker安装的中间件，可以统一使用docker这个集成收集日志，以及内存、cpu、网络等基本指标信息，dashboard那边也会有对应的图。
+
+部分中间件可以通过日志完成所有告警，但是有些指标日志里面没有就要自己想办法。可以根据容器名称或者镜像名称来对特定容器使用的内存、cpu进行告警。
+
+注意：如果容器直接使用了宿主机网络，即--net=host，则无法获取独立的网络使用信息。
+
 ### emqx
 
-需要先将数据推送到pushgateway，然后从pushgateway暴露/metrics端口给prometheus或者metricbeat使用。
-需要几步：
+去dashboard-插件里面打开emqx_prometheus，通过`localhost:8081/api/v4/emqx_prometheus?type=prometheus`即可获取。
 
-1. 安装pushgateway，[pushgateway下载](https://github.com/prometheus/pushgateway/releases/tag/v1.4.3)
-2. 开启emqx_prometheus插件，可在emqx的dashboard的插件模块下开启
-3. 配置/etc/emqx/plugins/emqx_prometheus.conf文件。将prometheus.push.gateway.server配置为对应pushgateway的地址，通常是http://xxx/9091; prometheus.interval使用默认值即可
-4. 调用pushgateway的metrics接口即可，通常是http://xxx:9091/metrics
+不过需要注意的是有时候会有bug，界面上显示启动成功，但是curl提示404，则实际上是启动失败了，可以去容器里面通过`emqx_ctl plugins start emqx_prometheus`手动启动。
 
-### influxdb cluster
+该API不需要密码，每个节点统计是当前节点的数据而不是整个集群的数据。
 
-支持metrics接口，可以直接用。不过能采集到的数据其实都是默认的golang exporter里面的。
+另外，需要注意的是，fleet的Prometheus插件的query参数是在高级选项里面设置的，**不是直接写在url后面的**。
 
-通过`debug/vars`接口可以拿到influxdb本身的监控数据，不过这个不是prometheus格式的，需要自己转换。
+如果想要统计整个集群的数据，也可以配合用官方的[emqx_exporter](https://github.com/emqx/emqx-exporter)，然后去通用-用户里面添加一个用户，然后增加配置文件：
 
-可以通过开源的[influxdb exporter](https://github.com/prometheus/influxdb_exporter)或者直接用[telegraf](https://github.com/influxdata/telegraf)作为exporter，后者在output里面启动一个prometheus client即可.
+```
+metrics:
+  api_key: {{username}}
+  api_secret: {{password}}
+  target: 10.147.147.191:18083
+  scheme: http
+```
 
-telegraf其实可以代替MetricBeat直接将数据发到es，不过和kibana那套体系配合的不是很好，需要自己管理相关index.
+如果是emqx5.x，上面api_key和secret对应的是通用-应用里面自动生成的密码对。
+
+启动命令：
+
+```
+#!/usr/bin/bash
+ 
+docker run -d --restart always --name emqx-exporter -p 8085:8085 \
+    -v $(pwd)/config.yml:/usr/local/emqx-exporter/bin/config.yaml \
+    emqx/emqx-exporter:0.2.9
+```
+
+通过curl localhost:8085/metrics即可看到metrics，一个集群有一个exporter就够了。
+
+告警可以考虑加上因为队列满导致drop的消息数，即prometheus.emqx_delivery_dropped_queue_full.counter的值，以及离线客户端占比：prometheus.emqx_client_disconnected.rate.
+
+告警提示1：
+
+```
+{
+    "msgtype": "markdown",
+    "markdown":{
+        "title": "emqx queue full!",
+        "text":"""
+ {{#context.hits}}
+ {{_source.data_stream.namespace}}环境，主机{{_source.host.name}}，emqx队列已满，消息丢弃{{prometheus.emqx_delivery_dropped_queue_full.counter}}条！！
+ {{/context.hits}}
+ 点击[此链接]({{context.link}})查看详情。"""
+    }
+}
+```
+
+告警提示2：
+
+```
+{
+    "msgtype": "markdown",
+    "markdown":{
+        "title": "lots of emqx client disconnected!",
+        "text":"""
+ {{#context.hits}}
+ {{_source.data_stream.namespace}}环境，主机{{_source.host.name}}，emqx客户端断联占比达到{{_source.prometheus.emqx_client_disconnected.rate}}！
+ {{/context.hits}}
+ 点击[此链接]({{context.link}})查看详情。"""
+    }
+}
+```
+
+
+
+### Kafka
+
+kafka可以在启动时将Jolokia jar包注入，作为代理，作为Prometheus的exporter，这样做以后就可以直接用集成里面的kafka采集数据了。
+
+还有个方法是使用独立的lag-exporter，监控消费lag情况，虽然官方已经将该方案的仓库archive了，但是目前还是能用的，以后就不好说了。
+
+参考配置：
+
+```
+
+  reporters.prometheus.port = 9090
+  clusters = [
+    {
+      name = "dev-singleton"
+      bootstrap-brokers = "10.147.147.191:9092"
+      topic-whitelist = ["^device.*"]
+      group-whitelist = ["data-repository", "hermes", "iot-gateway", ".*notify"]
+    },
+    {
+      name = "test-cluster"
+      bootstrap-brokers = "10.147.147.189:9092,10.147.147.190:9092,10.147.147.192:9092"
+      topic-whitelist = ["^device.*"]
+      group-whitelist = ["data-repository", "hermes", "iot-gateway", ".*notify"]
+    }
+  ]
+}
+```
+
+建议只关注量数据量比较大的topic，以及相关的消费者，避免采集的数据过多。启动命令：
+
+```
+docker run -d -p 9090:9090 \
+    --restart=always \
+    --name=kafka-exporter \
+    -v $DIR:/opt/docker/conf/ \
+    seglo/kafka-lag-exporter:0.8.2 \
+    /opt/docker/bin/kafka-lag-exporter \
+    -Dconfig.file=/opt/docker/conf/application.conf \
+    -Dlogback.configurationFile=/opt/docker/conf/logback.xml
+```
+
+告警条件：
+
+**prometheus.kafka_consumergroup_group_lag.value >= 100**
+
+告警提示：
+
+```
+{
+    "msgtype": "markdown",
+    "markdown":{
+        "title": "kafka lag found",
+        "text":"""
+ {{#context.hits}}
+ 集群{{_source.prometheus.labels.cluster_name}}，消费组{{_source.prometheus.labels.group}}，Topic {{_source.prometheus.labels.topic}}的消费延迟达到
+ **{{_source.prometheus.kafka_consumergroup_group_lag.value}}**，预计消费时间**{{_source.prometheus.kafka_consumergroup_group_lag_seconds.value}}**秒
+ {{/context.hits}}
+ 点击[此链接]({{context.link}})查看详情。"""
+    }
+}
+```
+
+### redis
+
+redis主要监控慢日志，慢日志需要在启动redis时配置好，如果没有配置，只能通过命令打开：
+
+```
+config set slowlog-log-slower-than 10000
+config set slowlog-max-len 128
+```
+
+第一行的10000表示10毫秒，可以酌情增减，一般不建议超过20毫秒避免阻塞其他命令，第二个表示记录慢查询的长度。
+
+可以通过
+
+```
+slowlog get 1
+```
+
+获取最近一条慢查询日志。
+
+fleet集成里面有个redis，可以通过info周期性采集数据，根据`**redis.info.slow****log.count > 0**`发出告警。
+
+### influxdb
+
+我们生产中用的是influx-proxy作为负载均衡代理，可以先收集influx-proxy的日志，对error发出告警。
+
+influxdb本身可以使用telegraf作为exporter，参考配置如下：
+
+```
+[[inputs.influxdb]]
+  urls = [
+    "http://10.147.147.191:8086/debug/vars"
+  ]
+ 
+[[outputs.prometheus_client]]
+  listen = ":9273"
+  namedrop = [
+    "influxdb_tsm*",
+    "influxdb_shard*"
+  ]
+  collectors_exclude = ["gocollector", "process"]
+```
+
+influxdb默认导出的metrics非常多，这里做了一些过滤。
+
+运行命令：
+
+```bash
+#!/usr/bin/bash
+ 
+docker run -d --restart always --name influx-exporter -p 9273:9273 -v $(pwd)/telegraf.conf:/etc/telegraf/telegraf.conf:ro telegraf:alpine
+```
+
+可以对写入失败数做告警。
+
+日志告警，条件为message里面含有error且container.name: "influx-proxy" ：
+
+```
+{
+    "msgtype": "markdown",
+    "markdown":{
+        "title": "influx error log found!",
+        "text":"""influx-proxy在过去2分钟内发现{{context.value}}条错误日志，摘录如下：
+ {{#context.hits}}
+ **主机{{_source.host.name}}:**
+ {{_source.@timestamp}}  {{_source.message}}
+ {{/context.hits}}
+ 点击[此链接]({{context.link}})查看详情。"""
+    }
+}
+```
+
+### rabbitmq
+
+SLB对rabbitmq的探测会打出error日志（socket is not connected），这个可以无视，或者让运维配合修改SLB探活方式。
+
+rabbitmq可以使用通用的Prometheus采集器采集，方法如下(3.18+)：
+
+进入容器内，使用``rabbitmq-plugins enable rabbitmq_prometheus`打开Prometheus端点开关，默认使用15692端口。如果之前没有导出这个端口，只能删掉容器重新创建了，然后使用curl localhost:15692/metrics获取指标数据。
+
+还有个更简单的方案是直接用15672进行采集，fleet自带了一个rabbitmq的采集器，可以使用那个。
 
 ### seaweedFS
 
@@ -706,3 +938,17 @@ POST <datastream/alias name>/_rollover
 ```
 
 正常的话，会创建一个新的索引。这样就可以删掉原来的索引了。
+
+### 字段类型冲突
+
+如果你在discover中看消息时看到字段类型前面有个感叹号，一般是改了字段映射导致的，没什么影响。如果想修正这个问题，需要到Stack Management-数据视图里面查看具体冲突的原因。
+
+一般删掉旧的索引就可以了。
+
+但是有些情况属于是处理不当导致的，例如采集管道里同一个字段，有时候是字符串，有时候是object，这种一定会冲突，但是一般不影响使用。
+
+### 同一个数据集，但是新增命名空间无日志
+
+比如测试环境正常收集数据，但是到生产环境就没数据了。首先check一下日志的格式是不是变了，pipeline那里可能对不上。
+
+此外，这可能是由于索引模板禁用了自动创建索引导致的，需要去索引模板那边打开自动创建索引。
