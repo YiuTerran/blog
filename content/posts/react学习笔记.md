@@ -229,4 +229,6 @@ NextJS推荐使用tailwindcss，不过也支持css modules. 国内使用后者�
 
 ## UmiJS
 
-国内一般还是mako + umijsv4 + antd，做纯客户端模式比较简单。
+国内一般还是mako + umijsv4 + antd，做纯客户端模式比较简单。官方教程见[这里](https://umijs.org/docs/guides/getting-started)。
+
+公司用的还是3.x，教程可以看[这里](https://v3.umijs.org/zh-CN/docs/getting-started)。
