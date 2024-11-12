@@ -46,24 +46,7 @@ tsc hello.ts
 16. N个元素如果类型一样，可以用`...`接数组或者数组表示任意多个元素；
 17. 只读的值类型，可以作为元组使用，也可以作为数组使用，例如`const arr=[1, 2] as const`，此时arr的长度和类型都是固定的；
 18. symbol类型一般是给库作者使用的，普通用户用到的机会不大；
-
-### 接口
-
-1. 接口(interface)，typescript的接口类似C中的struct：
-
-```typescript
-interface Person{
-	name: string;
-	age?: number; //问号标识可以不赋值
-    [propName: string]: any; //任意属性取string类型的值
-}
-```
-
-2. 在interface中定义了任意属性之后，其他确定/可选属性的类型必须是任意属性类型的子集。上面例子中，string和number都是any的子集；
-
-3. 只能有一个任意属性定义，如果有多个类型，则使用联合类型（或者用any）；
-
-4. 用`readonly`修饰属性名，标识只能在创建时赋值。
+19. 使用`as`进行类型转换，或者使用`<string> p`这种形式；
 
 ### 数组
 
@@ -109,3 +92,48 @@ const hello: (txt:string)=>void = function(txt){
 
 ### 对象
 
+1. const对象无法修改成员；
+2. 可选属性使用`?`修饰；
+3. 可选属性在使用之前要判断是不是undefined，可以用`??`操作符设一个默认值；
+4. 属性使用readonly修饰，标识只读；
+5. 如果一个对象变量有两个引用，其中一个变量是只读的，修改非只读的变量会影响只读变量；可以使用`as const`强制转为只读；
+6. 动态属性约束：
+
+```typescript
+type Obj = {
+    [property:string]: string
+}
+```
+
+7. 动态属性可以声明多个类型，但是不能和字符串索引的值类型冲突。换句话说，上面这个示例，如果想增加一个`[property:number]`对应的值必须也是string；
+8. 同样的，如果混合使用动态属性和固定属性，固定属性的值类型也必须和字符串动态索引的值类型一致；
+9. 解构赋值：
+
+```typescript
+let {a, b, c} = d
+```
+
+如果对象d里面有a/b/c三个属性，可以直接解出来（感觉没啥用）。
+
+可以在`a`后面加上`: x`，相当于变量的名字叫x。
+
+10. 结构类型原则，如果对象A的属性对象B都有，那么B兼容A，或者称B是A的子类型。其实就是ducktype的设计；
+11. ts不允许动态添加属性，必须在声明时一次性确定所有属性。实际上你可以用Map来动态加属性；或者使用`...`合成一个对象；
+
+### 接口
+
+1. 接口(interface)，typescript的接口类似C中的struct：
+
+```typescript
+interface Person{
+	name: string;
+	age?: number; //问号标识可以不赋值
+    [propName: string]: any; //任意属性取string类型的值
+}
+```
+
+2. 在interface中定义了任意属性之后，其他确定/可选属性的类型必须是任意属性类型的子集。上面例子中，string和number都是any的子集；
+
+3. 只能有一个任意属性定义，如果有多个类型，则使用联合类型（或者用any）；
+
+4. 用`readonly`修饰属性名，标识只能在创建时赋值。
