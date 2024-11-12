@@ -83,3 +83,29 @@ let array: NumberArray = [1, 2, 3];
 6. 但是readonly和泛型数组是不兼容的；
 
 ### 函数
+
+1. 首先兼容js中的普通函数：
+
+```typescript
+function hello(txt: string):void{
+	console.log('hello' + txt);
+}
+```
+
+2. 等价于：
+
+```typescript
+const hello: (txt:string)=>void = function(txt){
+  //...
+}
+```
+
+注意这里参数名是必须写的，和C语言不一样。包括用type给函数取别名，也要带上参数名。当然实际用的时候的参数名，可以名字不一样。
+
+3. 函数的实际参数个数，可以少于指定的参数，即只适用前面N个。类似JS的设计，后面都是undefined。
+4. `Function`可以匹配所有函数；
+5. 函数支持可选参数(?)，默认参数和重载；
+6. 支持高阶函数；
+
+### 对象
+
