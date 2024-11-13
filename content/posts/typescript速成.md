@@ -122,7 +122,8 @@ let {a, b, c} = d
 
 ### 接口
 
-1. 接口(interface)，typescript的接口类似C中的struct：
+1. object是直接定义的对象，可以看做匿名struct；
+1. 接口(interface)，其实就是普通的具名struct：
 
 ```typescript
 interface Person{
@@ -133,7 +134,4 @@ interface Person{
 ```
 
 2. 在interface中定义了任意属性之后，其他确定/可选属性的类型必须是任意属性类型的子集。上面例子中，string和number都是any的子集；
-
-3. 只能有一个任意属性定义，如果有多个类型，则使用联合类型（或者用any）；
-
-4. 用`readonly`修饰属性名，标识只能在创建时赋值。
+3. 
