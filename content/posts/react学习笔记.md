@@ -21,6 +21,8 @@ draft: true
 
 至于react，最开始定位是一个UI操作库，主要是为了声明式的修改DOM，后面慢慢的变成直接推荐Next.js这种框架了。
 
+推荐教程：https://zh-hans.react.dev/
+
 ## 核心概念
 
 * 组件(components)
@@ -50,6 +52,14 @@ ReactDOM.render(<Header />, app);
 
 显然，类似普通的HTML，组件可以嵌套组合。
 
+可以使用`{}`引入javascript对象、表达式或css样式。
+
+组件应该是**纯函数**，即不修改任何全局的东西，重复执行具有幂等效果。
+
+你不应该期望你的组件以任何特定的顺序被渲染，以任何顺序渲染它的结果都应该是对的。
+
+事件处理程序当然可以不是纯函数，如果你的代码无法找到合适的事件处理程序用来产生副作用，也可以使用`useEffect`在渲染之后运行（最好别用）。
+
 ### 属性
 
 有了组件之后，属性就很容易理解，就是在组件里传入的参数，如：
@@ -72,10 +82,10 @@ function Header(props){
 }
 ```
 
-或者直接拆包：
+或者直接拆包（下面使用了字符串插值）：
 
 ```jsx
-function Header({title}){
+function Header({title='world'}){
     return <h1>{`Hello ${title}`}</h1>
 }
 ```
@@ -112,15 +122,21 @@ function HomePage(){
 
 可以配合lambda表达式简化语法。
 
-**注意**：props是只读的，不能修改这些参数。
+**注意**：单项数据流，意味着对于子组件而言，这些props是只读的，不能修改这些参数。props的内容在每次渲染时都会被父组件刷新。如果用tsx, props设置readonly即可防止无意中犯错。
 
 ### 状态
 
 state表示UI组件的状态，react是单向数据流，通过`useState`来获取组件的状态。
 
+局部变量的更改不会触发重新渲染，也无法持久保存，所以需要state来替换简单的声明局部变量。
+
+**state只能在组件的顶层使用**，有点像C语言的变量声明在最上面的习惯。
+
+**state 完全私有于声明它的组件**，父组件无法更改它。
+
 ```jsx
 function HomePage(){
-    const [likes, setLikes] = React.useState(0);
+    const [likes, setLikes] = React.useState(0); //likes是一个简单的变量，setLikes则是修改变量的函数，0是变量的初始值
 }
 function handleClick(){
     setLikes(likes + 1);
@@ -132,9 +148,20 @@ return (
 )
 ```
 
-上例就是初始化一个state，**初始值是0**，likes对应值，setLikes对应修改UI的函数。
-
 onClick是点击回调，后者调用`setLikes`更新likes的值，react会自动进行元素的渲染。
+
+需要特别注意的是，**setLikes并不会立刻更改like的值**，而是通知react再下一次渲染时，将like的值修改为likes+1，所以重复调用setLikes一般是没有效果的。即：**一个 state 变量的值永远不会在一次渲染的内部发生变化**。
+
+如果想要重复调用setLikes并都生效，你需要传入的不是变量的值，而是更新变量的函数。即：
+
+```js
+function handleClick(){
+    setLikes(n => n + 1);
+    setLikes(n => n + 1);
+}
+```
+
+这个更新函数可以重复多次工作，注意更新函数必须是**纯函数**。
 
 UI相关的所有元素，都使用state来存储。
 
@@ -153,7 +180,7 @@ return (
 
 如果x和y关联到一个输入框，回调的时候重新设置，那么z的值是会随之改变的（也就是说看起来是const，但是实际上并不是）。
 
-由于是声明式语法，react在渲染的时候的行为并不一定和你想的一样。比如不同的button复用同一个textarea，切换button时需要清空数据，或者保留各自的数据：此时需要自行定义相关函数，给组件设置不同的key。当key变化时，react会将同一个组件视为不同的，进而重新渲染。
+由于是声明式语法，react在渲染的时候的行为并不一定和你想的一样。比如不同的button复用同一个textarea，切换button时需要清空数据，或者保留各自的数据：**此时需要自行定义相关函数，给组件设置不同的key**。当key变化时，react会将同一个组件视为不同的，进而重新渲染。
 
 除了`useState`之外，react还提供了更高级的`useReducer`来简化复杂状态管理，所谓`reducer`实际上就是一个状态机：`(state, action) => newState`，需要注意的是，reducer必须是一个幂等函数。举个例子：
 
@@ -170,7 +197,7 @@ function example(state, action){
 }
 ```
 
-由于state经常是一个复杂的数据解构，所以用了js的解包语法，上面实际上等价于：
+由于state经常是一个复杂的数据结构，所以用了js的解包语法，上面实际上等价于：
 
 ```jsx
 function example(state, action){
@@ -183,6 +210,8 @@ function example(state, action){
     return state
 }
 ```
+
+**需要注意**：如果state是一个对象，那么setObj的时候，需要全量set。这时候就经常要用到**对象展开复制语法，也就是`...`**。
 
 实际使用的方法：
 
@@ -217,6 +246,46 @@ export default function Section({ children }) {
 
 结合Reducer和Context可以简化复杂组件的逻辑。
 
+### 列表
+
+渲染列表一般使用map，但是注意必须指定key属性，即：
+
+```jsx
+return (
+	const items = people.map(person => 
+    	<li key={person.id}>
+      		xxx
+       </li>
+	)
+);
+```
+
+同时注意`=>`右侧如果有花括号，函数体必须加上return。
+
+注意最好不要用数组的索引作为id，除非这个数组是只读的。
+
+另外就是不要在运行时在生产这个key。
+
+### 事件
+
+事件处理和js中没什么差别，仍然遵从冒泡模型。
+
+如果想要阻止向上传播，可以用`e => e.stopPropagation()`，和js中也一样。
+
+如果非要捕获（即使下层调用了阻止传播），则捕获事件名+`Capture`这个名字。
+
+阻止默认行为使用`e.preventDefault()`，和js一样。
+
+
+
+## Immer
+
+
+
+## Hook
+
+上面的useXXX这些函数都是Hook，你不能在条件语句、循环语句或其他嵌套函数内调用 Hook.
+
 ## NextJS
 
 react只是一个UI框架，并不涉及到ajax、路由之类的东西，所以需要一个完整的框架来实现整个web项目，目前官方推荐的就是NextJS.
@@ -232,3 +301,6 @@ NextJS推荐使用tailwindcss，不过也支持css modules. 国内使用后者�
 国内一般还是mako + umijsv4 + antd，做纯客户端模式比较简单。官方教程见[这里](https://umijs.org/docs/guides/getting-started)。
 
 公司用的还是3.x，教程可以看[这里](https://v3.umijs.org/zh-CN/docs/getting-started)。
+
+## DVA
+
