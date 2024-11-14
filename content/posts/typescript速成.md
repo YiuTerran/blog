@@ -24,9 +24,7 @@ tsc hello.ts
 
 教程推荐：https://wangdoc.com/typescript/
 
-## 类型和对象
-
-### 基础
+## 基础
 
 1. 使用`let ok: boolean = false`和`let ok = new Boolean(1)`不同，前者是基本类型，后者是对象。类似C#/Java中的装箱和拆箱。
 2. 可以用void标识函数的任意返回值类型；
@@ -47,8 +45,10 @@ tsc hello.ts
 17. 只读的值类型，可以作为元组使用，也可以作为数组使用，例如`const arr=[1, 2] as const`，此时arr的长度和类型都是固定的；
 18. symbol类型一般是给库作者使用的，普通用户用到的机会不大；
 19. 使用`as`进行类型转换，或者使用`<string> p`这种形式；
+20. 使用`!`后缀进行非空断言；
+21. 支持模板字符串，语法是````
 
-### 数组
+## 数组
 
 1. 格式为：`let array: number[] = [1, 2, 3]`；
 2. 也可以用泛型格式：`let array: Array<number> = [1, 2, 3]`；
@@ -65,7 +65,7 @@ let array: NumberArray = [1, 2, 3];
 5. const声明的数组和对象其实是可以改变元素的，需要使用readonly修饰类型：`const arr: readonly number[] = [1, 2, 3]`，此时数组是不可变的；
 6. 但是readonly和泛型数组是不兼容的；
 
-### 函数
+## 函数
 
 1. 首先兼容js中的普通函数：
 
@@ -89,8 +89,21 @@ const hello: (txt:string)=>void = function(txt){
 4. `Function`可以匹配所有函数；
 5. 函数支持可选参数(?)，默认参数和重载；
 6. 支持高阶函数；
+7. 支持断言函数，语法比较奇怪：
 
-### 对象
+```typescript
+type AssertIsNumber = (value: unknown) => asserts value is number;
+```
+
+8. 类似地，还有类型保护函数：
+
+```typescript
+type isNumber = (value: unknown) => values is number;
+```
+
+两者的区别是，后者会返回一个bool值；前者啥也不返回，直接抛出异常。
+
+## 对象
 
 1. const对象无法修改成员；
 2. 可选属性使用`?`修饰；
@@ -118,9 +131,12 @@ let {a, b, c} = d
 可以在`a`后面加上`: x`，相当于变量的名字叫x。
 
 10. 结构类型原则，如果对象A的属性对象B都有，那么B兼容A，或者称B是A的子类型。其实就是ducktype的设计；
+
 11. ts不允许动态添加属性，必须在声明时一次性确定所有属性。实际上你可以用Map来动态加属性；或者使用`...`合成一个对象；
 
-### 接口
+    
+
+## 接口
 
 1. object是直接定义的对象，可以看做匿名struct；
 1. 接口(interface)，其实就是普通的具名struct：
@@ -141,7 +157,7 @@ interface Person{
 7. `type`可以用来扩展原始数据类型，但是`interface`不行；
 8. `type`可以设计复杂类型，比如前文说的联合类型、交叉类型，这个`interface`是不支持的；
 
-### 类
+## 类
 
 1. type和interface其实都很难用，还是`class`比较符合C系语法。可以直接将方法定义在class中；
 2. 使用`constructor`关键字声明构造函数；支持`this`关键字；
@@ -153,8 +169,71 @@ interface Person{
 8. 支持抽象类；
 9. 支持private/public和protected访问等级控制。
 10. 类的本质是构造函数；
+11. accessor是一个修饰符，可以用来装饰私有属性，自动生成set/get，类似Java里面loombok的@Getter@Setter
 
 ## 泛型
 
 1. 与Java/C++的泛型语法类似，可以指定默认参数；
-2. 可以使用extend指名T满足的接口或者类型
+2. 可以使用extend指名T满足的接口或者类型；
+3. 可以用`infer`关键字从对象中推断出类型；
+
+## 枚举
+
+1. enum既是一个类型，又是一个值；
+2. Enum成员可以不赋值，自动递增，类似go的iota；
+3. 同名Enum会自动合并；
+4. 可以使用keyof取出Enum的key值，作为一个联合类型返回（左侧必须是type xxx）；
+5. 如果要的是Enum成员值，则使用`in`运算符；
+6. 反向映射，可以直接用`枚举名[值]`的方式获取枚举的key，仅对数值enum生效；
+
+## 模块
+
+1. 如果文件包括`export`或者`import`语句，则视为一个模块；否则，视为一个全局脚本；
+2. 模块内部的所有变量、函数和类对外都不可件，需要显式的export才行；
+3. 兼容es6的import语法：
+
+> export {a, b, c};
+>
+> import {a, b, c} from xxx
+>
+> import * as t from xxx; //使用t.a来引用
+>
+> export default d; //等价于export { d as default};
+>
+> import d import xxx; //不需要花括号，直接拿到default导出
+>
+>  export {a, b } from xxx; // 导入再导出，一般用于库的聚合导出，方便外部用户引入
+>
+> //仍然可以使用require语法动态导入CommonJS模块（NodeJS模块），或者用import函数也行
+
+4. ts允许export type, interface, class，为了避免混淆，在import类型时，可以在前面加上`type`关键字，即`import {type a} from xxx`，或者直接使用`import type {a} from xxx`也行；
+5. 使用`import x = require('fs')`这种语法导入NodeJs模块，等价于`import * as fs from 'fs'`；
+6. 使用`export = a`语法输出NodeJs模块;
+
+## 命名空间
+
+已经废弃的特性，不再推荐使用
+
+## 装饰器
+
+1. 和Python的装饰器类似，使用`@xxx`语法，xxx是一个函数，会自动接受value和context参数，value是被装饰的对象，context就是上下文；
+2. context对象的属性，跟被装饰对象的类型有关。必然会有kind和name两个属性；
+3. kind支持：
+   1. class
+   2. method
+   3. getter
+   4. setter
+   5. field
+   6. accessor
+4. 如果修饰的是类，可以调用context的`addInitializer`函数，来修改类的初始化逻辑；
+5. 如果修饰的是方法，还可以调用private/static属性，判断是否为私有/静态成员；
+6. 属性装饰器如果返回值，只能返回一个函数用来初始化属性，函数的参数是属性的初始值；
+7. accessor装饰器可以返回一个对象，用来取代默认的`get()`和`set()`方法；
+8. 装饰器的执行顺序是，先评估所有装饰器表达式的值，再将其应用于当前类。应用装饰器时，顺序依次为方法装饰器和属性装饰器，然后是类装饰器；
+
+## declare关键字
+
+1. declare用来通知编译器某个变量的类型，这个变量是定义在其他文件里的（比如全局文件）；
+2. 类似C语言中的定义，等待链接时才知道具体定义在哪；
+3. 可以用.d.ts文件用来集中进行declare，在里面直接declare module并指明加载路径。自己的脚本里面使用`///<reference path="xxx.d.ts">`加载；
+4. 上述方法对库作者很常用，
