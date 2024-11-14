@@ -134,4 +134,27 @@ interface Person{
 ```
 
 2. 在interface中定义了任意属性之后，其他确定/可选属性的类型必须是任意属性类型的子集。上面例子中，string和number都是any的子集；
-3. 
+3. inerface内部可以使用new关键字，表示构造函数；
+4. interface可以使用extends继承；甚至可以继承type、class；
+5. **多个同名的interface会自动合并**，用来给外部对象进行注入；
+6. interface支持`this`关键字；
+7. `type`可以用来扩展原始数据类型，但是`interface`不行；
+8. `type`可以设计复杂类型，比如前文说的联合类型、交叉类型，这个`interface`是不支持的；
+
+### 类
+
+1. type和interface其实都很难用，还是`class`比较符合C系语法。可以直接将方法定义在class中；
+2. 使用`constructor`关键字声明构造函数；支持`this`关键字；
+3. class不仅可以implement interface，还可以实现class，此时后者被视为一个interface；
+4. **如果class与interface同名，interface会被合并到class的定义里**；
+5. 支持`get`和`set`；
+6. 确定两个类的兼容关系时，只检查实例成员，不考虑静态成员和构造方法；
+7. 属性初始化最好放在构造函数里。ts默认是先初始化构造函数，然后再初始化全局属性；与ES2022正好相反；
+8. 支持抽象类；
+9. 支持private/public和protected访问等级控制。
+10. 类的本质是构造函数；
+
+## 泛型
+
+1. 与Java/C++的泛型语法类似，可以指定默认参数；
+2. 可以使用extend指名T满足的接口或者类型
