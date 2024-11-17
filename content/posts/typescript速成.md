@@ -2,8 +2,8 @@
 title: Typescript速成
 description:
 toc: true
-authors: []
-tags: []
+authors: ["tryao"]
+tags: ["frontend"]
 categories: []
 series: []
 date: 2024-11-11T14:56:12+08:00

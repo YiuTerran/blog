@@ -112,144 +112,150 @@
     "itemListElement":[{
             "@type":"ListItem",
             "position":  1 ,
+            "name": "Typescript速成",
+            "description": "\u003ch2 id=\"安装使用\"\u003e安装\u0026amp;使用\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"language-bash\"\u003enpm install -g typscript\ntsc hello.ts\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e生成1个js文件。\u003c/p\u003e\n\u003cp\u003e教程推荐：https://wangdoc.com/typescript/\u003c/p\u003e\n\u003ch2 id=\"基础\"\u003e基础\u003c/h2\u003e\n\u003col\u003e\n\u003cli\u003e使用\u003ccode\u003elet ok: boolean = false\u003c/code\u003e和\u003ccode\u003elet ok = new Boolean(1)\u003c/code\u003e不同，前者是基本类型，后者是对象。类似C#/Java中的装箱和拆箱。\u003c/li\u003e\n\u003cli\u003e可以用void标识函数的任意返回值类型；\u003c/li\u003e\n\u003cli\u003e\u003ccode\u003eundefined\u003c/code\u003e和\u003ccode\u003enull\u003c/code\u003e是所有类型的子类型，默认情况下可以给任意类型（除了Object类型）；\u003c/li\u003e\n\u003cli\u003etsc编译时加上\u003ccode\u003e--strictNullChecks\u003c/code\u003e选项，可以让其只能赋给any/unknown类型；\u003c/li\u003e\n\u003cli\u003e内置类型：boolean, string, number, bigint, symbol，最后两个对应的类没法直接构造数据；\u003c/li\u003e\n\u003cli\u003e可以将变量声明为\u003ccode\u003eany\u003c/code\u003e，相当于使用js的弱类型；但是any会带来类型污染，可以用\u003ccode\u003eunknown\u003c/code\u003e类型代替，此时用之前需要判断类型，类似Go的\u003ccode\u003einterface{}\u003c/code\u003e必须\u003ccode\u003eswitch x.(type)\u003c/code\u003e才能用一样，在ts里面就是\u003ccode\u003eif(typeof a == 'string')\u003c/code\u003e；\u003c/li\u003e\n\u003cli\u003enever类型标识不可能存在的类型，不接受任何赋值（交叉类型时有点用）；\u003c/li\u003e\n\u003cli\u003e联合类型。类似Python，可以写出\u003ccode\u003ea|b\u003c/code\u003e，标识变量可以有多种类型；\u003c/li\u003e\n\u003cli\u003e值类型：值也可以作为一个类型，可以用来写枚举，\u003ccode\u003elet sex: 0| 1\u003c/code\u003e;\u003c/li\u003e\n\u003cli\u003e交叉类型：可以把两个interface合并；\u003c/li\u003e\n\u003cli\u003e使用\u003ccode\u003etype\u003c/code\u003e给类型取别名，\u003ccode\u003etype A=number|string\u003c/code\u003e；\u003c/li\u003e\n\u003cli\u003e使用\u003ccode\u003etypeof\u003c/code\u003e获取值的TypeScript类型，注意这里是类型而不是字符串；\u003c/li\u003e\n\u003cli\u003e但是ts兼容js的typeof用法，此时返回的是字符串。二者的区别是前者一般用于类型声明，编译之后就没了；\u003c/li\u003e\n\u003cli\u003e元组仍然使用中括号声明：\u003ccode\u003econst s:[string, string, boolean] = ['a', 'b', true]\u003c/code\u003e，这就导致元组必须显式声明，否则会被推断为一个数组；\u003c/li\u003e\n\u003cli\u003e最后x个元组元素可以配置为可选的，方式是在类型尾部增加\u003ccode\u003e?\u003c/code\u003e；\u003c/li\u003e\n\u003cli\u003eN个元素如果类型一样，可以用\u003ccode\u003e...\u003c/code\u003e接数组或者数组表示任意多个元素；\u003c/li\u003e\n\u003cli\u003e只读的值类型，可以作为元组使用，也可以作为数组使用，例如\u003ccode\u003econst arr=[1, 2] as const\u003c/code\u003e，此时arr的长度和类型都是固定的；\u003c/li\u003e\n\u003cli\u003esymbol类型一般是给库作者使用的，普通用户用到的机会不大；\u003c/li\u003e\n\u003cli\u003e使用\u003ccode\u003eas\u003c/code\u003e进行类型转换，或者使用\u003ccode\u003e\u0026lt;string\u0026gt; p\u003c/code\u003e这种形式；\u003c/li\u003e\n\u003cli\u003e使用\u003ccode\u003e!\u003c/code\u003e后缀进行非空断言；\u003c/li\u003e\n\u003cli\u003e支持模板字符串，语法是````\u003c/li\u003e\n\u003c/ol\u003e\n\u003ch2 id=\"数组\"\u003e数组\u003c/h2\u003e\n\u003col\u003e\n\u003cli\u003e格式为：\u003ccode\u003elet array: number[] = [1, 2, 3]\u003c/code\u003e；\u003c/li\u003e\n\u003cli\u003e也可以用泛型格式：\u003ccode\u003elet array: Array\u0026lt;number\u0026gt; = [1, 2, 3]\u003c/code\u003e；\u003c/li\u003e\n\u003cli\u003e甚至还可以用接口：\u003c/li\u003e\n\u003c/ol\u003e\n\u003cpre\u003e\u003ccode class=\"language-typescript\"\u003einterface NumberArray {\n    [index: number]: number;\n}\nlet array: NumberArray = [1, 2, 3];\n\u003c/code\u003e\u003c/pre\u003e\n\u003col start=\"4\"\u003e\n\u003cli\u003e如果数组初始值是空数组，且没有声明类型，在向里面push元素时，会自动推断元素类型，此时可以放入不同类型的元素（推断为联合类型）。但是当初始值非空时，再push不同类型的元素会直接报错；\u003c/li\u003e\n\u003cli\u003econst声明的数组和对象其实是可以改变元素的，需要使用readonly修饰类型：\u003ccode\u003econst arr: readonly number[] = [1, 2, 3]\u003c/code\u003e，此时数组是不可变的；\u003c/li\u003e\n\u003cli\u003e但是readonly和泛型数组是不兼容的；\u003c/li\u003e\n\u003c/ol\u003e\n\u003ch2 id=\"函数\"\u003e函数\u003c/h2\u003e\n\u003col\u003e\n\u003cli\u003e首先兼容js中的普通函数：\u003c/li\u003e\n\u003c/ol\u003e\n\u003cpre\u003e\u003ccode class=\"language-typescript\"\u003efunction hello(txt: string):void{\n\tconsole.log('hello' + txt);\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003col start=\"2\"\u003e\n\u003cli\u003e等价于：\u003c/li\u003e\n\u003c/ol\u003e\n\u003cpre\u003e\u003ccode class=\"language-typescript\"\u003econst hello: (txt:string)=\u0026gt;void = function(txt){\n  //...\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e注意这里参数名是必须写的，和C语言不一样。包括用type给函数取别名，也要带上参数名。当然实际用的时候的参数名，可以名字不一样。\u003c/p\u003e",
+            "url": "https://yiuterran.github.io/blog/posts/typescript%E9%80%9F%E6%88%90/"
+        },{
+            "@type":"ListItem",
+            "position":  2 ,
             "name": "Python技术栈更新",
             "description": "\u003cp\u003e有段时间没用Python写工程了，基本都是写脚本，最近接了个活帮忙搞个爬虫相关项目，需要更新一下技术栈，做个笔记。\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eweb开发：\u003ccode\u003efastapi\u003c/code\u003e, 其实还可以接着用flask，不过前者对asyncio支持更完善一些，顺便学一下新东西；至于django还是太重了，写单体估计有点用；\u003c/li\u003e\n\u003cli\u003e数据库ORM：仍然可以继续使用\u003ccode\u003esqlalchemy\u003c/code\u003e，最新的是2.0版本，已经支持asyncio；\u003c/li\u003e\n\u003cli\u003e爬虫：爬虫相关的技术栈变化不大…scrapy其实不太好用，封装的太厚，而且\u003ccode\u003etwisted\u003c/code\u003e早就过时了。自己写的话就：\n\u003cul\u003e\n\u003cli\u003e用\u003ccode\u003eaiohttp\u003c/code\u003e做网络请求；\u003c/li\u003e\n\u003cli\u003e\u003ccode\u003edom\u003c/code\u003e解析：仍然是基于\u003ccode\u003elxml\u003c/code\u003e的技术栈，主要还是\u003ccode\u003expath\u003c/code\u003e和\u003ccode\u003ecss-selector\u003c/code\u003e来获取元素；\u003c/li\u003e\n\u003cli\u003e浏览器模拟（动态网页）：\u003ccode\u003ePlaywright\u003c/code\u003e代替了\u003ccode\u003eSelenium\u003c/code\u003e等古早的框架；\u003c/li\u003e\n\u003cli\u003e打包：用docker就行；\u003c/li\u003e\n\u003cli\u003e验证码破解：这个相关的网站蛮多的，但是好不好使需要测试一下才知道。包括：\u003ccode\u003eyesCapture\u003c/code\u003e, \u003ccode\u003e2Capture\u003c/code\u003e和穿云等；\u003c/li\u003e\n\u003cli\u003e其他反爬技术：这个只能随机应变了，现在很多网站都做了反爬，具体手段不一，需要尝试解决；\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"fastapihttpsfastapitiangolocomzh\"\u003e\u003ca href=\"https://fastapi.tiangolo.com/zh/\"\u003eFastAPI\u003c/a\u003e\u003c/h2\u003e\n\u003cp\u003efastapi顾名思义，专注于提供API框架，不关心模版引擎、ORM之类的东西，但是自带了API文档(即\u003ccode\u003eswagger\u003c/code\u003e集成)。所以代码非常简单，不需要Django那套复杂的框架：\u003c/p\u003e",
             "url": "https://yiuterran.github.io/blog/posts/python%E6%8A%80%E6%9C%AF%E6%A0%88%E6%9B%B4%E6%96%B0/"
         },{
             "@type":"ListItem",
-            "position":  2 ,
+            "position":  3 ,
             "name": "Jinja2小结",
             "description": "\u003cp\u003e之前写Python的时候其实有接触过一些jinja2，不过没有怎么用过实际上。毕竟前后端分离之后，这些模板语言在web开发上用处并不大。不过\u003ccode\u003eansible\u003c/code\u003e选用了它做渲染模板，所以还是需要深入学习一下。比较蛋疼的是，k8s这边因为都是golang生态，所以用的是\u003ccode\u003ego template\u003c/code\u003e，那就是另外一套东西了。\u003c/p\u003e",
             "url": "https://yiuterran.github.io/blog/posts/jinja2%E5%B0%8F%E7%BB%93/"
         },{
             "@type":"ListItem",
-            "position":  3 ,
+            "position":  4 ,
             "name": "Ansible速成",
             "description": "\u003cp\u003e虽然iac(infracture as code)流行以来，新的技术栈层出不穷，但是一般都是面向k8s或者云服务商的。传统的部署还是用ansible这种仅依赖ssh的最简单。\u003c/p\u003e",
             "url": "https://yiuterran.github.io/blog/posts/ansible%E9%80%9F%E6%88%90/"
         },{
             "@type":"ListItem",
-            "position":  4 ,
+            "position":  5 ,
             "name": "Kcl试用",
             "description": "\u003cp\u003ekcl是蚂蚁金服开源的配置DSL，诞生比较晚，所以吸纳了已有的\u003ccode\u003ejsonnet\u003c/code\u003e、\u003ccode\u003ehcl\u003c/code\u003e、\u003ccode\u003ecue\u003c/code\u003e等方案的优点。\u003c/p\u003e\n\u003ch2 id=\"安装\"\u003e安装\u003c/h2\u003e\n\u003cp\u003e对于linux：\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-bash\"\u003ewget -q https://kcl-lang.io/script/install-cli.sh -O - | /bin/bash\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e这个脚本本质上还是从github中下载发行版，所以也需要翻墙。\u003c/p\u003e",
             "url": "https://yiuterran.github.io/blog/posts/kcl%E8%AF%95%E7%94%A8/"
         },{
             "@type":"ListItem",
-            "position":  5 ,
+            "position":  6 ,
             "name": "Ytt试用",
             "description": "\u003cp\u003ejsonnet最大的问题其实是：它支持的是json，而不是yaml. 其实这也不是什么问题，因为yaml是json的超集，json本身就是一个合法的yaml. 但是写起来需要将原来的yaml转成jsonnet，输出成yaml就更麻烦，需要在外围加上\u003ccode\u003estd.YamlManifest()\u003c/code\u003e，这种侵入式的设计感觉很蛋疼。\u003c/p\u003e",
             "url": "https://yiuterran.github.io/blog/posts/ytt%E8%AF%95%E7%94%A8/"
         },{
             "@type":"ListItem",
-            "position":  6 ,
+            "position":  7 ,
             "name": "Jsonnet试用",
             "description": "\u003cp\u003e\u003ccode\u003ejsonnet\u003c/code\u003e这个语言很有意思，它存在的目的就是为了编辑配置。其实使用任何一门带有字符串模板的语言都能完成类似的目的，但是\u003ccode\u003ejsonnet\u003c/code\u003e的好处是它的封闭性：不要使用额外的依赖完成配置。\u003c/p\u003e",
             "url": "https://yiuterran.github.io/blog/posts/jsonnet%E8%AF%95%E7%94%A8/"
         },{
             "@type":"ListItem",
-            "position":  7 ,
+            "position":  8 ,
             "name": "linux日常使用记录",
             "description": "\u003cp\u003e由于公司开始强制使用Linux桌面系统，记录一下使用中遇到的问题。\u003c/p\u003e\n\u003ch2 id=\"发行版选择\"\u003e发行版选择\u003c/h2\u003e\n\u003cp\u003e本来先尝试了Ubuntu 22.04和KDE Neon做为开发环境，但是体验都不太好：\u003c/p\u003e\n\u003cp\u003eKDE Neon与日常使用的软件兼容性很差，主要是大部分软件都是GTK搞的；\u003c/p\u003e",
             "url": "https://yiuterran.github.io/blog/posts/linux%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/"
         },{
             "@type":"ListItem",
-            "position":  8 ,
+            "position":  9 ,
             "name": "ES和kibana简要笔记",
             "description": "\u003cp\u003e由于比赛需要用到es和kibana，重新复习一下这块的内容。\u003c/p\u003e\n\u003ch2 id=\"基础概念\"\u003e基础概念\u003c/h2\u003e\n\u003cp\u003eES的概念和其他数据库截然不同，虽然和mongodb同为文档型数据库，但是后者的很多概念更接近于普通的关系型数据库。\u003c/p\u003e",
             "url": "https://yiuterran.github.io/blog/posts/es%E5%92%8Ckibana%E7%AE%80%E8%A6%81%E7%AC%94%E8%AE%B0/"
         },{
             "@type":"ListItem",
-            "position":  9 ,
+            "position":  10 ,
             "name": "解决k8s的javaSDK与jackson不兼容问题",
             "description": "\u003cp\u003ek8s的\u003ca href=\"https://github.com/kubernetes-client/java\"\u003ejava sdk\u003c/a\u003e中json序列化使用了google自家的gosn，但是springboot中默认使用Jackson，我们的业务代码里面也习惯上使用了Jackson。所以直接用k8s sdk会出现各种序列化/反序列化错误，需要做适配。\u003c/p\u003e",
             "url": "https://yiuterran.github.io/blog/posts/%E8%A7%A3%E5%86%B3k8s%E7%9A%84javasdk%E4%B8%8Ejackson%E4%B8%8D%E5%85%BC%E5%AE%B9%E9%97%AE%E9%A2%98/"
         },{
             "@type":"ListItem",
-            "position":  10 ,
+            "position":  11 ,
             "name": "K3s存储插件使用笔记",
             "description": "\u003ch2 id=\"原理\"\u003e原理\u003c/h2\u003e\n\u003cp\u003ek8s存储主要依赖PV和PVC的机制，前者由运维人员声明可用的存储，如：\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-yaml\"\u003eapiVersion: v1\nkind: PersistentVolume\nmetadata:\n  name: nfs\nspec:\n  storageClassName: manual\n  capacity:\n    storage: 10Gi\n  accessModes:\n    - ReadWriteMany\n  nfs:\n    server: 10.244.1.4\n    path: \u0026quot;/\u0026quot;\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e后者是用户（开发人员）声明的需求：\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-yaml\"\u003eapiVersion: v1\nkind: PersistentVolumeClaim\nmetadata:\n  name: nfs\nspec:\n  accessModes:\n    - ReadWriteMany\n  storageClassName: manual\n  resources:\n    requests:\n      storage: 1Gi\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e两者的匹配机制：\u003c/p\u003e",
             "url": "https://yiuterran.github.io/blog/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/"
         },{
             "@type":"ListItem",
-            "position":  11 ,
+            "position":  12 ,
             "name": "边缘服务器管理工具选型",
             "description": "\u003cp\u003e这里我们主要的需求是能够穿透内网管理服务器，服务器大部分情况下应当是linux，但是也可能是windows。我们的服务要通过API和这个服务器管理软件进行交互，也就是说要做二次开发，不能直接用。\u003c/p\u003e",
             "url": "https://yiuterran.github.io/blog/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/"
         },{
             "@type":"ListItem",
-            "position":  12 ,
+            "position":  13 ,
             "name": "Kotlin要点笔记",
             "description": "\u003cp\u003e实际上学习kotlin的动力一直不足，因为java is enough. 不过最近打算写一个QQ机器人玩，现在流行的框架是基于kotlin的，虽然可以用HTTP API进行桥接，但是这样部署太麻烦，而且性能有影响，索性简单的学习一下kotlin，然后直接扩展。用的教材是阿里的《kotlin核心编程》。\u003c/p\u003e",
             "url": "https://yiuterran.github.io/blog/posts/kotlin%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/"
         },{
             "@type":"ListItem",
-            "position":  13 ,
+            "position":  14 ,
             "name": "KubeEdge要点笔记",
             "description": "\u003ch2 id=\"安装流程\"\u003e安装流程\u003c/h2\u003e\n\u003cp\u003e首先要在云端安装k8s，理论上只需要master节点，可以没有worker，换句话说可以是一个单节点集群（但是要关闭NoSchedule的taint）。\u003c/p\u003e",
             "url": "https://yiuterran.github.io/blog/posts/kubeedge%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/"
         },{
             "@type":"ListItem",
-            "position":  14 ,
+            "position":  15 ,
             "name": "K8s要点简记",
             "description": "\u003cp\u003e22年的时候需要使用CICD的时候，看了一遍k8s相关的知识点。买了一本《深入剖析Kubernetes》，大致熟悉了常用的概念。\u003c/p\u003e\n\u003cp\u003e最近因为工作调动需要做云原生相关的开发，有必要重新复习一遍相关概念，并深入部分章节的细节。\u003c/p\u003e",
             "url": "https://yiuterran.github.io/blog/posts/k8s%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/"
         },{
             "@type":"ListItem",
-            "position":  15 ,
+            "position":  16 ,
             "name": "Makefile要点简记",
             "description": "\u003cp\u003e虽然现代C/CPP一般使用cmake作为工具链，但是如果要看陈年老项目，makefile相关的知识还是要掌握一些的，不然估计很难理清编译逻辑。这也是c/cpp的技术负债之一。\u003c/p\u003e",
             "url": "https://yiuterran.github.io/blog/posts/makefile%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/"
         },{
             "@type":"ListItem",
-            "position":  16 ,
+            "position":  17 ,
             "name": "CMake速记",
             "description": "\u003cp\u003e主要参考书籍《Modern CMake for C++》，以及《CMake Best Practices》，使用CMake版本3.25.\u003c/p\u003e\n\u003cp\u003e建议先看第一本，再看第二本。\u003c/p\u003e\n\u003ch2 id=\"使用\"\u003e使用\u003c/h2\u003e\n\u003cp\u003e一般而言，cmake的使用方式非常简单。在命令行下使用\u003c/p\u003e",
             "url": "https://yiuterran.github.io/blog/posts/cmake%E9%80%9F%E8%AE%B0/"
         },{
             "@type":"ListItem",
-            "position":  17 ,
+            "position":  18 ,
             "name": "Tinode源码解析",
             "description": "\u003ch2 id=\"概述\"\u003e概述\u003c/h2\u003e\n\u003cp\u003e有朋友需要做一个im，简单做了一下技术调研，\u003ca href=\"https://github.com/haiiiiiyun/awesome-selfhosted-cn#%E9%80%9A%E8%AE%AF%E7%B3%BB%E7%BB%9F\"\u003e开源的实现\u003c/a\u003e其实蛮多的，这里挑几个说一下：\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eSynapse/dendrite，matrix系，客户端比较多，比较推荐的应该是element.io. 稳定版本是python写的，性能很一般，golang/rust的服务端还没有stable，不建议使用；\u003c/li\u003e\n\u003cli\u003eTinode/chat: 即本文主角，golang编写，架构比较简单，有MySQL就能跑，轻量级方案。支持web/ios/android，界面长得比较像telegram；支持chatbot. 国内用有点水土不服，主要是推送等组件依赖国外大厂的服务(S3, Firebase等），国内根本连不上，需要自己改成个推之类的方案。由于方案比较轻量，消息可靠性上有一些缺陷，内置了chatbot支持（可以用Python写）；\u003c/li\u003e\n\u003cli\u003eOpen-IM-Server：据说是某个腾讯核心人员离职后自己开源的。服务端golang，架构基于微服务，有商业产品，自己试了一下目前版本大概有16个微服务，依赖kafka\u0026amp;zk、mysql、etcd、redis、miniIO和MongoDB。架构比较合理，早期是写扩散模型，v2.3之后群聊改为读扩散模型。主要问题是架构比较重，文档写的烂，需要自己分析代码，小团队维护比较吃力；另外客户端开源的只是demo，bug满天飞，不能直接拿来用。\u003c/li\u003e\n\u003cli\u003eturms-im/turms：java写的，读扩散模型。maintainer比较有自信，号称开源界最先进的方案，文档确实写的不错，很详细的技术分析。不过star数不多，实际使用者估计也寥寥。而且作者喜欢自研，Log/注册中心/配置中心这些都是自研的…有种自嗨过了头的感觉。整体来讲架构比较中庸，技术细节把控的比较好。java团队可以考虑，代码还比较易读，而且没有商业版，作者没有恰饭需求；客户端没有开源产品，只有sdk；\u003c/li\u003e\n\u003cli\u003ewildfirechat/im-server：也是java做的，主要卖商业版，开源的功能做的很全了，和国内生态也结合的蛮好。开源版强行指定了使用七牛云做文件夹存储，然后服务端端口强行指定了80/1883，另外开源版不支持集群模式；国内的小规模内部使用推荐使用该项目（\u0026lt;10w人）；\u003c/li\u003e\n\u003cli\u003eRocket.chat/mattermost：面向B端，类似zulip/Slack这种IM，有复杂B端需求的团队建议优先考虑。界面不太符合普通人使用im(qq/微信/钉钉)的习惯，办公人士用比较合适；\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003e这几个项目是客户端生态做的最好的了，基本能开箱即用。其他一些如goim之类的，没有客户端只有服务器，那还不如用mqtt自己写一个，毕竟有emqx这种高性能broker，写一个im真不算啥难事。聊天存储用influxdb或者MongoDB，元数据存MySQL。设计好推拉模型，读写扩散，消息时序，topic规则，一个基本的im软件还是能很快成型的。\u003c/p\u003e",
             "url": "https://yiuterran.github.io/blog/posts/tinode%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/"
         },{
             "@type":"ListItem",
-            "position":  18 ,
+            "position":  19 ,
             "name": "SRE读书笔记",
             "description": "\u003cp\u003eSRE相关的书籍，截止目前google出了2本，分别是2016年的的《Site Reliability Engineering: How Google Runs Production Systems》和2020年的《The Site Reliability Workbook》。这两本书是互补关系，需要先阅读第一本，然后再看第二本。\u003c/p\u003e",
             "url": "https://yiuterran.github.io/blog/posts/sre%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"
         },{
             "@type":"ListItem",
-            "position":  19 ,
+            "position":  20 ,
             "name": "Ginkgo使用笔记",
             "description": "\u003cp\u003ego自带的单元测试比较适合测一个小函数，如果要做一系列的流程测试，则显得较为繁琐。\u003c/p\u003e\n\u003cp\u003e推荐使用\u003ccode\u003eginkgo\u003c/code\u003e来做流程测试，BDD风格写出来的测试代码非常容易读懂和维护。\u003c/p\u003e",
             "url": "https://yiuterran.github.io/blog/posts/ginkgo%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/"
         },{
             "@type":"ListItem",
-            "position":  20 ,
+            "position":  21 ,
             "name": "Influxdb Cluster集成",
             "description": "\u003cp\u003e本文记录在golang项目中集成\u003ccode\u003einfluxdb-cluster\u003c/code\u003e需要的知识储备。\u003c/p\u003e\n\u003ch2 id=\"术语\"\u003e术语\u003c/h2\u003e\n\u003ch3 id=\"database\"\u003edatabase\u003c/h3\u003e\n\u003cp\u003e和MySQL中一致\u003c/p\u003e\n\u003ch3 id=\"batch\"\u003ebatch\u003c/h3\u003e\n\u003cp\u003e\u003ccode\u003e\\n\u003c/code\u003e分割的多行数据，用来批量写入。\u003c/p\u003e\n\u003cp\u003einfluxDB推荐5000~10000个点批量写入以提高性能。\u003c/p\u003e",
             "url": "https://yiuterran.github.io/blog/posts/influxdb-cluster%E9%9B%86%E6%88%90/"
         },{
             "@type":"ListItem",
-            "position":  21 ,
+            "position":  22 ,
             "name": "Zabbix配置记录",
             "description": "\u003ch2 id=\"安装服务\"\u003e安装服务\u003c/h2\u003e\n\u003cp\u003e这里演示的是物理机环境监控场景，容器场景还是更推荐k8s+prom来搞。\u003c/p\u003e\n\u003cp\u003e版本是zabbix6.0 LTS，官方已经不提供CentOS7的安装包了，所以这里推荐使用docker安装，后面升级也比较方便。\u003c/p\u003e",
             "url": "https://yiuterran.github.io/blog/posts/zabbix%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/"
         },{
             "@type":"ListItem",
-            "position":  22 ,
+            "position":  23 ,
             "name": "Golang定时器要点",
             "description": "\u003cp\u003egolang内置的定时器是基于多个四叉堆封装调度的，增删定时器的效率是O(lgn)，所以大量定时器本身可能成为性能瓶颈。可以考虑使用开源的时间轮算法实现方案进行替换。不过一般情况下不需要考虑该问题，如果时间轮真的万能的话，官方肯定就重构了。\u003c/p\u003e",
             "url": "https://yiuterran.github.io/blog/posts/golang%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A6%81%E7%82%B9/"
         },{
             "@type":"ListItem",
-            "position":  23 ,
+            "position":  24 ,
             "name": "Windows+wsl2后端开发环境搭建",
             "description": "\u003cp\u003e2023/11/16 Update: wsl2 2.0通过镜像网络解决了所有网络问题，已经不用折腾了。\u003c/p\u003e\n\u003cp\u003e2023/2/2 Update: wsl已经解决了systemd和网络问题，现在已经基本无障碍使用，移除了大部分无用的配置步骤。\u003c/p\u003e",
             "url": "https://yiuterran.github.io/blog/posts/windows+wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"
         },{
             "@type":"ListItem",
-            "position":  24 ,
+            "position":  25 ,
             "name": "Gb28181解析",
             "description": "\u003cp\u003e国标GB28181（以下简称国标或者gb）文档分析的文档我去年其实写过一版，但是由于原来的电脑炸了，文档还没来得及传上去就丢了（痛苦），所以还要重写一版做笔记。\u003c/p\u003e",
             "url": "https://yiuterran.github.io/blog/posts/gb28181%E8%A7%A3%E6%9E%90/"
@@ -287,7 +293,7 @@
 
 
 
-<meta property="og:updated_time" content="2024-01-09T09:35:01&#43;08:00" />
+<meta property="og:updated_time" content="2024-11-11T14:56:12&#43;08:00" />
 
 
 
@@ -439,6 +445,50 @@
     <div class="mx-auto max-w-screen-xl">
       <div class="mx-auto px-6 py-12 md:px-8 lg:w-3/4 xl:px-12">
         <div class="overflow-hidden divide-y">
+  
+  <div class="py-6">
+    <div class="flex flex-col-reverse lg:flex-row justify-between">
+  
+  <div class="w-full ">
+    <div class="prose">
+  <a href="https://yiuterran.github.io/blog/posts/typescript%E9%80%9F%E6%88%90/" class="no-underline">
+    <h3 class="mt-0">Typescript速成</h3>
+  </a>
+  
+    安装&amp;使用 npm install -g typscript tsc hello.ts 生成1个js文件。
+教程推荐：https://wangdoc.com/typescript/
+基础 使用let ok: boolean = false和let ok = new Boolean(1)不同，前者是基本类型，后者是对象。类似C#/Java中的装箱和拆箱。 可以用void标识函数的任意返回值类型； undefined和null是所有类型的子类型，默认情况下可以给任意类型（除了Object类型）； tsc编译时加上--strictNullChecks选项，可以让其只能赋给any/unknown类型； 内置类型：boolean, string, number, bigint, symbol，最后两个对应的类没法直接构造数据； 可以将变量声明为any，相当于使用js的弱类型；但是any会带来类型污染，可以用unknown类型代替，此时用之前需要判断类型，类似Go的interface{}必须switch x.(type)才能用一样，在ts里面就是if(typeof a == &#39;string&#39;)； never类型标识不可能存在的类型，不接受任何赋值（交叉类型时有点用）； 联合类型。类似Python，可以写出a|b，标识变量可以有多种类型； 值类型：值也可以作为一个类型，可以用来写枚举，let sex: 0| 1; 交叉类型：可以把两个interface合并； 使用type给类型取别名，type A=number|string； 使用typeof获取值的TypeScript类型，注意这里是类型而不是字符串； 但是ts兼容js的typeof用法，此时返回的是字符串。二者的区别是前者一般用于类型声明，编译之后就没了； 元组仍然使用中括号声明：const s:[string, string, boolean] = [&#39;a&#39;, &#39;b&#39;, true]，这就导致元组必须显式声明，否则会被推断为一个数组； 最后x个元组元素可以配置为可选的，方式是在类型尾部增加?； N个元素如果类型一样，可以用...接数组或者数组表示任意多个元素； 只读的值类型，可以作为元组使用，也可以作为数组使用，例如const arr=[1, 2] as const，此时arr的长度和类型都是固定的； symbol类型一般是给库作者使用的，普通用户用到的机会不大； 使用as进行类型转换，或者使用&lt;string&gt; p这种形式； 使用!后缀进行非空断言； 支持模板字符串，语法是```` 数组 格式为：let array: number[] = [1, 2, 3]； 也可以用泛型格式：let array: Array&lt;number&gt; = [1, 2, 3]； 甚至还可以用接口： interface NumberArray { [index: number]: number; } let array: NumberArray = [1, 2, 3]; 如果数组初始值是空数组，且没有声明类型，在向里面push元素时，会自动推断元素类型，此时可以放入不同类型的元素（推断为联合类型）。但是当初始值非空时，再push不同类型的元素会直接报错； const声明的数组和对象其实是可以改变元素的，需要使用readonly修饰类型：const arr: readonly number[] = [1, 2, 3]，此时数组是不可变的； 但是readonly和泛型数组是不兼容的； 函数 首先兼容js中的普通函数： function hello(txt: string):void{ console.log(&#39;hello&#39; &#43; txt); } 等价于： const hello: (txt:string)=&gt;void = function(txt){ //... } 注意这里参数名是必须写的，和C语言不一样。包括用type给函数取别名，也要带上参数名。当然实际用的时候的参数名，可以名字不一样。
+
+  
+
+  
+    <div
+  class="text-tertiary-text not-prose mt-2 flex flex-row flex-wrap items-center"
+>
+  <div class="me-6 my-2">
+    <i class="fas fa-calendar me-1"></i>
+    <span
+      >2024-11-11</span
+    >
+  </div>
+  <div class="me-6 my-2">
+    <i class="fas fa-clock me-1"></i>
+    <span>8分钟阅读时长</span>
+  </div>
+
+  
+
+  
+</div>
+
+  
+</div>
+
+  </div>
+
+  
+</div>
+  </div>
   
   <div class="py-6">
     <div class="flex flex-col-reverse lg:flex-row justify-between">
