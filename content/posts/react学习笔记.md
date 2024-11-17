@@ -37,6 +37,7 @@ react中组件就是一个function，返回UI元素（即jsx片段）。jsx需�
 * jsx内部使用驼峰命名而不是下划线（但是`data-*`除外）；
 * 避开js关键词冲突，如class对应className；
 * 组件名称首字母必须大写；
+* **不要嵌套定义组件，只在最上层定义组件**；
 
 使用`ReactDOM.render(component, location)`将组件渲染到dom中即可。例如：
 
@@ -126,6 +127,8 @@ function HomePage(){
 
 ### 状态
 
+#### state
+
 state表示UI组件的状态，react是单向数据流，通过`useState`来获取组件的状态。
 
 局部变量的更改不会触发重新渲染，也无法持久保存，所以需要state来替换简单的声明局部变量。
@@ -178,9 +181,13 @@ return (
 )
 ```
 
-如果x和y关联到一个输入框，回调的时候重新设置，那么z的值是会随之改变的（也就是说看起来是const，但是实际上并不是）。
+如果x和y关联到一个输入框，回调的时候重新设置，那么z的值是会随之改变的（也就是说看起来是const，但是实际上并不是，这是因为重新渲染时x和y的初始值都变了）。
 
-由于是声明式语法，react在渲染的时候的行为并不一定和你想的一样。比如不同的button复用同一个textarea，切换button时需要清空数据，或者保留各自的数据：**此时需要自行定义相关函数，给组件设置不同的key**。当key变化时，react会将同一个组件视为不同的，进而重新渲染。
+**相同位置的相同组件的state是复用的**（这个位置指的是组件在DOM树中的位置，可以理解为xpath）。可以通过给组件指定不同的`key`参数，强制重新渲染组件。key只需要在父组件内部是唯一的就行，不需要全局唯一。
+
+如果一个state在多个组件之间共用，应该将其放在父组件处来声明。
+
+#### Reducer
 
 除了`useState`之外，react还提供了更高级的`useReducer`来简化复杂状态管理，所谓`reducer`实际上就是一个状态机：`(state, action) => newState`，需要注意的是，reducer必须是一个幂等函数。举个例子：
 
@@ -211,7 +218,7 @@ function example(state, action){
 }
 ```
 
-**需要注意**：如果state是一个对象，那么setObj的时候，需要全量set。这时候就经常要用到**对象展开复制语法，也就是`...`**。
+**需要注意**：如果state是一个对象，那么setObj的时候，需要全量set。这时候就经常要用到**对象展开复制语法，也就是`...`**。对于数组，可以使用类似Java中的Stream方法，克隆出一个新的对象。
 
 实际使用的方法：
 
@@ -223,28 +230,31 @@ const [state, dispatch] = useReducer(reducer, initState)
 
 jsx那边只需要在事件触发的callback里调用dispatch就行，如`dispatch({type: 'add'})`。
 
-如果想在较深的父子组件间定义共享的状态，一般使用context，即：
+#### Context
 
-```jsx
-const LevelContext = createContext(0);
-```
+如果想在较深的父子组件间定义共享的状态，一般使用context，使用方法：
 
-用的时候：
+1. 通过 `export const MyContext = createContext(defaultValue)` 创建并导出 context。
+2. 在无论层级多深的任何子组件中，把 context 传递给 `useContext(MyContext)` Hook 来读取它。
+3. 在父组件中把 children 包在 `<MyContext.Provider value={...}>` 中来提供 context。
 
-```jsx
-import {LevelContext} from "./LevelContext.js"
+context其实有点像全局变量，当它包含的数据变更时，所有使用该变量的组件都会重新渲染。
 
-export default function Section({ children }) {
-    const level = useContext(LevelContext);
-    return (
-    	<section className="section">
-        	<LevelContext.Provider value={level+1}>{children}</LevelContext.Provider>
-      </section>
-    )
-}
-```
+#### 结合两者
 
-结合Reducer和Context可以简化复杂组件的逻辑。
+1. **创建** context。
+2. 将 state 和 dispatch **放入** context，需要创建2个context。
+3. 在组件树的任何地方 **使用** context。
+
+#### Immer
+
+由于state是不可变的，修改复杂object或者array都需要进行一些深拷贝，有时候写起来很麻烦。
+
+可以使用`npm install use-immer`，然后`import {useImmer} from 'use-immer'`，用`useImmer`代替`useState`。
+
+该函数返回的set函数，可以直接修改原来的数据结构，当然是使用更新函数修改。
+
+另外该库还提供了`useImmerReducer`来简化reducer的使用。
 
 ### 列表
 
@@ -276,15 +286,29 @@ return (
 
 阻止默认行为使用`e.preventDefault()`，和js一样。
 
+### Ref
 
+当需要组件记住某些信息，但是不想让这些信息触发重渲染时，使用ref(`const ref=useRef(null)`)。
 
-## Immer
+此外，ref还可以用来直接操作DOM，使用ref.current获取当前目标，此时在需要引用的组件上指定ref属性进行赋值。
 
+### Effect
 
+用来和外部系统同步，effect将在渲染之后异步运行一些代码，类似于渲染之后的回调，可以做一些特殊工作。
 
-## Hook
+尽量少使用effect。
 
-上面的useXXX这些函数都是Hook，你不能在条件语句、循环语句或其他嵌套函数内调用 Hook.
+* useEffect()不加第二个参数,则每次更新组件状态的时候都会执行(所以不能没有参数的时候setState()，因为这样会触发无限循环)。使用场景:可以用于监听事件。
+
+* useEffect()第二个参数为空数组。类似于mounted(),只会执行一次。 使用场景:可以用于页面初始化请求。
+
+* useEffect()第二个参数不为空数组。类似于watch，当数组中变量改变的时候执行，使用场景:watch。
+
+### 自定义HOOK
+
+与内置hook一样，自定义hook需要以use开头，hook可以返回任意值。
+
+自定义hook共享的是状态逻辑相关代码，换句话说，是纯函数。
 
 ## NextJS
 
@@ -292,7 +316,7 @@ react只是一个UI框架，并不涉及到ajax、路由之类的东西，所以
 
 NextJS默认使用**服务端**组件，如果想要使用客户端组件，需要将其独立成单独的文件，并在文件最前端加上`'use client';`
 
-NextJS默认使用文件路由，直接用文件夹路径就行，很简单。
+NextJS默认使用文件路由，直接用文件夹路径就行，很简单。 
 
 NextJS推荐使用tailwindcss，不过也支持css modules. 国内使用后者更多，前者适合初创团队使用。
 
@@ -304,3 +328,50 @@ NextJS推荐使用tailwindcss，不过也支持css modules. 国内使用后者�
 
 ## DVA
 
+基于redux的一个框架，可配合umi使用。
+
+dva通过module的概念来管理模型，配合state/reducer和effect使用。
+
+```js
+export const model = {
+  namespace: "model", //文件名
+  state: {},
+  reducer:{ //同步方法，就是react的reducer
+    
+  },
+  effects: { //异步操作，调用接口需要在这里
+    *deleteOne({payload}, {call, select, put}){ //Generator必须以*开头，第一个参数是dispatch的数据
+      yield payload.x+1; //yield会计算并返回，下一次调用next时进行到下一个yield，直到return
+      yield payload.x+5; //yield表达式本身总是返回undefined。调用next时可以传入一个参数，代替上次计算的真实yield表达式值
+      const n = yield select((state) => state.test.num) //select用来从state中选择数据
+      yield put({ //put类似dispatch
+        type: 'addNum',
+        payload:{
+          
+        }
+      })
+    }
+  },
+  subscriptions: { //订阅数据源
+    setup({dispatch, history, query}{
+    	       
+    })
+  }
+}
+```
+
+如果在一个 effect 中，函数 B 的入参需要依赖于函数 A 的执行结果，可以使用 **@@end** 来阻塞当前的函数。
+
+model经过`connect`之后，可以在组件里面通过`this.props`获取state。
+
+通过reducer修改state，在页面通过dispatch调用，即`this.props.dispatch({type: 'model/deleteOne', payload: 'hello'})`，被调用的可以是reducer，也可以是effect。
+
+dva核心的五个元素：
+
+* State：即模型里面的state
+* View：React组件构成的视图层
+* Action：一个对象，描述事件
+* connect：绑定State到View
+* dispatch：发送Action到stae
+
+和umi3在一起使用时，可以用`useDispatch`直接获取dispatch函数，然后使用useSelector直接获取state中的值：`const x=useSelector(state=>state.x)`。

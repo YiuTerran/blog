@@ -79,11 +79,11 @@
 </script>
 
 
-<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu546329292729773971.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu16414047889438337432.png">
 
 <meta name="description"
-  content="SRE相关的书籍，截止目前google出了2本，分别是2016年的的《Site Reliability Engineering: How Google Runs Production Systems》和2020年的《The Site Reliability Workbook》">
+  content="SRE相关的书籍，截止目前google出了2本，分别是2016年的的《Site Reliability Engineering: How Google Runs Production Systems》和2020年的《The Site Reliability Workbook》。这两本书是互补关系，需要先阅读第一本，然后再看第二本。">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -112,7 +112,7 @@
     },
     "headline": "SRE读书笔记 | 应许之地","datePublished": "2022-09-22T10:01:11+08:00",
     "dateModified": "2022-09-22T10:01:11+08:00",
-    "wordCount":  5396 ,
+    "wordCount":  5410 ,
     "author": {
         "@type": "Person",
         "name": ["tryao"]
@@ -125,7 +125,7 @@
             "url": "https://yiuterran.github.io/blog/images/icon.png"
         }
         },
-    "description": "SRE相关的书籍，截止目前google出了2本，分别是2016年的的《Site Reliability Engineering: How Google Runs Production Systems》和2020年的《The Site Reliability Workbook》"
+    "description": "\u003cp\u003eSRE相关的书籍，截止目前google出了2本，分别是2016年的的《Site Reliability Engineering: How Google Runs Production Systems》和2020年的《The Site Reliability Workbook》。这两本书是互补关系，需要先阅读第一本，然后再看第二本。\u003c\/p\u003e"
 }
 </script><meta property="og:title" content="SRE读书笔记 | 应许之地" />
 <meta property="og:type" content="article" />
@@ -139,7 +139,7 @@
 
 
 
-<meta property="og:description" content="SRE相关的书籍，截止目前google出了2本，分别是2016年的的《Site Reliability Engineering: How Google Runs Production Systems》和2020年的《The Site Reliability Workbook》" />
+<meta property="og:description" content="SRE相关的书籍，截止目前google出了2本，分别是2016年的的《Site Reliability Engineering: How Google Runs Production Systems》和2020年的《The Site Reliability Workbook》。这两本书是互补关系，需要先阅读第一本，然后再看第二本。" />
 
 
 
@@ -354,7 +354,7 @@
 <ol>
 <li>一般应建立N+2个服务实例，保证流量峰值满足需求；</li>
 <li>如果业务的生命周期尚未达到成熟/稳定运行阶段，应当执行<strong>更低</strong>的可用性目标；</li>
-<li>如果服务允许停机，那么计划内停机时间是允许；</li>
+<li>如果服务允许停机，那么计划内停机时间应该计算在SLO中；</li>
 <li>可用性是最基本的目标，其他业务指标需要根据业务特性来指定。如最大延迟时间等；</li>
 <li>基础设施组件由于需要服务多个用户，用户之间的需求可能恰好相反：
 <ul>
@@ -527,7 +527,7 @@
 <ul>
 <li>所有请求都应当设置一个恰当的超时时间；太长会导致工作线程耗尽，太短会导致重型请求总是失败；</li>
 <li>服务端应该在请求处理的各个阶段判断是否已经超过客户端超时时间，避免浪费资源做无用功；</li>
-<li>可以在入口层加上请求的绝对截止时间戳，这样请求在多个微服务间传递时，</li>
+<li>可以在入口层加上请求的绝对截止时间戳，这样请求在多个微服务间传递时，可以及时截断请求</li>
 <li>确定性的长时间响应，应当尽量异步化；</li>
 </ul>
 </li>

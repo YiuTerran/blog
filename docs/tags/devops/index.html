@@ -79,8 +79,8 @@
 </script>
 
 
-<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu546329292729773971.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu16414047889438337432.png">
 
 <meta name="description"
   content="始于2022年初mbp2015归天之后...">
@@ -111,31 +111,31 @@
             "@type":"ListItem",
             "position":  1 ,
             "name": "Jinja2小结",
-            "description": "之前写Python的时候其实有接触过一些jinja2，不过没有怎么用过实际上。毕竟前后端分离之后，这些模板语言在web开发上用处并不大。不过ansib",
+            "description": "\u003cp\u003e之前写Python的时候其实有接触过一些jinja2，不过没有怎么用过实际上。毕竟前后端分离之后，这些模板语言在web开发上用处并不大。不过\u003ccode\u003eansible\u003c/code\u003e选用了它做渲染模板，所以还是需要深入学习一下。比较蛋疼的是，k8s这边因为都是golang生态，所以用的是\u003ccode\u003ego template\u003c/code\u003e，那就是另外一套东西了。\u003c/p\u003e",
             "url": "https://yiuterran.github.io/blog/posts/jinja2%E5%B0%8F%E7%BB%93/"
         },{
             "@type":"ListItem",
             "position":  2 ,
             "name": "Ansible速成",
-            "description": "虽然iac(infracture as code)流行以来，新的技术栈层出不穷，但是一般都是面向k8s或者云服务商的。传统的部署还是用ansible这种仅依",
+            "description": "\u003cp\u003e虽然iac(infracture as code)流行以来，新的技术栈层出不穷，但是一般都是面向k8s或者云服务商的。传统的部署还是用ansible这种仅依赖ssh的最简单。\u003c/p\u003e",
             "url": "https://yiuterran.github.io/blog/posts/ansible%E9%80%9F%E6%88%90/"
         },{
             "@type":"ListItem",
             "position":  3 ,
             "name": "边缘服务器管理工具选型",
-            "description": "这里我们主要的需求是能够穿透内网管理服务器，服务器大部分情况下应当是linux，但是也可能是windows。我们的服务要通过API和这个服务器管理软件",
+            "description": "\u003cp\u003e这里我们主要的需求是能够穿透内网管理服务器，服务器大部分情况下应当是linux，但是也可能是windows。我们的服务要通过API和这个服务器管理软件进行交互，也就是说要做二次开发，不能直接用。\u003c/p\u003e",
             "url": "https://yiuterran.github.io/blog/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/"
         },{
             "@type":"ListItem",
             "position":  4 ,
             "name": "SRE读书笔记",
-            "description": "SRE相关的书籍，截止目前google出了2本，分别是2016年的的《Site Reliability Engineering: How Google Runs Production Systems》和2020年的《The Site Reliability Workbook》",
+            "description": "\u003cp\u003eSRE相关的书籍，截止目前google出了2本，分别是2016年的的《Site Reliability Engineering: How Google Runs Production Systems》和2020年的《The Site Reliability Workbook》。这两本书是互补关系，需要先阅读第一本，然后再看第二本。\u003c/p\u003e",
             "url": "https://yiuterran.github.io/blog/posts/sre%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"
         },{
             "@type":"ListItem",
             "position":  5 ,
             "name": "Zabbix配置记录",
-            "description": "安装服务 这里演示的是物理机环境监控场景，容器场景还是更推荐k8s+prom来搞。 版本是zabbix6.0 LTS，官方已经不提供CentOS7的安装包了",
+            "description": "\u003ch2 id=\"安装服务\"\u003e安装服务\u003c/h2\u003e\n\u003cp\u003e这里演示的是物理机环境监控场景，容器场景还是更推荐k8s+prom来搞。\u003c/p\u003e\n\u003cp\u003e版本是zabbix6.0 LTS，官方已经不提供CentOS7的安装包了，所以这里推荐使用docker安装，后面升级也比较方便。\u003c/p\u003e",
             "url": "https://yiuterran.github.io/blog/posts/zabbix%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/"
         }
     ]
@@ -269,7 +269,8 @@
     <h3 class="mt-0">Jinja2小结</h3>
   </a>
   
-    之前写Python的时候其实有接触过一些jinja2，不过没有怎么用过实际上。毕竟前后端分离之后，这些模板语言在web开发上用处并不大。不过ansib
+    之前写Python的时候其实有接触过一些jinja2，不过没有怎么用过实际上。毕竟前后端分离之后，这些模板语言在web开发上用处并不大。不过ansible选用了它做渲染模板，所以还是需要深入学习一下。比较蛋疼的是，k8s这边因为都是golang生态，所以用的是go template，那就是另外一套东西了。
+
   
 
   
@@ -310,7 +311,8 @@
     <h3 class="mt-0">Ansible速成</h3>
   </a>
   
-    虽然iac(infracture as code)流行以来，新的技术栈层出不穷，但是一般都是面向k8s或者云服务商的。传统的部署还是用ansible这种仅依
+    虽然iac(infracture as code)流行以来，新的技术栈层出不穷，但是一般都是面向k8s或者云服务商的。传统的部署还是用ansible这种仅依赖ssh的最简单。
+
   
 
   
@@ -351,7 +353,8 @@
     <h3 class="mt-0">边缘服务器管理工具选型</h3>
   </a>
   
-    这里我们主要的需求是能够穿透内网管理服务器，服务器大部分情况下应当是linux，但是也可能是windows。我们的服务要通过API和这个服务器管理软件
+    这里我们主要的需求是能够穿透内网管理服务器，服务器大部分情况下应当是linux，但是也可能是windows。我们的服务要通过API和这个服务器管理软件进行交互，也就是说要做二次开发，不能直接用。
+
   
 
   
@@ -392,7 +395,8 @@
     <h3 class="mt-0">SRE读书笔记</h3>
   </a>
   
-    SRE相关的书籍，截止目前google出了2本，分别是2016年的的《Site Reliability Engineering: How Google Runs Production Systems》和2020年的《The Site Reliability Workbook》
+    SRE相关的书籍，截止目前google出了2本，分别是2016年的的《Site Reliability Engineering: How Google Runs Production Systems》和2020年的《The Site Reliability Workbook》。这两本书是互补关系，需要先阅读第一本，然后再看第二本。
+
   
 
   
@@ -433,7 +437,9 @@
     <h3 class="mt-0">Zabbix配置记录</h3>
   </a>
   
-    安装服务 这里演示的是物理机环境监控场景，容器场景还是更推荐k8s&#43;prom来搞。 版本是zabbix6.0 LTS，官方已经不提供CentOS7的安装包了
+    安装服务 这里演示的是物理机环境监控场景，容器场景还是更推荐k8s&#43;prom来搞。
+版本是zabbix6.0 LTS，官方已经不提供CentOS7的安装包了，所以这里推荐使用docker安装，后面升级也比较方便。
+
   
 
   

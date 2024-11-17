@@ -79,8 +79,8 @@
 </script>
 
 
-<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu546329292729773971.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu16414047889438337432.png">
 
 <meta name="description"
   content="始于2022年初mbp2015归天之后...">
@@ -111,13 +111,13 @@
             "@type":"ListItem",
             "position":  1 ,
             "name": "Ytt试用",
-            "description": "jsonnet最大的问题其实是：它支持的是json，而不是yaml. 其实这也不是什么问题，因为yaml是json的超集，json本身就是一个合法的ya",
+            "description": "\u003cp\u003ejsonnet最大的问题其实是：它支持的是json，而不是yaml. 其实这也不是什么问题，因为yaml是json的超集，json本身就是一个合法的yaml. 但是写起来需要将原来的yaml转成jsonnet，输出成yaml就更麻烦，需要在外围加上\u003ccode\u003estd.YamlManifest()\u003c/code\u003e，这种侵入式的设计感觉很蛋疼。\u003c/p\u003e",
             "url": "https://yiuterran.github.io/blog/posts/ytt%E8%AF%95%E7%94%A8/"
         },{
             "@type":"ListItem",
             "position":  2 ,
             "name": "Jsonnet试用",
-            "description": "jsonnet这个语言很有意思，它存在的目的就是为了编辑配置。其实使用任何一门带有字符串模板的语言都能完成类似的目的，但是jsonnet的好处是它的封",
+            "description": "\u003cp\u003e\u003ccode\u003ejsonnet\u003c/code\u003e这个语言很有意思，它存在的目的就是为了编辑配置。其实使用任何一门带有字符串模板的语言都能完成类似的目的，但是\u003ccode\u003ejsonnet\u003c/code\u003e的好处是它的封闭性：不要使用额外的依赖完成配置。\u003c/p\u003e",
             "url": "https://yiuterran.github.io/blog/posts/jsonnet%E8%AF%95%E7%94%A8/"
         }
     ]
@@ -251,7 +251,8 @@
     <h3 class="mt-0">Ytt试用</h3>
   </a>
   
-    jsonnet最大的问题其实是：它支持的是json，而不是yaml. 其实这也不是什么问题，因为yaml是json的超集，json本身就是一个合法的ya
+    jsonnet最大的问题其实是：它支持的是json，而不是yaml. 其实这也不是什么问题，因为yaml是json的超集，json本身就是一个合法的yaml. 但是写起来需要将原来的yaml转成jsonnet，输出成yaml就更麻烦，需要在外围加上std.YamlManifest()，这种侵入式的设计感觉很蛋疼。
+
   
 
   
@@ -292,7 +293,8 @@
     <h3 class="mt-0">Jsonnet试用</h3>
   </a>
   
-    jsonnet这个语言很有意思，它存在的目的就是为了编辑配置。其实使用任何一门带有字符串模板的语言都能完成类似的目的，但是jsonnet的好处是它的封
+    jsonnet这个语言很有意思，它存在的目的就是为了编辑配置。其实使用任何一门带有字符串模板的语言都能完成类似的目的，但是jsonnet的好处是它的封闭性：不要使用额外的依赖完成配置。
+
   
 
   

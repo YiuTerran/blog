@@ -15,7 +15,7 @@
       <link>https://yiuterran.github.io/blog/posts/ginkgo%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/</link>
       <pubDate>Mon, 05 Sep 2022 18:10:06 +0800</pubDate>
       <guid>https://yiuterran.github.io/blog/posts/ginkgo%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/</guid>
-      <description>go自带的单元测试比较适合测一个小函数，如果要做一系列的流程测试，则显得较为繁琐。 推荐使用ginkgo来做流程测试，BDD风格写出来的测试代码非常容易</description>
+      <description>&lt;p&gt;go自带的单元测试比较适合测一个小函数，如果要做一系列的流程测试，则显得较为繁琐。&lt;/p&gt;&#xA;&lt;p&gt;推荐使用&lt;code&gt;ginkgo&lt;/code&gt;来做流程测试，BDD风格写出来的测试代码非常容易读懂和维护。&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

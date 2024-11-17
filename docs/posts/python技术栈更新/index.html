@@ -79,11 +79,27 @@
 </script>
 
 
-<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu546329292729773971.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu16414047889438337432.png">
 
 <meta name="description"
-  content="有段时间没用Python写工程了，基本都是写脚本，最近接了个活帮忙搞个爬虫相关项目，需要更新一下技术栈，做个笔记。 web开发：fastapi, 其实还可">
+  content="有段时间没用Python写工程了，基本都是写脚本，最近接了个活帮忙搞个爬虫相关项目，需要更新一下技术栈，做个笔记。
+
+web开发：fastapi, 其实还可以接着用flask，不过前者对asyncio支持更完善一些，顺便学一下新东西；至于django还是太重了，写单体估计有点用；
+数据库ORM：仍然可以继续使用sqlalchemy，最新的是2.0版本，已经支持asyncio；
+爬虫：爬虫相关的技术栈变化不大…scrapy其实不太好用，封装的太厚，而且twisted早就过时了。自己写的话就：
+
+用aiohttp做网络请求；
+dom解析：仍然是基于lxml的技术栈，主要还是xpath和css-selector来获取元素；
+浏览器模拟（动态网页）：Playwright代替了Selenium等古早的框架；
+打包：用docker就行；
+验证码破解：这个相关的网站蛮多的，但是好不好使需要测试一下才知道。包括：yesCapture, 2Capture和穿云等；
+其他反爬技术：这个只能随机应变了，现在很多网站都做了反爬，具体手段不一，需要尝试解决；
+
+
+
+FastAPI
+fastapi顾名思义，专注于提供API框架，不关心模版引擎、ORM之类的东西，但是自带了API文档(即swagger集成)。所以代码非常简单，不需要Django那套复杂的框架：">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -125,7 +141,7 @@
             "url": "https://yiuterran.github.io/blog/images/icon.png"
         }
         },
-    "description": "有段时间没用Python写工程了，基本都是写脚本，最近接了个活帮忙搞个爬虫相关项目，需要更新一下技术栈，做个笔记。 web开发：fastapi, 其实还可"
+    "description": "\u003cp\u003e有段时间没用Python写工程了，基本都是写脚本，最近接了个活帮忙搞个爬虫相关项目，需要更新一下技术栈，做个笔记。\u003c\/p\u003e\n\u003cul\u003e\n\u003cli\u003eweb开发：\u003ccode\u003efastapi\u003c\/code\u003e, 其实还可以接着用flask，不过前者对asyncio支持更完善一些，顺便学一下新东西；至于django还是太重了，写单体估计有点用；\u003c\/li\u003e\n\u003cli\u003e数据库ORM：仍然可以继续使用\u003ccode\u003esqlalchemy\u003c\/code\u003e，最新的是2.0版本，已经支持asyncio；\u003c\/li\u003e\n\u003cli\u003e爬虫：爬虫相关的技术栈变化不大…scrapy其实不太好用，封装的太厚，而且\u003ccode\u003etwisted\u003c\/code\u003e早就过时了。自己写的话就：\n\u003cul\u003e\n\u003cli\u003e用\u003ccode\u003eaiohttp\u003c\/code\u003e做网络请求；\u003c\/li\u003e\n\u003cli\u003e\u003ccode\u003edom\u003c\/code\u003e解析：仍然是基于\u003ccode\u003elxml\u003c\/code\u003e的技术栈，主要还是\u003ccode\u003expath\u003c\/code\u003e和\u003ccode\u003ecss-selector\u003c\/code\u003e来获取元素；\u003c\/li\u003e\n\u003cli\u003e浏览器模拟（动态网页）：\u003ccode\u003ePlaywright\u003c\/code\u003e代替了\u003ccode\u003eSelenium\u003c\/code\u003e等古早的框架；\u003c\/li\u003e\n\u003cli\u003e打包：用docker就行；\u003c\/li\u003e\n\u003cli\u003e验证码破解：这个相关的网站蛮多的，但是好不好使需要测试一下才知道。包括：\u003ccode\u003eyesCapture\u003c\/code\u003e, \u003ccode\u003e2Capture\u003c\/code\u003e和穿云等；\u003c\/li\u003e\n\u003cli\u003e其他反爬技术：这个只能随机应变了，现在很多网站都做了反爬，具体手段不一，需要尝试解决；\u003c\/li\u003e\n\u003c\/ul\u003e\n\u003c\/li\u003e\n\u003c\/ul\u003e\n\u003ch2 id=\u0022fastapihttpsfastapitiangolocomzh\u0022\u003e\u003ca href=\u0022https:\/\/fastapi.tiangolo.com\/zh\/\u0022\u003eFastAPI\u003c\/a\u003e\u003c\/h2\u003e\n\u003cp\u003efastapi顾名思义，专注于提供API框架，不关心模版引擎、ORM之类的东西，但是自带了API文档(即\u003ccode\u003eswagger\u003c\/code\u003e集成)。所以代码非常简单，不需要Django那套复杂的框架：\u003c\/p\u003e"
 }
 </script><meta property="og:title" content="Python技术栈更新 | 应许之地" />
 <meta property="og:type" content="article" />
@@ -139,7 +155,23 @@
 
 
 
-<meta property="og:description" content="有段时间没用Python写工程了，基本都是写脚本，最近接了个活帮忙搞个爬虫相关项目，需要更新一下技术栈，做个笔记。 web开发：fastapi, 其实还可" />
+<meta property="og:description" content="有段时间没用Python写工程了，基本都是写脚本，最近接了个活帮忙搞个爬虫相关项目，需要更新一下技术栈，做个笔记。
+
+web开发：fastapi, 其实还可以接着用flask，不过前者对asyncio支持更完善一些，顺便学一下新东西；至于django还是太重了，写单体估计有点用；
+数据库ORM：仍然可以继续使用sqlalchemy，最新的是2.0版本，已经支持asyncio；
+爬虫：爬虫相关的技术栈变化不大…scrapy其实不太好用，封装的太厚，而且twisted早就过时了。自己写的话就：
+
+用aiohttp做网络请求；
+dom解析：仍然是基于lxml的技术栈，主要还是xpath和css-selector来获取元素；
+浏览器模拟（动态网页）：Playwright代替了Selenium等古早的框架；
+打包：用docker就行；
+验证码破解：这个相关的网站蛮多的，但是好不好使需要测试一下才知道。包括：yesCapture, 2Capture和穿云等；
+其他反爬技术：这个只能随机应变了，现在很多网站都做了反爬，具体手段不一，需要尝试解决；
+
+
+
+FastAPI
+fastapi顾名思义，专注于提供API框架，不关心模版引擎、ORM之类的东西，但是自带了API文档(即swagger集成)。所以代码非常简单，不需要Django那套复杂的框架：" />
 
 
 

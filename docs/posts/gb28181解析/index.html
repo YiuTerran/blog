@@ -79,11 +79,11 @@
 </script>
 
 
-<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu546329292729773971.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu16414047889438337432.png">
 
 <meta name="description"
-  content="国标GB28181（以下简称国标或者gb）文档分析的文档我去年其实写过一版，但是由于原来的电脑炸了，文档还没来得及传上去就丢了（痛苦），所以还要重写一">
+  content="国标GB28181（以下简称国标或者gb）文档分析的文档我去年其实写过一版，但是由于原来的电脑炸了，文档还没来得及传上去就丢了（痛苦），所以还要重写一版做笔记。">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -125,7 +125,7 @@
             "url": "https://yiuterran.github.io/blog/images/icon.png"
         }
         },
-    "description": "国标GB28181（以下简称国标或者gb）文档分析的文档我去年其实写过一版，但是由于原来的电脑炸了，文档还没来得及传上去就丢了（痛苦），所以还要重写一"
+    "description": "\u003cp\u003e国标GB28181（以下简称国标或者gb）文档分析的文档我去年其实写过一版，但是由于原来的电脑炸了，文档还没来得及传上去就丢了（痛苦），所以还要重写一版做笔记。\u003c\/p\u003e"
 }
 </script><meta property="og:title" content="Gb28181解析 | 应许之地" />
 <meta property="og:type" content="article" />
@@ -139,7 +139,7 @@
 
 
 
-<meta property="og:description" content="国标GB28181（以下简称国标或者gb）文档分析的文档我去年其实写过一版，但是由于原来的电脑炸了，文档还没来得及传上去就丢了（痛苦），所以还要重写一" />
+<meta property="og:description" content="国标GB28181（以下简称国标或者gb）文档分析的文档我去年其实写过一版，但是由于原来的电脑炸了，文档还没来得及传上去就丢了（痛苦），所以还要重写一版做笔记。" />
 
 
 
@@ -359,257 +359,257 @@
 <strong>请求行举例：</strong><code>INVITE sip:bob@zte.com SIP/2.0 /r/n</code></p>
 <p>Method分为：</p>
 <table>
-<thead>
-<tr>
-<th style="text-align:left">Method</th>
-<th style="text-align:left">方法说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">REGISTER</td>
-<td style="text-align:left">注册联系信息</td>
-</tr>
-<tr>
-<td style="text-align:left">INVITE</td>
-<td style="text-align:left">发起会话请求</td>
-</tr>
-<tr>
-<td style="text-align:left">ACK</td>
-<td style="text-align:left">INVITE 请求的响应的确认</td>
-</tr>
-<tr>
-<td style="text-align:left">CANCEL</td>
-<td style="text-align:left">取消请求</td>
-</tr>
-<tr>
-<td style="text-align:left">BYE</td>
-<td style="text-align:left">终结会话</td>
-</tr>
-<tr>
-<td style="text-align:left">OPTIONS</td>
-<td style="text-align:left">查询服务器能力</td>
-</tr>
-<tr>
-<td style="text-align:left">MESSAGE</td>
-<td style="text-align:left">RFC3428，上文已有描述</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: left">Method</th>
+          <th style="text-align: left">方法说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">REGISTER</td>
+          <td style="text-align: left">注册联系信息</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">INVITE</td>
+          <td style="text-align: left">发起会话请求</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">ACK</td>
+          <td style="text-align: left">INVITE 请求的响应的确认</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">CANCEL</td>
+          <td style="text-align: left">取消请求</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">BYE</td>
+          <td style="text-align: left">终结会话</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">OPTIONS</td>
+          <td style="text-align: left">查询服务器能力</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">MESSAGE</td>
+          <td style="text-align: left">RFC3428，上文已有描述</td>
+      </tr>
+  </tbody>
 </table>
 <h4 id="状态行">状态行</h4>
 <p><strong>状态行格式：</strong> <code>SIP-Version Status-Code Reason-Phrase CRLF</code>
 <strong>状态行举例：</strong><code>SIP/2.0 200 OK /r/n</code></p>
 <p>状态码的设计也和HTTP非常类似：</p>
 <table>
-<thead>
-<tr>
-<th style="text-align:left">状态码</th>
-<th style="text-align:left">含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">1xx:</td>
-<td style="text-align:left">临时响应、表示请求消息正在被处理</td>
-</tr>
-<tr>
-<td style="text-align:left">2xx</td>
-<td style="text-align:left">成功响应、表示请求已被成功接收完全理解并接收</td>
-</tr>
-<tr>
-<td style="text-align:left">3xx</td>
-<td style="text-align:left">重定向响应、表示需采取进一步完成请求</td>
-</tr>
-<tr>
-<td style="text-align:left">4xx</td>
-<td style="text-align:left">客户机错误、表示请求消息中包含语法错误信息或服务器无法完成客户机的请求</td>
-</tr>
-<tr>
-<td style="text-align:left">5xx</td>
-<td style="text-align:left">服务器错误、表示服务器无法合法完成请求</td>
-</tr>
-<tr>
-<td style="text-align:left">6xx</td>
-<td style="text-align:left">全局故障 、表示任何服务器都无法完成该请求</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: left">状态码</th>
+          <th style="text-align: left">含义</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">1xx:</td>
+          <td style="text-align: left">临时响应、表示请求消息正在被处理</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">2xx</td>
+          <td style="text-align: left">成功响应、表示请求已被成功接收完全理解并接收</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">3xx</td>
+          <td style="text-align: left">重定向响应、表示需采取进一步完成请求</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">4xx</td>
+          <td style="text-align: left">客户机错误、表示请求消息中包含语法错误信息或服务器无法完成客户机的请求</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">5xx</td>
+          <td style="text-align: left">服务器错误、表示服务器无法合法完成请求</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">6xx</td>
+          <td style="text-align: left">全局故障 、表示任何服务器都无法完成该请求</td>
+      </tr>
+  </tbody>
 </table>
 <p>常用的状态码举例：</p>
 <table>
-<thead>
-<tr>
-<th style="text-align:left">状态码</th>
-<th style="text-align:left">msg</th>
-<th style="text-align:left">含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">100</td>
-<td style="text-align:left">Trying</td>
-<td style="text-align:left">试呼叫</td>
-</tr>
-<tr>
-<td style="text-align:left">180</td>
-<td style="text-align:left">Ringing</td>
-<td style="text-align:left">振铃</td>
-</tr>
-<tr>
-<td style="text-align:left">181</td>
-<td style="text-align:left">Call is Being Forwarded</td>
-<td style="text-align:left">呼叫正在前转</td>
-</tr>
-<tr>
-<td style="text-align:left">200</td>
-<td style="text-align:left">OK</td>
-<td style="text-align:left">成功响应</td>
-</tr>
-<tr>
-<td style="text-align:left">302</td>
-<td style="text-align:left">Moved Temporarily</td>
-<td style="text-align:left">临时迁移</td>
-</tr>
-<tr>
-<td style="text-align:left">400</td>
-<td style="text-align:left">Bad Request</td>
-<td style="text-align:left">错误请求</td>
-</tr>
-<tr>
-<td style="text-align:left">401</td>
-<td style="text-align:left">Unauthorized</td>
-<td style="text-align:left">未授权</td>
-</tr>
-<tr>
-<td style="text-align:left">403</td>
-<td style="text-align:left">Forbidden</td>
-<td style="text-align:left">禁止</td>
-</tr>
-<tr>
-<td style="text-align:left">404</td>
-<td style="text-align:left">Not Found</td>
-<td style="text-align:left">用户不存在</td>
-</tr>
-<tr>
-<td style="text-align:left">408</td>
-<td style="text-align:left">Request Timeout</td>
-<td style="text-align:left">请求超时</td>
-</tr>
-<tr>
-<td style="text-align:left">480</td>
-<td style="text-align:left">Temporarily Unavailable</td>
-<td style="text-align:left">暂时无人接听</td>
-</tr>
-<tr>
-<td style="text-align:left">486</td>
-<td style="text-align:left">Busy Here</td>
-<td style="text-align:left">线路忙</td>
-</tr>
-<tr>
-<td style="text-align:left">504</td>
-<td style="text-align:left">Server Time-out</td>
-<td style="text-align:left">服务器超时</td>
-</tr>
-<tr>
-<td style="text-align:left">600</td>
-<td style="text-align:left">Busy Everywhere</td>
-<td style="text-align:left">全忙</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: left">状态码</th>
+          <th style="text-align: left">msg</th>
+          <th style="text-align: left">含义</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">100</td>
+          <td style="text-align: left">Trying</td>
+          <td style="text-align: left">试呼叫</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">180</td>
+          <td style="text-align: left">Ringing</td>
+          <td style="text-align: left">振铃</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">181</td>
+          <td style="text-align: left">Call is Being Forwarded</td>
+          <td style="text-align: left">呼叫正在前转</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">200</td>
+          <td style="text-align: left">OK</td>
+          <td style="text-align: left">成功响应</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">302</td>
+          <td style="text-align: left">Moved Temporarily</td>
+          <td style="text-align: left">临时迁移</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">400</td>
+          <td style="text-align: left">Bad Request</td>
+          <td style="text-align: left">错误请求</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">401</td>
+          <td style="text-align: left">Unauthorized</td>
+          <td style="text-align: left">未授权</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">403</td>
+          <td style="text-align: left">Forbidden</td>
+          <td style="text-align: left">禁止</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">404</td>
+          <td style="text-align: left">Not Found</td>
+          <td style="text-align: left">用户不存在</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">408</td>
+          <td style="text-align: left">Request Timeout</td>
+          <td style="text-align: left">请求超时</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">480</td>
+          <td style="text-align: left">Temporarily Unavailable</td>
+          <td style="text-align: left">暂时无人接听</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">486</td>
+          <td style="text-align: left">Busy Here</td>
+          <td style="text-align: left">线路忙</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">504</td>
+          <td style="text-align: left">Server Time-out</td>
+          <td style="text-align: left">服务器超时</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">600</td>
+          <td style="text-align: left">Busy Everywhere</td>
+          <td style="text-align: left">全忙</td>
+      </tr>
+  </tbody>
 </table>
 <p>可以说和HTTP的状态码含义非常接近。</p>
 <p>中间响应消息1xx的使用则是为了节省网络开销设计的，一旦 UC 收到任何一个中间响应消息，则UC必须<strong>停止消息重发定时器</strong>，不再从发这个请求消息，反之则直到收到最终响应消息或重发定时器超时。</p>
 <h4 id="header">Header</h4>
 <p>格式和HTTP的header也保持一致，典型的<code>k:v</code>结构。常用header包括：</p>
 <table>
-<thead>
-<tr>
-<th style="text-align:left">Header</th>
-<th style="text-align:left">含义说明</th>
-<th style="text-align:left">举例</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">Call-ID</td>
-<td style="text-align:left">由本地设备(Client)生成，全局唯一，每次呼叫这个值唯一不变。</td>
-<td style="text-align:left">Call-ID: <a href="mailto:asd88asd77a@1.2.3.4">asd88asd77a@1.2.3.4</a></td>
-</tr>
-<tr>
-<td style="text-align:left">From</td>
-<td style="text-align:left">表示请求的发起者</td>
-<td style="text-align:left">From: sip:user1@domain.com;tag=49583</td>
-</tr>
-<tr>
-<td style="text-align:left">To</td>
-<td style="text-align:left">表示请求的接收者</td>
-<td style="text-align:left">To: sip:user2@domain.com</td>
-</tr>
-<tr>
-<td style="text-align:left">Via</td>
-<td style="text-align:left">Via头域是被服务器插入request中，用来检查路由环的，并且可以使response根据via找到返回的路</td>
-<td style="text-align:left">Via: SIP/2.0/TCP user1pc.domain.com;branch=z9hG4bK776sgdkse</td>
-</tr>
-<tr>
-<td style="text-align:left">Max-Forwards</td>
-<td style="text-align:left">用于表示这个包最多可以传送多少跳，每经过一跳都会减一，当Max-Forwards==0系统会返回483。默认为70</td>
-<td style="text-align:left">Max-Forwards: 70</td>
-</tr>
-<tr>
-<td style="text-align:left">Contact</td>
-<td style="text-align:left">包含源的URI信息，用来给响应方直接和源建立连接用</td>
-<td style="text-align:left">Contact: sip:192.168.100.1:1111</td>
-</tr>
-<tr>
-<td style="text-align:left">Content-Type</td>
-<td style="text-align:left">指明消息体的类型</td>
-<td style="text-align:left">Content-Type: text/plain；Content-Type: application/sdp; Content-Type: application/cpim;</td>
-</tr>
-<tr>
-<td style="text-align:left">Content-Length</td>
-<td style="text-align:left">指明消息体的字节大小</td>
-<td style="text-align:left">Content-Length: 18</td>
-</tr>
-<tr>
-<td style="text-align:left">Authorization</td>
-<td style="text-align:left">鉴权凭证消息</td>
-<td style="text-align:left">Authorization: Digest username=&ldquo;01062237493&rdquo;, realm=&ldquo;192.168.2.89&rdquo;, qop=auth, algorithm=MD5, uri=&ldquo;sip:192.168.2.89&rdquo;, nonce=&ldquo;e17d377c3d2d9c343e26576a7fd04738481dfc10&rdquo;, nc=00000001, cnonce=&ldquo;12660455546344082314666316435946&rdquo;, response=&ldquo;f57e47ce03162293b9ced07362ce2b79&rdquo;</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: left">Header</th>
+          <th style="text-align: left">含义说明</th>
+          <th style="text-align: left">举例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">Call-ID</td>
+          <td style="text-align: left">由本地设备(Client)生成，全局唯一，每次呼叫这个值唯一不变。</td>
+          <td style="text-align: left">Call-ID: <a href="mailto:asd88asd77a@1.2.3.4">asd88asd77a@1.2.3.4</a></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">From</td>
+          <td style="text-align: left">表示请求的发起者</td>
+          <td style="text-align: left">From: sip:user1@domain.com;tag=49583</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">To</td>
+          <td style="text-align: left">表示请求的接收者</td>
+          <td style="text-align: left">To: sip:user2@domain.com</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Via</td>
+          <td style="text-align: left">Via头域是被服务器插入request中，用来检查路由环的，并且可以使response根据via找到返回的路</td>
+          <td style="text-align: left">Via: SIP/2.0/TCP user1pc.domain.com;branch=z9hG4bK776sgdkse</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Max-Forwards</td>
+          <td style="text-align: left">用于表示这个包最多可以传送多少跳，每经过一跳都会减一，当Max-Forwards==0系统会返回483。默认为70</td>
+          <td style="text-align: left">Max-Forwards: 70</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Contact</td>
+          <td style="text-align: left">包含源的URI信息，用来给响应方直接和源建立连接用</td>
+          <td style="text-align: left">Contact: sip:192.168.100.1:1111</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Content-Type</td>
+          <td style="text-align: left">指明消息体的类型</td>
+          <td style="text-align: left">Content-Type: text/plain；Content-Type: application/sdp; Content-Type: application/cpim;</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Content-Length</td>
+          <td style="text-align: left">指明消息体的字节大小</td>
+          <td style="text-align: left">Content-Length: 18</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Authorization</td>
+          <td style="text-align: left">鉴权凭证消息</td>
+          <td style="text-align: left">Authorization: Digest username=&ldquo;01062237493&rdquo;, realm=&ldquo;192.168.2.89&rdquo;, qop=auth, algorithm=MD5, uri=&ldquo;sip:192.168.2.89&rdquo;, nonce=&ldquo;e17d377c3d2d9c343e26576a7fd04738481dfc10&rdquo;, nc=00000001, cnonce=&ldquo;12660455546344082314666316435946&rdquo;, response=&ldquo;f57e47ce03162293b9ced07362ce2b79&rdquo;</td>
+      </tr>
+  </tbody>
 </table>
 <h3 id="manscdp">MANSCDP</h3>
 <p>在国标附录A里面有描述，主要是一系列对设备的查询、控制等指令，并规定了请求/应答的数据结构。</p>
 <p>MANSCDP使用xml进行通信，作为SIP <code>MESSAGE</code>类型消息的负载，Content-Type为<code>Application/MANSCDP+xml</code>。</p>
 <p>消息大致分为以下几类，名称就是xml的根标签。</p>
 <table>
-<thead>
-<tr>
-<th>类型</th>
-<th>名称</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Request</td>
-<td>Control</td>
-<td>控制设备指令</td>
-</tr>
-<tr>
-<td>Request</td>
-<td>Query</td>
-<td>查询设备信息指令</td>
-</tr>
-<tr>
-<td>Request</td>
-<td>Notify</td>
-<td>通知，主要用于设备向云端发送告警。</td>
-</tr>
-<tr>
-<td>Response</td>
-<td>Response</td>
-<td>应答</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>类型</th>
+          <th>名称</th>
+          <th>说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Request</td>
+          <td>Control</td>
+          <td>控制设备指令</td>
+      </tr>
+      <tr>
+          <td>Request</td>
+          <td>Query</td>
+          <td>查询设备信息指令</td>
+      </tr>
+      <tr>
+          <td>Request</td>
+          <td>Notify</td>
+          <td>通知，主要用于设备向云端发送告警。</td>
+      </tr>
+      <tr>
+          <td>Response</td>
+          <td>Response</td>
+          <td>应答</td>
+      </tr>
+  </tbody>
 </table>
 <p>基础数据结构，写代码的话这些就是类或者alias：</p>
 <p><img alt="截屏2022-03-02 下午2.07.31" src="https://s2.loli.net/2022/03/02/jYEKN9mSeRAMzgL.png"></p>

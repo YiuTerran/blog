@@ -79,11 +79,11 @@
 </script>
 
 
-<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu546329292729773971.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu16414047889438337432.png">
 
 <meta name="description"
-  content="一般服务都是使用deployment部署，deploy的使用非常简单，无状态，随意调度。但是各种需要持久化数据的中间件都需要使用StatefulSet">
+  content="一般服务都是使用deployment部署，deploy的使用非常简单，无状态，随意调度。但是各种需要持久化数据的中间件都需要使用StatefulSet来部署，这个玩意儿实际上有点复杂。">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -112,7 +112,7 @@
     },
     "headline": "StatefulSet使用思路梳理 | 应许之地","datePublished": "2023-09-15T14:57:05+08:00",
     "dateModified": "2023-09-15T14:57:05+08:00",
-    "wordCount":  1917 ,
+    "wordCount":  1916 ,
     "author": {
         "@type": "Person",
         "name": ["“tryao\""]
@@ -125,7 +125,7 @@
             "url": "https://yiuterran.github.io/blog/images/icon.png"
         }
         },
-    "description": "一般服务都是使用deployment部署，deploy的使用非常简单，无状态，随意调度。但是各种需要持久化数据的中间件都需要使用StatefulSet"
+    "description": "\u003cp\u003e一般服务都是使用deployment部署，deploy的使用非常简单，无状态，随意调度。但是各种需要持久化数据的中间件都需要使用StatefulSet来部署，这个玩意儿实际上有点复杂。\u003c\/p\u003e"
 }
 </script><meta property="og:title" content="StatefulSet使用思路梳理 | 应许之地" />
 <meta property="og:type" content="article" />
@@ -139,7 +139,7 @@
 
 
 
-<meta property="og:description" content="一般服务都是使用deployment部署，deploy的使用非常简单，无状态，随意调度。但是各种需要持久化数据的中间件都需要使用StatefulSet" />
+<meta property="og:description" content="一般服务都是使用deployment部署，deploy的使用非常简单，无状态，随意调度。但是各种需要持久化数据的中间件都需要使用StatefulSet来部署，这个玩意儿实际上有点复杂。" />
 
 
 
@@ -298,7 +298,7 @@
 <p>比如sqlite，将它放在longhorn里，理论上pod在任意节点，都可以访问到这块pv.  longhorn自带的多副本策略也可以保证数据不丢失。如果宿主机节点挂掉，k8s自动调度pod到其他结点，原来的pv也依然可用。</p>
 <p>这一切很美好，但是有两个问题：</p>
 <ul>
-<li>IO性能会变差；</li>
+<li>IO性能会变差</li>
 <li><strong>数据可能损坏</strong></li>
 </ul>
 <p>第一点是显而易见的，毕竟分布式存储是在文件系统的基础上又加了一层，肯定会影响性能。</p>

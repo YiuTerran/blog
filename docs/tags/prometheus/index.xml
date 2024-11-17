@@ -15,7 +15,7 @@
       <link>https://yiuterran.github.io/blog/posts/promql%E7%AC%94%E8%AE%B0/</link>
       <pubDate>Mon, 24 Jul 2023 11:21:33 +0800</pubDate>
       <guid>https://yiuterran.github.io/blog/posts/promql%E7%AC%94%E8%AE%B0/</guid>
-      <description>格式 类似influxdb，prometheus也有自己的line protocol： &amp;lt;--------------- metric ---------------------&amp;gt;&amp;lt;-timestamp -&amp;gt;&amp;lt;-value-&amp;gt; &amp;lt;---metric name---&amp;gt;{labelname=labelvalue,....} http_request_total{status=&amp;quot;200&amp;quot;, method=&amp;quot;GET&amp;quot;}@1434417560938 =&amp;gt; 94355 http_request_total{status=&amp;quot;200&amp;quot;, method=&amp;quot;GET&amp;quot;}@1434417561287 =&amp;gt; 94334 上面就表示在某个时间戳系统http GET</description>
+      <description>&lt;h2 id=&#34;格式&#34;&gt;格式&lt;/h2&gt;&#xA;&lt;p&gt;类似influxdb，prometheus也有自己的line protocol：&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;&amp;lt;--------------- metric ---------------------&amp;gt;&amp;lt;-timestamp -&amp;gt;&amp;lt;-value-&amp;gt;&#xA;&amp;lt;---metric name---&amp;gt;{labelname=labelvalue,....}&#xA;http_request_total{status=&amp;quot;200&amp;quot;, method=&amp;quot;GET&amp;quot;}@1434417560938 =&amp;gt; 94355&#xA;http_request_total{status=&amp;quot;200&amp;quot;, method=&amp;quot;GET&amp;quot;}@1434417561287 =&amp;gt; 94334&#xA;&lt;/code&gt;&lt;/pre&gt;&#xA;&lt;p&gt;上面就表示在某个时间戳系统http GET请求中200的数量。&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

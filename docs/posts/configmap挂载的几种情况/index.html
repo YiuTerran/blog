@@ -79,11 +79,36 @@
 </script>
 
 
-<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu546329292729773971.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu16414047889438337432.png">
 
 <meta name="description"
-  content="ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理： 将某个key的值挂载为环境变量 apiVersion: v1 kind: Pod metadata: name: dapi-test-pod spec: containers: - name: test-container image: gcr.io/google_containers/busybox command: [ &quot;/bin/sh&quot;, &quot;-c&quot;, &quot;env&quot; ] env: - name: SPECIAL_LEVEL_KEY valueFrom: configMapKeyRef:">
+  content="ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理：
+将某个key的值挂载为环境变量
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dapi-test-pod
+spec:
+  containers:
+    - name: test-container
+      image: gcr.io/google_containers/busybox
+      command: [ &quot;/bin/sh&quot;, &quot;-c&quot;, &quot;env&quot; ]
+      env:
+        - name: SPECIAL_LEVEL_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: special-config
+              key: special.how
+        - name: SPECIAL_TYPE_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: special-config
+              key: special.type
+              optional: true
+  restartPolicy: Never
+
+这里在command里可以通过$(SPECIAL_TYPE_KEY)的格式来引用这些环境变量作为命令行参数。">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -125,7 +150,7 @@
             "url": "https://yiuterran.github.io/blog/images/icon.png"
         }
         },
-    "description": "ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理： 将某个key的值挂载为环境变量 apiVersion: v1 kind: Pod metadata: name: dapi-test-pod spec: containers: - name: test-container image: gcr.io\/google_containers\/busybox command: [ \u0026quot;\/bin\/sh\u0026quot;, \u0026quot;-c\u0026quot;, \u0026quot;env\u0026quot; ] env: - name: SPECIAL_LEVEL_KEY valueFrom: configMapKeyRef:"
+    "description": "\u003cp\u003eConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理：\u003c\/p\u003e\n\u003ch2 id=\u0022将某个key的值挂载为环境变量\u0022\u003e将某个key的值挂载为环境变量\u003c\/h2\u003e\n\u003cpre\u003e\u003ccode class=\u0022language-yaml\u0022\u003eapiVersion: v1\nkind: Pod\nmetadata:\n  name: dapi-test-pod\nspec:\n  containers:\n    - name: test-container\n      image: gcr.io\/google_containers\/busybox\n      command: [ \u0026quot;\/bin\/sh\u0026quot;, \u0026quot;-c\u0026quot;, \u0026quot;env\u0026quot; ]\n      env:\n        - name: SPECIAL_LEVEL_KEY\n          valueFrom:\n            configMapKeyRef:\n              name: special-config\n              key: special.how\n        - name: SPECIAL_TYPE_KEY\n          valueFrom:\n            configMapKeyRef:\n              name: special-config\n              key: special.type\n              optional: true\n  restartPolicy: Never\n\u003c\/code\u003e\u003c\/pre\u003e\n\u003cp\u003e这里在\u003ccode\u003ecommand\u003c\/code\u003e里可以通过\u003ccode\u003e$(SPECIAL_TYPE_KEY)\u003c\/code\u003e的格式来引用这些环境变量作为命令行参数。\u003c\/p\u003e"
 }
 </script><meta property="og:title" content="Configmap挂载的几种情况 | 应许之地" />
 <meta property="og:type" content="article" />
@@ -139,7 +164,32 @@
 
 
 
-<meta property="og:description" content="ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理： 将某个key的值挂载为环境变量 apiVersion: v1 kind: Pod metadata: name: dapi-test-pod spec: containers: - name: test-container image: gcr.io/google_containers/busybox command: [ &quot;/bin/sh&quot;, &quot;-c&quot;, &quot;env&quot; ] env: - name: SPECIAL_LEVEL_KEY valueFrom: configMapKeyRef:" />
+<meta property="og:description" content="ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理：
+将某个key的值挂载为环境变量
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dapi-test-pod
+spec:
+  containers:
+    - name: test-container
+      image: gcr.io/google_containers/busybox
+      command: [ &quot;/bin/sh&quot;, &quot;-c&quot;, &quot;env&quot; ]
+      env:
+        - name: SPECIAL_LEVEL_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: special-config
+              key: special.how
+        - name: SPECIAL_TYPE_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: special-config
+              key: special.type
+              optional: true
+  restartPolicy: Never
+
+这里在command里可以通过$(SPECIAL_TYPE_KEY)的格式来引用这些环境变量作为命令行参数。" />
 
 
 

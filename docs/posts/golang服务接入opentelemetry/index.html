@@ -79,11 +79,13 @@
 </script>
 
 
-<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu546329292729773971.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu16414047889438337432.png">
 
 <meta name="description"
-  content="三大支柱中，Log是最简单的，metric也不难。对于golang而言，最麻烦的是trace，这时候就分外羡慕java这种可以自动注入的语言了。 基本设">
+  content="三大支柱中，Log是最简单的，metric也不难。对于golang而言，最麻烦的是trace，这时候就分外羡慕java这种可以自动注入的语言了。
+基本设计
+首先是一个Trace Provider，用来实例化Tracer。某些语言里Provider和Tracer都是全局预创建好的。">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -121,7 +123,7 @@
             "url": "https://yiuterran.github.io/blog/images/icon.png"
         }
         },
-    "description": "三大支柱中，Log是最简单的，metric也不难。对于golang而言，最麻烦的是trace，这时候就分外羡慕java这种可以自动注入的语言了。 基本设"
+    "description": "\u003cp\u003e三大支柱中，Log是最简单的，metric也不难。对于golang而言，最麻烦的是trace，这时候就分外羡慕java这种可以自动注入的语言了。\u003c\/p\u003e\n\u003ch2 id=\u0022基本设计\u0022\u003e基本设计\u003c\/h2\u003e\n\u003cp\u003e首先是一个Trace Provider，用来实例化Tracer。某些语言里Provider和Tracer都是全局预创建好的。\u003c\/p\u003e"
 }
 </script><meta property="og:title" content="Golang服务接入OpenTelemetry | 应许之地" />
 <meta property="og:type" content="article" />
@@ -135,7 +137,9 @@
 
 
 
-<meta property="og:description" content="三大支柱中，Log是最简单的，metric也不难。对于golang而言，最麻烦的是trace，这时候就分外羡慕java这种可以自动注入的语言了。 基本设" />
+<meta property="og:description" content="三大支柱中，Log是最简单的，metric也不难。对于golang而言，最麻烦的是trace，这时候就分外羡慕java这种可以自动注入的语言了。
+基本设计
+首先是一个Trace Provider，用来实例化Tracer。某些语言里Provider和Tracer都是全局预创建好的。" />
 
 
 

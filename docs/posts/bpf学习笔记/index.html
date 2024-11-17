@@ -79,11 +79,12 @@
 </script>
 
 
-<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu546329292729773971.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu16414047889438337432.png">
 
 <meta name="description"
-  content="eBPF的理论看起来有点抽象，实际上就是注册到内核的回调函数，可以拦截系统调用，然后用来完成自己的事情。 只是这个回调函数在内核空间只能用C来写，门槛还">
+  content="eBPF的理论看起来有点抽象，实际上就是注册到内核的回调函数，可以拦截系统调用，然后用来完成自己的事情。
+只是这个回调函数在内核空间只能用C来写，门槛还是有点高的，除了C之外其他的语言可以写用户空间部分。">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -121,7 +122,7 @@
             "url": "https://yiuterran.github.io/blog/images/icon.png"
         }
         },
-    "description": "eBPF的理论看起来有点抽象，实际上就是注册到内核的回调函数，可以拦截系统调用，然后用来完成自己的事情。 只是这个回调函数在内核空间只能用C来写，门槛还"
+    "description": "\u003cp\u003eeBPF的理论看起来有点抽象，实际上就是注册到内核的回调函数，可以拦截系统调用，然后用来完成自己的事情。\u003c\/p\u003e\n\u003cp\u003e只是这个回调函数在内核空间只能用C来写，门槛还是有点高的，除了C之外其他的语言可以写用户空间部分。\u003c\/p\u003e"
 }
 </script><meta property="og:title" content="eBPF学习笔记 | 应许之地" />
 <meta property="og:type" content="article" />
@@ -135,7 +136,8 @@
 
 
 
-<meta property="og:description" content="eBPF的理论看起来有点抽象，实际上就是注册到内核的回调函数，可以拦截系统调用，然后用来完成自己的事情。 只是这个回调函数在内核空间只能用C来写，门槛还" />
+<meta property="og:description" content="eBPF的理论看起来有点抽象，实际上就是注册到内核的回调函数，可以拦截系统调用，然后用来完成自己的事情。
+只是这个回调函数在内核空间只能用C来写，门槛还是有点高的，除了C之外其他的语言可以写用户空间部分。" />
 
 
 
@@ -316,6 +318,11 @@ sudo apt-get install bpfcc-tools linux-headers-$(uname -r)
     class="-mx-2 mt-4 flex flex-col border-t px-2 pt-4 md:flex-row md:justify-between"
   >
     <div>
+      
+        <span class="text-primary-text block font-bold"
+          >上一页</span
+        >
+        <a href="https://yiuterran.github.io/blog/posts/%E5%9F%BA%E4%BA%8Eliteflow%E7%9A%84%E8%A7%84%E5%88%99%E5%BC%95%E6%93%8E%E8%AE%BE%E8%AE%A1/" class="block">基于LiteFlow的规则引擎设计</a>
       
     </div>
     <div class="mt-4 md:mt-0 md:text-right">

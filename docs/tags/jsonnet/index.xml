@@ -15,7 +15,7 @@
       <link>https://yiuterran.github.io/blog/posts/jsonnet%E8%AF%95%E7%94%A8/</link>
       <pubDate>Fri, 29 Dec 2023 10:21:59 +0800</pubDate>
       <guid>https://yiuterran.github.io/blog/posts/jsonnet%E8%AF%95%E7%94%A8/</guid>
-      <description>jsonnet这个语言很有意思，它存在的目的就是为了编辑配置。其实使用任何一门带有字符串模板的语言都能完成类似的目的，但是jsonnet的好处是它的封</description>
+      <description>&lt;p&gt;&lt;code&gt;jsonnet&lt;/code&gt;这个语言很有意思，它存在的目的就是为了编辑配置。其实使用任何一门带有字符串模板的语言都能完成类似的目的，但是&lt;code&gt;jsonnet&lt;/code&gt;的好处是它的封闭性：不要使用额外的依赖完成配置。&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

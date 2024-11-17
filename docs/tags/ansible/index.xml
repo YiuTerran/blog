@@ -15,7 +15,7 @@
       <link>https://yiuterran.github.io/blog/posts/ansible%E9%80%9F%E6%88%90/</link>
       <pubDate>Thu, 04 Jan 2024 14:00:55 +0800</pubDate>
       <guid>https://yiuterran.github.io/blog/posts/ansible%E9%80%9F%E6%88%90/</guid>
-      <description>虽然iac(infracture as code)流行以来，新的技术栈层出不穷，但是一般都是面向k8s或者云服务商的。传统的部署还是用ansible这种仅依</description>
+      <description>&lt;p&gt;虽然iac(infracture as code)流行以来，新的技术栈层出不穷，但是一般都是面向k8s或者云服务商的。传统的部署还是用ansible这种仅依赖ssh的最简单。&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

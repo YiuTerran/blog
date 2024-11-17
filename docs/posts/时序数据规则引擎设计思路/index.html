@@ -79,11 +79,17 @@
 </script>
 
 
-<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu546329292729773971.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu16414047889438337432.png">
 
 <meta name="description"
-  content="规则引擎的大致组成包括： 触发条件：如某个设备某种消息在某个时间点内到达；或周期性，每隔多久触发一次； 触发响应：即触发条件后要做什么，一般是告警、通知、">
+  content="规则引擎的大致组成包括：
+
+触发条件：如某个设备某种消息在某个时间点内到达；或周期性，每隔多久触发一次；
+触发响应：即触发条件后要做什么，一般是告警、通知、联动其他设备、联动其他系统等；
+边界情况：重复触发如何处理、回调频率控制等细节；
+
+实现思路大致包括以下几种：">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -112,7 +118,7 @@
     },
     "headline": "时序数据规则引擎设计思路 | 应许之地","datePublished": "2024-03-08T09:02:16+08:00",
     "dateModified": "2024-03-08T09:02:16+08:00",
-    "wordCount":  1100 ,
+    "wordCount":  1436 ,
     "publisher": {
         "@type": "Person",
         "name": "C. Wang",
@@ -121,7 +127,7 @@
             "url": "https://yiuterran.github.io/blog/images/icon.png"
         }
         },
-    "description": "规则引擎的大致组成包括： 触发条件：如某个设备某种消息在某个时间点内到达；或周期性，每隔多久触发一次； 触发响应：即触发条件后要做什么，一般是告警、通知、"
+    "description": "\u003cp\u003e规则引擎的大致组成包括：\u003c\/p\u003e\n\u003col\u003e\n\u003cli\u003e触发条件：如某个设备某种消息在某个时间点内到达；或周期性，每隔多久触发一次；\u003c\/li\u003e\n\u003cli\u003e触发响应：即触发条件后要做什么，一般是告警、通知、联动其他设备、联动其他系统等；\u003c\/li\u003e\n\u003cli\u003e边界情况：重复触发如何处理、回调频率控制等细节；\u003c\/li\u003e\n\u003c\/ol\u003e\n\u003cp\u003e实现思路大致包括以下几种：\u003c\/p\u003e"
 }
 </script><meta property="og:title" content="时序数据规则引擎设计思路 | 应许之地" />
 <meta property="og:type" content="article" />
@@ -135,7 +141,13 @@
 
 
 
-<meta property="og:description" content="规则引擎的大致组成包括： 触发条件：如某个设备某种消息在某个时间点内到达；或周期性，每隔多久触发一次； 触发响应：即触发条件后要做什么，一般是告警、通知、" />
+<meta property="og:description" content="规则引擎的大致组成包括：
+
+触发条件：如某个设备某种消息在某个时间点内到达；或周期性，每隔多久触发一次；
+触发响应：即触发条件后要做什么，一般是告警、通知、联动其他设备、联动其他系统等；
+边界情况：重复触发如何处理、回调频率控制等细节；
+
+实现思路大致包括以下几种：" />
 
 
 
@@ -289,6 +301,45 @@
 <h2 id="基于实时流计算">基于实时流计算</h2>
 <p>即类似FlinkCDC的思路来做。thingsboard的规则引擎是基于消息到来时进行触发，但是只能处理单条消息，没有使用时间窗口技术，所以是个半成品。真正的流计算必须使用类似Flink的时间窗口技术，并允许跨多条消息进行处理。</p>
 <p>与基于消息回调不同，实时流计算可以将需要计算的数据缓存在内存中，通过时间窗口来维护变量的生命周期，其性能比回调时去查询数据库要高的多。</p>
+<p>Flink支持CEP功能，但是不支持动态规则更新（FLIP-200），如果使用阿里云商业的Flink，可以考虑使用该功能。</p>
+<p>除了Flink，还有siddhi、esper和drools等方案，但是都有一些问题。</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">选型</th>
+          <th style="text-align: left">优点</th>
+          <th style="text-align: left">缺点</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">drools fusion</td>
+          <td style="text-align: left">同上，语法drl</td>
+          <td style="text-align: left">不支持集群</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">esper</td>
+          <td style="text-align: left">支持嵌入式运行（即作为一个库）java语言，符合公司技术栈类似SQL的语法</td>
+          <td style="text-align: left">集群是收费功能</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Flink-CEP</td>
+          <td style="text-align: left">性能最好，也最灵活</td>
+          <td style="text-align: left">需要二次开发，不支持动态更新规则（FLIP-200）没有用户友好界面</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">siddhi</td>
+          <td style="text-align: left">比较轻量级，自带图形界面可以编排规则</td>
+          <td style="text-align: left">不是很活跃，性能未知</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">lite-flow</td>
+          <td style="text-align: left">java嵌入式运行，规则可以持久化到数据库，支持动态刷新规则，支持常用脚本语言，中文文档齐全</td>
+          <td style="text-align: left">前端需要自行开发</td>
+      </tr>
+  </tbody>
+</table>
+<p>这里个人推荐lite-flow，功能比较健全，配合脚本功能可以满足大部分需求。</p>
 <h2 id="建议实施步骤">建议实施步骤</h2>
 <p>基于单条数据的实时处理、或回调触发最为简单，可以优先实现，满足5成以上的需求；</p>
 <p>基于周期性计算的规则引擎更容易图形化，实现起来也相对简单（但是要采用一种DSL），非即时计算的场景可以采用该方案；</p>

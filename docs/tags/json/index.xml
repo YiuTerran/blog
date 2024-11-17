@@ -15,14 +15,14 @@
       <link>https://yiuterran.github.io/blog/posts/ytt%E8%AF%95%E7%94%A8/</link>
       <pubDate>Fri, 29 Dec 2023 16:13:12 +0800</pubDate>
       <guid>https://yiuterran.github.io/blog/posts/ytt%E8%AF%95%E7%94%A8/</guid>
-      <description>jsonnet最大的问题其实是：它支持的是json，而不是yaml. 其实这也不是什么问题，因为yaml是json的超集，json本身就是一个合法的ya</description>
+      <description>&lt;p&gt;jsonnet最大的问题其实是：它支持的是json，而不是yaml. 其实这也不是什么问题，因为yaml是json的超集，json本身就是一个合法的yaml. 但是写起来需要将原来的yaml转成jsonnet，输出成yaml就更麻烦，需要在外围加上&lt;code&gt;std.YamlManifest()&lt;/code&gt;，这种侵入式的设计感觉很蛋疼。&lt;/p&gt;</description>
     </item>
     <item>
       <title>Jsonnet试用</title>
       <link>https://yiuterran.github.io/blog/posts/jsonnet%E8%AF%95%E7%94%A8/</link>
       <pubDate>Fri, 29 Dec 2023 10:21:59 +0800</pubDate>
       <guid>https://yiuterran.github.io/blog/posts/jsonnet%E8%AF%95%E7%94%A8/</guid>
-      <description>jsonnet这个语言很有意思，它存在的目的就是为了编辑配置。其实使用任何一门带有字符串模板的语言都能完成类似的目的，但是jsonnet的好处是它的封</description>
+      <description>&lt;p&gt;&lt;code&gt;jsonnet&lt;/code&gt;这个语言很有意思，它存在的目的就是为了编辑配置。其实使用任何一门带有字符串模板的语言都能完成类似的目的，但是&lt;code&gt;jsonnet&lt;/code&gt;的好处是它的封闭性：不要使用额外的依赖完成配置。&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

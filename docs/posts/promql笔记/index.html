@@ -79,11 +79,18 @@
 </script>
 
 
-<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu546329292729773971.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu16414047889438337432.png">
 
 <meta name="description"
-  content="格式 类似influxdb，prometheus也有自己的line protocol： &lt;--------------- metric ---------------------&gt;&lt;-timestamp -&gt;&lt;-value-&gt; &lt;---metric name---&gt;{labelname=labelvalue,....} http_request_total{status=&quot;200&quot;, method=&quot;GET&quot;}@1434417560938 =&gt; 94355 http_request_total{status=&quot;200&quot;, method=&quot;GET&quot;}@1434417561287 =&gt; 94334 上面就表示在某个时间戳系统http GET">
+  content="格式
+类似influxdb，prometheus也有自己的line protocol：
+&lt;--------------- metric ---------------------&gt;&lt;-timestamp -&gt;&lt;-value-&gt;
+&lt;---metric name---&gt;{labelname=labelvalue,....}
+http_request_total{status=&quot;200&quot;, method=&quot;GET&quot;}@1434417560938 =&gt; 94355
+http_request_total{status=&quot;200&quot;, method=&quot;GET&quot;}@1434417561287 =&gt; 94334
+
+上面就表示在某个时间戳系统http GET请求中200的数量。">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -125,7 +132,7 @@
             "url": "https://yiuterran.github.io/blog/images/icon.png"
         }
         },
-    "description": "格式 类似influxdb，prometheus也有自己的line protocol： \u0026lt;--------------- metric ---------------------\u0026gt;\u0026lt;-timestamp -\u0026gt;\u0026lt;-value-\u0026gt; \u0026lt;---metric name---\u0026gt;{labelname=labelvalue,....} http_request_total{status=\u0026quot;200\u0026quot;, method=\u0026quot;GET\u0026quot;}@1434417560938 =\u0026gt; 94355 http_request_total{status=\u0026quot;200\u0026quot;, method=\u0026quot;GET\u0026quot;}@1434417561287 =\u0026gt; 94334 上面就表示在某个时间戳系统http GET"
+    "description": "\u003ch2 id=\u0022格式\u0022\u003e格式\u003c\/h2\u003e\n\u003cp\u003e类似influxdb，prometheus也有自己的line protocol：\u003c\/p\u003e\n\u003cpre\u003e\u003ccode\u003e\u0026lt;--------------- metric ---------------------\u0026gt;\u0026lt;-timestamp -\u0026gt;\u0026lt;-value-\u0026gt;\n\u0026lt;---metric name---\u0026gt;{labelname=labelvalue,....}\nhttp_request_total{status=\u0026quot;200\u0026quot;, method=\u0026quot;GET\u0026quot;}@1434417560938 =\u0026gt; 94355\nhttp_request_total{status=\u0026quot;200\u0026quot;, method=\u0026quot;GET\u0026quot;}@1434417561287 =\u0026gt; 94334\n\u003c\/code\u003e\u003c\/pre\u003e\n\u003cp\u003e上面就表示在某个时间戳系统http GET请求中200的数量。\u003c\/p\u003e"
 }
 </script><meta property="og:title" content="PromQL笔记 | 应许之地" />
 <meta property="og:type" content="article" />
@@ -139,7 +146,14 @@
 
 
 
-<meta property="og:description" content="格式 类似influxdb，prometheus也有自己的line protocol： &lt;--------------- metric ---------------------&gt;&lt;-timestamp -&gt;&lt;-value-&gt; &lt;---metric name---&gt;{labelname=labelvalue,....} http_request_total{status=&quot;200&quot;, method=&quot;GET&quot;}@1434417560938 =&gt; 94355 http_request_total{status=&quot;200&quot;, method=&quot;GET&quot;}@1434417561287 =&gt; 94334 上面就表示在某个时间戳系统http GET" />
+<meta property="og:description" content="格式
+类似influxdb，prometheus也有自己的line protocol：
+&lt;--------------- metric ---------------------&gt;&lt;-timestamp -&gt;&lt;-value-&gt;
+&lt;---metric name---&gt;{labelname=labelvalue,....}
+http_request_total{status=&quot;200&quot;, method=&quot;GET&quot;}@1434417560938 =&gt; 94355
+http_request_total{status=&quot;200&quot;, method=&quot;GET&quot;}@1434417561287 =&gt; 94334
+
+上面就表示在某个时间戳系统http GET请求中200的数量。" />
 
 
 

@@ -79,8 +79,8 @@
 </script>
 
 
-<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu546329292729773971.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu16414047889438337432.png">
 
 <meta name="description"
   content="始于2022年初mbp2015归天之后...">
@@ -95,20 +95,32 @@
     "itemListElement":[{
             "@type":"ListItem",
             "position":  1 ,
-            "name": "Windows+wsl2后端开发环境搭建",
-            "description": "2023/11/16 Update: wsl2 2.0通过镜像网络解决了所有网络问题，已经不用折腾了。 2023/2/2 Update: wsl已经解决了systemd和网络问题，现在已经基本无障碍使用，移除了大部分无用的配",
-            "url": "https://yiuterran.github.io/blog/posts/windows+wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"
+            "name": "Zabbix配置记录",
+            "description": "\u003ch2 id=\"安装服务\"\u003e安装服务\u003c/h2\u003e\n\u003cp\u003e这里演示的是物理机环境监控场景，容器场景还是更推荐k8s+prom来搞。\u003c/p\u003e\n\u003cp\u003e版本是zabbix6.0 LTS，官方已经不提供CentOS7的安装包了，所以这里推荐使用docker安装，后面升级也比较方便。\u003c/p\u003e",
+            "url": "https://yiuterran.github.io/blog/posts/zabbix%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/"
         },{
             "@type":"ListItem",
             "position":  2 ,
-            "name": "Gb28181解析",
-            "description": "国标GB28181（以下简称国标或者gb）文档分析的文档我去年其实写过一版，但是由于原来的电脑炸了，文档还没来得及传上去就丢了（痛苦），所以还要重写一",
-            "url": "https://yiuterran.github.io/blog/posts/gb28181%E8%A7%A3%E6%9E%90/"
+            "name": "Golang定时器要点",
+            "description": "\u003cp\u003egolang内置的定时器是基于多个四叉堆封装调度的，增删定时器的效率是O(lgn)，所以大量定时器本身可能成为性能瓶颈。可以考虑使用开源的时间轮算法实现方案进行替换。不过一般情况下不需要考虑该问题，如果时间轮真的万能的话，官方肯定就重构了。\u003c/p\u003e",
+            "url": "https://yiuterran.github.io/blog/posts/golang%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A6%81%E7%82%B9/"
         },{
             "@type":"ListItem",
             "position":  3 ,
+            "name": "Windows+wsl2后端开发环境搭建",
+            "description": "\u003cp\u003e2023/11/16 Update: wsl2 2.0通过镜像网络解决了所有网络问题，已经不用折腾了。\u003c/p\u003e\n\u003cp\u003e2023/2/2 Update: wsl已经解决了systemd和网络问题，现在已经基本无障碍使用，移除了大部分无用的配置步骤。\u003c/p\u003e",
+            "url": "https://yiuterran.github.io/blog/posts/windows+wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"
+        },{
+            "@type":"ListItem",
+            "position":  4 ,
+            "name": "Gb28181解析",
+            "description": "\u003cp\u003e国标GB28181（以下简称国标或者gb）文档分析的文档我去年其实写过一版，但是由于原来的电脑炸了，文档还没来得及传上去就丢了（痛苦），所以还要重写一版做笔记。\u003c/p\u003e",
+            "url": "https://yiuterran.github.io/blog/posts/gb28181%E8%A7%A3%E6%9E%90/"
+        },{
+            "@type":"ListItem",
+            "position":  5 ,
             "name": "重新启程",
-            "description": "MBP2015 Late显卡坏了，这件事我处理的不好导致原来的数据都丢了。 就上上周在公司，出去忙了一会儿回来之后发现mbp休眠了，但是敲击键盘却无法唤醒。重启之后可",
+            "description": "\u003cp\u003eMBP2015 Late显卡坏了，这件事我处理的不好导致原来的数据都丢了。\u003c/p\u003e\n\u003cp\u003e就上上周在公司，出去忙了一会儿回来之后发现mbp休眠了，但是敲击键盘却无法唤醒。重启之后可以输入密码，但是没法进入桌面。\u003c/p\u003e",
             "url": "https://yiuterran.github.io/blog/posts/first-post/"
         }
     ]
@@ -144,7 +156,7 @@
 
 
 
-<meta property="og:updated_time" content="2024-05-18T17:53:43&#43;08:00" />
+<meta property="og:updated_time" content="2024-11-11T14:56:12&#43;08:00" />
 
 
 
@@ -238,11 +250,98 @@
   
   <div class="w-full ">
     <div class="prose">
+  <a href="https://yiuterran.github.io/blog/posts/zabbix%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/" class="no-underline">
+    <h3 class="mt-0">Zabbix配置记录</h3>
+  </a>
+  
+    安装服务 这里演示的是物理机环境监控场景，容器场景还是更推荐k8s&#43;prom来搞。
+版本是zabbix6.0 LTS，官方已经不提供CentOS7的安装包了，所以这里推荐使用docker安装，后面升级也比较方便。
+
+  
+
+  
+    <div
+  class="text-tertiary-text not-prose mt-2 flex flex-row flex-wrap items-center"
+>
+  <div class="me-6 my-2">
+    <i class="fas fa-calendar me-1"></i>
+    <span
+      >2022-07-13</span
+    >
+  </div>
+  <div class="me-6 my-2">
+    <i class="fas fa-clock me-1"></i>
+    <span>6分钟阅读时长</span>
+  </div>
+
+  
+
+  
+</div>
+
+  
+</div>
+
+  </div>
+
+  
+</div>
+  </div>
+  
+  <div class="py-6">
+    <div class="flex flex-col-reverse lg:flex-row justify-between">
+  
+  <div class="w-full ">
+    <div class="prose">
+  <a href="https://yiuterran.github.io/blog/posts/golang%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A6%81%E7%82%B9/" class="no-underline">
+    <h3 class="mt-0">Golang定时器要点</h3>
+  </a>
+  
+    golang内置的定时器是基于多个四叉堆封装调度的，增删定时器的效率是O(lgn)，所以大量定时器本身可能成为性能瓶颈。可以考虑使用开源的时间轮算法实现方案进行替换。不过一般情况下不需要考虑该问题，如果时间轮真的万能的话，官方肯定就重构了。
+
+  
+
+  
+    <div
+  class="text-tertiary-text not-prose mt-2 flex flex-row flex-wrap items-center"
+>
+  <div class="me-6 my-2">
+    <i class="fas fa-calendar me-1"></i>
+    <span
+      >2022-04-07</span
+    >
+  </div>
+  <div class="me-6 my-2">
+    <i class="fas fa-clock me-1"></i>
+    <span>2分钟阅读时长</span>
+  </div>
+
+  
+
+  
+</div>
+
+  
+</div>
+
+  </div>
+
+  
+</div>
+  </div>
+  
+  <div class="py-6">
+    <div class="flex flex-col-reverse lg:flex-row justify-between">
+  
+  <div class="w-full ">
+    <div class="prose">
   <a href="https://yiuterran.github.io/blog/posts/windows&#43;wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" class="no-underline">
     <h3 class="mt-0">Windows&#43;wsl2后端开发环境搭建</h3>
   </a>
   
-    2023/11/16 Update: wsl2 2.0通过镜像网络解决了所有网络问题，已经不用折腾了。 2023/2/2 Update: wsl已经解决了systemd和网络问题，现在已经基本无障碍使用，移除了大部分无用的配
+    2023/11/16 Update: wsl2 2.0通过镜像网络解决了所有网络问题，已经不用折腾了。
+2023/2/2 Update: wsl已经解决了systemd和网络问题，现在已经基本无障碍使用，移除了大部分无用的配置步骤。
+
   
 
   
@@ -292,7 +391,8 @@
     <h3 class="mt-0">Gb28181解析</h3>
   </a>
   
-    国标GB28181（以下简称国标或者gb）文档分析的文档我去年其实写过一版，但是由于原来的电脑炸了，文档还没来得及传上去就丢了（痛苦），所以还要重写一
+    国标GB28181（以下简称国标或者gb）文档分析的文档我去年其实写过一版，但是由于原来的电脑炸了，文档还没来得及传上去就丢了（痛苦），所以还要重写一版做笔记。
+
   
 
   
@@ -342,7 +442,9 @@
     <h3 class="mt-0">重新启程</h3>
   </a>
   
-    MBP2015 Late显卡坏了，这件事我处理的不好导致原来的数据都丢了。 就上上周在公司，出去忙了一会儿回来之后发现mbp休眠了，但是敲击键盘却无法唤醒。重启之后可
+    MBP2015 Late显卡坏了，这件事我处理的不好导致原来的数据都丢了。
+就上上周在公司，出去忙了一会儿回来之后发现mbp休眠了，但是敲击键盘却无法唤醒。重启之后可以输入密码，但是没法进入桌面。
+
   
 
   

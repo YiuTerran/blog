@@ -79,8 +79,8 @@
 </script>
 
 
-<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu546329292729773971.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu16414047889438337432.png">
 
 <meta name="description"
   content="始于2022年初mbp2015归天之后...">
@@ -118,7 +118,7 @@
 
 
 
-<meta property="og:updated_time" content="2024-05-18T17:53:43&#43;08:00" />
+<meta property="og:updated_time" content="2024-11-11T14:56:12&#43;08:00" />
 
 
 
@@ -269,11 +269,100 @@
   
   <div class="w-full ">
     <div class="prose">
+  <a href="https://yiuterran.github.io/blog/posts/typescript%E9%80%9F%E6%88%90/" class="no-underline">
+    <h3 class="mt-0">Typescript速成</h3>
+  </a>
+  
+    安装&amp;使用 npm install -g typscript tsc hello.ts 生成1个js文件。
+教程推荐：https://wangdoc.com/typescript/
+基础 使用let ok: boolean = false和let ok = new Boolean(1)不同，前者是基本类型，后者是对象。类似C#/Java中的装箱和拆箱。 可以用void标识函数的任意返回值类型； undefined和null是所有类型的子类型，默认情况下可以给任意类型（除了Object类型）； tsc编译时加上--strictNullChecks选项，可以让其只能赋给any/unknown类型； 内置类型：boolean, string, number, bigint, symbol，最后两个对应的类没法直接构造数据； 可以将变量声明为any，相当于使用js的弱类型；但是any会带来类型污染，可以用unknown类型代替，此时用之前需要判断类型，类似Go的interface{}必须switch x.(type)才能用一样，在ts里面就是if(typeof a == &#39;string&#39;)； never类型标识不可能存在的类型，不接受任何赋值（交叉类型时有点用）； 联合类型。类似Python，可以写出a|b，标识变量可以有多种类型； 值类型：值也可以作为一个类型，可以用来写枚举，let sex: 0| 1; 交叉类型：可以把两个interface合并； 使用type给类型取别名，type A=number|string； 使用typeof获取值的TypeScript类型，注意这里是类型而不是字符串； 但是ts兼容js的typeof用法，此时返回的是字符串。二者的区别是前者一般用于类型声明，编译之后就没了； 元组仍然使用中括号声明：const s:[string, string, boolean] = [&#39;a&#39;, &#39;b&#39;, true]，这就导致元组必须显式声明，否则会被推断为一个数组； 最后x个元组元素可以配置为可选的，方式是在类型尾部增加?； N个元素如果类型一样，可以用...接数组或者数组表示任意多个元素； 只读的值类型，可以作为元组使用，也可以作为数组使用，例如const arr=[1, 2] as const，此时arr的长度和类型都是固定的； symbol类型一般是给库作者使用的，普通用户用到的机会不大； 使用as进行类型转换，或者使用&lt;string&gt; p这种形式； 使用!后缀进行非空断言； 支持模板字符串，语法是```` 数组 格式为：let array: number[] = [1, 2, 3]； 也可以用泛型格式：let array: Array&lt;number&gt; = [1, 2, 3]； 甚至还可以用接口： interface NumberArray { [index: number]: number; } let array: NumberArray = [1, 2, 3]; 如果数组初始值是空数组，且没有声明类型，在向里面push元素时，会自动推断元素类型，此时可以放入不同类型的元素（推断为联合类型）。但是当初始值非空时，再push不同类型的元素会直接报错； const声明的数组和对象其实是可以改变元素的，需要使用readonly修饰类型：const arr: readonly number[] = [1, 2, 3]，此时数组是不可变的； 但是readonly和泛型数组是不兼容的； 函数 首先兼容js中的普通函数： function hello(txt: string):void{ console.log(&#39;hello&#39; &#43; txt); } 等价于： const hello: (txt:string)=&gt;void = function(txt){ //... } 注意这里参数名是必须写的，和C语言不一样。包括用type给函数取别名，也要带上参数名。当然实际用的时候的参数名，可以名字不一样。
+
+  
+
+  
+    <div
+  class="text-tertiary-text not-prose mt-2 flex flex-row flex-wrap items-center"
+>
+  <div class="me-6 my-2">
+    <i class="fas fa-calendar me-1"></i>
+    <span
+      >2024-11-11</span
+    >
+  </div>
+  <div class="me-6 my-2">
+    <i class="fas fa-clock me-1"></i>
+    <span>8分钟阅读时长</span>
+  </div>
+
+  
+
+  
+</div>
+
+  
+</div>
+
+  </div>
+
+  
+</div>
+</div>
+</div>
+
+<div class="mb-6">
+  <div class="bg-secondary-bg rounded border hover:shadow-lg transition ease-in-out duration-200 px-6 pt-6 pb-4">
+  <div class="flex flex-col-reverse lg:flex-row justify-between">
+  
+  <div class="w-full ">
+    <div class="prose">
+  <a href="https://yiuterran.github.io/blog/posts/%E5%9F%BA%E4%BA%8Eliteflow%E7%9A%84%E8%A7%84%E5%88%99%E5%BC%95%E6%93%8E%E8%AE%BE%E8%AE%A1/" class="no-underline">
+    <h3 class="mt-0">基于LiteFlow的规则引擎设计</h3>
+  </a>
+  
+
+  
+    <div
+  class="text-tertiary-text not-prose mt-2 flex flex-row flex-wrap items-center"
+>
+  <div class="me-6 my-2">
+    <i class="fas fa-calendar me-1"></i>
+    <span
+      >2024-10-24</span
+    >
+  </div>
+  <div class="me-6 my-2">
+    <i class="fas fa-clock me-1"></i>
+    <span>0分钟阅读时长</span>
+  </div>
+
+  
+
+  
+</div>
+
+  
+</div>
+
+  </div>
+
+  
+</div>
+</div>
+</div>
+
+<div class="mb-6">
+  <div class="bg-secondary-bg rounded border hover:shadow-lg transition ease-in-out duration-200 px-6 pt-6 pb-4">
+  <div class="flex flex-col-reverse lg:flex-row justify-between">
+  
+  <div class="w-full ">
+    <div class="prose">
   <a href="https://yiuterran.github.io/blog/posts/bpf%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="no-underline">
     <h3 class="mt-0">eBPF学习笔记</h3>
   </a>
   
-    eBPF的理论看起来有点抽象，实际上就是注册到内核的回调函数，可以拦截系统调用，然后用来完成自己的事情。 只是这个回调函数在内核空间只能用C来写，门槛还
+    eBPF的理论看起来有点抽象，实际上就是注册到内核的回调函数，可以拦截系统调用，然后用来完成自己的事情。
+只是这个回调函数在内核空间只能用C来写，门槛还是有点高的，除了C之外其他的语言可以写用户空间部分。
+
   
 
   
@@ -316,7 +405,9 @@
     <h3 class="mt-0">时序数据规则引擎设计思路</h3>
   </a>
   
-    规则引擎的大致组成包括： 触发条件：如某个设备某种消息在某个时间点内到达；或周期性，每隔多久触发一次； 触发响应：即触发条件后要做什么，一般是告警、通知、
+    规则引擎的大致组成包括：
+触发条件：如某个设备某种消息在某个时间点内到达；或周期性，每隔多久触发一次； 触发响应：即触发条件后要做什么，一般是告警、通知、联动其他设备、联动其他系统等； 边界情况：重复触发如何处理、回调频率控制等细节； 实现思路大致包括以下几种：
+
   
 
   
@@ -359,7 +450,9 @@
     <h3 class="mt-0">K8s应用调试技巧</h3>
   </a>
   
-    注意： 谨慎使用本文所述的工具，尤其是不要直接修改生产环境数据，风险自负！！！ rancher只读账号也可以登录服务pod的终端，而能登录到pod里就可以
+     注意： 谨慎使用本文所述的工具，尤其是不要直接修改生产环境数据，风险自负！！！
+rancher只读账号也可以登录服务pod的终端，而能登录到pod里就可以访问生产环境的所有组件。
+
   
 
   
@@ -375,92 +468,6 @@
   <div class="me-6 my-2">
     <i class="fas fa-clock me-1"></i>
     <span>3分钟阅读时长</span>
-  </div>
-
-  
-
-  
-</div>
-
-  
-</div>
-
-  </div>
-
-  
-</div>
-</div>
-</div>
-
-<div class="mb-6">
-  <div class="bg-secondary-bg rounded border hover:shadow-lg transition ease-in-out duration-200 px-6 pt-6 pb-4">
-  <div class="flex flex-col-reverse lg:flex-row justify-between">
-  
-  <div class="w-full ">
-    <div class="prose">
-  <a href="https://yiuterran.github.io/blog/posts/k3s%E5%AE%89%E8%A3%85%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/" class="no-underline">
-    <h3 class="mt-0">K3s安装注意事项</h3>
-  </a>
-  
-    k3s自带了containerd作为CRI实现，不过我们一般习惯上还是使用docker作为运行时。但是两者结合使用有一些坑，这里做一下记录。 不用con
-  
-
-  
-    <div
-  class="text-tertiary-text not-prose mt-2 flex flex-row flex-wrap items-center"
->
-  <div class="me-6 my-2">
-    <i class="fas fa-calendar me-1"></i>
-    <span
-      >2024-02-19</span
-    >
-  </div>
-  <div class="me-6 my-2">
-    <i class="fas fa-clock me-1"></i>
-    <span>9分钟阅读时长</span>
-  </div>
-
-  
-
-  
-</div>
-
-  
-</div>
-
-  </div>
-
-  
-</div>
-</div>
-</div>
-
-<div class="mb-6">
-  <div class="bg-secondary-bg rounded border hover:shadow-lg transition ease-in-out duration-200 px-6 pt-6 pb-4">
-  <div class="flex flex-col-reverse lg:flex-row justify-between">
-  
-  <div class="w-full ">
-    <div class="prose">
-  <a href="https://yiuterran.github.io/blog/posts/python%E6%8A%80%E6%9C%AF%E6%A0%88%E6%9B%B4%E6%96%B0/" class="no-underline">
-    <h3 class="mt-0">Python技术栈更新</h3>
-  </a>
-  
-    有段时间没用Python写工程了，基本都是写脚本，最近接了个活帮忙搞个爬虫相关项目，需要更新一下技术栈，做个笔记。 web开发：fastapi, 其实还可
-  
-
-  
-    <div
-  class="text-tertiary-text not-prose mt-2 flex flex-row flex-wrap items-center"
->
-  <div class="me-6 my-2">
-    <i class="fas fa-calendar me-1"></i>
-    <span
-      >2024-01-09</span
-    >
-  </div>
-  <div class="me-6 my-2">
-    <i class="fas fa-clock me-1"></i>
-    <span>4分钟阅读时长</span>
   </div>
 
   

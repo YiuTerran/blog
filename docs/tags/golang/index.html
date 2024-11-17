@@ -79,8 +79,8 @@
 </script>
 
 
-<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu546329292729773971.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu16414047889438337432.png">
 
 <meta name="description"
   content="始于2022年初mbp2015归天之后...">
@@ -111,31 +111,31 @@
             "@type":"ListItem",
             "position":  1 ,
             "name": "Sqlx备忘录",
-            "description": "很少用golang写增删改查，sqlx的用法和java差别很大，用的时候总是要从头看文档。这里写个备忘录方便以后查询，使用sqlx和go-sqlbui",
+            "description": "\u003cp\u003e很少用golang写增删改查，sqlx的用法和java差别很大，用的时候总是要从头看文档。这里写个备忘录方便以后查询，使用sqlx和go-sqlbuilder来完成增删改查。\u003c/p\u003e",
             "url": "https://yiuterran.github.io/blog/posts/sqlx%E5%A4%87%E5%BF%98%E5%BD%95/"
         },{
             "@type":"ListItem",
             "position":  2 ,
             "name": "Tinode源码解析",
-            "description": "概述 有朋友需要做一个im，简单做了一下技术调研，开源的实现其实蛮多的，这里挑几个说一下： Synapse/dendrite，matrix系，客户端比较多",
+            "description": "\u003ch2 id=\"概述\"\u003e概述\u003c/h2\u003e\n\u003cp\u003e有朋友需要做一个im，简单做了一下技术调研，\u003ca href=\"https://github.com/haiiiiiyun/awesome-selfhosted-cn#%E9%80%9A%E8%AE%AF%E7%B3%BB%E7%BB%9F\"\u003e开源的实现\u003c/a\u003e其实蛮多的，这里挑几个说一下：\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eSynapse/dendrite，matrix系，客户端比较多，比较推荐的应该是element.io. 稳定版本是python写的，性能很一般，golang/rust的服务端还没有stable，不建议使用；\u003c/li\u003e\n\u003cli\u003eTinode/chat: 即本文主角，golang编写，架构比较简单，有MySQL就能跑，轻量级方案。支持web/ios/android，界面长得比较像telegram；支持chatbot. 国内用有点水土不服，主要是推送等组件依赖国外大厂的服务(S3, Firebase等），国内根本连不上，需要自己改成个推之类的方案。由于方案比较轻量，消息可靠性上有一些缺陷，内置了chatbot支持（可以用Python写）；\u003c/li\u003e\n\u003cli\u003eOpen-IM-Server：据说是某个腾讯核心人员离职后自己开源的。服务端golang，架构基于微服务，有商业产品，自己试了一下目前版本大概有16个微服务，依赖kafka\u0026amp;zk、mysql、etcd、redis、miniIO和MongoDB。架构比较合理，早期是写扩散模型，v2.3之后群聊改为读扩散模型。主要问题是架构比较重，文档写的烂，需要自己分析代码，小团队维护比较吃力；另外客户端开源的只是demo，bug满天飞，不能直接拿来用。\u003c/li\u003e\n\u003cli\u003eturms-im/turms：java写的，读扩散模型。maintainer比较有自信，号称开源界最先进的方案，文档确实写的不错，很详细的技术分析。不过star数不多，实际使用者估计也寥寥。而且作者喜欢自研，Log/注册中心/配置中心这些都是自研的…有种自嗨过了头的感觉。整体来讲架构比较中庸，技术细节把控的比较好。java团队可以考虑，代码还比较易读，而且没有商业版，作者没有恰饭需求；客户端没有开源产品，只有sdk；\u003c/li\u003e\n\u003cli\u003ewildfirechat/im-server：也是java做的，主要卖商业版，开源的功能做的很全了，和国内生态也结合的蛮好。开源版强行指定了使用七牛云做文件夹存储，然后服务端端口强行指定了80/1883，另外开源版不支持集群模式；国内的小规模内部使用推荐使用该项目（\u0026lt;10w人）；\u003c/li\u003e\n\u003cli\u003eRocket.chat/mattermost：面向B端，类似zulip/Slack这种IM，有复杂B端需求的团队建议优先考虑。界面不太符合普通人使用im(qq/微信/钉钉)的习惯，办公人士用比较合适；\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003e这几个项目是客户端生态做的最好的了，基本能开箱即用。其他一些如goim之类的，没有客户端只有服务器，那还不如用mqtt自己写一个，毕竟有emqx这种高性能broker，写一个im真不算啥难事。聊天存储用influxdb或者MongoDB，元数据存MySQL。设计好推拉模型，读写扩散，消息时序，topic规则，一个基本的im软件还是能很快成型的。\u003c/p\u003e",
             "url": "https://yiuterran.github.io/blog/posts/tinode%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/"
         },{
             "@type":"ListItem",
             "position":  3 ,
             "name": "Ginkgo使用笔记",
-            "description": "go自带的单元测试比较适合测一个小函数，如果要做一系列的流程测试，则显得较为繁琐。 推荐使用ginkgo来做流程测试，BDD风格写出来的测试代码非常容易",
+            "description": "\u003cp\u003ego自带的单元测试比较适合测一个小函数，如果要做一系列的流程测试，则显得较为繁琐。\u003c/p\u003e\n\u003cp\u003e推荐使用\u003ccode\u003eginkgo\u003c/code\u003e来做流程测试，BDD风格写出来的测试代码非常容易读懂和维护。\u003c/p\u003e",
             "url": "https://yiuterran.github.io/blog/posts/ginkgo%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/"
         },{
             "@type":"ListItem",
             "position":  4 ,
             "name": "Influxdb Cluster集成",
-            "description": "本文记录在golang项目中集成influxdb-cluster需要的知识储备。 术语 database 和MySQL中一致 batch \\n分割的多行数据，用来批量写入。 influ",
+            "description": "\u003cp\u003e本文记录在golang项目中集成\u003ccode\u003einfluxdb-cluster\u003c/code\u003e需要的知识储备。\u003c/p\u003e\n\u003ch2 id=\"术语\"\u003e术语\u003c/h2\u003e\n\u003ch3 id=\"database\"\u003edatabase\u003c/h3\u003e\n\u003cp\u003e和MySQL中一致\u003c/p\u003e\n\u003ch3 id=\"batch\"\u003ebatch\u003c/h3\u003e\n\u003cp\u003e\u003ccode\u003e\\n\u003c/code\u003e分割的多行数据，用来批量写入。\u003c/p\u003e\n\u003cp\u003einfluxDB推荐5000~10000个点批量写入以提高性能。\u003c/p\u003e",
             "url": "https://yiuterran.github.io/blog/posts/influxdb-cluster%E9%9B%86%E6%88%90/"
         },{
             "@type":"ListItem",
             "position":  5 ,
             "name": "Golang定时器要点",
-            "description": "golang内置的定时器是基于多个四叉堆封装调度的，增删定时器的效率是O(lgn)，所以大量定时器本身可能成为性能瓶颈。可以考虑使用开源的时间轮算法实",
+            "description": "\u003cp\u003egolang内置的定时器是基于多个四叉堆封装调度的，增删定时器的效率是O(lgn)，所以大量定时器本身可能成为性能瓶颈。可以考虑使用开源的时间轮算法实现方案进行替换。不过一般情况下不需要考虑该问题，如果时间轮真的万能的话，官方肯定就重构了。\u003c/p\u003e",
             "url": "https://yiuterran.github.io/blog/posts/golang%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A6%81%E7%82%B9/"
         }
     ]
@@ -269,7 +269,8 @@
     <h3 class="mt-0">Sqlx备忘录</h3>
   </a>
   
-    很少用golang写增删改查，sqlx的用法和java差别很大，用的时候总是要从头看文档。这里写个备忘录方便以后查询，使用sqlx和go-sqlbui
+    很少用golang写增删改查，sqlx的用法和java差别很大，用的时候总是要从头看文档。这里写个备忘录方便以后查询，使用sqlx和go-sqlbuilder来完成增删改查。
+
   
 
   
@@ -310,7 +311,9 @@
     <h3 class="mt-0">Tinode源码解析</h3>
   </a>
   
-    概述 有朋友需要做一个im，简单做了一下技术调研，开源的实现其实蛮多的，这里挑几个说一下： Synapse/dendrite，matrix系，客户端比较多
+    概述 有朋友需要做一个im，简单做了一下技术调研，开源的实现其实蛮多的，这里挑几个说一下：
+Synapse/dendrite，matrix系，客户端比较多，比较推荐的应该是element.io. 稳定版本是python写的，性能很一般，golang/rust的服务端还没有stable，不建议使用； Tinode/chat: 即本文主角，golang编写，架构比较简单，有MySQL就能跑，轻量级方案。支持web/ios/android，界面长得比较像telegram；支持chatbot. 国内用有点水土不服，主要是推送等组件依赖国外大厂的服务(S3, Firebase等），国内根本连不上，需要自己改成个推之类的方案。由于方案比较轻量，消息可靠性上有一些缺陷，内置了chatbot支持（可以用Python写）； Open-IM-Server：据说是某个腾讯核心人员离职后自己开源的。服务端golang，架构基于微服务，有商业产品，自己试了一下目前版本大概有16个微服务，依赖kafka&amp;zk、mysql、etcd、redis、miniIO和MongoDB。架构比较合理，早期是写扩散模型，v2.3之后群聊改为读扩散模型。主要问题是架构比较重，文档写的烂，需要自己分析代码，小团队维护比较吃力；另外客户端开源的只是demo，bug满天飞，不能直接拿来用。 turms-im/turms：java写的，读扩散模型。maintainer比较有自信，号称开源界最先进的方案，文档确实写的不错，很详细的技术分析。不过star数不多，实际使用者估计也寥寥。而且作者喜欢自研，Log/注册中心/配置中心这些都是自研的…有种自嗨过了头的感觉。整体来讲架构比较中庸，技术细节把控的比较好。java团队可以考虑，代码还比较易读，而且没有商业版，作者没有恰饭需求；客户端没有开源产品，只有sdk； wildfirechat/im-server：也是java做的，主要卖商业版，开源的功能做的很全了，和国内生态也结合的蛮好。开源版强行指定了使用七牛云做文件夹存储，然后服务端端口强行指定了80/1883，另外开源版不支持集群模式；国内的小规模内部使用推荐使用该项目（&lt;10w人）； Rocket.chat/mattermost：面向B端，类似zulip/Slack这种IM，有复杂B端需求的团队建议优先考虑。界面不太符合普通人使用im(qq/微信/钉钉)的习惯，办公人士用比较合适； 这几个项目是客户端生态做的最好的了，基本能开箱即用。其他一些如goim之类的，没有客户端只有服务器，那还不如用mqtt自己写一个，毕竟有emqx这种高性能broker，写一个im真不算啥难事。聊天存储用influxdb或者MongoDB，元数据存MySQL。设计好推拉模型，读写扩散，消息时序，topic规则，一个基本的im软件还是能很快成型的。
+
   
 
   
@@ -351,7 +354,9 @@
     <h3 class="mt-0">Ginkgo使用笔记</h3>
   </a>
   
-    go自带的单元测试比较适合测一个小函数，如果要做一系列的流程测试，则显得较为繁琐。 推荐使用ginkgo来做流程测试，BDD风格写出来的测试代码非常容易
+    go自带的单元测试比较适合测一个小函数，如果要做一系列的流程测试，则显得较为繁琐。
+推荐使用ginkgo来做流程测试，BDD风格写出来的测试代码非常容易读懂和维护。
+
   
 
   
@@ -392,7 +397,11 @@
     <h3 class="mt-0">Influxdb Cluster集成</h3>
   </a>
   
-    本文记录在golang项目中集成influxdb-cluster需要的知识储备。 术语 database 和MySQL中一致 batch \n分割的多行数据，用来批量写入。 influ
+    本文记录在golang项目中集成influxdb-cluster需要的知识储备。
+术语 database 和MySQL中一致
+batch \n分割的多行数据，用来批量写入。
+influxDB推荐5000~10000个点批量写入以提高性能。
+
   
 
   
@@ -433,7 +442,8 @@
     <h3 class="mt-0">Golang定时器要点</h3>
   </a>
   
-    golang内置的定时器是基于多个四叉堆封装调度的，增删定时器的效率是O(lgn)，所以大量定时器本身可能成为性能瓶颈。可以考虑使用开源的时间轮算法实
+    golang内置的定时器是基于多个四叉堆封装调度的，增删定时器的效率是O(lgn)，所以大量定时器本身可能成为性能瓶颈。可以考虑使用开源的时间轮算法实现方案进行替换。不过一般情况下不需要考虑该问题，如果时间轮真的万能的话，官方肯定就重构了。
+
   
 
   

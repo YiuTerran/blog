@@ -15,7 +15,7 @@
       <link>https://yiuterran.github.io/blog/posts/cmake%E9%80%9F%E8%AE%B0/</link>
       <pubDate>Mon, 09 Jan 2023 16:42:44 +0800</pubDate>
       <guid>https://yiuterran.github.io/blog/posts/cmake%E9%80%9F%E8%AE%B0/</guid>
-      <description>主要参考书籍《Modern CMake for C++》，以及《CMake Best Practices》，使用CMake版本3.25. 建议先看第一本，再看第二本。 使用 一般而言，</description>
+      <description>&lt;p&gt;主要参考书籍《Modern CMake for C++》，以及《CMake Best Practices》，使用CMake版本3.25.&lt;/p&gt;&#xA;&lt;p&gt;建议先看第一本，再看第二本。&lt;/p&gt;&#xA;&lt;h2 id=&#34;使用&#34;&gt;使用&lt;/h2&gt;&#xA;&lt;p&gt;一般而言，cmake的使用方式非常简单。在命令行下使用&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>
