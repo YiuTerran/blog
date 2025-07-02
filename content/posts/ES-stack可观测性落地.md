@@ -143,12 +143,48 @@ cat password.txt
 
 将上面的token换成真实token即可。
 
+## 第二次启动
+
+除了第一个节点外，其他容器节点无法重启。这是因为ES设计的有问题，ENROLLMENT_TOKEN只能在第一次启动时作为参数。
+
+第二次启动时，在第一个节点宿主机上使用docker cp elastic1:/usr/share/elasticsearch/config . 将配置文件复制出来。
+
+将配置文件传到其他节点，放置在data同目录下，修改config/elasticsearch.yml中的内容，删除或者注释掉cluster.initial_master_nodes所在行。
+
+使用如下脚本启动：
+
+```bash
+#!/usr/bin/env bash
+version=8.15.0
+name='elastic2'
+chown -Rh 1000:root data/
+ 
+docker run -itd \
+    --name $name \
+    --restart always \
+    -p 9200:9200 \
+    -p 9300:9300 \
+    -e 'network.host=0.0.0.0' \
+    -e 'network.publish_host=<节点IP>' \
+    -e 'discovery.seed_hosts=172.19.3.209,172.19.3.210,172.19.3.211' \
+    -m 4GB \
+    -v $(pwd)/data:/usr/share/elasticsearch/data \
+    -v $(pwd)/config:/usr/share/elasticsearch/config \
+    -v $(pwd)/crack/x-pack-core-$version.crack.jar:/usr/share/elasticsearch/modules/x-pack-core/x-pack-core-$version.jar \
+    elasticsearch:$version
+```
+
+注意这里删除了ENROLLMENT_TOKEN的环境变量，增加了discovery.seed_hosts，对应的值是集群所有节点的ip。
+
+之后再重启，就没有问题了。
+
+**理论上也可以直接使用这个方案加入节点，而不使用ENROLLMENT_TOKEN，不过没有尝试过。**
+
 ## 注意事项
 
-1. 上面的节点启动之后，重启容器会报错，这是因为ENROLLMENT_TOKEN只有第一次启动需要，后面再启动就可以删掉这个参数了。
-2. 可以删除掉data文件夹下的内容，使用`ENROLLMENT_TOKEN`重新加入节点。
-3. 可以通过增加环境变量修改`elasticsearch.yml`中的配置，方法是将所有字母变成大写，`.`变为`_`，`_`变成`__`，如：`k1.k2.k_3`对应的环境变量就是：`K1_K2_K__3`，和emqx的环境变量配置方式比较像。
-4. 如果要重置密码，可以使用`elasticsearch-reset-password`工具。
+1. 如果要重置密码，可以使用`elasticsearch-reset-password`工具。
+2. 可以通过增加环境变量修改`elasticsearch.yml`中的配置，方法是将所有字母变成大写，`.`变为`_`，`_`变成`__`，如：`k1.k2.k_3`对应的环境变量就是：`K1_K2_K__3`，和emqx的环境变量配置方式比较像。
+3. 如果要重置密码，可以使用`elasticsearch-reset-password`工具。
 
 ## Kibana部分
 
@@ -170,8 +206,6 @@ kibana的启动方式类似加入集群的节点，但是有一些需要额外�
          -e "XPACK_REPORTING_ENCRYPTIONKEY=<key2>" \
          -e "XPACK_SECURITY_ENCRYPTIONKEY=<key3>" \
          -e "I18N_LOCALE=zh-CN" \
-         -v "$(pwd)/config:/usr/share/kibana/config \
-         -v "$(pwd)/data:/usr/share/kibana/data" \
          -m 2GB \
          kibana:$version
 ```
@@ -190,7 +224,7 @@ Fleet Server是接受Elastic Agent或者各种Beat发送过来的数据并存储
 
 MetricBeats等beats工具则比较轻量一些，可以直接传输数据到ES，不过此类工具就无法通过kibana直接进行配置升级等管理了。
 
-这里还是先使用Agent+Fleet的方式安装，方便后续升级管理。在kibana的`Management-Fleet页面上点击“添加Fleet服务器”即可添加代理服务。`
+这里还是先使用Agent+Fleet的方式安装，方便后续升级管理。在kibana的Management-Fleet页面上点击“添加Fleet服务器”即可添加代理服务。
 
 在此之前需要准备fleet-server通信用的HTTPS证书（**如果全部是内网监控，也可以使用`–insecure`参数跳过TLS认证，这样就没必要安装证书了**）。
 
@@ -495,7 +529,7 @@ ES的查询语法是复杂的JSON，直接在界面上不方便使用，所以ki
 
 ## 安装Elastic APM
 
-这里的APM其实指的是Trace系统，通过Fleet直接绑定集成就可以。
+这里的APM其实指的是Trace系统，通过Fleet直接绑定集成就可以。需要注意apm采集会影响应用程序的性能，如果部署规模不是很大，不太建议集成。
 
 推荐使用OpenTelemetry的Agent进行Export，方便将来迁移到其他平台。
 
