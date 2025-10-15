@@ -24,7 +24,7 @@ enableEmoji = true
 # otherwise it returns the section with the most pages.
 mainSections = ["posts"]
 
-publishDir = "docs"
+#publishDir = "docs"
 buildDrafts = false
 buildFuture = false
 buildExpired = false
