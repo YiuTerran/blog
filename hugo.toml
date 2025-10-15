@@ -360,7 +360,6 @@ home = [
 ]
 page = [
   "html",
-  "markdown"
 ]
 section = [
   "html",
@@ -1101,20 +1100,20 @@ fontawesome = true
 # license info (HTML format is supported)
 license = '<a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a>'
 # whether to show link to Raw Markdown content of the post
-linkToMarkdown = true
+linkToMarkdown = false
 # FixIt 0.3.0 | NEW whether to show link to view source code of the post
-linkToSource = true
+linkToSource = false
 # FixIt 0.3.0 | NEW whether to show link to edit the post
-linkToEdit = true
+linkToEdit = false
 # FixIt 0.3.0 | NEW whether to show link to report issue for the post
-linkToReport = true
+linkToReport = false
 # FixIt 0.3.20 | NEW whether to show link to view the post in VSCode
-linkToVscode = true
+linkToVscode = false
 # FixIt 0.3.10 | CHANGED Page style ["narrow", "normal", "wide", ...]
 pageStyle = "normal"
 # FixIt 0.2.17 | CHANGED Auto Bookmark Support
 # If true, save the reading progress when closing the page.
-autoBookmark = false
+autoBookmark = true
 # FixIt 0.2.17 | NEW whether to enable wordCount
 wordCount = true
 # FixIt 0.2.17 | NEW whether to enable readingTime
@@ -1145,8 +1144,8 @@ auto = true
 position = "right"
 # FixIt 0.3.12 | NEW supersede `markup.tableOfContents` settings
 ordered = false
-startLevel = 1
-endLevel = 3
+startLevel = 2
+endLevel = 4
 # FixIt 0.4.0 | NEW whether to decrease the H1 heading level in content
 decreaseH1 = false
 

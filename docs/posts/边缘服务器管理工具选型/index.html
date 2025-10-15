@@ -10,7 +10,7 @@
   <meta itemprop="name" content="边缘服务器管理工具选型">
   <meta itemprop="description" content="这里我们主要的需求是能够穿透内网管理服务器，服务器大部分情况下应当是linux，但是也可能是windows。我们的服务要通过API和这个服务器管理软件进行交互，也就是说要做二次开发，不能直接用。">
   <meta itemprop="datePublished" content="2023-03-06T14:37:28+08:00">
-  <meta itemprop="dateModified" content="2023-03-07T20:00:59+08:00">
+  <meta itemprop="dateModified" content="2025-10-15T15:01:59+08:00">
   <meta itemprop="wordCount" content="1723">
   <meta itemprop="keywords" content="Edge,Devops"><meta property="og:url" content="https://yiuterran.github.io/blogs/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/">
   <meta property="og:site_name" content="思海沉钩">
@@ -20,7 +20,7 @@
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
     <meta property="article:published_time" content="2023-03-06T14:37:28+08:00">
-    <meta property="article:modified_time" content="2023-03-07T20:00:59+08:00">
+    <meta property="article:modified_time" content="2025-10-15T15:01:59+08:00">
     <meta property="article:tag" content="Edge">
     <meta property="article:tag" content="Devops">
 
@@ -30,7 +30,7 @@
 <meta name="application-name" content="思海沉钩">
 <meta name="apple-mobile-web-app-title" content="思海沉钩"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/blogs/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/blogs/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/blogs/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/blogs/apple-touch-icon.png"><link rel="mask-icon" href="/blogs/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="https://yiuterran.github.io/blogs/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/" title="边缘服务器管理工具选型 - 思海沉钩" /><link rel="prev" type="text/html" href="https://yiuterran.github.io/blogs/posts/kotlin%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/" title="Kotlin要点笔记" /><link rel="next" type="text/html" href="https://yiuterran.github.io/blogs/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/" title="K3s存储插件使用笔记" /><link rel="alternate" type="text/markdown" href="https://yiuterran.github.io/blogs/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/index.md" title="边缘服务器管理工具选型 - 思海沉钩"><link rel="stylesheet" href="/blogs/css/config.min.css"><link rel="stylesheet" href="/blogs/css/style.min.css"><link rel="preload" href="/blogs/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <link rel="icon" type="image/png" sizes="16x16" href="/blogs/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/blogs/apple-touch-icon.png"><link rel="mask-icon" href="/blogs/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="https://yiuterran.github.io/blogs/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/" title="边缘服务器管理工具选型 - 思海沉钩" /><link rel="prev" type="text/html" href="https://yiuterran.github.io/blogs/posts/kotlin%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/" title="Kotlin要点笔记" /><link rel="next" type="text/html" href="https://yiuterran.github.io/blogs/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/" title="K3s存储插件使用笔记" /><link rel="stylesheet" href="/blogs/css/config.min.css"><link rel="stylesheet" href="/blogs/css/style.min.css"><link rel="preload" href="/blogs/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/blogs/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/blogs/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/blogs/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
   {
@@ -42,7 +42,7 @@
       "@type": "WebPage",
       "@id": "https:\/\/yiuterran.github.io\/blogs\/posts\/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B\/"
     },"genre": "posts","keywords": "edge, devops","wordcount":  1723 ,
-    "url": "https:\/\/yiuterran.github.io\/blogs\/posts\/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B\/","datePublished": "2023-03-06T14:37:28+08:00","dateModified": "2023-03-07T20:00:59+08:00","publisher": {
+    "url": "https:\/\/yiuterran.github.io\/blogs\/posts\/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B\/","datePublished": "2023-03-06T14:37:28+08:00","dateModified": "2025-10-15T15:01:59+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
         "@type": "Person",
@@ -115,7 +115,7 @@
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>边缘服务器管理工具选型</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://gravatar.com/afxmessagebox" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img class="avatar" src='https://avatars.githubusercontent.com/u/5930695?v=4' alt="tryao" height="16" width="16">&nbsp;tryao</a></span></div><div class="post-meta-line"><span title="发布于 2023-03-06 14:37:28"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2023-03-06">2023-03-06</time></span>&nbsp;<span title="更新于 2023-03-07 20:00:59"><i class="fa-regular fa-calendar-check fa-fw me-1" aria-hidden="true"></i><time datetime="2023-03-07">2023-03-07</time></span>&nbsp;<span title="1723 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 1800 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 4 分钟</span>&nbsp;</div>
+      <div class="post-meta-line"><span class="post-author"><a href="https://gravatar.com/afxmessagebox" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img class="avatar" src='https://avatars.githubusercontent.com/u/5930695?v=4' alt="tryao" height="16" width="16">&nbsp;tryao</a></span></div><div class="post-meta-line"><span title="发布于 2023-03-06 14:37:28"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2023-03-06">2023-03-06</time></span>&nbsp;<span title="更新于 2025-10-15 15:01:59"><i class="fa-regular fa-calendar-check fa-fw me-1" aria-hidden="true"></i><time datetime="2025-10-15">2025-10-15</time></span>&nbsp;<span title="1723 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 1800 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 4 分钟</span>&nbsp;</div>
     </div><div class="content" id="content"><p>这里我们主要的需求是能够穿透内网管理服务器，服务器大部分情况下应当是linux，但是也可能是windows。我们的服务要通过API和这个服务器管理软件进行交互，也就是说要做二次开发，不能直接用。</p>
 <p>刚开始调研的是<a href="https://rport.io/"target="_blank" rel="external nofollow noopener noreferrer">rport</a>，不太成熟，主要有几个问题：</p>
 <ol>
@@ -157,11 +157,11 @@
 </div><div class="post-footer" id="post-footer">
   <div class="post-info">
     <div class="post-info-line">
-      <div class="post-info-mod"><span title="更新于 2023-03-07 20:00:59">更新于 2023-03-07&nbsp;<a class="git-hash" href="YiuTerran/blog/commit/b8a9f2c86304a7b8379316c2e1dcfc91d3743d27" rel="external nofollow noopener noreferrer" target="_blank" title="fix: some desc change&#10&#10Commit: b8a9f2c86304a7b8379316c2e1dcfc91d3743d27 [b8a9f2c]&#10Author: tryao&#10Date: 2023-03-07 20:00:59"><i class="fa-solid fa-hashtag fa-fw" aria-hidden="true"></i>b8a9f2c</a></span>
+      <div class="post-info-mod"><span title="更新于 2025-10-15 15:01:59">更新于 2025-10-15&nbsp;<a class="git-hash" href="YiuTerran/blog/commit/151e6a599de6497ce95f669d90f63f596a52a2c9" rel="external nofollow noopener noreferrer" target="_blank" title="update theme&#10&#10Commit: 151e6a599de6497ce95f669d90f63f596a52a2c9 [151e6a5]&#10Author: 姚泰然&#10Date: 2025-10-15 15:01:59&#10Commit Date: 2025-10-15 15:02:21"><i class="fa-solid fa-hashtag fa-fw" aria-hidden="true"></i>151e6a5</a></span>
       </div><div class="post-info-license">
             <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
           </div></div><div class="post-info-line">
-        <div class="post-info-md"><span><a href="/blogs/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="YiuTerran/blog/blob/monolingual/content/posts/%e8%be%b9%e7%bc%98%e6%9c%8d%e5%8a%a1%e5%99%a8%e7%ae%a1%e7%90%86%e5%b7%a5%e5%85%b7%e9%80%89%e5%9e%8b.md?plain=1" title="查看源码" class="link-to-source">查看源码</a></span><span><a href="YiuTerran/blog/edit/monolingual/content/posts/%e8%be%b9%e7%bc%98%e6%9c%8d%e5%8a%a1%e5%99%a8%e7%ae%a1%e7%90%86%e5%b7%a5%e5%85%b7%e9%80%89%e5%9e%8b.md" title="编辑此页" class="link-to-edit">编辑此页</a></span><span><a href="YiuTerran/blog/issues/new?title=[BUG]%20%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B&amp;body=%7cField%7cValue%7c%0A%7c-%7c-%7c%0A%7cTitle%7c%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B%7c%0A%7cURL%7chttps://yiuterran.github.io/blogs/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/%7c%0A%7cFilename%7cYiuTerran/blog/blob/monolingual/content/posts/%e8%be%b9%e7%bc%98%e6%9c%8d%e5%8a%a1%e5%99%a8%e7%ae%a1%e7%90%86%e5%b7%a5%e5%85%b7%e9%80%89%e5%9e%8b.md?plain=1%7c" title="报告问题" class="link-to-report">报告问题</a></span></div>
+        <div class="post-info-md"></div>
         <div class="post-info-share">
           <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://yiuterran.github.io/blogs/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/" data-title="边缘服务器管理工具选型" data-hashtags="edge,devops"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
   <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://yiuterran.github.io/blogs/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/" data-hashtag="edge"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>

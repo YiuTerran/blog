@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head><script src="/blogs/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=blogs/livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>边缘应用托管方案设计 - 思海沉钩</title><meta name="author" content="tryao">
+<meta name="description" content="需求与现状 我们需要一套方案，来解决边侧应用部署的问题。这不仅仅包括边缘网关，同时还应包括独立部署整个iot平台，以及任意第三方服务。当然，除了部署之外，还有权限隔离、运行监测（可观测性）和远程调试等常见的需求。目前来说，我们不需要考虑边缘端服务器配置轻量化需求，所以后面略去了这部分的考量。
+"><meta name="keywords" content='edge, design'>
+  <meta itemprop="name" content="边缘应用托管方案设计">
+  <meta itemprop="description" content="需求与现状 我们需要一套方案，来解决边侧应用部署的问题。这不仅仅包括边缘网关，同时还应包括独立部署整个iot平台，以及任意第三方服务。当然，除了部署之外，还有权限隔离、运行监测（可观测性）和远程调试等常见的需求。目前来说，我们不需要考虑边缘端服务器配置轻量化需求，所以后面略去了这部分的考量。">
+  <meta itemprop="datePublished" content="2023-02-22T09:12:59+08:00">
+  <meta itemprop="dateModified" content="2025-10-15T15:01:59+08:00">
+  <meta itemprop="wordCount" content="8491">
+  <meta itemprop="keywords" content="Edge,Design"><meta property="og:url" content="http://localhost:1313/blogs/posts/%E8%BE%B9%E7%BC%98%E5%BA%94%E7%94%A8%E6%89%98%E7%AE%A1%E6%96%B9%E6%A1%88%E8%AE%BE%E8%AE%A1/">
+  <meta property="og:site_name" content="思海沉钩">
+  <meta property="og:title" content="边缘应用托管方案设计">
+  <meta property="og:description" content="需求与现状 我们需要一套方案，来解决边侧应用部署的问题。这不仅仅包括边缘网关，同时还应包括独立部署整个iot平台，以及任意第三方服务。当然，除了部署之外，还有权限隔离、运行监测（可观测性）和远程调试等常见的需求。目前来说，我们不需要考虑边缘端服务器配置轻量化需求，所以后面略去了这部分的考量。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2023-02-22T09:12:59+08:00">
+    <meta property="article:modified_time" content="2025-10-15T15:01:59+08:00">
+    <meta property="article:tag" content="Edge">
+    <meta property="article:tag" content="Design">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="边缘应用托管方案设计">
+  <meta name="twitter:description" content="需求与现状 我们需要一套方案，来解决边侧应用部署的问题。这不仅仅包括边缘网关，同时还应包括独立部署整个iot平台，以及任意第三方服务。当然，除了部署之外，还有权限隔离、运行监测（可观测性）和远程调试等常见的需求。目前来说，我们不需要考虑边缘端服务器配置轻量化需求，所以后面略去了这部分的考量。">
+<meta name="application-name" content="思海沉钩">
+<meta name="apple-mobile-web-app-title" content="思海沉钩"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/blogs/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/blogs/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/blogs/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/blogs/apple-touch-icon.png"><link rel="mask-icon" href="/blogs/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/blogs/posts/%E8%BE%B9%E7%BC%98%E5%BA%94%E7%94%A8%E6%89%98%E7%AE%A1%E6%96%B9%E6%A1%88%E8%AE%BE%E8%AE%A1/" title="边缘应用托管方案设计 - 思海沉钩" /><link rel="prev" type="text/html" href="http://localhost:1313/blogs/posts/kubeedge%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/" title="KubeEdge要点笔记" /><link rel="next" type="text/html" href="http://localhost:1313/blogs/posts/kotlin%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/" title="Kotlin要点笔记" /><link rel="stylesheet" href="/blogs/css/config.min.css"><link rel="stylesheet" href="/blogs/css/style.min.css"><link rel="preload" href="/blogs/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/blogs/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/blogs/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/blogs/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "边缘应用托管方案设计",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/blogs\/posts\/%E8%BE%B9%E7%BC%98%E5%BA%94%E7%94%A8%E6%89%98%E7%AE%A1%E6%96%B9%E6%A1%88%E8%AE%BE%E8%AE%A1\/"
+    },"genre": "posts","keywords": "edge, design","wordcount":  8491 ,
+    "url": "http:\/\/localhost:1313\/blogs\/posts\/%E8%BE%B9%E7%BC%98%E5%BA%94%E7%94%A8%E6%89%98%E7%AE%A1%E6%96%B9%E6%A1%88%E8%AE%BE%E8%AE%A1\/","datePublished": "2023-02-22T09:12:59+08:00","dateModified": "2025-10-15T15:01:59+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "tryao"
+      },"description": ""
+  }
+  </script><script src="/blogs/js/head/color-scheme.min.js"></script></head>
+  <body data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="wide"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/blogs/" title="思海沉钩"><span class="header-title-text">思海沉钩</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/blogs/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item">
+              <a class="menu-link" href="/blogs/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item">
+              <a class="menu-link" href="/blogs/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+              <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch" title="切换主题">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/blogs/" title="思海沉钩"><span class="header-title-text">思海沉钩</span></a><span class="header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+              </span>
+            </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li class="menu-item"><a class="menu-link" href="/blogs/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item"><a class="menu-link" href="/blogs/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item"><a class="menu-link" href="/blogs/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item menu-system">
+          <span class="menu-system-item theme-switch" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
+      </ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>边缘应用托管方案设计</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://gravatar.com/afxmessagebox" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img class="avatar" src='https://avatars.githubusercontent.com/u/5930695?v=4' alt="tryao" height="16" width="16">&nbsp;tryao</a></span></div><div class="post-meta-line"><span title="发布于 2023-02-22 09:12:59"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2023-02-22">2023-02-22</time></span>&nbsp;<span title="更新于 2025-10-15 15:01:59"><i class="fa-regular fa-calendar-check fa-fw me-1" aria-hidden="true"></i><time datetime="2025-10-15">2025-10-15</time></span>&nbsp;<span title="8491 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 8500 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 17 分钟</span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#需求与现状">需求与现状</a></li>
+    <li><a href="#统一托管方案">统一托管方案</a>
+      <ul>
+        <li><a href="#裸机部署">裸机部署</a></li>
+        <li><a href="#容器部署">容器部署</a></li>
+        <li><a href="#k8s部署">k8s部署</a>
+          <ul>
+            <li><a href="#k3srancherportainer">k3s+rancher/portainer</a></li>
+            <li><a href="#k8skubeedge">k8s+KubeEdge</a></li>
+            <li><a href="#k8sopenyurt方案">k8s+OpenYurt方案</a></li>
+            <li><a href="#总结">总结</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#应用交付方案">应用交付方案</a>
+      <ul>
+        <li><a href="#oam模型">OAM模型</a></li>
+      </ul>
+    </li>
+    <li><a href="#大规模部署方案">大规模部署方案</a></li>
+    <li><a href="#方案落地流程">方案落地流程</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><h2 class="heading-element" id="需求与现状"><span>需求与现状</span>
+  <a href="#%e9%9c%80%e6%b1%82%e4%b8%8e%e7%8e%b0%e7%8a%b6" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>我们需要一套方案，来解决边侧应用部署的问题。这不仅仅包括边缘网关，同时还应包括独立部署整个iot平台，以及任意第三方服务。当然，除了部署之外，还有<strong>权限隔离</strong>、<strong>运行监测</strong>（可观测性）和<strong>远程调试</strong>等常见的需求。目前来说，我们<strong>不需要</strong>考虑边缘端服务器配置轻量化需求，所以后面略去了这部分的考量。</p>
+<p>目前，IoT云测服务运行于阿里云托管的k8s中，相关权限在运维手中。跟院里大部分服务一样，IoT整体架构并不强依赖于k8s，而是使用了SpringCloud等框架，换句话来说，并没有云原生化。特别地，视频云服务使用了大量UDP based（RTP/SIP）协议，而k8s对于非TCP based协议的网络支持都比较有限，短时间内恐怕很难on k8s. 所以，<strong>我们必须同时支持k8s部署和传统部署</strong>。</p>
+<p>我们可以强制要求所有的应用运行在<strong>容器</strong>中，通过合理规划端口使用和卷挂载，理论上可以解决绝大部分服务运行问题。但是第三方应用可能不支持容器化。那么，我们的方案最好的情况需要支持三级部署：裸机、容器化和直接部署在k8s里，次一级也至少支持容器化和k8s两种（因为裸机部署很难做到权限、环境隔离）。当然，即使不支持裸机部署，也要考虑如何满足裸机监控运维的需求。</p>
+<p>边侧服务除掉最早期使用windows server的版本，目前都运行在一期基于k3s的应用托管容器中。目前的应用托管（以下简称v1）架构比较简单：</p>
+<p><img loading="lazy" src='https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/06508ac1f18f5a725dde24846f37f753-20230218195750.png' alt="06508ac1f18f5a725dde24846f37f753-20230218195750"></p>
+<p>云端是一个rancher集群，边侧就是一个k3s集群（类似于一个k8s集群），云边之间有建立websocket通道，而各边侧之间是相互隔离的（当然可以通过云端rancher中转通信，不过这个不是out-of-box的）。该方案对云端有没有k8s没有需求。</p>
+<p>墨斗通过调用rancher的各种API，来与边侧的k3s集群的API Server交互，从而达到远程部署应用的目的。不过rancher v2的API并没有官方文档，需要自己通过web console抓包来确定API。</p>
+<p>虽然目前v1版本还做的比较简陋，但是显然该方案可以解决<strong>所有服务都能跑在k8s中的需求</strong>，只是后续需要开发的东西还欠缺非常多。</p>
+<h2 class="heading-element" id="统一托管方案"><span>统一托管方案</span>
+  <a href="#%e7%bb%9f%e4%b8%80%e6%89%98%e7%ae%a1%e6%96%b9%e6%a1%88" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h3 class="heading-element" id="裸机部署"><span>裸机部署</span>
+  <a href="#%e8%a3%b8%e6%9c%ba%e9%83%a8%e7%bd%b2" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>裸机程序部署方案，在k8s甚至docker出现之前就有很多，比如Ansible/Puppet/SaltStack/Chef等。这些方案其实更偏向于<strong>服务器管理</strong>，即传统运维配置管理工具，对于软件部署其实并没有提供一致的抽象方式。Chef倒是提供了Chef Habitat，用来完成应用打包，但是这实际上没有啥意义，你不能指望使用传统部署的那些供应商提供类似rpm/deb的最终打包。</p>
+<p>在这些工具中，hashicorp公司的terranform独树一帜，它提供了类似k8s的配置即基础设施方案，可以理解为通用的编排工具，不过很可惜该工具仅支持云端资源编排（如阿里云）。另外该公司的Nomad是一种不同于k8s的容器编排方案，有兴趣也可以了解一下。</p>
+<p>在这一层做应用交付抽象非常困难，所以我们应当简化在这一层的设计，毕竟大部分服务应该还是可以容器化运行的。如果我们只需要一个简单的远程工具，不考虑批量部署之类的功能，那么我们只需要提供一个ssh访问的功能就够了。边缘服务器一般是工作在内网中的(behind NAT），有一些开源项目可以提供类似<strong>向日葵</strong>的内网穿透功能，比如bore/frp/nps. 他们工作的原理是从内网向公网服务器发起连接，建立tunnel，从而可以将本地端口转发到服务器上，这样就可以通过服务器进行远程ssh/rdp访问了。而一旦有了这个端口，后续就可以使用Ansible这种无Agent配置工具进行批量管理了。</p>
+<p>值得注意的是，裸机方案不仅适配于应用托管，在更小型的环境里（如树莓派或者更低的配置）运行应用程序都应当考虑该方案。因为docker启动之后至少需要200~300M内存，k3s更是需求1G内存。此外，虽然很少，但是对于某些<strong>强依赖windows环境</strong>的应用，也只能采用裸机部署方案。</p>
+<h3 class="heading-element" id="容器部署"><span>容器部署</span>
+  <a href="#%e5%ae%b9%e5%99%a8%e9%83%a8%e7%bd%b2" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>目前流行的开源方案中，<a href="https://www.portainer.io/"target="_blank" rel="external nofollow noopener noreferrer">portainer</a>是功能比较全面的容器环境管理系统，它不仅支持docker compose/k8s，甚至还支持docker swarm，不过目前还不支持containerd.</p>
+<p><img loading="lazy" src='https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/portainer-architecture-detailed.png' alt="portainer-architecture-detailed"></p>
+<p>这个是它的架构图。左侧是边缘Agent，右侧是云端Agent. 该服务最开始的架构是pull模型，EdgeAgent在内网，只能改成push模型。</p>
+<p>与想象的不同，该方案的Agent与Server是<strong>按需连接</strong>的。EdgeAgent会每隔几秒（默认是5秒）探测一下服务端是否需要建立长连接，需要的话才会建立websocket通道，所以Edge与Server的通信建立可能有一定的延迟。</p>
+<p><img loading="lazy" src='https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/image-20230223173543309.png' alt="image-20230223173543309"></p>
+<p>上面是该服务运行时截图。</p>
+<p>经过测试，portainer可以比较完美的支持<strong>容器部署</strong>的常用功能，并能直接透传docker命令。k8s的支持稍弱，不过也能使用helm部署，和自定义API对象模板，足够满足一般使用需求。</p>
+<p>对于应用部署，docker环境提供了简单的表单方案，当然支持直接上传compose file；k8s环境也支持通过表单简单部署ReplicaSets. 当然k8s环境可以使用其他部署方案，不一定要走他这一套，后面会详述。</p>
+<p>有一定的权限隔离支持，但是不太完善（RBAC属于收费功能），可以通过前端封装API来解决相关问题。</p>
+<p>总体来说，<code>portainer</code>配合docker和k3s集群，可以解决大部分应用部署的问题。需要注意的是，portainer的官方地址疑似被墙，安装脚本虽然完善，但是需要改动才能使用（当然k8s本身就被墙了……）。</p>
+<h3 class="heading-element" id="k8s部署"><span>k8s部署</span>
+  <a href="#k8s%e9%83%a8%e7%bd%b2" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>这个可选的方案就很多了，目前在用的k3s+rancher也是比较成熟的方案，当然也可以用上面说的portainer+k3s替代。除此之外还有KubeEdge/OpenYurt等边缘计算的方案，下面对这些方案做一个简单对比。</p>
+<h4 class="heading-element" id="k3srancherportainer"><span>k3s+rancher/portainer</span>
+  <a href="#k3srancherportainer" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>前文已经说过这种架构，v1版本用rancher2.x配合k3s可以解决大部分k8s内部署的问题，k3s对k8s做了精简，并且自带了LocalPV和Ingress的配置，开箱即用。不过rancher没有官方的API指南，需要自行抓包看API，这点不如portainer; rancher的优势是用户更多，知名度更大，这样理论上会更加稳定一些。</p>
+<p>这种架构最大的特点，是<strong>服务端并不需要k8s集群</strong>。这有利有弊，好处当然是比较轻量封闭；坏处是无法进行云边算力协同，边与边之间的集群也没有任何关系。如果是完全云原生化的服务，分区域部署，显然不能使用该方案。不过对于目前的墨斗平台而言，使用该方案<strong>无迁移成本</strong>，反而是最优选择。</p>
+<p>另外值得一提的是，k3s部署非常简单，有官方的中国区镜像，整个过程可以在线完成，无须翻墙。</p>
+<h4 class="heading-element" id="k8skubeedge"><span>k8s+KubeEdge</span>
+  <a href="#k8skubeedge" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p><img loading="lazy" src='https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/kubeedge_arch.png' alt="KubeEdge Architecture"></p>
+<p>主要组件：</p>
+<ol>
+<li>云端的cloudCore运行在k8s中，包括：
+<ol>
+<li>CloudHub是一个websocket服务，负责与边缘端的EdgeHub通信；</li>
+<li>EdgeController，负责桥接k8s-apiserver与edgecore. 即所有在云端通过kubectl管理边缘端API对象的行为，都是通过它来转达的；这通过k8s apiserver的webhook功能实现；</li>
+<li>DeviceController. Device在KubeEdge中被定义为一种CRD. 所以也可以通过<code>kubectl</code>来进行管理。这种设计实际上是将<strong>业务耦合进基础设施中</strong>，或者也可以说是完全云原生化；<strong>这种设计看起来很方便，但是实际使用中会有各种问题</strong>；</li>
+</ol>
+</li>
+<li>边缘端的EdgeCore是一套简化的k8s（与k8s生态不兼容，甚至无法运行kubectl命令）；主要包括：
+<ol>
+<li>EdgeHub，与CloudHub对应的websocket客户端，负责与云端进行通信；所有其他边缘组件都通过它与云端进行通信；</li>
+<li>Edged，简化的kubelet，负责边缘端容器编排；</li>
+<li>MetaManager，类似ETCD的元数据管理（使用sqlite）；</li>
+<li>DeviceTwin，设备孪生（或者设备影子）；可以理解为一种缓存，用于同步设备状态；</li>
+<li>EventBus，一个mqtt消息总线，订阅mqtt broker的消息，并转发给edgehub，后者再同步给云端（反过来的路径也是成立的）；</li>
+<li>ServiceBus，类似EventBus，一个http消息总线，负责与边缘端运行的http服务进行交互；可以解决需要反向拉取HTTP数据的场景；</li>
+<li>Mapper, 一种协议抽象方式。遵从kubeedge的物模型规范，可以将协议实现为一个小的<strong>golang app</strong>，该app一般作为一个deployment在k8s中进行部署；</li>
+</ol>
+</li>
+</ol>
+<p>可以看出，kubeEdge是一个边缘计算的**打包(ALL-IN-ONE)**方案，主要解决了几个问题：</p>
+<ol>
+<li>容器远程管理。可以在云端直接部署边缘端的服务，通过nodeAffinity等方式将服务部署到合适的边缘端；可以在云端统一管理边缘容器，不过在应用部署这块，kubeEdge并没有提供更进一步的抽象，该项目主要还是在IoT侧发力；</li>
+<li>统一消息路由。应用层不需要关心消息如何传递的，云端服务只需和cloudHub通信，边缘端Mapper只需和Mqtt broker通信；</li>
+<li>统一设备抽象。提供了统一的物模型设计，统一的驱动（协议）开发方式；包括统一的设备孪生设计，用于同步设备状态；</li>
+<li>优化资源占用和满足离线自治。这也是其他方案都有的能力；</li>
+</ol>
+<p><strong>存在的问题</strong>：</p>
+<ol>
+<li>统一设备抽象并不好。按着目前的设计，大量数据会被存储在云端etcd里（因为每个设备相当于是一个configMap），对于超大规模物联网平台而言，这个数据量会非常大。etcd搞增删改查的性能堪忧；</li>
+<li>统一消息路由问题同样很大。首先是云端直连场景实际上并没有考虑，然后客户端的场景也只考虑了HTTP，实际上协议支持非常不完善。然后就是性能问题，目前这套设计消息会经过多个实体，最终才能到达云端服务，延迟必然收到影响。且在边缘端连接大量设备时，消息总线能支持多大的量还是未知；</li>
+<li>目前仅支持golang mapper，这对使用其他语言技术栈的公司很不友好；</li>
+<li>开发门槛提高。由于业务深入耦合k8s，完全云原生化，这就要求相关开发必须深入理解k8s的原理，不然出了问题很难调试；</li>
+<li>文档稀烂，资料较少；虽然是华为主导开发，但是中文文档写的还不如k3s，英文文档版本也无法跟得上release, 出现问题比较难找到资料；</li>
+<li>边缘端与k8s生态不兼容；只有少量开源项目支持kubeEdge，如kubesphere. 一般开源软件只兼容原生k8s. 边缘端实际上无法自治，在离线情况下，边缘端由于缺少kubectl工具，很多功能无法使用，比如离线部署应用；</li>
+</ol>
+<p>经过实际调研，使用KubeEdge的用户大部分还是只用它最基础的容器远程管理和部分网络功能，IoT部分还是各自自研。实际上github上Mapper项目的star数还不足100…</p>
+<h4 class="heading-element" id="k8sopenyurt方案"><span>k8s+OpenYurt方案</span>
+  <a href="#k8sopenyurt%e6%96%b9%e6%a1%88" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>KubeEdge的问题实际上是过度设计了，如果只需要保留最基本的网络拓扑和容器管理功能，可以考虑使用OpenYurt.</p>
+<p>这个方案和KubeEdge实际上不太一样，它主要解决的其实是跨机房集群问题，比如多个异地机房组成服务集群这种场景，所以在设备管理、以及轻量化这两方面，做的不如kubeEdge.</p>
+<p><img loading="lazy" src='https://openyurt.io/zh/assets/images/arch-3dc62565787cc0f579dd62eba788f49a.png' alt="img"></p>
+<p>上图是OpenYurt的架构。包括以下通用组件：</p>
+<ul>
+<li>YurtHub：同样是流量代理，sidecar模式，同时支持云端和边缘端两种运行模式；</li>
+<li>Raven：打通云端和边缘端的网络流量，可以理解成一个VPN；</li>
+</ul>
+<p>云端额外有<strong>YurtControllerManager</strong>和<strong>YurtAppManager</strong>，负责证书、调度等工作，用户一般无需关心；</p>
+<p>边缘端额外有<strong>Pool-Coordinator</strong>，负责心跳管理，边缘端运维监控等功能。</p>
+<p>OpenYurt主要是抽象了节点池的概念，我们可以简单的把一个边缘机房里的所有服务器理解为一个节点池。OpenYurt主要是方便云端统一管理各个节点池的资源，统一进行部署运维等工作；并能协调边云资源，解决负载不均衡造成的资源浪费问题。</p>
+<p>优点：</p>
+<ul>
+<li>与业务没有耦合，解决问题比较单一，比较容易理解；</li>
+<li>为应用部署做了节点池等抽象，有比较完整的部署模型。这点KubeEdge没有；</li>
+<li>中文文档完整，边缘部署比较方便（基本无须翻墙），云端部署缺乏一键脚本；</li>
+<li>阿里云有个商业版本的Edge@Ack，两者设计几乎一致；</li>
+<li>与k8s生态兼容（无论边云，本质上都还是k8s）；</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>成熟度不如kubeEdge，目前案例较少；</li>
+<li>大规模使用的性能未知，官方暂未给出相关数据（仅有100节点的测试报告）；kubeEdge有10w边缘节点的数据（但是没有多设备压测的数据）；</li>
+<li>相比于k3s，相关资料也不太多；</li>
+</ul>
+<h4 class="heading-element" id="总结"><span>总结</span>
+  <a href="#%e6%80%bb%e7%bb%93" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>虽然还有superEdge等开源产品，不过成熟度不够高，这里不再赘述。</p>
+<p>不管哪个方案，都应该有一个宿主机管理工具（除非宿主机被映射到了公网，可以直接ssh连接），这里假设用nps(因为nps支持API控制，其他的不支持)；</p>
+<p>不管哪个方案，都应该有一套监控工具。这里仍然统一使用之前提的ElasticAgent + Elastic APM方案即可，支持所有环境（k8s/非k8s）的可观测性数据收集。当然，如果要集成到墨斗上，需要自己开发API与es进行交互，否则就直接通过kibana看就行；</p>
+<p>方案1：同时支持docker/k8s，那么用portainer+docker+k3s，可以解决所有问题；我方服务主要和bore/portainer交互；</p>
+<p>方案2：仅支持k8s，使用云端k8s+边缘OpenYurt/KubeEdge，其中kubeEdge仅使用边云打通功能，不使用iot相关功能；云端单独部署k8s master节点与edge通信，墨斗iot仍然部署在阿里云的托管集群里；我方服务直接和云端的k8s apiserver交互；</p>
+<p>方案3：综合上面两个方案，使用portainer+OpenYurt/KubeEdge；</p>
+<p>激进方案：使用KubeEdge的全部功能，重构墨斗平台，使其云原生化（工具量非常大，网关层的所有协议，hermes的设备管理，以及视频云信令服务都要重构，且都需要使用go语言）。需要将云端墨斗移入单独的k8s环境，与边缘端打通。当然，如果需要完全云原生化，还可以进一步的，抛弃springCloud框架，使用dapr/istio等云原生方案；</p>
+<h2 class="heading-element" id="应用交付方案"><span>应用交付方案</span>
+  <a href="#%e5%ba%94%e7%94%a8%e4%ba%a4%e4%bb%98%e6%96%b9%e6%a1%88" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>k8s对大部分开发人员来说过于复杂，直接填写yaml的方式经常容易出错。因此如何进一步简化部署难度，减轻开发人员压力，也是一个值得讨论的话题。</p>
+<p><img loading="lazy" src='https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/3-5.png' alt="img"></p>
+<p>上图是CNCF定义的应用交付模型：</p>
+<ul>
+<li>Helm 就是位于整个应用管理体系的最上面，也就是第 1 层，还有 Kustomize 等各种 YAML 管理工具，CNAB 等打包工具，它们都对应在第 1.5 层；</li>
+<li>然后有 Tekton、Flagger 、Kepton 等应用交付项目，包括发布部署的流程，配置管理等，目前比较流行的是基于 GitOps 的管理，通过 git 作为“the source of truth”，一切都面向终态、透明化的管理，也方便对接，对应在第 2 层；</li>
+<li>而 Operator 以及 K8s 的各种工作负载组件（Deployment、StatefulSet 等），具体来说就像某个实例挂了这些组件自动拉起来一个弥补上原来所需要三个的实例数，包括一些自愈、扩缩容等能力，对应在第 3 层；</li>
+<li>最后一层则是平台层，包括了所有底层的核心功能，负责对工作负载的容器进行管理、封装基础设施能力、对各种不同的工作负载对接底层基础设施提供 API 等。</li>
+</ul>
+<p>对于非云资源而言，一般使用Helm交付就能避免和底层k8s API打交道了，不过这里还有更好的选择。</p>
+<h3 class="heading-element" id="oam模型"><span>OAM模型</span>
+  <a href="#oam%e6%a8%a1%e5%9e%8b" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p><a href="https://oam.dev/"target="_blank" rel="external nofollow noopener noreferrer">OAM（Open Application Model）</a>是阿里巴巴和微软共同开源的云原生应用规范模型，使用该模型可以分清开发和运维的责任，减轻开发使用k8s的难度。</p>
+<p><img loading="lazy" src='https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/oam-principle.jpg' alt="OAM 的原理"></p>
+<p>上图是其工具原理，可以看到实际上是在k8s前面又加了一层。</p>
+<p><img loading="lazy" src='https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/model-92e2ae5a5bd9367698a296fb9bd45ec5.png' alt="alt"></p>
+<p>上图是OAM yaml的示例，可以看到它是一种CRD，抽象了Application这种资源，并指定了组件、运维能力、部署策略和工作流这四个部分组成一个部署计划。</p>
+<p>kubeVela项目是OAM yaml的解析器，结合kubeVela项目和OpenYurt项目，可以比较好的解决应用部署/应用市场的实现难度。</p>
+<p>kubeVela将用户明确分为运维方（平台团队）和开发者（使用者），前者负责维护基础设施，后者只需要在前者提供模板的基础上填入参数即可完成部署。并且可以在部署流程中增加人工审核等步骤，使工作流更加正规化。</p>
+<p><img loading="lazy" src='https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/how-it-works-6e694357bb1ac5482b48e099817a1000.jpg' alt="alt"></p>
+<p>当然，kubeVela本身也比较复杂，增加了许多概念需要理解。</p>
+<p>与OpenYurt结合使用的具体案例可以参考<a href="https://kubevela.io/zh/blog/2023/01/09/kubevela-openyurt-integration"target="_blank" rel="external nofollow noopener noreferrer">这里</a>，有一些介绍。当然，由于kubeEdge的边缘端并不兼容k8s生态，这个方案理论上是<strong>无法在kubeEdge上跑的</strong>。</p>
+<h2 class="heading-element" id="大规模部署方案"><span>大规模部署方案</span>
+  <a href="#%e5%a4%a7%e8%a7%84%e6%a8%a1%e9%83%a8%e7%bd%b2%e6%96%b9%e6%a1%88" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>当智慧工地、智慧水务等产品已经成型，现场部署时再采用从手工安装OS开始，人工运行脚本安装的方式来安装基础设施效率就太低了。这时候最合适的是直接定制操作系统镜像，通过网络（PXE）全自动化安装、运行，全程无须人工干扰。</p>
+<p>镜像制作可以参考Maas/foreman/uyuni/DRP等项目，下面是Maas的功能介绍（不过这玩意儿只有部署ubuntu server是免费的）：</p>
+<p><img loading="lazy" src='https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/image-20230227160728632.png' alt="image-20230227160728632"></p>
+<p>这里已经牵涉到IaaS领域，由于太过底层，这里不再赘述。</p>
+<p>关于虚拟化领域有兴趣的可以查看以下词汇相关的资料：</p>
+<ul>
+<li><strong><code>KVM</code></strong>：<code>Linux</code> 内核态的虚拟化组件。</li>
+<li><strong><code>QEMU</code></strong>：<code>Linux</code> 用户态的虚拟化组件。<code>QEMU</code> 跟 <code>KVM</code> 结合提供完整的虚拟化技术支撑，属于架构的最底层。</li>
+<li><strong><code>Libvirt</code></strong>：介于架构底层和架构上层之间，它将底层的虚拟化特性抽象成统一的 <code>API</code>（应用程序编程接口），从而提供给上层调用。</li>
+<li><strong><code>Packer</code> 和 <code>Vagrant</code></strong>：虚拟化客户端工具，它们属于架构的最上层，直接跟终端用户交互。同时，在客户端之间也会产生相应联系，我们将 <code>Packer</code> 的输出物作为 <code>Vagrant</code> 的输入源。</li>
+</ul>
+<h2 class="heading-element" id="方案落地流程"><span>方案落地流程</span>
+  <a href="#%e6%96%b9%e6%a1%88%e8%90%bd%e5%9c%b0%e6%b5%81%e7%a8%8b" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>从理论上来说，应用托管在做的是一个私有云，或者说混合云方案，工作量非常之大。因此最优先的实现是直接使用商用的产品，比如阿里云的Ack@Edge；其次应考虑在商业级平台基础上继续开发，如Red Hat OpenShift；最后才应考虑在上述开源平台的基础上从bare metal开始自研。</p>
+<p>综合前面的讨论，可以确定自研的流程如下：</p>
+<p>在第一个阶段，需要实现node级别的管理，即<strong>远程管理服务器</strong>的能力。该能力主要是给我们维护边缘服务器使用的，一般不应该开放给用户，该阶段相当于实现阿里云ECS的控制台（当然ECS和物理机之间还有一层虚拟机，比如OpenStack，这个我们当然不做）。如果有无法容器化的传统应用，可以考虑提供申请临时SSH/RDP权限的功能。</p>
+<p>在第二个阶段，需考虑实现container级别的管理。提供镜像仓库供用户上传镜像，提供应用表单生成Dockerfile，提供用户直接提交docker-compose并部署的能力；提供用户直接与docker api进行交互的能力；注意<strong>docker本身并不提供任何权限相关的设计</strong>，也没有namespace的隔离。因此这里需要利用portainer等平台自带的权限相关功能来实现。或者直接跳过该阶段，到第三个阶段，因为第一个阶段实际上也可以完成该级别的能力。</p>
+<p>在第三个阶段，需实现k8s级别的应用部署功能。初期可以粗放式允许用户自己完成应用部署，将边缘机器按节点池分类（参考OpenYurt）。用户可以通过填写表单提交deployment，或者通过提交yaml部署StatefulSet，或者提交helm chart。可以跳过该阶段，直接到第四个阶段；</p>
+<p>在第四个阶段，可以考虑集成KubeVela这种精细化部署方案，用户层只需提交Application对应的表单，基础设施由我方编写模板进行维护，用户不再接触k8s底层，缩小用户权限；提供应用市场，供用户一键部署各种开源组件。</p>
+<p>在第1~3个阶段之间，可以<strong>并行</strong>完成监控功能的集成。监控功能对内直接使用kibana，对外依次提供应用Log/Metric/Trace展示或者推送给第三方的能力，这三种数据的优先级依次降低；根据需求提供告警能力，或者让用户自己实现；看板能力理论上无须对外提供。kubeVela等项目也单独提供了监控的能力，也可以考虑直接使用。</p>
+<p>在第四个阶段之后，平台需要进一步自动化运维管理，这时候再考虑<strong>大规模部署方案</strong>章节提到的各种相关技术。</p>
+<p>在落地过程中，平台后端应当从hermes中剥离出来作为单独的微服务，前端也可以考虑独立出来做一个单独的平台（同墨斗的账号体系一致）。目前的应用托管v1, 实际上跳过了第一和第二个阶段，直接到第三个阶段，而且把常用的中间件对应的yaml直接预置到数据库中了，这只能是一个临时方案。</p>
+<p>同墨斗其他功能保持一致，应用托管的所有功能应允许通过API来使用，所以需要梳理一下功能点和权限设计。</p>
+<p>由于k8s生态非常活跃，各类产品的发布周期较短，因此无论是开发还是持续维护该平台都需要耗费较大的精力。不同于一般的业务开发，开发该平台需要大量的运维领域知识，因此整体时间预期会比较漫长。</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2025-10-15 15:01:59">更新于 2025-10-15&nbsp;<a class="git-hash" href="YiuTerran/blog/commit/151e6a599de6497ce95f669d90f63f596a52a2c9" rel="external nofollow noopener noreferrer" target="_blank" title="update theme&#10&#10Commit: 151e6a599de6497ce95f669d90f63f596a52a2c9 [151e6a5]&#10Author: 姚泰然&#10Date: 2025-10-15 15:01:59&#10Commit Date: 2025-10-15 15:02:21"><i class="fa-solid fa-hashtag fa-fw" aria-hidden="true"></i>151e6a5</a></span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/blogs/posts/%E8%BE%B9%E7%BC%98%E5%BA%94%E7%94%A8%E6%89%98%E7%AE%A1%E6%96%B9%E6%A1%88%E8%AE%BE%E8%AE%A1/" data-title="边缘应用托管方案设计" data-hashtags="edge,design"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/blogs/posts/%E8%BE%B9%E7%BC%98%E5%BA%94%E7%94%A8%E6%89%98%E7%AE%A1%E6%96%B9%E6%A1%88%E8%AE%BE%E8%AE%A1/" data-hashtag="edge"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/blogs/posts/%E8%BE%B9%E7%BC%98%E5%BA%94%E7%94%A8%E6%89%98%E7%AE%A1%E6%96%B9%E6%A1%88%E8%AE%BE%E8%AE%A1/" data-title="边缘应用托管方案设计"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/blogs/tags/edge/" class="post-tag" title="标签 - Edge">Edge</a><a href="/blogs/tags/design/" class="post-tag" title="标签 - Design">Design</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blogs/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/blogs/posts/kubeedge%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/" class="post-nav-item" rel="prev" title="KubeEdge要点笔记"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>KubeEdge要点笔记</a><a href="/blogs/posts/kotlin%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/" class="post-nav-item" rel="next" title="Kotlin要点笔记">Kotlin要点笔记<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.151.0"><img class="hugo-icon" src="/blogs/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.4.0-alpha.2-20251014082535-5c74d431"><img class="fixit-icon" src="/blogs/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2025</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://gravatar.com/afxmessagebox"target="_blank" rel="external nofollow noopener noreferrer">tryao</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/blogs/lib/cookieconsent/cookieconsent.min.css"><script src="/blogs/lib/autocomplete/autocomplete.min.js" defer></script><script src="/blogs/lib/fuse/fuse.min.js" defer></script><script src="/blogs/lib/sharer/sharer.min.js" async defer></script><script src="/blogs/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/blogs/posts/%E8%BE%B9%E7%BC%98%E5%BA%94%E7%94%A8%E6%89%98%E7%AE%A1%E6%96%B9%E6%A1%88%E8%AE%BE%E8%AE%A1/config/page.js" defer></script><script src="/blogs/js/theme.min.js" defer></script></body>
+</html>

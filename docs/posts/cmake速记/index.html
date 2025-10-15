@@ -14,7 +14,7 @@
 建议先看第一本，再看第二本。
 使用 一般而言，cmake的使用方式非常简单。在命令行下使用">
   <meta itemprop="datePublished" content="2023-01-09T16:42:44+08:00">
-  <meta itemprop="dateModified" content="2023-01-16T22:03:49+08:00">
+  <meta itemprop="dateModified" content="2025-10-15T15:01:59+08:00">
   <meta itemprop="wordCount" content="8636">
   <meta itemprop="keywords" content="Cmake,C&#43;&#43;"><meta property="og:url" content="https://yiuterran.github.io/blogs/posts/cmake%E9%80%9F%E8%AE%B0/">
   <meta property="og:site_name" content="思海沉钩">
@@ -26,7 +26,7 @@
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
     <meta property="article:published_time" content="2023-01-09T16:42:44+08:00">
-    <meta property="article:modified_time" content="2023-01-16T22:03:49+08:00">
+    <meta property="article:modified_time" content="2025-10-15T15:01:59+08:00">
     <meta property="article:tag" content="Cmake">
     <meta property="article:tag" content="C&#43;&#43;">
 
@@ -38,7 +38,7 @@
 <meta name="application-name" content="思海沉钩">
 <meta name="apple-mobile-web-app-title" content="思海沉钩"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/blogs/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/blogs/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/blogs/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/blogs/apple-touch-icon.png"><link rel="mask-icon" href="/blogs/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="https://yiuterran.github.io/blogs/posts/cmake%E9%80%9F%E8%AE%B0/" title="CMake速记 - 思海沉钩" /><link rel="prev" type="text/html" href="https://yiuterran.github.io/blogs/posts/golang%E6%9C%8D%E5%8A%A1%E6%8E%A5%E5%85%A5opentelemetry/" title="Golang服务接入OpenTelemetry" /><link rel="next" type="text/html" href="https://yiuterran.github.io/blogs/posts/makefile%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/" title="Makefile要点简记" /><link rel="alternate" type="text/markdown" href="https://yiuterran.github.io/blogs/posts/cmake%E9%80%9F%E8%AE%B0/index.md" title="CMake速记 - 思海沉钩"><link rel="stylesheet" href="/blogs/css/config.min.css"><link rel="stylesheet" href="/blogs/css/style.min.css"><link rel="preload" href="/blogs/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <link rel="icon" type="image/png" sizes="16x16" href="/blogs/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/blogs/apple-touch-icon.png"><link rel="mask-icon" href="/blogs/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="https://yiuterran.github.io/blogs/posts/cmake%E9%80%9F%E8%AE%B0/" title="CMake速记 - 思海沉钩" /><link rel="prev" type="text/html" href="https://yiuterran.github.io/blogs/posts/golang%E6%9C%8D%E5%8A%A1%E6%8E%A5%E5%85%A5opentelemetry/" title="Golang服务接入OpenTelemetry" /><link rel="next" type="text/html" href="https://yiuterran.github.io/blogs/posts/makefile%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/" title="Makefile要点简记" /><link rel="stylesheet" href="/blogs/css/config.min.css"><link rel="stylesheet" href="/blogs/css/style.min.css"><link rel="preload" href="/blogs/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/blogs/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/blogs/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/blogs/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
   {
@@ -50,7 +50,7 @@
       "@type": "WebPage",
       "@id": "https:\/\/yiuterran.github.io\/blogs\/posts\/cmake%E9%80%9F%E8%AE%B0\/"
     },"genre": "posts","keywords": "cmake, c\u002b\u002b","wordcount":  8636 ,
-    "url": "https:\/\/yiuterran.github.io\/blogs\/posts\/cmake%E9%80%9F%E8%AE%B0\/","datePublished": "2023-01-09T16:42:44+08:00","dateModified": "2023-01-16T22:03:49+08:00","publisher": {
+    "url": "https:\/\/yiuterran.github.io\/blogs\/posts\/cmake%E9%80%9F%E8%AE%B0\/","datePublished": "2023-01-09T16:42:44+08:00","dateModified": "2025-10-15T15:01:59+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
         "@type": "Person",
@@ -123,7 +123,7 @@
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>CMake速记</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://gravatar.com/afxmessagebox" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img class="avatar" src='https://avatars.githubusercontent.com/u/5930695?v=4' alt="tryao" height="16" width="16">&nbsp;tryao</a></span></div><div class="post-meta-line"><span title="发布于 2023-01-09 16:42:44"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2023-01-09">2023-01-09</time></span>&nbsp;<span title="更新于 2023-01-16 22:03:49"><i class="fa-regular fa-calendar-check fa-fw me-1" aria-hidden="true"></i><time datetime="2023-01-16">2023-01-16</time></span>&nbsp;<span title="8636 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 8700 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 18 分钟</span>&nbsp;</div>
+      <div class="post-meta-line"><span class="post-author"><a href="https://gravatar.com/afxmessagebox" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img class="avatar" src='https://avatars.githubusercontent.com/u/5930695?v=4' alt="tryao" height="16" width="16">&nbsp;tryao</a></span></div><div class="post-meta-line"><span title="发布于 2023-01-09 16:42:44"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2023-01-09">2023-01-09</time></span>&nbsp;<span title="更新于 2025-10-15 15:01:59"><i class="fa-regular fa-calendar-check fa-fw me-1" aria-hidden="true"></i><time datetime="2025-10-15">2025-10-15</time></span>&nbsp;<span title="8636 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 8700 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 18 分钟</span>&nbsp;</div>
     </div><div class="details toc" id="toc-static" data-kept="false">
         <div class="details-summary toc-title">
           <span>目录</span>
@@ -131,56 +131,60 @@
         </div>
         <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#使用">使用</a>
       <ul>
-        <li><a href="#使用">使用</a>
-          <ul>
-            <li><a href="#准备阶段">准备阶段</a></li>
-            <li><a href="#构建阶段">构建阶段</a></li>
-            <li><a href="#安装">安装</a></li>
-            <li><a href="#其他">其他</a></li>
-          </ul>
-        </li>
-        <li><a href="#语法">语法</a>
-          <ul>
-            <li><a href="#基础">基础</a></li>
-            <li><a href="#变量">变量</a></li>
-            <li><a href="#作用域">作用域</a></li>
-            <li><a href="#列表">列表</a></li>
-            <li><a href="#条件语句">条件语句</a></li>
-            <li><a href="#循环语句">循环语句</a></li>
-            <li><a href="#宏和函数">宏和函数</a></li>
-            <li><a href="#编程范式">编程范式</a></li>
-            <li><a href="#实用命令">实用命令</a></li>
-          </ul>
-        </li>
-        <li><a href="#构建项目">构建项目</a>
-          <ul>
-            <li><a href="#编译配置">编译配置</a></li>
-            <li><a href="#链接配置">链接配置</a></li>
-            <li><a href="#管理依赖">管理依赖</a></li>
-          </ul>
-        </li>
-        <li><a href="#安装配置">安装配置</a>
-          <ul>
-            <li><a href="#安装目标">安装目标</a></li>
-            <li><a href="#安装文件和目录">安装文件和目录</a></li>
-            <li><a href="#配置导出">配置导出</a></li>
-            <li><a href="#打包">打包</a></li>
-          </ul>
-        </li>
-        <li><a href="#依赖管理">依赖管理</a>
-          <ul>
-            <li><a href="#包管理">包管理</a></li>
-            <li><a href="#源码集成">源码集成</a></li>
-          </ul>
-        </li>
-        <li><a href="#文档生成">文档生成</a></li>
-        <li><a href="#测试">测试</a></li>
-        <li><a href="#自定义任务">自定义任务</a></li>
-        <li><a href="#其他-1">其他</a></li>
+        <li><a href="#准备阶段">准备阶段</a></li>
+        <li><a href="#构建阶段">构建阶段</a></li>
+        <li><a href="#安装">安装</a></li>
+        <li><a href="#其他">其他</a></li>
       </ul>
     </li>
+    <li><a href="#语法">语法</a>
+      <ul>
+        <li><a href="#基础">基础</a></li>
+        <li><a href="#变量">变量</a></li>
+        <li><a href="#作用域">作用域</a></li>
+        <li><a href="#列表">列表</a></li>
+        <li><a href="#条件语句">条件语句</a></li>
+        <li><a href="#循环语句">循环语句</a></li>
+        <li><a href="#宏和函数">宏和函数</a></li>
+        <li><a href="#编程范式">编程范式</a></li>
+        <li><a href="#实用命令">实用命令</a>
+          <ul>
+            <li><a href="#message命令">message命令</a></li>
+            <li><a href="#include命令">include命令</a></li>
+            <li><a href="#include_guard命令">include_guard命令</a></li>
+            <li><a href="#file命令">file命令</a></li>
+            <li><a href="#execute_process命令">execute_process命令</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#构建项目">构建项目</a>
+      <ul>
+        <li><a href="#编译配置">编译配置</a></li>
+        <li><a href="#链接配置">链接配置</a></li>
+        <li><a href="#管理依赖">管理依赖</a></li>
+      </ul>
+    </li>
+    <li><a href="#安装配置">安装配置</a>
+      <ul>
+        <li><a href="#安装目标">安装目标</a></li>
+        <li><a href="#安装文件和目录">安装文件和目录</a></li>
+        <li><a href="#配置导出">配置导出</a></li>
+        <li><a href="#打包">打包</a></li>
+      </ul>
+    </li>
+    <li><a href="#依赖管理">依赖管理</a>
+      <ul>
+        <li><a href="#包管理">包管理</a></li>
+        <li><a href="#源码集成">源码集成</a></li>
+      </ul>
+    </li>
+    <li><a href="#文档生成">文档生成</a></li>
+    <li><a href="#测试">测试</a></li>
+    <li><a href="#自定义任务">自定义任务</a></li>
+    <li><a href="#其他-1">其他</a></li>
   </ul>
 </nav></div>
       </div><div class="content" id="content"><p>主要参考书籍《Modern CMake for C++》，以及《CMake Best Practices》，使用CMake版本3.25.</p>
@@ -994,11 +998,11 @@
 </div><div class="post-footer" id="post-footer">
   <div class="post-info">
     <div class="post-info-line">
-      <div class="post-info-mod"><span title="更新于 2023-01-16 22:03:49">更新于 2023-01-16&nbsp;<a class="git-hash" href="YiuTerran/blog/commit/3cff28e336f476e6e7bfa5311594a03c629289bb" rel="external nofollow noopener noreferrer" target="_blank" title="complete cmake note&#10&#10Commit: 3cff28e336f476e6e7bfa5311594a03c629289bb [3cff28e]&#10Author: tryao&#10Date: 2023-01-16 22:03:49"><i class="fa-solid fa-hashtag fa-fw" aria-hidden="true"></i>3cff28e</a></span>
+      <div class="post-info-mod"><span title="更新于 2025-10-15 15:01:59">更新于 2025-10-15&nbsp;<a class="git-hash" href="YiuTerran/blog/commit/151e6a599de6497ce95f669d90f63f596a52a2c9" rel="external nofollow noopener noreferrer" target="_blank" title="update theme&#10&#10Commit: 151e6a599de6497ce95f669d90f63f596a52a2c9 [151e6a5]&#10Author: 姚泰然&#10Date: 2025-10-15 15:01:59&#10Commit Date: 2025-10-15 15:02:21"><i class="fa-solid fa-hashtag fa-fw" aria-hidden="true"></i>151e6a5</a></span>
       </div><div class="post-info-license">
             <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
           </div></div><div class="post-info-line">
-        <div class="post-info-md"><span><a href="/blogs/posts/cmake%E9%80%9F%E8%AE%B0/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="YiuTerran/blog/blob/monolingual/content/posts/cmake%e9%80%9f%e8%ae%b0.md?plain=1" title="查看源码" class="link-to-source">查看源码</a></span><span><a href="YiuTerran/blog/edit/monolingual/content/posts/cmake%e9%80%9f%e8%ae%b0.md" title="编辑此页" class="link-to-edit">编辑此页</a></span><span><a href="YiuTerran/blog/issues/new?title=[BUG]%20CMake%E9%80%9F%E8%AE%B0&amp;body=%7cField%7cValue%7c%0A%7c-%7c-%7c%0A%7cTitle%7cCMake%E9%80%9F%E8%AE%B0%7c%0A%7cURL%7chttps://yiuterran.github.io/blogs/posts/cmake%E9%80%9F%E8%AE%B0/%7c%0A%7cFilename%7cYiuTerran/blog/blob/monolingual/content/posts/cmake%e9%80%9f%e8%ae%b0.md?plain=1%7c" title="报告问题" class="link-to-report">报告问题</a></span></div>
+        <div class="post-info-md"></div>
         <div class="post-info-share">
           <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://yiuterran.github.io/blogs/posts/cmake%E9%80%9F%E8%AE%B0/" data-title="CMake速记" data-hashtags="cmake,c&#43;&#43;"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
   <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://yiuterran.github.io/blogs/posts/cmake%E9%80%9F%E8%AE%B0/" data-hashtag="cmake"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>

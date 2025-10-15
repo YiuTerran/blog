@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rust - 标签 - 思海沉钩</title>
+    <link>http://localhost:1313/blogs/tags/rust/</link>
+    <description>一些工作学习笔记</description>
+    <generator>Hugo 0.151.0 &amp; FixIt v0.4.0-alpha.2-20251014082535-5c74d431</generator>
+    <language>zh-CN</language>
+    <managingEditor>yaotairan@gmail.com (tryao)</managingEditor>
+    <webMaster>yaotairan@gmail.com (tryao)</webMaster>
+    <lastBuildDate>Wed, 15 Oct 2025 15:01:59 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/blogs/tags/rust/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Rust学习纪要</title>
+      <link>http://localhost:1313/blogs/posts/rust%E5%AD%A6%E4%B9%A0%E7%BA%AA%E8%A6%81/</link>
+      <pubDate>Fri, 10 Feb 2023 09:50:48 +0800</pubDate><author>yaotairan@gmail.com (tryao)</author>
+      <guid>http://localhost:1313/blogs/posts/rust%E5%AD%A6%E4%B9%A0%E7%BA%AA%E8%A6%81/</guid>
+      <description>&lt;p&gt;我大概学了3次rust, 之前基本都是半途而废。第一次是卡在生命周期那里，第二次是卡在智能指针那里。&lt;/p&gt;&#xA;&lt;p&gt;最近写了一段时间C++，再拿起rust的书，突然感觉没啥阻塞了。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

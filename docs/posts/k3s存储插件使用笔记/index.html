@@ -10,7 +10,7 @@
   <meta itemprop="name" content="K3s存储插件使用笔记">
   <meta itemprop="description" content="原理 k8s存储主要依赖PV和PVC的机制，前者由运维人员声明可用的存储，如：">
   <meta itemprop="datePublished" content="2023-06-12T09:20:20+08:00">
-  <meta itemprop="dateModified" content="2023-06-13T18:21:30+08:00">
+  <meta itemprop="dateModified" content="2025-10-15T15:01:59+08:00">
   <meta itemprop="wordCount" content="2636">
   <meta itemprop="keywords" content="K8s"><meta property="og:url" content="https://yiuterran.github.io/blogs/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/">
   <meta property="og:site_name" content="思海沉钩">
@@ -20,7 +20,7 @@
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
     <meta property="article:published_time" content="2023-06-12T09:20:20+08:00">
-    <meta property="article:modified_time" content="2023-06-13T18:21:30+08:00">
+    <meta property="article:modified_time" content="2025-10-15T15:01:59+08:00">
     <meta property="article:tag" content="K8s">
 
   <meta name="twitter:card" content="summary">
@@ -29,7 +29,7 @@
 <meta name="application-name" content="思海沉钩">
 <meta name="apple-mobile-web-app-title" content="思海沉钩"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/blogs/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/blogs/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/blogs/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/blogs/apple-touch-icon.png"><link rel="mask-icon" href="/blogs/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="https://yiuterran.github.io/blogs/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/" title="K3s存储插件使用笔记 - 思海沉钩" /><link rel="prev" type="text/html" href="https://yiuterran.github.io/blogs/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/" title="边缘服务器管理工具选型" /><link rel="next" type="text/html" href="https://yiuterran.github.io/blogs/posts/%E8%A7%A3%E5%86%B3k8s%E7%9A%84javasdk%E4%B8%8Ejackson%E4%B8%8D%E5%85%BC%E5%AE%B9%E9%97%AE%E9%A2%98/" title="解决k8s的javaSDK与jackson不兼容问题" /><link rel="alternate" type="text/markdown" href="https://yiuterran.github.io/blogs/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/index.md" title="K3s存储插件使用笔记 - 思海沉钩"><link rel="stylesheet" href="/blogs/css/config.min.css"><link rel="stylesheet" href="/blogs/css/style.min.css"><link rel="preload" href="/blogs/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <link rel="icon" type="image/png" sizes="16x16" href="/blogs/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/blogs/apple-touch-icon.png"><link rel="mask-icon" href="/blogs/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="https://yiuterran.github.io/blogs/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/" title="K3s存储插件使用笔记 - 思海沉钩" /><link rel="prev" type="text/html" href="https://yiuterran.github.io/blogs/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/" title="边缘服务器管理工具选型" /><link rel="next" type="text/html" href="https://yiuterran.github.io/blogs/posts/%E8%A7%A3%E5%86%B3k8s%E7%9A%84javasdk%E4%B8%8Ejackson%E4%B8%8D%E5%85%BC%E5%AE%B9%E9%97%AE%E9%A2%98/" title="解决k8s的javaSDK与jackson不兼容问题" /><link rel="stylesheet" href="/blogs/css/config.min.css"><link rel="stylesheet" href="/blogs/css/style.min.css"><link rel="preload" href="/blogs/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/blogs/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/blogs/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/blogs/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
   {
@@ -41,7 +41,7 @@
       "@type": "WebPage",
       "@id": "https:\/\/yiuterran.github.io\/blogs\/posts\/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0\/"
     },"genre": "posts","keywords": "k8s","wordcount":  2636 ,
-    "url": "https:\/\/yiuterran.github.io\/blogs\/posts\/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0\/","datePublished": "2023-06-12T09:20:20+08:00","dateModified": "2023-06-13T18:21:30+08:00","publisher": {
+    "url": "https:\/\/yiuterran.github.io\/blogs\/posts\/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0\/","datePublished": "2023-06-12T09:20:20+08:00","dateModified": "2025-10-15T15:01:59+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
         "@type": "Person",
@@ -114,7 +114,7 @@
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>K3s存储插件使用笔记</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://gravatar.com/afxmessagebox" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img class="avatar" src='https://avatars.githubusercontent.com/u/5930695?v=4' alt="tryao" height="16" width="16">&nbsp;tryao</a></span></div><div class="post-meta-line"><span title="发布于 2023-06-12 09:20:20"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2023-06-12">2023-06-12</time></span>&nbsp;<span title="更新于 2023-06-13 18:21:30"><i class="fa-regular fa-calendar-check fa-fw me-1" aria-hidden="true"></i><time datetime="2023-06-13">2023-06-13</time></span>&nbsp;<span title="2636 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 2700 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 6 分钟</span>&nbsp;</div>
+      <div class="post-meta-line"><span class="post-author"><a href="https://gravatar.com/afxmessagebox" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img class="avatar" src='https://avatars.githubusercontent.com/u/5930695?v=4' alt="tryao" height="16" width="16">&nbsp;tryao</a></span></div><div class="post-meta-line"><span title="发布于 2023-06-12 09:20:20"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2023-06-12">2023-06-12</time></span>&nbsp;<span title="更新于 2025-10-15 15:01:59"><i class="fa-regular fa-calendar-check fa-fw me-1" aria-hidden="true"></i><time datetime="2025-10-15">2025-10-15</time></span>&nbsp;<span title="2636 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 2700 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 6 分钟</span>&nbsp;</div>
     </div><div class="details toc" id="toc-static" data-kept="false">
         <div class="details-summary toc-title">
           <span>目录</span>
@@ -122,17 +122,13 @@
         </div>
         <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
-    <li>
-      <ul>
-        <li><a href="#原理">原理</a></li>
-        <li><a href="#dynamic-provisioning">Dynamic Provisioning</a></li>
-        <li><a href="#localpv">LocalPV</a></li>
-        <li><a href="#移除pv">移除PV</a></li>
-        <li><a href="#csi">CSI</a></li>
-        <li><a href="#k3s默认配置">k3s默认配置</a></li>
-        <li><a href="#longhorn">Longhorn</a></li>
-      </ul>
-    </li>
+    <li><a href="#原理">原理</a></li>
+    <li><a href="#dynamic-provisioning">Dynamic Provisioning</a></li>
+    <li><a href="#localpv">LocalPV</a></li>
+    <li><a href="#移除pv">移除PV</a></li>
+    <li><a href="#csi">CSI</a></li>
+    <li><a href="#k3s默认配置">k3s默认配置</a></li>
+    <li><a href="#longhorn">Longhorn</a></li>
   </ul>
 </nav></div>
       </div><div class="content" id="content"><h2 class="heading-element" id="原理"><span>原理</span>
@@ -531,11 +527,11 @@
 </div><div class="post-footer" id="post-footer">
   <div class="post-info">
     <div class="post-info-line">
-      <div class="post-info-mod"><span title="更新于 2023-06-13 18:21:30">更新于 2023-06-13&nbsp;<a class="git-hash" href="YiuTerran/blog/commit/e7d175e68233cfc3523b7e69df1486a7e07e5565" rel="external nofollow noopener noreferrer" target="_blank" title="new doc for k8s volume&#10&#10Commit: e7d175e68233cfc3523b7e69df1486a7e07e5565 [e7d175e]&#10Author: 姚泰然&#10Date: 2023-06-13 18:21:30&#10Commit Date: 2023-06-13 18:41:01"><i class="fa-solid fa-hashtag fa-fw" aria-hidden="true"></i>e7d175e</a></span>
+      <div class="post-info-mod"><span title="更新于 2025-10-15 15:01:59">更新于 2025-10-15&nbsp;<a class="git-hash" href="YiuTerran/blog/commit/151e6a599de6497ce95f669d90f63f596a52a2c9" rel="external nofollow noopener noreferrer" target="_blank" title="update theme&#10&#10Commit: 151e6a599de6497ce95f669d90f63f596a52a2c9 [151e6a5]&#10Author: 姚泰然&#10Date: 2025-10-15 15:01:59&#10Commit Date: 2025-10-15 15:02:21"><i class="fa-solid fa-hashtag fa-fw" aria-hidden="true"></i>151e6a5</a></span>
       </div><div class="post-info-license">
             <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
           </div></div><div class="post-info-line">
-        <div class="post-info-md"><span><a href="/blogs/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="YiuTerran/blog/blob/monolingual/content/posts/k3s%e5%ad%98%e5%82%a8%e6%8f%92%e4%bb%b6%e4%bd%bf%e7%94%a8%e7%ac%94%e8%ae%b0.md?plain=1" title="查看源码" class="link-to-source">查看源码</a></span><span><a href="YiuTerran/blog/edit/monolingual/content/posts/k3s%e5%ad%98%e5%82%a8%e6%8f%92%e4%bb%b6%e4%bd%bf%e7%94%a8%e7%ac%94%e8%ae%b0.md" title="编辑此页" class="link-to-edit">编辑此页</a></span><span><a href="YiuTerran/blog/issues/new?title=[BUG]%20K3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0&amp;body=%7cField%7cValue%7c%0A%7c-%7c-%7c%0A%7cTitle%7cK3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0%7c%0A%7cURL%7chttps://yiuterran.github.io/blogs/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/%7c%0A%7cFilename%7cYiuTerran/blog/blob/monolingual/content/posts/k3s%e5%ad%98%e5%82%a8%e6%8f%92%e4%bb%b6%e4%bd%bf%e7%94%a8%e7%ac%94%e8%ae%b0.md?plain=1%7c" title="报告问题" class="link-to-report">报告问题</a></span></div>
+        <div class="post-info-md"></div>
         <div class="post-info-share">
           <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://yiuterran.github.io/blogs/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/" data-title="K3s存储插件使用笔记" data-hashtags="k8s"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
   <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://yiuterran.github.io/blogs/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/" data-hashtag="k8s"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>

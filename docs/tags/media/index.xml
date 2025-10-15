@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Media - 标签 - 思海沉钩</title>
+    <link>http://localhost:1313/blogs/tags/media/</link>
+    <description>一些工作学习笔记</description>
+    <generator>Hugo 0.151.0 &amp; FixIt v0.4.0-alpha.2-20251014082535-5c74d431</generator>
+    <language>zh-CN</language>
+    <managingEditor>yaotairan@gmail.com (tryao)</managingEditor>
+    <webMaster>yaotairan@gmail.com (tryao)</webMaster>
+    <lastBuildDate>Wed, 15 Oct 2025 15:01:59 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/blogs/tags/media/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Srs源码阅读笔记</title>
+      <link>http://localhost:1313/blogs/posts/srs%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Wed, 25 Jan 2023 16:15:52 +0800</pubDate><author>yaotairan@gmail.com (tryao)</author>
+      <guid>http://localhost:1313/blogs/posts/srs%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+      <description>&lt;p&gt;春节休息了几天，正式开始看srs的源码了，流媒体领域估计我也没时间深入研究，只求能理解一个大概逻辑。之前有大略看过ffmpeg的代码，感觉不追求细节的话，还是能看懂大概的。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

@@ -11,7 +11,7 @@
   <meta itemprop="description" content="modbus很多术语是从旧时代继承过来的，所以看起来有点莫名其妙。
 通信模式">
   <meta itemprop="datePublished" content="2025-02-08T09:13:17+08:00">
-  <meta itemprop="dateModified" content="2025-03-14T17:37:31+08:00">
+  <meta itemprop="dateModified" content="2025-10-15T15:01:59+08:00">
   <meta itemprop="wordCount" content="1298"><meta property="og:url" content="https://yiuterran.github.io/blogs/posts/modbus%E8%A6%81%E7%82%B9/">
   <meta property="og:site_name" content="思海沉钩">
   <meta property="og:title" content="Modbus要点">
@@ -21,7 +21,7 @@
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
     <meta property="article:published_time" content="2025-02-08T09:13:17+08:00">
-    <meta property="article:modified_time" content="2025-03-14T17:37:31+08:00">
+    <meta property="article:modified_time" content="2025-10-15T15:01:59+08:00">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Modbus要点">
@@ -30,7 +30,7 @@
 <meta name="application-name" content="思海沉钩">
 <meta name="apple-mobile-web-app-title" content="思海沉钩"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/blogs/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/blogs/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/blogs/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/blogs/apple-touch-icon.png"><link rel="mask-icon" href="/blogs/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="https://yiuterran.github.io/blogs/posts/modbus%E8%A6%81%E7%82%B9/" title="Modbus要点 - 思海沉钩" /><link rel="prev" type="text/html" href="https://yiuterran.github.io/blogs/posts/postgresql%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="Postgresql学习笔记" /><link rel="next" type="text/html" href="https://yiuterran.github.io/blogs/posts/vue3%E7%AC%94%E8%AE%B0/" title="Vue3笔记" /><link rel="alternate" type="text/markdown" href="https://yiuterran.github.io/blogs/posts/modbus%E8%A6%81%E7%82%B9/index.md" title="Modbus要点 - 思海沉钩"><link rel="stylesheet" href="/blogs/css/config.min.css"><link rel="stylesheet" href="/blogs/css/style.min.css"><link rel="preload" href="/blogs/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <link rel="icon" type="image/png" sizes="16x16" href="/blogs/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/blogs/apple-touch-icon.png"><link rel="mask-icon" href="/blogs/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="https://yiuterran.github.io/blogs/posts/modbus%E8%A6%81%E7%82%B9/" title="Modbus要点 - 思海沉钩" /><link rel="prev" type="text/html" href="https://yiuterran.github.io/blogs/posts/postgresql%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="Postgresql学习笔记" /><link rel="next" type="text/html" href="https://yiuterran.github.io/blogs/posts/vue3%E7%AC%94%E8%AE%B0/" title="Vue3笔记" /><link rel="stylesheet" href="/blogs/css/config.min.css"><link rel="stylesheet" href="/blogs/css/style.min.css"><link rel="preload" href="/blogs/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/blogs/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/blogs/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/blogs/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
   {
@@ -42,7 +42,7 @@
       "@type": "WebPage",
       "@id": "https:\/\/yiuterran.github.io\/blogs\/posts\/modbus%E8%A6%81%E7%82%B9\/"
     },"genre": "posts","wordcount":  1298 ,
-    "url": "https:\/\/yiuterran.github.io\/blogs\/posts\/modbus%E8%A6%81%E7%82%B9\/","datePublished": "2025-02-08T09:13:17+08:00","dateModified": "2025-03-14T17:37:31+08:00","publisher": {
+    "url": "https:\/\/yiuterran.github.io\/blogs\/posts\/modbus%E8%A6%81%E7%82%B9\/","datePublished": "2025-02-08T09:13:17+08:00","dateModified": "2025-10-15T15:01:59+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
         "@type": "Person",
@@ -115,7 +115,7 @@
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>Modbus要点</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://gravatar.com/afxmessagebox" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img class="avatar" src='https://avatars.githubusercontent.com/u/5930695?v=4' alt="tryao" height="16" width="16">&nbsp;tryao</a></span></div><div class="post-meta-line"><span title="发布于 2025-02-08 09:13:17"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2025-02-08">2025-02-08</time></span>&nbsp;<span title="更新于 2025-03-14 17:37:31"><i class="fa-regular fa-calendar-check fa-fw me-1" aria-hidden="true"></i><time datetime="2025-03-14">2025-03-14</time></span>&nbsp;<span title="1298 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 1300 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 3 分钟</span>&nbsp;</div>
+      <div class="post-meta-line"><span class="post-author"><a href="https://gravatar.com/afxmessagebox" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img class="avatar" src='https://avatars.githubusercontent.com/u/5930695?v=4' alt="tryao" height="16" width="16">&nbsp;tryao</a></span></div><div class="post-meta-line"><span title="发布于 2025-02-08 09:13:17"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2025-02-08">2025-02-08</time></span>&nbsp;<span title="更新于 2025-10-15 15:01:59"><i class="fa-regular fa-calendar-check fa-fw me-1" aria-hidden="true"></i><time datetime="2025-10-15">2025-10-15</time></span>&nbsp;<span title="1298 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 1300 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 3 分钟</span>&nbsp;</div>
     </div><div class="details toc" id="toc-static" data-kept="false">
         <div class="details-summary toc-title">
           <span>目录</span>
@@ -123,16 +123,12 @@
         </div>
         <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#通信模式">通信模式</a></li>
+    <li><a href="#地址空间">地址空间</a></li>
+    <li><a href="#报文格式">报文格式</a>
       <ul>
-        <li><a href="#通信模式">通信模式</a></li>
-        <li><a href="#地址空间">地址空间</a></li>
-        <li><a href="#报文格式">报文格式</a>
-          <ul>
-            <li><a href="#modbus-rtu">ModBus RTU</a></li>
-            <li><a href="#modbus-tcp">ModBus TCP</a></li>
-          </ul>
-        </li>
+        <li><a href="#modbus-rtu">ModBus RTU</a></li>
+        <li><a href="#modbus-tcp">ModBus TCP</a></li>
       </ul>
     </li>
   </ul>
@@ -224,11 +220,11 @@
 </div><div class="post-footer" id="post-footer">
   <div class="post-info">
     <div class="post-info-line">
-      <div class="post-info-mod"><span title="更新于 2025-03-14 17:37:31">更新于 2025-03-14&nbsp;<a class="git-hash" href="YiuTerran/blog/commit/2d7b160ad0ff9b78d846573bf85199c594e3facf" rel="external nofollow noopener noreferrer" target="_blank" title="feat: some new docs&#10&#10Commit: 2d7b160ad0ff9b78d846573bf85199c594e3facf [2d7b160]&#10Author: 姚泰然&#10Date: 2025-03-14 17:37:31"><i class="fa-solid fa-hashtag fa-fw" aria-hidden="true"></i>2d7b160</a></span>
+      <div class="post-info-mod"><span title="更新于 2025-10-15 15:01:59">更新于 2025-10-15&nbsp;<a class="git-hash" href="YiuTerran/blog/commit/151e6a599de6497ce95f669d90f63f596a52a2c9" rel="external nofollow noopener noreferrer" target="_blank" title="update theme&#10&#10Commit: 151e6a599de6497ce95f669d90f63f596a52a2c9 [151e6a5]&#10Author: 姚泰然&#10Date: 2025-10-15 15:01:59&#10Commit Date: 2025-10-15 15:02:21"><i class="fa-solid fa-hashtag fa-fw" aria-hidden="true"></i>151e6a5</a></span>
       </div><div class="post-info-license">
             <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
           </div></div><div class="post-info-line">
-        <div class="post-info-md"><span><a href="/blogs/posts/modbus%E8%A6%81%E7%82%B9/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="YiuTerran/blog/blob/monolingual/content/posts/modbus%e8%a6%81%e7%82%b9.md?plain=1" title="查看源码" class="link-to-source">查看源码</a></span><span><a href="YiuTerran/blog/edit/monolingual/content/posts/modbus%e8%a6%81%e7%82%b9.md" title="编辑此页" class="link-to-edit">编辑此页</a></span><span><a href="YiuTerran/blog/issues/new?title=[BUG]%20Modbus%E8%A6%81%E7%82%B9&amp;body=%7cField%7cValue%7c%0A%7c-%7c-%7c%0A%7cTitle%7cModbus%E8%A6%81%E7%82%B9%7c%0A%7cURL%7chttps://yiuterran.github.io/blogs/posts/modbus%E8%A6%81%E7%82%B9/%7c%0A%7cFilename%7cYiuTerran/blog/blob/monolingual/content/posts/modbus%e8%a6%81%e7%82%b9.md?plain=1%7c" title="报告问题" class="link-to-report">报告问题</a></span></div>
+        <div class="post-info-md"></div>
         <div class="post-info-share">
           <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://yiuterran.github.io/blogs/posts/modbus%E8%A6%81%E7%82%B9/" data-title="Modbus要点"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
   <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://yiuterran.github.io/blogs/posts/modbus%E8%A6%81%E7%82%B9/"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>

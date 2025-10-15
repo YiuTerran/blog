@@ -12,7 +12,7 @@
   <meta itemprop="description" content="2023/11/16 Update: wsl2 2.0通过镜像网络解决了所有网络问题，已经不用折腾了。
 2023/2/2 Update: wsl已经解决了systemd和网络问题，现在已经基本无障碍使用，移除了大部分无用的配置步骤。">
   <meta itemprop="datePublished" content="2022-03-04T20:54:01+08:00">
-  <meta itemprop="dateModified" content="2023-11-16T15:00:50+08:00">
+  <meta itemprop="dateModified" content="2025-10-15T15:01:59+08:00">
   <meta itemprop="wordCount" content="3066">
   <meta itemprop="keywords" content="Wsl"><meta property="og:url" content="https://yiuterran.github.io/blogs/posts/windows&#43;wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
   <meta property="og:site_name" content="思海沉钩">
@@ -23,7 +23,7 @@
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
     <meta property="article:published_time" content="2022-03-04T20:54:01+08:00">
-    <meta property="article:modified_time" content="2023-11-16T15:00:50+08:00">
+    <meta property="article:modified_time" content="2025-10-15T15:01:59+08:00">
     <meta property="article:tag" content="Wsl">
 
   <meta name="twitter:card" content="summary">
@@ -33,7 +33,7 @@
 <meta name="application-name" content="思海沉钩">
 <meta name="apple-mobile-web-app-title" content="思海沉钩"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/blogs/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/blogs/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/blogs/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/blogs/apple-touch-icon.png"><link rel="mask-icon" href="/blogs/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="https://yiuterran.github.io/blogs/posts/windows&#43;wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" title="Windows&#43;wsl2后端开发环境搭建 - 思海沉钩" /><link rel="prev" type="text/html" href="https://yiuterran.github.io/blogs/posts/gb28181%E8%A7%A3%E6%9E%90/" title="Gb28181解析" /><link rel="next" type="text/html" href="https://yiuterran.github.io/blogs/posts/golang%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A6%81%E7%82%B9/" title="Golang定时器要点" /><link rel="alternate" type="text/markdown" href="https://yiuterran.github.io/blogs/posts/windows+wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/index.md" title="Windows+wsl2后端开发环境搭建 - 思海沉钩"><link rel="stylesheet" href="/blogs/css/config.min.css"><link rel="stylesheet" href="/blogs/css/style.min.css"><link rel="preload" href="/blogs/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <link rel="icon" type="image/png" sizes="16x16" href="/blogs/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/blogs/apple-touch-icon.png"><link rel="mask-icon" href="/blogs/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="https://yiuterran.github.io/blogs/posts/windows&#43;wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" title="Windows&#43;wsl2后端开发环境搭建 - 思海沉钩" /><link rel="prev" type="text/html" href="https://yiuterran.github.io/blogs/posts/gb28181%E8%A7%A3%E6%9E%90/" title="Gb28181解析" /><link rel="next" type="text/html" href="https://yiuterran.github.io/blogs/posts/golang%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A6%81%E7%82%B9/" title="Golang定时器要点" /><link rel="stylesheet" href="/blogs/css/config.min.css"><link rel="stylesheet" href="/blogs/css/style.min.css"><link rel="preload" href="/blogs/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/blogs/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/blogs/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/blogs/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
   {
@@ -45,7 +45,7 @@
       "@type": "WebPage",
       "@id": "https:\/\/yiuterran.github.io\/blogs\/posts\/windows\u002bwsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA\/"
     },"genre": "posts","keywords": "wsl","wordcount":  3066 ,
-    "url": "https:\/\/yiuterran.github.io\/blogs\/posts\/windows\u002bwsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA\/","datePublished": "2022-03-04T20:54:01+08:00","dateModified": "2023-11-16T15:00:50+08:00","publisher": {
+    "url": "https:\/\/yiuterran.github.io\/blogs\/posts\/windows\u002bwsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA\/","datePublished": "2022-03-04T20:54:01+08:00","dateModified": "2025-10-15T15:01:59+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
         "@type": "Person",
@@ -118,7 +118,7 @@
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>Windows&#43;wsl2后端开发环境搭建</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://gravatar.com/afxmessagebox" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img class="avatar" src='https://avatars.githubusercontent.com/u/5930695?v=4' alt="tryao" height="16" width="16">&nbsp;tryao</a></span><span class="post-included-in">&nbsp;收录于 <a href="/blogs/categories/%E7%9E%8E%E6%8A%98%E8%85%BE/" class="post-category" title="分类 - 瞎折腾"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 瞎折腾</a></span></div><div class="post-meta-line"><span title="发布于 2022-03-04 20:54:01"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2022-03-04">2022-03-04</time></span>&nbsp;<span title="更新于 2023-11-16 15:00:50"><i class="fa-regular fa-calendar-check fa-fw me-1" aria-hidden="true"></i><time datetime="2023-11-16">2023-11-16</time></span>&nbsp;<span title="3066 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 3100 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 7 分钟</span>&nbsp;</div>
+      <div class="post-meta-line"><span class="post-author"><a href="https://gravatar.com/afxmessagebox" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img class="avatar" src='https://avatars.githubusercontent.com/u/5930695?v=4' alt="tryao" height="16" width="16">&nbsp;tryao</a></span><span class="post-included-in">&nbsp;收录于 <a href="/blogs/categories/%E7%9E%8E%E6%8A%98%E8%85%BE/" class="post-category" title="分类 - 瞎折腾"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 瞎折腾</a></span></div><div class="post-meta-line"><span title="发布于 2022-03-04 20:54:01"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2022-03-04">2022-03-04</time></span>&nbsp;<span title="更新于 2025-10-15 15:01:59"><i class="fa-regular fa-calendar-check fa-fw me-1" aria-hidden="true"></i><time datetime="2025-10-15">2025-10-15</time></span>&nbsp;<span title="3066 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 3100 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 7 分钟</span>&nbsp;</div>
     </div><div class="details toc" id="toc-static" data-kept="false">
         <div class="details-summary toc-title">
           <span>目录</span>
@@ -126,27 +126,23 @@
         </div>
         <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#准备工作">准备工作</a>
       <ul>
-        <li><a href="#准备工作">准备工作</a>
-          <ul>
-            <li><a href="#网络准备">网络准备</a></li>
-            <li><a href="#windows命令行工具">windows命令行工具</a></li>
-            <li><a href="#安装包管理器">安装包管理器</a></li>
-            <li><a href="#安装字体">安装字体</a></li>
-            <li><a href="#配置pwsh">配置pwsh</a></li>
-          </ul>
-        </li>
-        <li><a href="#安装wsl2">安装wsl2</a>
-          <ul>
-            <li><a href="#配置linux">配置linux</a></li>
-            <li><a href="#配置wsl">配置wsl</a></li>
-          </ul>
-        </li>
-        <li><a href="#注意事项">注意事项</a></li>
-        <li><a href="#附常用alias">附：常用alias</a></li>
+        <li><a href="#网络准备">网络准备</a></li>
+        <li><a href="#windows命令行工具">windows命令行工具</a></li>
+        <li><a href="#安装包管理器">安装包管理器</a></li>
+        <li><a href="#安装字体">安装字体</a></li>
+        <li><a href="#配置pwsh">配置pwsh</a></li>
       </ul>
     </li>
+    <li><a href="#安装wsl2">安装wsl2</a>
+      <ul>
+        <li><a href="#配置linux">配置linux</a></li>
+        <li><a href="#配置wsl">配置wsl</a></li>
+      </ul>
+    </li>
+    <li><a href="#注意事项">注意事项</a></li>
+    <li><a href="#附常用alias">附：常用alias</a></li>
   </ul>
 </nav></div>
       </div><div class="content" id="content"><p>2023/11/16 Update: wsl2 2.0通过镜像网络解决了所有网络问题，已经不用折腾了。</p>
@@ -416,11 +412,11 @@
 </div></div><div class="post-footer" id="post-footer">
   <div class="post-info">
     <div class="post-info-line">
-      <div class="post-info-mod"><span title="更新于 2023-11-16 15:00:50">更新于 2023-11-16&nbsp;<a class="git-hash" href="YiuTerran/blog/commit/0fc53d9e6877b777c2e31a89fdcb424ebd337ec8" rel="external nofollow noopener noreferrer" target="_blank" title="更新wsl环境配置&#10&#10Commit: 0fc53d9e6877b777c2e31a89fdcb424ebd337ec8 [0fc53d9]&#10Author: 姚泰然&#10Date: 2023-11-16 15:00:50"><i class="fa-solid fa-hashtag fa-fw" aria-hidden="true"></i>0fc53d9</a></span>
+      <div class="post-info-mod"><span title="更新于 2025-10-15 15:01:59">更新于 2025-10-15&nbsp;<a class="git-hash" href="YiuTerran/blog/commit/151e6a599de6497ce95f669d90f63f596a52a2c9" rel="external nofollow noopener noreferrer" target="_blank" title="update theme&#10&#10Commit: 151e6a599de6497ce95f669d90f63f596a52a2c9 [151e6a5]&#10Author: 姚泰然&#10Date: 2025-10-15 15:01:59&#10Commit Date: 2025-10-15 15:02:21"><i class="fa-solid fa-hashtag fa-fw" aria-hidden="true"></i>151e6a5</a></span>
       </div><div class="post-info-license">
             <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
           </div></div><div class="post-info-line">
-        <div class="post-info-md"><span><a href="/blogs/posts/windows&#43;wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="YiuTerran/blog/blob/monolingual/content/posts/windows&#43;wsl2%e5%90%8e%e7%ab%af%e5%bc%80%e5%8f%91%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba.md?plain=1" title="查看源码" class="link-to-source">查看源码</a></span><span><a href="YiuTerran/blog/edit/monolingual/content/posts/windows&#43;wsl2%e5%90%8e%e7%ab%af%e5%bc%80%e5%8f%91%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba.md" title="编辑此页" class="link-to-edit">编辑此页</a></span><span><a href="YiuTerran/blog/issues/new?title=[BUG]%20Windows%2Bwsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA&amp;body=%7cField%7cValue%7c%0A%7c-%7c-%7c%0A%7cTitle%7cWindows%2Bwsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%7c%0A%7cURL%7chttps://yiuterran.github.io/blogs/posts/windows&#43;wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/%7c%0A%7cFilename%7cYiuTerran/blog/blob/monolingual/content/posts/windows&#43;wsl2%e5%90%8e%e7%ab%af%e5%bc%80%e5%8f%91%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba.md?plain=1%7c" title="报告问题" class="link-to-report">报告问题</a></span></div>
+        <div class="post-info-md"></div>
         <div class="post-info-share">
           <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://yiuterran.github.io/blogs/posts/windows&#43;wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" data-title="Windows&#43;wsl2后端开发环境搭建" data-hashtags="wsl"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
   <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://yiuterran.github.io/blogs/posts/windows&#43;wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" data-hashtag="wsl"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
