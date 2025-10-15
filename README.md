@@ -4,4 +4,4 @@
 
 这次直接把md原始文件也传到github，以后就用这个了。
 
-新地址是：https://yiuterran.github.io/blog/
+新地址是：https://yiuterran.github.io/blog，原来的博客还在，删掉/blog后缀即可
