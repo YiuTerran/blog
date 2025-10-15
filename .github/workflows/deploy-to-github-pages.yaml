@@ -1,0 +1,36 @@
+name: GitHub Pages
+
+on:
+  push:
+    branches:
+      - monolingual
+  pull_request:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: '0.151.0'  # 填写你的hugo版本，可用hugo version查看
+          extended: true          # 如果你使用的不是extended版本的hugo，将true改为false
+
+      - name: Build
+        run: hugo --minify
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        if: ${{ github.ref == 'refs/heads/monolingual' }}  # 注意填写main或者master
+        with:
+          personal_token: ${{ secrets.HUGO_DEPLOY }}
+          external_repository: YiuTerran/blog # 填写远程仓库，不一定是这个格式，按照自己的情况写
+          publish_dir: ./docs
+
