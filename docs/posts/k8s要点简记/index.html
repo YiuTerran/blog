@@ -43,7 +43,7 @@
 <link rel="stylesheet" href="https://yiuterran.github.io/blog/css/highlightjs.min.2958991528e43eb6fc9b8c4f2b8e052f79c4010718e1d1e888a777620e9ee63021c2c57ec7417a3108019bb8c41943e6.css" media="print" onload="this.media='all';this.onload=null">
 
 
-<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.78e494ccd35d494929874dc88a1c7963e597460caafa2ea0b64b9f5cd2ed626a7348522a90f0b37886181ab1ed34301f.js"></script>
+<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.8c77c7521b1f95ec2031c2a79f5c6a698aa4a0dba5ba649dfbc7f73994cddf3f494be6aac7e5724f35cbf72cfde09703.js"></script>
 
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
@@ -69,22 +69,13 @@
 
 <script defer src="https://cdn.jsdelivr.net/npm/mermaid@8.14.0/dist/mermaid.min.js" 
   integrity="sha384-atOyb0FxAgN9LyAc6PEf9BjgwLISyansgdH8/VXQH8p2o5vfrRgmGIJ2Sg22L0A0"  crossorigin></script>
-<link rel="preconnect" href="https://www.google-analytics.com" crossorigin>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-C0R8DENDJ0"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag() { dataLayer.push(arguments); }
-  gtag('js', new Date());
-  gtag('config', 'G-C0R8DENDJ0');
-</script>
 
 
-<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu546329292729773971.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu16414047889438337432.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
 
 <meta name="description"
-  content="22年的时候需要使用CICD的时候，看了一遍k8s相关的知识点。买了一本《深入剖析Kubernetes》，大致熟悉了常用的概念。
-最近因为工作调动需要做云原生相关的开发，有必要重新复习一遍相关概念，并深入部分章节的细节。">
+  content="22年的时候需要使用CICD的时候，看了一遍k8s相关的知识点。买了一本《深入剖析Kubernetes》，大致熟悉了常用的概念。 最近因为工作调动需要做">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -126,7 +117,7 @@
             "url": "https://yiuterran.github.io/blog/images/icon.png"
         }
         },
-    "description": "\u003cp\u003e22年的时候需要使用CICD的时候，看了一遍k8s相关的知识点。买了一本《深入剖析Kubernetes》，大致熟悉了常用的概念。\u003c\/p\u003e\n\u003cp\u003e最近因为工作调动需要做云原生相关的开发，有必要重新复习一遍相关概念，并深入部分章节的细节。\u003c\/p\u003e"
+    "description": "22年的时候需要使用CICD的时候，看了一遍k8s相关的知识点。买了一本《深入剖析Kubernetes》，大致熟悉了常用的概念。 最近因为工作调动需要做"
 }
 </script><meta property="og:title" content="K8s要点简记 | 应许之地" />
 <meta property="og:type" content="article" />
@@ -140,8 +131,7 @@
 
 
 
-<meta property="og:description" content="22年的时候需要使用CICD的时候，看了一遍k8s相关的知识点。买了一本《深入剖析Kubernetes》，大致熟悉了常用的概念。
-最近因为工作调动需要做云原生相关的开发，有必要重新复习一遍相关概念，并深入部分章节的细节。" />
+<meta property="og:description" content="22年的时候需要使用CICD的时候，看了一遍k8s相关的知识点。买了一本《深入剖析Kubernetes》，大致熟悉了常用的概念。 最近因为工作调动需要做" />
 
 
 
@@ -345,80 +335,80 @@ kubeadm join &lt;master ip:port&gt;
 </code></pre>
 <p>当然需要自己提前安装运行时（如containerd，如果使用DockerEngine则需要额外安装<code>cri-dockered</code>适配器），此外需要打开一些端口。master节点包括：</p>
 <table>
-  <thead>
-      <tr>
-          <th>协议</th>
-          <th>方向</th>
-          <th>端口范围</th>
-          <th>目的</th>
-          <th>使用者</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>TCP</td>
-          <td>入站</td>
-          <td>6443</td>
-          <td>Kubernetes API server</td>
-          <td>所有</td>
-      </tr>
-      <tr>
-          <td>TCP</td>
-          <td>入站</td>
-          <td>2379-2380</td>
-          <td>etcd server client API</td>
-          <td>kube-apiserver, etcd</td>
-      </tr>
-      <tr>
-          <td>TCP</td>
-          <td>入站</td>
-          <td>10250</td>
-          <td>Kubelet API</td>
-          <td>自身, 控制面</td>
-      </tr>
-      <tr>
-          <td>TCP</td>
-          <td>入站</td>
-          <td>10259</td>
-          <td>kube-scheduler</td>
-          <td>自身</td>
-      </tr>
-      <tr>
-          <td>TCP</td>
-          <td>入站</td>
-          <td>10257</td>
-          <td>kube-controller-manager</td>
-          <td>自身</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>协议</th>
+<th>方向</th>
+<th>端口范围</th>
+<th>目的</th>
+<th>使用者</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TCP</td>
+<td>入站</td>
+<td>6443</td>
+<td>Kubernetes API server</td>
+<td>所有</td>
+</tr>
+<tr>
+<td>TCP</td>
+<td>入站</td>
+<td>2379-2380</td>
+<td>etcd server client API</td>
+<td>kube-apiserver, etcd</td>
+</tr>
+<tr>
+<td>TCP</td>
+<td>入站</td>
+<td>10250</td>
+<td>Kubelet API</td>
+<td>自身, 控制面</td>
+</tr>
+<tr>
+<td>TCP</td>
+<td>入站</td>
+<td>10259</td>
+<td>kube-scheduler</td>
+<td>自身</td>
+</tr>
+<tr>
+<td>TCP</td>
+<td>入站</td>
+<td>10257</td>
+<td>kube-controller-manager</td>
+<td>自身</td>
+</tr>
+</tbody>
 </table>
 <p>node节点包括：</p>
 <table>
-  <thead>
-      <tr>
-          <th>协议</th>
-          <th>方向</th>
-          <th>端口范围</th>
-          <th>目的</th>
-          <th>使用者</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>TCP</td>
-          <td>入站</td>
-          <td>10250</td>
-          <td>Kubelet API</td>
-          <td>自身, 控制面</td>
-      </tr>
-      <tr>
-          <td>TCP</td>
-          <td>入站</td>
-          <td>30000-32767</td>
-          <td>NodePort Services</td>
-          <td>所有</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>协议</th>
+<th>方向</th>
+<th>端口范围</th>
+<th>目的</th>
+<th>使用者</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TCP</td>
+<td>入站</td>
+<td>10250</td>
+<td>Kubelet API</td>
+<td>自身, 控制面</td>
+</tr>
+<tr>
+<td>TCP</td>
+<td>入站</td>
+<td>30000-32767</td>
+<td>NodePort Services</td>
+<td>所有</td>
+</tr>
+</tbody>
 </table>
 <p>NodePort默认使用30000~32767的端口，这里可以根据需要开放。截止v1.26，k8s单个集群的限制如下：</p>
 <ul>
@@ -930,7 +920,7 @@ ipvs:
       
         <div class="my-4">
     
-    <a href="https://yiuterran.github.io/blog/tags/k8s/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#K8s</a>
+    <a href="https://yiuterran.github.io/blog/tags/k8s/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#k8s</a>
     
 </div>
       

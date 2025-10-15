@@ -43,7 +43,7 @@
 <link rel="stylesheet" href="https://yiuterran.github.io/blog/css/highlightjs.min.2958991528e43eb6fc9b8c4f2b8e052f79c4010718e1d1e888a777620e9ee63021c2c57ec7417a3108019bb8c41943e6.css" media="print" onload="this.media='all';this.onload=null">
 
 
-<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.78e494ccd35d494929874dc88a1c7963e597460caafa2ea0b64b9f5cd2ed626a7348522a90f0b37886181ab1ed34301f.js"></script>
+<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.8c77c7521b1f95ec2031c2a79f5c6a698aa4a0dba5ba649dfbc7f73994cddf3f494be6aac7e5724f35cbf72cfde09703.js"></script>
 
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
@@ -69,46 +69,13 @@
 
 <script defer src="https://cdn.jsdelivr.net/npm/mermaid@8.14.0/dist/mermaid.min.js" 
   integrity="sha384-atOyb0FxAgN9LyAc6PEf9BjgwLISyansgdH8/VXQH8p2o5vfrRgmGIJ2Sg22L0A0"  crossorigin></script>
-<link rel="preconnect" href="https://www.google-analytics.com" crossorigin>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-C0R8DENDJ0"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag() { dataLayer.push(arguments); }
-  gtag('js', new Date());
-  gtag('config', 'G-C0R8DENDJ0');
-</script>
 
 
-<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu546329292729773971.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu16414047889438337432.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
 
 <meta name="description"
-  content="ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理：
-将某个key的值挂载为环境变量
-apiVersion: v1
-kind: Pod
-metadata:
-  name: dapi-test-pod
-spec:
-  containers:
-    - name: test-container
-      image: gcr.io/google_containers/busybox
-      command: [ &quot;/bin/sh&quot;, &quot;-c&quot;, &quot;env&quot; ]
-      env:
-        - name: SPECIAL_LEVEL_KEY
-          valueFrom:
-            configMapKeyRef:
-              name: special-config
-              key: special.how
-        - name: SPECIAL_TYPE_KEY
-          valueFrom:
-            configMapKeyRef:
-              name: special-config
-              key: special.type
-              optional: true
-  restartPolicy: Never
-
-这里在command里可以通过$(SPECIAL_TYPE_KEY)的格式来引用这些环境变量作为命令行参数。">
+  content="ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理： 将某个key的值挂载为环境变量 apiVersion: v1 kind: Pod metadata: name: dapi-test-pod spec: containers: - name: test-container image: gcr.io/google_containers/busybox command: [ &quot;/bin/sh&quot;, &quot;-c&quot;, &quot;env&quot; ] env: - name: SPECIAL_LEVEL_KEY valueFrom: configMapKeyRef:">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -150,7 +117,7 @@ spec:
             "url": "https://yiuterran.github.io/blog/images/icon.png"
         }
         },
-    "description": "\u003cp\u003eConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理：\u003c\/p\u003e\n\u003ch2 id=\u0022将某个key的值挂载为环境变量\u0022\u003e将某个key的值挂载为环境变量\u003c\/h2\u003e\n\u003cpre\u003e\u003ccode class=\u0022language-yaml\u0022\u003eapiVersion: v1\nkind: Pod\nmetadata:\n  name: dapi-test-pod\nspec:\n  containers:\n    - name: test-container\n      image: gcr.io\/google_containers\/busybox\n      command: [ \u0026quot;\/bin\/sh\u0026quot;, \u0026quot;-c\u0026quot;, \u0026quot;env\u0026quot; ]\n      env:\n        - name: SPECIAL_LEVEL_KEY\n          valueFrom:\n            configMapKeyRef:\n              name: special-config\n              key: special.how\n        - name: SPECIAL_TYPE_KEY\n          valueFrom:\n            configMapKeyRef:\n              name: special-config\n              key: special.type\n              optional: true\n  restartPolicy: Never\n\u003c\/code\u003e\u003c\/pre\u003e\n\u003cp\u003e这里在\u003ccode\u003ecommand\u003c\/code\u003e里可以通过\u003ccode\u003e$(SPECIAL_TYPE_KEY)\u003c\/code\u003e的格式来引用这些环境变量作为命令行参数。\u003c\/p\u003e"
+    "description": "ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理： 将某个key的值挂载为环境变量 apiVersion: v1 kind: Pod metadata: name: dapi-test-pod spec: containers: - name: test-container image: gcr.io\/google_containers\/busybox command: [ \u0026quot;\/bin\/sh\u0026quot;, \u0026quot;-c\u0026quot;, \u0026quot;env\u0026quot; ] env: - name: SPECIAL_LEVEL_KEY valueFrom: configMapKeyRef:"
 }
 </script><meta property="og:title" content="Configmap挂载的几种情况 | 应许之地" />
 <meta property="og:type" content="article" />
@@ -164,32 +131,7 @@ spec:
 
 
 
-<meta property="og:description" content="ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理：
-将某个key的值挂载为环境变量
-apiVersion: v1
-kind: Pod
-metadata:
-  name: dapi-test-pod
-spec:
-  containers:
-    - name: test-container
-      image: gcr.io/google_containers/busybox
-      command: [ &quot;/bin/sh&quot;, &quot;-c&quot;, &quot;env&quot; ]
-      env:
-        - name: SPECIAL_LEVEL_KEY
-          valueFrom:
-            configMapKeyRef:
-              name: special-config
-              key: special.how
-        - name: SPECIAL_TYPE_KEY
-          valueFrom:
-            configMapKeyRef:
-              name: special-config
-              key: special.type
-              optional: true
-  restartPolicy: Never
-
-这里在command里可以通过$(SPECIAL_TYPE_KEY)的格式来引用这些环境变量作为命令行参数。" />
+<meta property="og:description" content="ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理： 将某个key的值挂载为环境变量 apiVersion: v1 kind: Pod metadata: name: dapi-test-pod spec: containers: - name: test-container image: gcr.io/google_containers/busybox command: [ &quot;/bin/sh&quot;, &quot;-c&quot;, &quot;env&quot; ] env: - name: SPECIAL_LEVEL_KEY valueFrom: configMapKeyRef:" />
 
 
 
@@ -469,7 +411,7 @@ spec:
       
         <div class="my-4">
     
-    <a href="https://yiuterran.github.io/blog/tags/k8s/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#K8s</a>
+    <a href="https://yiuterran.github.io/blog/tags/k8s/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#k8s</a>
     
 </div>
       
@@ -485,7 +427,11 @@ spec:
       <a href="https://yiuterran.github.io/blog/authors/tryao/" class="md:me-4 text-primary-text h-24 w-24">
         
         
-          <i class="fas fa-user-circle fa-6x"></i>
+          <img
+            src="https://yiuterran.github.io/blog/images/avatar.png"
+            class="bg-primary-bg w-full rounded-full"
+            alt="Avatar"
+          />
         
       </a>
       <div class="mt-4 w-full md:mt-0 md:w-auto">
@@ -493,9 +439,25 @@ spec:
           href="https://yiuterran.github.io/blog/authors/tryao/"
           class="mb-2 block border-b pb-1 text-lg font-bold"
         >
-          <h3>“Tryao&#34;</h3>
+          <h3>个人介绍</h3>
         </a>
-        <span class="block pb-2"></span>
+        <span class="block pb-2">兴趣使然的程序员，博而不精，乐学不倦</span>
+        
+          
+          
+          
+          
+          <a href="mailto:yaotairan@gmail.com" class="me-2">
+            <i class="fas fa-envelope"></i>
+          </a>
+        
+          
+          
+          
+          
+          <a href="https://github.com/YiuTerran" class="me-2">
+            <i class="fab fa-github"></i>
+          </a>
         
       </div>
     </div>

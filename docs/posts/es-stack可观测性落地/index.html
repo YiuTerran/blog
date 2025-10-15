@@ -43,7 +43,7 @@
 <link rel="stylesheet" href="https://yiuterran.github.io/blog/css/highlightjs.min.2958991528e43eb6fc9b8c4f2b8e052f79c4010718e1d1e888a777620e9ee63021c2c57ec7417a3108019bb8c41943e6.css" media="print" onload="this.media='all';this.onload=null">
 
 
-<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.78e494ccd35d494929874dc88a1c7963e597460caafa2ea0b64b9f5cd2ed626a7348522a90f0b37886181ab1ed34301f.js"></script>
+<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.8c77c7521b1f95ec2031c2a79f5c6a698aa4a0dba5ba649dfbc7f73994cddf3f494be6aac7e5724f35cbf72cfde09703.js"></script>
 
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
@@ -69,21 +69,13 @@
 
 <script defer src="https://cdn.jsdelivr.net/npm/mermaid@8.14.0/dist/mermaid.min.js" 
   integrity="sha384-atOyb0FxAgN9LyAc6PEf9BjgwLISyansgdH8/VXQH8p2o5vfrRgmGIJ2Sg22L0A0"  crossorigin></script>
-<link rel="preconnect" href="https://www.google-analytics.com" crossorigin>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-C0R8DENDJ0"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag() { dataLayer.push(arguments); }
-  gtag('js', new Date());
-  gtag('config', 'G-C0R8DENDJ0');
-</script>
 
 
-<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu546329292729773971.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu16414047889438337432.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
 
 <meta name="description"
-  content="随着ES v8.4的发布，es对于可观测性三支柱（Metric/Trace/Log）都具有较为完备的支持，Alert功能也能满足一般需求，kibana的看板功能经过这么多年的迭代，可用性也比较好了。最重要的是，兼容OpenTelemetry的标准也保证如果用的不爽也可以用其他开源组件替换，所以项目组目前搭建监控平台，经过评估还是决定优先用这一套。">
+  content="随着ES v8.4的发布，es对于可观测性三支柱（Metric/Trace/Log）都具有较为完备的支持，Alert功能也能满足一般需求，kibana的">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -112,7 +104,7 @@
     },
     "headline": "Elastic Observability系统搭建 | 应许之地","datePublished": "2022-10-12T17:52:42+08:00",
     "dateModified": "2022-10-12T17:52:42+08:00",
-    "wordCount":  13761 ,
+    "wordCount":  14148 ,
     "publisher": {
         "@type": "Person",
         "name": "C. Wang",
@@ -121,7 +113,7 @@
             "url": "https://yiuterran.github.io/blog/images/icon.png"
         }
         },
-    "description": "\u003cp\u003e随着ES v8.4的发布，es对于可观测性三支柱（Metric\/Trace\/Log）都具有较为完备的支持，Alert功能也能满足一般需求，kibana的看板功能经过这么多年的迭代，可用性也比较好了。最重要的是，\u003cstrong\u003e兼容OpenTelemetry的标准\u003c\/strong\u003e也保证如果用的不爽也可以用其他开源组件替换，所以项目组目前搭建监控平台，经过评估还是决定优先用这一套。\u003c\/p\u003e"
+    "description": "随着ES v8.4的发布，es对于可观测性三支柱（Metric\/Trace\/Log）都具有较为完备的支持，Alert功能也能满足一般需求，kibana的"
 }
 </script><meta property="og:title" content="Elastic Observability系统搭建 | 应许之地" />
 <meta property="og:type" content="article" />
@@ -135,7 +127,7 @@
 
 
 
-<meta property="og:description" content="随着ES v8.4的发布，es对于可观测性三支柱（Metric/Trace/Log）都具有较为完备的支持，Alert功能也能满足一般需求，kibana的看板功能经过这么多年的迭代，可用性也比较好了。最重要的是，兼容OpenTelemetry的标准也保证如果用的不爽也可以用其他开源组件替换，所以项目组目前搭建监控平台，经过评估还是决定优先用这一套。" />
+<meta property="og:description" content="随着ES v8.4的发布，es对于可观测性三支柱（Metric/Trace/Log）都具有较为完备的支持，Alert功能也能满足一般需求，kibana的" />
 
 
 
@@ -256,7 +248,7 @@
   </div>
   <div class="me-6 my-2">
     <i class="fas fa-clock me-1"></i>
-    <span>28分钟阅读时长</span>
+    <span>29分钟阅读时长</span>
   </div>
 
   
@@ -372,10 +364,36 @@ cat password.txt
          elasticsearch:$version
 </code></pre>
 <p>将上面的token换成真实token即可。</p>
+<h2 id="第二次启动">第二次启动</h2>
+<p>除了第一个节点外，其他容器节点无法重启。这是因为ES设计的有问题，ENROLLMENT_TOKEN只能在第一次启动时作为参数。</p>
+<p>第二次启动时，在第一个节点宿主机上使用docker cp elastic1:/usr/share/elasticsearch/config . 将配置文件复制出来。</p>
+<p>将配置文件传到其他节点，放置在data同目录下，修改config/elasticsearch.yml中的内容，删除或者注释掉cluster.initial_master_nodes所在行。</p>
+<p>使用如下脚本启动：</p>
+<pre><code class="language-bash">#!/usr/bin/env bash
+version=8.15.0
+name='elastic2'
+chown -Rh 1000:root data/
+ 
+docker run -itd \
+    --name $name \
+    --restart always \
+    -p 9200:9200 \
+    -p 9300:9300 \
+    -e 'network.host=0.0.0.0' \
+    -e 'network.publish_host=&lt;节点IP&gt;' \
+    -e 'discovery.seed_hosts=172.19.3.209,172.19.3.210,172.19.3.211' \
+    -m 4GB \
+    -v $(pwd)/data:/usr/share/elasticsearch/data \
+    -v $(pwd)/config:/usr/share/elasticsearch/config \
+    -v $(pwd)/crack/x-pack-core-$version.crack.jar:/usr/share/elasticsearch/modules/x-pack-core/x-pack-core-$version.jar \
+    elasticsearch:$version
+</code></pre>
+<p>注意这里删除了ENROLLMENT_TOKEN的环境变量，增加了discovery.seed_hosts，对应的值是集群所有节点的ip。</p>
+<p>之后再重启，就没有问题了。</p>
+<p><strong>理论上也可以直接使用这个方案加入节点，而不使用ENROLLMENT_TOKEN，不过没有尝试过。</strong></p>
 <h2 id="注意事项">注意事项</h2>
 <ol>
-<li>上面的节点启动之后，重启容器会报错，这是因为ENROLLMENT_TOKEN只有第一次启动需要，后面再启动就可以删掉这个参数了。</li>
-<li>可以删除掉data文件夹下的内容，使用<code>ENROLLMENT_TOKEN</code>重新加入节点。</li>
+<li>如果要重置密码，可以使用<code>elasticsearch-reset-password</code>工具。</li>
 <li>可以通过增加环境变量修改<code>elasticsearch.yml</code>中的配置，方法是将所有字母变成大写，<code>.</code>变为<code>_</code>，<code>_</code>变成<code>__</code>，如：<code>k1.k2.k_3</code>对应的环境变量就是：<code>K1_K2_K__3</code>，和emqx的环境变量配置方式比较像。</li>
 <li>如果要重置密码，可以使用<code>elasticsearch-reset-password</code>工具。</li>
 </ol>
@@ -396,8 +414,6 @@ cat password.txt
          -e &quot;XPACK_REPORTING_ENCRYPTIONKEY=&lt;key2&gt;&quot; \
          -e &quot;XPACK_SECURITY_ENCRYPTIONKEY=&lt;key3&gt;&quot; \
          -e &quot;I18N_LOCALE=zh-CN&quot; \
-         -v &quot;$(pwd)/config:/usr/share/kibana/config \
-         -v &quot;$(pwd)/data:/usr/share/kibana/data&quot; \
          -m 2GB \
          kibana:$version
 </code></pre>
@@ -408,7 +424,7 @@ cat password.txt
 <h2 id="fleet-server">Fleet Server</h2>
 <p>Fleet Server是接受Elastic Agent或者各种Beat发送过来的数据并存储到ES的服务。比较蛋疼的是，FleetServer是集成在ElasticAgent这个二进制文件里面的，所以agent体积巨大。</p>
 <p>MetricBeats等beats工具则比较轻量一些，可以直接传输数据到ES，不过此类工具就无法通过kibana直接进行配置升级等管理了。</p>
-<p>这里还是先使用Agent+Fleet的方式安装，方便后续升级管理。在kibana的<code>Management-Fleet页面上点击“添加Fleet服务器”即可添加代理服务。</code></p>
+<p>这里还是先使用Agent+Fleet的方式安装，方便后续升级管理。在kibana的Management-Fleet页面上点击“添加Fleet服务器”即可添加代理服务。</p>
 <p>在此之前需要准备fleet-server通信用的HTTPS证书（<strong>如果全部是内网监控，也可以使用<code>–insecure</code>参数跳过TLS认证，这样就没必要安装证书了</strong>）。</p>
 <p>进入es节点的docker容器内，依次输入下面的命令：</p>
 <pre><code>elasticsearch-certutil ca --pem
@@ -436,9 +452,9 @@ cd fleet-server
 <p>由于FleetServer和ElasticAgent实际上是同一个二进制文件，所在FleetServer所在的机器就没必要再装agent了。这里另外找一台主机来安装agent.</p>
 <h3 id="代理策略">代理策略</h3>
 <p>切换到代理策略页面，先创建一个代理策略。注意默认情况下，fleet和es的地址都是内网的，<strong>可以在设置页面里面分别增加一个外网入口</strong>，供远程监控时使用：</p>
-<p><img alt="image-2024-5-10_18-42-50" src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/image-2024-5-10_18-42-50.png"></p>
+<p><img src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/image-2024-5-10_18-42-50.png" alt="image-2024-5-10_18-42-50"></p>
 <p>然后在创建代理策略时，滚动到下面，可以选择外网接入：</p>
-<p><img alt="image-2024-5-10_18-43-30" src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/image-2024-5-10_18-43-30.png"></p>
+<p><img src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/image-2024-5-10_18-43-30.png" alt="image-2024-5-10_18-43-30"></p>
 <p><strong>特别注意：</strong></p>
 <p><strong>默认生成的证书只适用于内网通信，如果要外网通信，CA证书需要留空，且需要在高级配置部分增加：</strong></p>
 <pre><code>ssl.verification_mode: none
@@ -485,7 +501,7 @@ cd fleet-server
 <p>在discover那边，将索引切换到<code>metrics-*</code>，搜索<code>prometheus*:*</code>应该可以看到有数据采集过来。</p>
 <p>如果是在k8s里面监控，则比较复杂。首先k8s里面必须安装<a href="https://github.com/kubernetes/kube-state-metrics">kube-state-metric</a>，否则无法正常采集pod数据。</p>
 <p>如果pod的数量只有1个，可以通过service直接访问，比如iot-iotwebgateway.prod.svc.cluster.local，但是多余1个pod就不行了，此时需要使用autodiscover功能，如下图：</p>
-<p><img alt="截屏2024-05-14 21.17.48" src="https://global.discourse-cdn.com/elastic/optimized/3X/8/1/819bbce240960e670e3a8d12abcb63cf508e55d9_2_566x500.png"></p>
+<p><img src="https://global.discourse-cdn.com/elastic/optimized/3X/8/1/819bbce240960e670e3a8d12abcb63cf508e55d9_2_566x500.png" alt="截屏2024-05-14 21.17.48"></p>
 <p>condition里面通过label筛选满足条件的pod，hosts使用对应的变量访问。</p>
 <h2 id="黑盒blackbox监控">黑盒(Blackbox)监控</h2>
 <p>在Observability-Synthetics-Monitor里有个入口可以配置黑盒探测来监控接口或者主机的可用性，支持进行模拟浏览器/HTTP/TCP/ICMP的探测。</p>
@@ -596,7 +612,7 @@ multiline.match: after
 <li>如果是多级嵌套，如<code>k1:[{k2: [{&quot;k3&quot;: &quot;v&quot;}]]</code>，搜索的时候需要写全路径，即<code>k1.k2:{k3: v}</code>这种搜索；</li>
 </ol>
 <h2 id="安装elastic-apm">安装Elastic APM</h2>
-<p>这里的APM其实指的是Trace系统，通过Fleet直接绑定集成就可以。</p>
+<p>这里的APM其实指的是Trace系统，通过Fleet直接绑定集成就可以。需要注意apm采集会影响应用程序的性能，如果部署规模不是很大，不太建议集成。</p>
 <p>推荐使用OpenTelemetry的Agent进行Export，方便将来迁移到其他平台。</p>
 <p>对于Java而言，可以使用自动导出，支持大部分组件。Go/C++服务则需要手动集成，并且需要修改大量代码。</p>
 <p>跨服务传递时，一般通过<code>traceparent</code>和<code>tracestate</code>header进行传递，相关w3c标准见<a href="https://w3c.github.io/trace-context/">这里</a>.</p>
@@ -635,14 +651,14 @@ multiline.match: after
 <p>在安全里可以安装Elastic预构建的几百个规则，不过不是很建议全部导入，因为大部分都没啥用。可以考虑激活k8s，linux之内tag的规则，如果使用云厂商自带的监控，则一般不必再使用这里的告警功能，相当于重复监测了，而且<strong>有性能损耗</strong>。</p>
 <h4 id="observability使用示例">Observability使用示例</h4>
 <p>如果只是简单的创建一个error日志告警，可以在Observability点击创建规则，选择日志阈值，然后创建一个如下的规则：</p>
-<p><img alt="image-20221020141946295" src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/chDWbTyCmFlVs2f-20230307194344056.png"></p>
+<p><img src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/chDWbTyCmFlVs2f-20230307194344056.png" alt="image-20221020141946295"></p>
 <p>由于我们在上面的数据预处理里面已经将log.level映射出来，所以这里使用这个字段判断一下就行。连接器选择刚才创建的webhook，在Fired和Recovered两种条件下创建两个不同的告警提示即可。</p>
-<p><img alt="image-20221020142216332" src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/lIORdb4Dt6GwngU-20230307194344606.png"></p>
+<p><img src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/lIORdb4Dt6GwngU-20230307194344606.png" alt="image-20221020142216332"></p>
 <p>右侧可以看到这里可以使用的变量。可以注意到这里并<strong>没有字段可以拿到日志的详情</strong>，这是因为这里只能做聚合查询，肯定是拿不到具体日志的详情的，不过可以通过group by source.ip之类的方式获取到具体的主机。如果需要直接提示详细的错误，需要用其他方案；</p>
 <h4 id="告警与洞见使用示例推荐">告警与洞见使用示例（推荐）</h4>
 <p>点击<strong>创建规则</strong>，选择<strong>Elasticsearch查询</strong>，选择KQL查询，创建一个视图<code>logs-golang*</code>作为索引，这样就自动匹配所有golang服务。</p>
 <p>如果不想这么粗放的创建告警，也可以用<code>logs-golang_sip_server*</code>，作为匹配，这样就匹配到单个服务的所有日志。所以index的名字很重要，不要随便取。</p>
-<p><img alt="image-20221021090656229" src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/EqnO2xCD1f6Hb8R-20230307194345086.png"></p>
+<p><img src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/EqnO2xCD1f6Hb8R-20230307194345086.png" alt="image-20221021090656229"></p>
 <p>查询条件仍然是日志等级为ERROR（这里是区分大小写的，可以在预处理里统一转换成大写），这里就是过去5分钟出现任意错误日志则触发。这里在body里面可以拿到<code>{{context.hits}}</code>，我们可以通过<a href="http://mustache.github.io/mustache.5.html">mustache</a>这个模板语言对其内容进行解析。</p>
 <p>告警模板：</p>
 <pre><code>{
@@ -668,7 +684,7 @@ multiline.match: after
 }
 </code></pre>
 <p>效果如图：</p>
-<p><img alt="image-20221021112827617" src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/iFZBmhLjnrRbNAG-20230307194345363.png"></p>
+<p><img src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/iFZBmhLjnrRbNAG-20230307194345363.png" alt="image-20221021112827617"></p>
 <h4 id="安全告警使用示例">安全告警使用示例</h4>
 <p>这里不太建议使用，非安全问题用这里的规则不太符合ES本身的设计，具体使用方法请自己摸索。</p>
 <h4 id="watcher使用示例">watcher使用示例</h4>
@@ -967,6 +983,7 @@ docker run -d --restart always --name influx-exporter -p 9273:9273 -v $(pwd)/tel
     <li><a href="#elasticsearch部分">ElasticSearch部分</a></li>
     <li><a href="#第一个节点">第一个节点</a></li>
     <li><a href="#其他节点">其他节点</a></li>
+    <li><a href="#第二次启动">第二次启动</a></li>
     <li><a href="#注意事项">注意事项</a></li>
     <li><a href="#kibana部分">Kibana部分</a></li>
     <li><a href="#fleet-server">Fleet Server</a></li>

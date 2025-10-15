@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Crawler on 应许之地</title>
+    <title>crawler on 应许之地</title>
     <link>https://yiuterran.github.io/blog/tags/crawler/</link>
-    <description>Recent content in Crawler on 应许之地</description>
-    <generator>Hugo</generator>
+    <description>Recent content in crawler on 应许之地</description>
+    <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>&amp;copy; 2021 &lt;a href=&#34;https://github.com/YiuTerran&#34;&gt;tryao&lt;/a&gt;
 </copyright>
-    <lastBuildDate>Tue, 09 Jan 2024 09:35:01 +0800</lastBuildDate>
-    <atom:link href="https://yiuterran.github.io/blog/tags/crawler/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 09 Jan 2024 09:35:01 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/tags/crawler/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Python技术栈更新</title>
       <link>https://yiuterran.github.io/blog/posts/python%E6%8A%80%E6%9C%AF%E6%A0%88%E6%9B%B4%E6%96%B0/</link>
       <pubDate>Tue, 09 Jan 2024 09:35:01 +0800</pubDate>
+      
       <guid>https://yiuterran.github.io/blog/posts/python%E6%8A%80%E6%9C%AF%E6%A0%88%E6%9B%B4%E6%96%B0/</guid>
-      <description>&lt;p&gt;有段时间没用Python写工程了，基本都是写脚本，最近接了个活帮忙搞个爬虫相关项目，需要更新一下技术栈，做个笔记。&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;web开发：&lt;code&gt;fastapi&lt;/code&gt;, 其实还可以接着用flask，不过前者对asyncio支持更完善一些，顺便学一下新东西；至于django还是太重了，写单体估计有点用；&lt;/li&gt;&#xA;&lt;li&gt;数据库ORM：仍然可以继续使用&lt;code&gt;sqlalchemy&lt;/code&gt;，最新的是2.0版本，已经支持asyncio；&lt;/li&gt;&#xA;&lt;li&gt;爬虫：爬虫相关的技术栈变化不大…scrapy其实不太好用，封装的太厚，而且&lt;code&gt;twisted&lt;/code&gt;早就过时了。自己写的话就：&#xA;&lt;ul&gt;&#xA;&lt;li&gt;用&lt;code&gt;aiohttp&lt;/code&gt;做网络请求；&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;dom&lt;/code&gt;解析：仍然是基于&lt;code&gt;lxml&lt;/code&gt;的技术栈，主要还是&lt;code&gt;xpath&lt;/code&gt;和&lt;code&gt;css-selector&lt;/code&gt;来获取元素；&lt;/li&gt;&#xA;&lt;li&gt;浏览器模拟（动态网页）：&lt;code&gt;Playwright&lt;/code&gt;代替了&lt;code&gt;Selenium&lt;/code&gt;等古早的框架；&lt;/li&gt;&#xA;&lt;li&gt;打包：用docker就行；&lt;/li&gt;&#xA;&lt;li&gt;验证码破解：这个相关的网站蛮多的，但是好不好使需要测试一下才知道。包括：&lt;code&gt;yesCapture&lt;/code&gt;, &lt;code&gt;2Capture&lt;/code&gt;和穿云等；&lt;/li&gt;&#xA;&lt;li&gt;其他反爬技术：这个只能随机应变了，现在很多网站都做了反爬，具体手段不一，需要尝试解决；&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;fastapihttpsfastapitiangolocomzh&#34;&gt;&lt;a href=&#34;https://fastapi.tiangolo.com/zh/&#34;&gt;FastAPI&lt;/a&gt;&lt;/h2&gt;&#xA;&lt;p&gt;fastapi顾名思义，专注于提供API框架，不关心模版引擎、ORM之类的东西，但是自带了API文档(即&lt;code&gt;swagger&lt;/code&gt;集成)。所以代码非常简单，不需要Django那套复杂的框架：&lt;/p&gt;</description>
+      <description>有段时间没用Python写工程了，基本都是写脚本，最近接了个活帮忙搞个爬虫相关项目，需要更新一下技术栈，做个笔记。 web开发：fastapi, 其实还可</description>
     </item>
+    
   </channel>
 </rss>

@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html
+  lang="zh"
+  dir="ltr"
+  
+><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<title>Cicd搭建笔记 | 应许之地</title>
+
+<meta name="generator" content="Hugo Eureka 0.9.3" />
+<link rel="stylesheet" href="https://yiuterran.github.io/blog/css/eureka.min.30cfa2a7d2b5754cd246875caad26d69af1d8567ea53339f6729fe1d0ceee8917d33fcd191d4284da2a5da6359d79cb7.css">
+<script defer src="https://yiuterran.github.io/blog/js/eureka.min.e8043b71b627e3cfd9b2a5de56adf007f5af83dee672ca0c186aa2e29a10d6f648632064d0c00b2fa4d1b11e0f196af3.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload"
+  href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&amp;family=Noto&#43;Serif&#43;SC:wght@400;600;700&amp;display=swap"
+  as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.4.0/build/styles/solarized-light.min.css"
+   media="print"
+  onload="this.media='all';this.onload=null" crossorigin>
+<script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.4.0/build/highlight.min.js"
+   crossorigin></script>
+  <script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.4.0/build/languages/dart.min.js"
+     crossorigin></script>
+<link rel="stylesheet" href="https://yiuterran.github.io/blog/css/highlightjs.min.2958991528e43eb6fc9b8c4f2b8e052f79c4010718e1d1e888a777620e9ee63021c2c57ec7417a3108019bb8c41943e6.css" media="print" onload="this.media='all';this.onload=null">
+
+
+<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.8c77c7521b1f95ec2031c2a79f5c6a698aa4a0dba5ba649dfbc7f73994cddf3f494be6aac7e5724f35cbf72cfde09703.js"></script>
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
+   integrity="sha384-MlJdn/WNKDGXveldHDdyRP1R4CTHr3FeuDNfhsLPYrq2t0UBkUdK2jyTnXPEK1NQ"  media="print"
+  onload="this.media='all';this.onload=null" crossorigin>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js" 
+  integrity="sha384-VQ8d8WVFw0yHhCk5E8I86oOhv48xLpnDZx5T9GogA/Y84DcCKWXDmSDfn13bzFZY"  crossorigin></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js"
+   integrity="sha384-&#43;XBljXPPiv&#43;OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR"  crossorigin></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: "$$", right: "$$", display: true },
+        { left: "$", right: "$", display: false },
+        { left: "\\(", right: "\\)", display: false },
+        { left: "\\[", right: "\\]", display: true }
+      ],
+    });
+  });
+</script>
+
+
+<script defer src="https://cdn.jsdelivr.net/npm/mermaid@8.14.0/dist/mermaid.min.js" 
+  integrity="sha384-atOyb0FxAgN9LyAc6PEf9BjgwLISyansgdH8/VXQH8p2o5vfrRgmGIJ2Sg22L0A0"  crossorigin></script>
+
+
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
+
+<meta name="description"
+  content="安装Docker 所有组件使用docker/docker compose搭建，所以先要安装docker。 docker安装过程略过，配置/etc/docke">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+      "@type": "ListItem",
+      "position": 1 ,
+      "name":"文章列表",
+      "item":"https://yiuterran.github.io/blog/posts/"},{
+      "@type": "ListItem",
+      "position": 2 ,
+      "name":"Cicd搭建笔记",
+      "item":"https://yiuterran.github.io/blog/posts/cicd%E6%90%AD%E5%BB%BA%E7%AC%94%E8%AE%B0/"}]
+}
+</script>
+
+
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://yiuterran.github.io/blog/posts/cicd%E6%90%AD%E5%BB%BA%E7%AC%94%E8%AE%B0/"
+    },
+    "headline": "Cicd搭建笔记 | 应许之地","datePublished": "2025-09-29T11:56:08+08:00",
+    "dateModified": "2025-09-29T11:56:08+08:00",
+    "wordCount":  4727 ,
+    "author": {
+        "@type": "Person",
+        "name": ["tryao"]
+    },
+    "publisher": {
+        "@type": "Person",
+        "name": "C. Wang",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://yiuterran.github.io/blog/images/icon.png"
+        }
+        },
+    "description": "安装Docker 所有组件使用docker\/docker compose搭建，所以先要安装docker。 docker安装过程略过，配置\/etc\/docke"
+}
+</script><meta property="og:title" content="Cicd搭建笔记 | 应许之地" />
+<meta property="og:type" content="article" />
+
+
+<meta property="og:image" content="https://yiuterran.github.io/blog/images/icon.png">
+
+
+<meta property="og:url" content="https://yiuterran.github.io/blog/posts/cicd%E6%90%AD%E5%BB%BA%E7%AC%94%E8%AE%B0/" />
+
+
+
+
+<meta property="og:description" content="安装Docker 所有组件使用docker/docker compose搭建，所以先要安装docker。 docker安装过程略过，配置/etc/docke" />
+
+
+
+
+<meta property="og:locale" content="zh" />
+
+
+
+
+<meta property="og:site_name" content="应许之地" />
+
+
+
+
+
+
+<meta property="article:published_time" content="2025-09-29T11:56:08&#43;08:00" />
+
+
+<meta property="article:modified_time" content="2025-09-29T11:56:08&#43;08:00" />
+
+
+
+<meta property="article:section" content="posts" />
+
+
+
+
+
+  <body class="flex min-h-screen flex-col">
+    <header
+      class="min-h-16 pl-scrollbar bg-secondary-bg fixed z-50 flex w-full items-center shadow-sm"
+    >
+      <div class="mx-auto w-full max-w-screen-xl"><script>
+    let storageColorScheme = localStorage.getItem("lightDarkMode")
+    if (((storageColorScheme == 'Auto' || storageColorScheme == null) && window.matchMedia("(prefers-color-scheme: dark)").matches) || storageColorScheme == "Dark") {
+        document.getElementsByTagName('html')[0].classList.add('dark')
+    }
+</script>
+<nav class="flex items-center justify-between flex-wrap px-4 py-4 md:py-0">
+    <a href="https://yiuterran.github.io/blog/" class="me-6 text-primary-text text-xl font-bold">应许之地</a>
+    <button id="navbar-btn" class="md:hidden flex items-center px-3 py-2" aria-label="Open Navbar">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div id="target"
+        class="hidden block md:flex md:grow md:justify-between md:items-center w-full md:w-auto text-primary-text z-20">
+        <div class="md:flex md:h-16 text-sm md:grow pb-4 md:pb-0 border-b md:border-b-0">
+            <a href="https://yiuterran.github.io/blog/authors/tryao/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  border-transparent  me-4">作者</a>
+            <a href="https://yiuterran.github.io/blog/posts/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  selected-menu-item  me-4">文章</a>
+        </div>
+
+        <div class="flex">
+            <div class="relative pt-4 md:pt-0">
+                <div class="cursor-pointer hover:text-eureka" id="lightDarkMode">
+                    <i class="fas fa-adjust"></i>
+                </div>
+                <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-30" id="is-open">
+                </div>
+                <div class="absolute flex flex-col start-0 md:start-auto end-auto md:end-0 hidden bg-secondary-bg w-48 rounded py-2 border border-tertiary-bg cursor-pointer z-40"
+                    id='lightDarkOptions'>
+                    <span class="px-4 py-1 hover:text-eureka" name="Light">浅色</span>
+                    <span class="px-4 py-1 hover:text-eureka" name="Dark">深色</span>
+                    <span class="px-4 py-1 hover:text-eureka" name="Auto">自动</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-0" id="is-open-mobile">
+    </div>
+
+</nav>
+<script>
+    
+    let element = document.getElementById('lightDarkMode')
+    if (storageColorScheme == null || storageColorScheme == 'Auto') {
+        document.addEventListener('DOMContentLoaded', () => {
+            window.matchMedia("(prefers-color-scheme: dark)").addEventListener('change', switchDarkMode)
+        })
+    } else if (storageColorScheme == "Light") {
+        element.firstElementChild.classList.remove('fa-adjust')
+        element.firstElementChild.setAttribute("data-icon", 'sun')
+        element.firstElementChild.classList.add('fa-sun')
+    } else if (storageColorScheme == "Dark") {
+        element.firstElementChild.classList.remove('fa-adjust')
+        element.firstElementChild.setAttribute("data-icon", 'moon')
+        element.firstElementChild.classList.add('fa-moon')
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        getcolorscheme();
+        switchBurger();
+    });
+</script>
+</div>
+    </header>
+    <main class="grow pt-16">
+        <div class="pl-scrollbar">
+          <div class="mx-auto w-full max-w-screen-xl lg:px-4 xl:px-8">
+  
+  
+  <div class="grid grid-cols-2 gap-4 lg:grid-cols-8 lg:pt-12">
+    <div
+      class=" bg-secondary-bg col-span-2 rounded px-6 py-8 lg:col-span-6"
+    >
+      <article class="prose">
+  <h1 class="mb-4">Cicd搭建笔记</h1>
+
+  <div
+  class="text-tertiary-text not-prose mt-2 flex flex-row flex-wrap items-center"
+>
+  <div class="me-6 my-2">
+    <i class="fas fa-calendar me-1"></i>
+    <span
+      >2025-09-29</span
+    >
+  </div>
+  <div class="me-6 my-2">
+    <i class="fas fa-clock me-1"></i>
+    <span>10分钟阅读时长</span>
+  </div>
+
+  
+
+  
+</div>
+
+
+  
+  
+
+  <h1 id="安装docker">安装Docker</h1>
+<p>所有组件使用docker/docker compose搭建，所以先要安装docker。</p>
+<p>docker安装过程略过，配置<code>/etc/docker/daemon.json</code>如下：</p>
+<pre><code class="language-json">{
+  &quot;data-root&quot;: &quot;/data/docker&quot;,
+  &quot;bip&quot;: &quot;192.168.100.1/24&quot;,
+  &quot;default-address-pools&quot;: [
+    {&quot;base&quot;: &quot;192.168.0.0/16&quot;, &quot;size&quot;: 24}
+  ],
+  &quot;registry-mirrors&quot;: [
+        &quot;https://docker.1ms.run&quot;,
+        &quot;https://docker.xuanyuan.me&quot;
+    ],
+    &quot;live-restore&quot;: true,
+    &quot;log-driver&quot;:&quot;json-file&quot;,
+    &quot;log-opts&quot;: {&quot;max-size&quot;:&quot;50m&quot;, &quot;max-file&quot;:&quot;3&quot;}
+
+}
+</code></pre>
+<p>其中<code>data-root</code>一般调整到外挂磁盘；如果服务器的ip段是172段，需要修改bip到192段或者10段。</p>
+<p><code>live-restore</code>可以保证重启docker不重启容器（有时候需要关掉这个行为）。</p>
+<h1 id="搭建gitlab">搭建gitlab</h1>
+<p>首先需要搭建代码仓库，compose文件如下：</p>
+<pre><code class="language-yaml">services:
+  gitlab:
+    image: registry.gitlab.cn/omnibus/gitlab-jh
+    container_name: gitlab
+    restart: always
+    hostname: 'zop-tools.cscec3b-iti.com'
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'https://zop-tools.cscec3b-iti.com:7440'
+        gitlab_rails['trusted_proxies']=['172.18.0.0/16']
+        gitlab_rails['gitlab_port'] = 7440
+        gitlab_rails['gravatar_enabled'] = false
+        nginx['listen_port'] = 80
+        nginx['listen_https'] = false
+        nginx['redirect_http_to_https'] = false
+        nginx['proxy_set_headers'] = {
+          &quot;X-Forwarded-Proto&quot; =&gt; &quot;https&quot;,
+          &quot;X-Forwarded-Ssl&quot; =&gt; &quot;on&quot;,
+          &quot;X-Forwarded-Port&quot; =&gt; &quot;7440&quot;
+        }
+    ports:
+      - '7440:80'
+    volumes:
+      - '/data/gitlab/config:/etc/gitlab'
+      - '/data/gitlab/logs:/var/log/gitlab'
+      - '/data/gitlab/data:/var/opt/gitlab'
+    shm_size: '256m'
+</code></pre>
+<ul>
+<li>
+<p>hostname和external_url修改成对外的域名。</p>
+</li>
+<li>
+<p>trusted_proxies对应的是外围nginx的地址。</p>
+</li>
+<li>
+<p>gitlab_port改成外部监听的端口。</p>
+</li>
+<li>
+<p>volumes需要手动先创建好</p>
+</li>
+</ul>
+<p>这里面的nginx是gitlab自带的nginx的配置。如果外围自己又加了个nginx，路径是：nginx(自建) -&gt; nginx(gitlab) -&gt;rails，这里面的转发header和外围nginx要对齐。</p>
+<p>外围nginx的参考配置如下：</p>
+<pre><code class="language-nginx">upstream gitlab {
+	server 172.18.195.26:7440;
+}
+
+server {
+	server_name zop-tools.cscec3b-iti.com 171.43.173.112;
+	listen 7440 ssl;
+
+        ssl_certificate /etc/nginx/certs/cscec3b-iti.com.pem;
+        ssl_certificate_key /etc/nginx/certs/cscec3b-iti.com.key;
+        ssl_protocols TLSv1.1 TLSv1.2;
+        ssl_session_cache shared:GITLAB:10m;
+        ssl_ciphers HIGH:!aNULL:!MD5;
+        ssl_prefer_server_ciphers on;
+
+    location / {
+        proxy_pass http://gitlab;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host:$server_port;
+        proxy_set_header X-Forwarded-Ssl on;
+        proxy_set_header X-Forwarded-Port $server_port;
+        proxy_redirect off;
+        proxy_connect_timeout 300;
+        proxy_read_timeout 300;
+        proxy_send_timeout 300;
+
+        client_max_body_size 5m;
+    }
+
+    # 处理WebSocket连接
+    location /websocket/ {
+        proxy_pass http://gitlab;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection &quot;upgrade&quot;;
+        proxy_set_header Host $host;
+    }
+}
+</code></pre>
+<p>gitlab也支持高可用搭建，步骤就比较繁琐了（主要是通过PostgreSQL支持多节点），这里不记录。</p>
+<h1 id="搭建gitlab-runner">搭建Gitlab runner</h1>
+<p>使用管理员账号登录gitlab，点击【管理员】按钮，进入【Runner】，点击【创建实例Runner】。</p>
+<p>为Runner创建标签，ci文件中通过标签与Runner匹配，可以为某个Runner勾选【运行未打标签的作业】做兜底。</p>
+<p>如果是虚拟机/裸金属服务器作为Runner，一台机器上装1个就可以了。</p>
+<p>如果是k8s中安装Runner，整个集群里面装1个就行，这两种方式的工作原理不太一样，但都是有一个主进程周期探测有没有部署任务，有的话创建一个容器运行对应的任务。</p>
+<p>创建完成后会显示密钥，复制它，后面会用上。</p>
+<h2 id="docker安装runner">Docker安装Runner</h2>
+<p>首先创建一个config文件夹，放入runner的配置<code>config.toml</code>，参考如下：</p>
+<pre><code class="language-toml">concurrent = 8
+check_interval = 5
+connection_max_age = &quot;15m0s&quot;
+shutdown_timeout = 0
+
+[session_server]
+  session_timeout = 1800
+
+[[runners]]
+  name = &quot;ecs&quot;
+  url = &quot;https://zop-tools.cscec3b-iti.com:7440&quot;
+  id = 3
+  token = &quot;&quot; #上面的密钥
+  token_obtained_at = 2025-09-23T08:08:03Z
+  token_expires_at = 0001-01-01T00:00:00Z
+  executor = &quot;docker&quot;
+  request_concurrency = 4
+  [runners.cache]
+    MaxUploadedArchiveSize = 0
+    [runners.cache.s3]
+    [runners.cache.gcs]
+    [runners.cache.azure]
+  [runners.feature_flags]
+    FF_USE_ADAPTIVE_REQUEST_CONCURRENCY = true
+  [runners.docker]
+    tls_verify = false
+    image = &quot;docker:26&quot;
+    privileged = true
+    disable_entrypoint_overwrite = false
+    oom_kill_disable = false
+    disable_cache = false
+    volumes = [&quot;/var/run/docker.sock:/var/run/docker.sock&quot;, &quot;/cache&quot;]
+    extra_hosts = [&quot;zop-tools.cscec3b-iti.com:172.18.195.25&quot;]
+    shm_size = 0
+    network_mtu = 0
+</code></pre>
+<p>由于CI进程里面一般需要使用docker进行镜像打包，而runner本身也要运行在docker里面。所以需要调用宿主机的docker来创建容器，从而避免docker in docker问题，因此需要再volumes里面做一层映射。当然还有个方案是使用其他工具打包（下面会讲）。</p>
+<p>这里[runners.docker]里面的image可以随便写，因为ci文件那边可以覆盖掉。extra_hosts里面主要需要讲harbor镜像仓库的域名映射成内网地址，加快拉取速度。concurrent根据机器cpu核数适当挑战。</p>
+<p>启动Runner的compose文件参考：</p>
+<pre><code class="language-yaml">services:
+  gitlab-runner:
+    image: gitlab/gitlab-runner:latest
+    container_name: gitlab-runner
+    restart: always
+    extra_hosts:
+      - &quot;zop-tools.cscec3b-iti.com:172.18.195.25&quot;
+    volumes:
+      - /data/gitlab/runner/config:/etc/gitlab-runner
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - TZ=Asia/Shanghai
+</code></pre>
+<p>上面的config.toml要放到/data/gitlab/runner/config文件夹下面。</p>
+<p>启动容器之后，gitlab那边可以看到runner上线。</p>
+<h2 id="k8s安装runner">K8s安装Runner</h2>
+<p>k8s使用helm安装：</p>
+<pre><code class="language-bash">helm repo add gitlab https://charts.gitlab.cn
+kubectl create ns gitlab-runner
+</code></pre>
+<p>假设将runner安装在<code>gitlab-runner</code>这个ns，服务使用<code>dev</code>和<code>test</code>两个ns进行部署，对应开发和测试环境。需要创建一个ServiceAccout给runner使用，赋予runner调用k8s api的权利。</p>
+<pre><code class="language-yaml"># 1. 在 gitlab-runner namespace 创建 ServiceAccount
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: gitlab-deployer
+  namespace: gitlab-runner
+---
+# 2. 定义一个 ClusterRole，拥有所有资源的所有操作权限
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: dev-test-full-access
+rules:
+- apiGroups: [ &quot;*&quot; ]
+  resources: [ &quot;*&quot; ]
+  verbs: [ &quot;*&quot; ]
+---
+# 3. 在 dev namespace 绑定
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: gitlab-deployer-dev
+  namespace: dev
+subjects:
+- kind: ServiceAccount
+  name: gitlab-deployer
+  namespace: gitlab-runner
+roleRef:
+  kind: ClusterRole
+  name: dev-test-full-access
+  apiGroup: rbac.authorization.k8s.io
+---
+# 4. 在 gitlab-runner namespace 绑定
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: gitlab-deployer-test
+  namespace: test
+subjects:
+- kind: ServiceAccount
+  name: gitlab-deployer
+  namespace: gitlab-runner
+roleRef:
+  kind: ClusterRole
+  name: dev-test-full-access
+  apiGroup: rbac.authorization.k8s.io
+---
+# 4. 在 test namespace 绑定
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: gitlab-deployer-self
+  namespace: gitlab-runner
+subjects:
+- kind: ServiceAccount
+  name: gitlab-deployer
+  namespace: gitlab-runner
+roleRef:
+  kind: ClusterRole
+  name: dev-test-full-access
+  apiGroup: rbac.authorization.k8s.io
+
+</code></pre>
+<p>使用<code>kubectl apply -f account.yml</code>，在集群中创建权限和绑定。这里给的权限比较大，也可以修改ClusterRole里面的rules只赋予必要的权限。</p>
+<p>之后创建values.yml，修改helm安装runner的默认配置：</p>
+<pre><code class="language-yaml"># 使用helm在k8s里面安装gitlab-runner
+gitlabUrl: &quot;https://zop-tools.cscec3b-iti.com:7440&quot;
+runnerRegistrationToken: &quot;&quot; #从gitlab中获取
+runnerName: &quot;k8s-gitlab-runner&quot;
+runnerTagList: &quot;k8s,dev,test&quot;
+concurrent: 10 #并发度
+checkInterval: 5
+unregisterRunners: true
+
+rbac:
+  create: false
+  serviceAccount: &quot;gitlab-deployer&quot;
+  clusterWideAccess: false
+
+runners:
+  config: |
+    [[runners]]
+      [runners.kubernetes]
+        namespace = &quot;gitlab-runner&quot;
+        service_account = &quot;gitlab-deployer&quot;
+        ttlSecondsAfterFinished = 300
+        image = &quot;ubuntu:22.04&quot;
+      [runners.cache]
+        type = &quot;s3&quot;
+        [runners.cache.s3]
+        [runners.cache.gcs]
+
+</code></pre>
+<p>这里只需要绑定手动创建的ServiceAccount即可。</p>
+<p>使用<code>helm install gitlab-runner gitlab/gitlab-runner -f values.yaml --namespace gitlab-runner</code>，完成runner安装，同样在gitlab里面会看到runner在线。</p>
+<h1 id="安装harbor">安装Harbor</h1>
+<p>harbor官方支持docker-compose安装，直接去github的release里面下载。</p>
+<p>解压之后修改harbor.yml，主要需要修改的部分如下：</p>
+<pre><code class="language-yaml">http:
+  port: 7441
+external_url: https://zop-tools.cscec3b-iti.com:7441
+harbor_admin_password: yourpass
+data_volume: /data/harbor/data
+trivy:
+  ignore_unfixed: false
+  skip_update: true
+  skip_java_db_update: true
+  offline_scan: true
+  security_check: vuln
+  insecure: false
+</code></pre>
+<p><strong>注意</strong>：harbor会启动多个容器，其中redis和postgresql的名字可能会和已有的容器冲突，可以使用docker rename修改已有容器的名字。</p>
+<p>之后运行<code>./install.sh --with-trivy</code>进行安装。</p>
+<p>然后去github下载oras二进制文件，放到PATH下面，运行下面的脚本下载漏洞库：</p>
+<pre><code class="language-bash">#!/usr/bin/bash
+#创建缓存目录
+mkdir -p /data/harbor/data/trivy-adapter/trivy/{db,java-db}
+cd /data/harbor/data/trivy-adapter/trivy
+
+# 清空 db 目录下的内容
+rm -rf db/*
+# 清空 java-db 目录下的内容
+rm -rf java-db/*
+
+# 下载离线库文件
+oras pull ghcr.nju.edu.cn/aquasecurity/trivy-java-db:1
+oras pull ghcr.nju.edu.cn/aquasecurity/trivy-db:2
+
+# 解压 jdb.tar.gz 文件到 java-db 目录
+tar -xvf javadb.tar.gz -C java-db
+
+# 解压 db.tar.gz 文件到 db 目录
+tar -xvf db.tar.gz -C db
+
+# 删除压缩包文件
+rm -f javadb.tar.gz
+rm -f db.tar.gz
+
+#chown赋权
+chown -Rf 10000:10000 /data/harbor/data/trivy-adapter/trivy
+</code></pre>
+<p>可以在cronjob里面配置每天更新漏洞库。</p>
+<p>之后就可以在harbor里面进行镜像管理和漏洞扫描了。</p>
+<p>harbor外侧的nginx配置参考：</p>
+<pre><code class="language-nginx">upstream harbor {
+	server 172.18.195.26:7441;
+}
+
+server {
+	server_name zop-tools.cscec3b-iti.com 171.43.173.112;
+	listen 7441 ssl;
+
+        ssl_certificate /etc/nginx/certs/cscec3b-iti.com.pem;
+        ssl_certificate_key /etc/nginx/certs/cscec3b-iti.com.key;
+        ssl_protocols TLSv1.1 TLSv1.2;
+        ssl_session_cache shared:HARBOR:10m;
+        ssl_ciphers HIGH:!aNULL:!MD5;
+        ssl_prefer_server_ciphers on;
+
+    location / {
+        proxy_pass http://harbor;
+    	  proxy_http_version 1.1;
+
+        proxy_set_header Host $host:$server_port;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_redirect off;
+        proxy_connect_timeout 300;
+        proxy_read_timeout 300;
+        proxy_send_timeout 300;
+        client_max_body_size 2000m;
+
+        proxy_buffering on;
+        proxy_pass_request_headers on;
+    }
+
+}
+</code></pre>
+<p>主要是要支持大镜像的拉取和推送。</p>
+<h1 id="安装nexus">安装nexus</h1>
+<p>由于ci运行在容器里无法复用宿主机的缓存，需要nexus做一层局域网缓存加快ci编译速度。</p>
+<pre><code class="language-yaml">services:
+  nexus:
+    image: sonatype/nexus3:latest
+    container_name: nexus3
+    restart: always
+    ports:
+      - &quot;7442:8081&quot;
+    volumes:
+      - /data/nexus/data:/nexus-data
+    environment:
+      - NEXUS_CONTEXT=/
+      - INSTALL4J_ADD_VM_PARAMS=-Xms1g -Xmx4g -XX:MaxDirectMemorySize=4g -Djava.util.prefs.userRoot=/nexus-data/.java/.userPrefs
+    healthcheck:
+      test: [&quot;CMD&quot;, &quot;wget&quot;, &quot;--no-verbose&quot;, &quot;--tries=1&quot;, &quot;--spider&quot;, &quot;http://localhost:8081/service/metrics/health&quot;]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+</code></pre>
+<p>唯一需要注意的是参数里面jvm的内存分配，这玩意儿里面有es，内存建议不低于4g。</p>
+<p>登录nexus，在settings-repositories里面手动创建npm的代理(proxy)和托管(hosted)。maven可以将中央仓库改为阿里源，增加google等常用proxy。</p>
+<p>修改~/.m2/settings.xml，将仓库加到配置里，ci的时候也要将这个文件放到对应的位置。</p>
+<p>外围nginx反向代理配置参考：</p>
+<pre><code class="language-nginx">server {
+	server_name zop-tools.cscec3b-iti.com 171.43.173.112;
+	listen 7442 ssl;
+
+        ssl_certificate /etc/nginx/certs/cscec3b-iti.com.pem;
+        ssl_certificate_key /etc/nginx/certs/cscec3b-iti.com.key;
+        ssl_protocols TLSv1.1 TLSv1.2 TLSv1.3;
+        ssl_session_cache shared:HARBOR:10m;
+        ssl_ciphers HIGH:!aNULL:!MD5;
+        ssl_prefer_server_ciphers on;
+
+       location /v2 {
+        proxy_set_header Host $host:$server_port;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto &quot;https&quot;;
+        proxy_read_timeout 600;
+        client_max_body_size 2000m;
+
+        proxy_pass http://172.18.195.26:7442/repository/zop-image/$request_uri;
+      }
+
+      location / {
+        proxy_pass http://172.18.195.26:7442;
+    	  proxy_http_version 1.1;
+
+        proxy_set_header Host $host:$server_port;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_redirect off;
+        proxy_connect_timeout 300;
+        proxy_read_timeout 300;
+        proxy_send_timeout 300;
+        client_max_body_size 2000m;
+
+        proxy_buffering on;
+        proxy_pass_request_headers on;
+    }
+}
+</code></pre>
+<p>这里<code>/v2</code>是给docker仓库用的，如果不想安装harbor，而是用nexus托管docker镜像，可以创建对应的仓库（这里叫zop-image），然后配置上去。</p>
+<p>但是，nexus的docker托管不支持按aritifact清理镜像，也不支持trivis集成，不如harbor成熟。</p>
+<h1 id="安装sonarqube">安装SonarQube</h1>
+<p>如果想在ci时统一管控代码质量，可以安装sonar.</p>
+<p>Docker Compose文件如下：</p>
+<pre><code class="language-yaml">services:
+  sonarqube:
+    image: sonarqube:community
+    hostname: sonarqube
+    container_name: sonarqube
+    read_only: true
+    extra_hosts:
+      - &quot;zop-tools.cscec3b-iti.com:172.18.195.25&quot;
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SONAR_JDBC_URL: jdbc:postgresql://db:5432/sonar
+      SONAR_JDBC_USERNAME: sonar
+      SONAR_JDBC_PASSWORD: sonar
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+      - sonarqube_temp:/opt/sonarqube/temp
+    ports:
+      - &quot;7443:9000&quot;
+    networks:
+      - ${NETWORK_TYPE:-ipv4}
+  db:
+    image: postgres:17
+    healthcheck:
+      test: [ &quot;CMD-SHELL&quot;, &quot;pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}&quot; ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    hostname: postgresql
+    container_name: postgresql
+    environment:
+      POSTGRES_USER: sonar
+      POSTGRES_PASSWORD: sonar
+      POSTGRES_DB: sonar
+    volumes:
+      - postgresql:/var/lib/postgresql
+    networks:
+      - ${NETWORK_TYPE:-ipv4}
+
+volumes:
+  sonarqube_data:
+  sonarqube_temp:
+  sonarqube_extensions:
+  sonarqube_logs:
+  postgresql:
+
+networks:
+  ipv4:
+    driver: bridge
+    enable_ipv6: false
+  dual:
+    driver: bridge
+    enable_ipv6: true
+    ipam:
+      config:
+        - subnet: &quot;192.168.2.0/24&quot;
+          gateway: &quot;192.168.2.1&quot;
+        - subnet: &quot;2001:db8:2::/64&quot;
+          gateway: &quot;2001:db8:2::1&quot;
+</code></pre>
+<p>需要注意的是，sonar不支持挂载volume，只能用docker create的volume，所以一定要在docker配置文件里修改data-root，避免磁盘溢出。</p>
+<p>如果服务器可以连接github，可以在市场里面下载中文插件。否则需要手动下载jar包到<code>/data/docker/volumes/sonarqube_sonarqube_extensions/_data/plugins</code>， 这里data-root是<code>/data/docker</code>。</p>
+<p>然后重启容器就会变成中文界面。</p>
+<p>将sonar关联到gitlab也比较简单，在gitlab用户那边创建访问令牌，授权gitlab read相关api就可以了。</p>
+<h1 id="配置cicd">配置CI/CD</h1>
+<p>都安装完成之后，在gitlab里面创建一个cicd专用的项目，比如devops/cicd，可以设置为”内部“权限，或者公开权限（如果用了vpn的话），方便其他项目集成。</p>
+<p>在项目根目录创建templates文件夹，然后将完善项目描述、ReadMe文件。</p>
+<p>在项目根目录下创建<code>.gitlab-ci.yml</code>文件，内容如下：</p>
+<pre><code class="language-yaml">stages:
+  - release
+create-release:
+  stage: release
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  script: echo &quot;Creating release $CI_COMMIT_TAG&quot;
+  rules:
+  - if: $CI_COMMIT_TAG
+  release:
+    tag_name: $CI_COMMIT_TAG
+    description: &quot;Release $CI_COMMIT_TAG of components in $CI_PROJECT_PATH&quot;
+
+</code></pre>
+<p>这样一旦给commit打了tag就会自动发布新版本。</p>
+<p>在templates里面添加常用的模板供其他项目集成，比如java后端的编译+部署模板如下：</p>
+<pre><code class="language-yaml">variables:
+  # 默认镜像制品名（可被项目覆盖）
+  IMAGE_ARTIFACT_NAME: &quot;$CI_PROJECT_NAME&quot;
+  # 默认容器名称
+  CONTAINER_NAME: &quot;app&quot;
+
+stages:
+- build
+- deploy
+
+default:
+  before_script:
+  - |
+    export IMAGE_TAG=&quot;$CI_COMMIT_SHORT_SHA&quot;
+    if [[ -n &quot;$CI_COMMIT_TAG&quot; ]]; then export IMAGE_TAG=&quot;$CI_COMMIT_TAG&quot;; fi
+    export IMAGE=&quot;$HARBOR_HOST/$REPO_NAME/$IMAGE_ARTIFACT_NAME:$IMAGE_TAG&quot;
+    echo &quot;Built image will be: $IMAGE&quot;
+
+.kaniko_build:
+  image:
+    name: zop-tools.cscec3b-iti.com:7441/cicd/kaniko:debug
+    entrypoint: [ &quot;&quot; ]
+  script:
+  - echo &quot;{\&quot;auths\&quot;:{\&quot;${HARBOR_HOST}\&quot;:{\&quot;auth\&quot;:\&quot;$(echo -n ${HARBOR_USER}:${HARBOR_PWD} | base64)\&quot;}}}&quot; &gt; /kaniko/.docker/config.json
+  - /kaniko/executor --context ${CI_PROJECT_DIR} --dockerfile ${CI_PROJECT_DIR}/Dockerfile --destination ${IMAGE}
+
+# 使用kaniko构建镜像（dev/test）
+dev_test_build:
+  stage: build
+  extends: .kaniko_build
+  rules:
+  - if: '$CI_COMMIT_BRANCH == &quot;dev&quot;'
+    when: manual
+    variables:
+      REPO_NAME: &quot;dev&quot;
+  - if: '$CI_COMMIT_BRANCH == &quot;test&quot;'
+    variables:
+      REPO_NAME: &quot;test&quot;
+  tags: [ $CI_COMMIT_BRANCH ]
+
+# 使用kaniko构建镜像（生产）
+release_build:
+  stage: build
+  extends: .kaniko_build
+  rules:
+  - if: '$CI_COMMIT_TAG =~ /^v/'
+    variables:
+      REPO_NAME: &quot;main&quot;
+  tags: [ &quot;main&quot; ]
+
+# 部署到 Kubernetes（仅 dev/test 分支）
+dev_test_deploy:
+  stage: deploy
+  image: zop-tools.cscec3b-iti.com:7441/cicd/kubectl:1.24
+  script:
+  - echo &quot;Deploying $IMAGE to namespace $K8S_NAMESPACE&quot;
+  - kubectl set image deployment/$IMAGE_ARTIFACT_NAME $CONTAINER_NAME=$IMAGE -n $K8S_NAMESPACE
+  - kubectl rollout status deployment/$IMAGE_ARTIFACT_NAME -n $K8S_NAMESPACE --timeout=300s
+  rules:
+  - if: '$CI_COMMIT_BRANCH == &quot;dev&quot;'
+    when: manual
+    variables:
+      K8S_NAMESPACE: &quot;dev&quot;
+      REPO_NAME: &quot;dev&quot;
+  - if: '$CI_COMMIT_BRANCH == &quot;test&quot;'
+    when: manual
+    variables:
+      K8S_NAMESPACE: &quot;test&quot;
+      REPO_NAME: &quot;test&quot;
+  needs: [ dev_test_build ]
+  tags: [ $CI_COMMIT_BRANCH ]
+
+</code></pre>
+<p>这个CI/CD文件使用<strong>kaniko进行编译打包</strong>，并支持dev/test环境持续部署（替换镜像名）。</p>
+<p>为了加快CI/CD的速度，这里将image都上传到私库里面了。</p>
+<p>对于k8s的runner，<strong>需要同时修改k8s宿主机的host和coredns的host，将域名映射成内网ip。</strong></p>
+<p><strong>注</strong>：google官方的kaniko已经不再维护，建议使用第三方维护的<code>martizih/kaniko</code>镜像，用debug版本（有bash）。</p>
+<p>在对应的项目的<code>.gitlab-ci.yml</code>里，引用对应的模板即可：</p>
+<pre><code class="language-yaml">include:
+  - project: 'devops/cicd'
+    ref: v0.9.2
+    file: 'templates/backend.yml'
+
+# 可选：覆盖默认变量
+variables:
+  IMAGE_ARTIFACT_NAME: &quot;hello-world&quot;
+
+</code></pre>
+<p>这里面的ref对应release的版本，如果还在调试，可以用<code>main</code>引用最新的commit.</p>
+<p>项目的Dockerfile可以参考：</p>
+<pre><code class="language-dockerfile">FROM zop-tools.cscec3b-iti.com:7441/cicd/openjdk:21-builder AS builder
+
+# 设置工作目录
+WORKDIR /app
+
+# 复制 Maven 配置文件
+COPY pom.xml .
+# 下载依赖（利用 Docker 缓存）
+RUN mvn dependency:go-offline -B
+
+# 复制源代码
+COPY src ./src
+
+# 编译打包
+RUN mvn package -DskipTests
+
+# 第二阶段：运行环境
+FROM zop-tools.cscec3b-iti.com:7441/cicd/openjdk:21
+
+# 设置工作目录
+WORKDIR /app
+
+# 从 builder 阶段复制 jar 包
+COPY --from=builder /app/target/*.jar app.jar
+
+# 暴露端口
+EXPOSE 8080
+
+# 运行应用
+ENTRYPOINT [&quot;java&quot;, &quot;-jar&quot;, &quot;app.jar&quot;]
+</code></pre>
+<p>注意这是一个多阶段Dockerfile，编译型语言需要在第一阶段构建出目标文件，解释型语言（如Python）一般不需要。</p>
+<h1 id="附docker镜像定制">附：Docker镜像定制</h1>
+<p>docker镜像最小的一般是alpine版本，定制化的话需要替换国内源。如果是go/c++服务，尽量用glibc版本，musl版本有时候会有一些奇奇怪怪的问题。</p>
+<p>glibc版本的alpine:</p>
+<pre><code class="language-dockerfile">FROM frolvlad/alpine-glibc:alpine-3.18_glibc-2.34
+
+ENV TZ Asia/Shanghai
+
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories \
+    &amp;&amp; apk add --no-cache alpine-conf ttf-dejavu fontconfig \
+    &amp;&amp; /sbin/setup-timezone -z Asia/Shanghai \
+    &amp;&amp; apk del alpine-conf &amp;&amp; rm -rf /tmp/* /var/cache/apk/*
+
+</code></pre>
+<p>一般的基于alpine的镜像定制（java21）：</p>
+<pre><code class="language-dockerfile">FROM azul/zulu-openjdk-alpine:21
+
+ENV TZ Asia/Shanghai
+
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories \
+    &amp;&amp; apk add --no-cache alpine-conf ttf-dejavu fontconfig \
+    &amp;&amp; /sbin/setup-timezone -z Asia/Shanghai \
+    &amp;&amp; apk del alpine-conf &amp;&amp; rm -rf /tmp/* /var/cache/apk/*
+
+</code></pre>
+<p>用的时候，直接用apk安装需要的二进制文件即可，例如<code>apk add curl</code>。</p>
+
+</article>
+
+
+      
+
+      
+
+
+
+      
+        <div class="py-2">
+  
+    <div class="my-8 flex flex-col items-center md:flex-row">
+      <a href="https://yiuterran.github.io/blog/authors/tryao/" class="md:me-4 text-primary-text h-24 w-24">
+        
+        
+          <img
+            src="https://yiuterran.github.io/blog/images/avatar.png"
+            class="bg-primary-bg w-full rounded-full"
+            alt="Avatar"
+          />
+        
+      </a>
+      <div class="mt-4 w-full md:mt-0 md:w-auto">
+        <a
+          href="https://yiuterran.github.io/blog/authors/tryao/"
+          class="mb-2 block border-b pb-1 text-lg font-bold"
+        >
+          <h3>个人介绍</h3>
+        </a>
+        <span class="block pb-2">兴趣使然的程序员，博而不精，乐学不倦</span>
+        
+          
+          
+          
+          
+          <a href="mailto:yaotairan@gmail.com" class="me-2">
+            <i class="fas fa-envelope"></i>
+          </a>
+        
+          
+          
+          
+          
+          <a href="https://github.com/YiuTerran" class="me-2">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+</div>
+
+      
+
+      
+  <div
+    class="-mx-2 mt-4 flex flex-col border-t px-2 pt-4 md:flex-row md:justify-between"
+  >
+    <div>
+      
+    </div>
+    <div class="mt-4 md:mt-0 md:text-right">
+      
+        <span class="text-primary-text block font-bold">下一页</span>
+        <a href="https://yiuterran.github.io/blog/posts/vue3%E7%AC%94%E8%AE%B0/" class="block">Vue3笔记</a>
+      
+    </div>
+  </div>
+
+
+      
+
+
+
+  <script id="utterances" src="https://utteranc.es/client.js"
+            issue-term=title
+            repo=YiuTerran/blog-comment
+              theme=preferred-color-scheme
+        crossorigin="anonymous"
+        async>
+</script>
+<script>
+    if (storageColorScheme == "Light") {
+      document.getElementById('utterances').setAttribute('theme', 'github-light')
+    } else if (storageColorScheme == "Dark") {
+      document.getElementById('utterances').setAttribute('theme', 'github-dark')
+    }
+</script>
+
+    </div>
+    
+      <div class="col-span-2">
+        
+        
+          <div
+  class="
+    bg-primary-bg
+   prose sticky top-16 z-10 hidden px-6 py-4 lg:block"
+>
+  <h3>本页内容</h3>
+</div>
+<div
+  class="sticky-toc  hidden px-6 pb-6 lg:block"
+>
+  <nav id="TableOfContents">
+  <ul>
+    <li><a href="#docker安装runner">Docker安装Runner</a></li>
+    <li><a href="#k8s安装runner">K8s安装Runner</a></li>
+  </ul>
+</nav>
+</div>
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
+    enableStickyToc();
+  });
+</script>
+
+        
+      </div>
+    
+
+    
+    
+  </div>
+
+  
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        hljs.highlightAll();
+      });
+    </script>
+
+          </div>
+        </div>
+      
+    </main>
+    <footer class="pl-scrollbar">
+      <div class="mx-auto w-full max-w-screen-xl"><div class="text-center p-6 pin-b">
+    <p class="text-sm text-tertiary-text">&copy; 2021 <a href="https://github.com/YiuTerran">tryao</a>
+ &middot;  Powered by the <a href="https://github.com/wangchucheng/hugo-eureka" class="hover:text-eureka">Eureka</a> theme for <a href="https://gohugo.io" class="hover:text-eureka">Hugo</a></p>
+</div></div>
+    </footer>
+  </body>
+</html>

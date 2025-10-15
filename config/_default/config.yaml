@@ -20,7 +20,7 @@ hasCJKLanguage: true # Set `true` for Chinese/Japanese/Korean.
 defaultContentLanguageInSubdir: false
 
 # Uncomment for google analytics
-googleAnalytics: G-C0R8DENDJ0
+# googleAnalytics: G-C0R8DENDJ0
 
 publishDir: docs
 markup:
@@ -49,4 +49,4 @@ module:
 
 security:
   exec:
-    osEnv: ['(?i)^(PATH|PATHEXT|APPDATA|TMP|TEMP|TERM|HOME|SSH_AUTH_SOCK|USERPROFILE|XDG_CONFIG_HOME|HTTP_PROXY|HTTPS_PROXY)$']
+    osEnv: [ '(?i)^(PATH|PATHEXT|APPDATA|TMP|TEMP|TERM|HOME|SSH_AUTH_SOCK|USERPROFILE|XDG_CONFIG_HOME|HTTP_PROXY|HTTPS_PROXY)$' ]

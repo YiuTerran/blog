@@ -43,7 +43,7 @@
 <link rel="stylesheet" href="https://yiuterran.github.io/blog/css/highlightjs.min.2958991528e43eb6fc9b8c4f2b8e052f79c4010718e1d1e888a777620e9ee63021c2c57ec7417a3108019bb8c41943e6.css" media="print" onload="this.media='all';this.onload=null">
 
 
-<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.78e494ccd35d494929874dc88a1c7963e597460caafa2ea0b64b9f5cd2ed626a7348522a90f0b37886181ab1ed34301f.js"></script>
+<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.8c77c7521b1f95ec2031c2a79f5c6a698aa4a0dba5ba649dfbc7f73994cddf3f494be6aac7e5724f35cbf72cfde09703.js"></script>
 
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
@@ -69,23 +69,13 @@
 
 <script defer src="https://cdn.jsdelivr.net/npm/mermaid@8.14.0/dist/mermaid.min.js" 
   integrity="sha384-atOyb0FxAgN9LyAc6PEf9BjgwLISyansgdH8/VXQH8p2o5vfrRgmGIJ2Sg22L0A0"  crossorigin></script>
-<link rel="preconnect" href="https://www.google-analytics.com" crossorigin>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-C0R8DENDJ0"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag() { dataLayer.push(arguments); }
-  gtag('js', new Date());
-  gtag('config', 'G-C0R8DENDJ0');
-</script>
 
 
-<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu546329292729773971.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu16414047889438337432.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
 
 <meta name="description"
-  content="边侧服务高可用其实就是当年服务还没上云的时候，使用的那套技术栈。不过稍微有些不同的是，边缘计算需要考虑完全封闭的局域网，有点像组态软件的场景。
-基于域名
-本地域名一般使用.local/.lan之类的后缀，避免和.com等云上域名冲突。">
+  content="边侧服务高可用其实就是当年服务还没上云的时候，使用的那套技术栈。不过稍微有些不同的是，边缘计算需要考虑完全封闭的局域网，有点像组态软件的场景。 基于域名">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -127,7 +117,7 @@
             "url": "https://yiuterran.github.io/blog/images/icon.png"
         }
         },
-    "description": "\u003cp\u003e边侧服务高可用其实就是当年服务还没上云的时候，使用的那套技术栈。不过稍微有些不同的是，边缘计算需要考虑完全封闭的局域网，有点像组态软件的场景。\u003c\/p\u003e\n\u003ch2 id=\u0022基于域名\u0022\u003e基于域名\u003c\/h2\u003e\n\u003cp\u003e本地域名一般使用\u003ccode\u003e.local\u003c\/code\u003e\/\u003ccode\u003e.lan\u003c\/code\u003e之类的后缀，避免和\u003ccode\u003e.com\u003c\/code\u003e等云上域名冲突。\u003c\/p\u003e"
+    "description": "边侧服务高可用其实就是当年服务还没上云的时候，使用的那套技术栈。不过稍微有些不同的是，边缘计算需要考虑完全封闭的局域网，有点像组态软件的场景。 基于域名"
 }
 </script><meta property="og:title" content="边侧高可用解决方案 | 应许之地" />
 <meta property="og:type" content="article" />
@@ -141,9 +131,7 @@
 
 
 
-<meta property="og:description" content="边侧服务高可用其实就是当年服务还没上云的时候，使用的那套技术栈。不过稍微有些不同的是，边缘计算需要考虑完全封闭的局域网，有点像组态软件的场景。
-基于域名
-本地域名一般使用.local/.lan之类的后缀，避免和.com等云上域名冲突。" />
+<meta property="og:description" content="边侧服务高可用其实就是当年服务还没上云的时候，使用的那套技术栈。不过稍微有些不同的是，边缘计算需要考虑完全封闭的局域网，有点像组态软件的场景。 基于域名" />
 
 
 
@@ -293,7 +281,7 @@
 <p>在多个节点上安装Keepalived，通过配置使其中一个成为master，其他结点都是backup. 外部服务通过master节点的**虚拟IP(vip)**地址访问结点上的服务。如果边侧是k3s环境，由于自带了LoadBalancer，所以只要指向任意一个k3s结点都可以访问暴露出来的服务。所以可以在k3s的server节点上都装上keepalived, 第一台初始化成功的作为master，其他的作为backup即可。</p>
 <p>当master节点宕机时，backup节点会根据配置选举出新的master，这个新的master接管了vip，所以客户端访问该vip的流量就会自动切换过来。</p>
 <p>vrrp设计是给路由器使用的，是将多个路由器视为一个路由器，所以它的算法其实比较简单，见下图：</p>
-<p><img alt="Master设备选举过程" src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/download"></p>
+<p><img src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/download" alt="Master设备选举过程"></p>
 <p>默认情况下，所有节点之间通过UDP组播通信，如果在云上也可以改为单播。选举主要需要配置的参数是抢占策略和优先级数值。</p>
 <p>需要注意的是，存在多个master的可能性，不过对于k3s而言这个问题不大。k3s的server节点本来就是等价的，对于LoadBalancer服务而言更是如此。</p>
 <h3 id="配置示例">配置示例</h3>
@@ -437,7 +425,11 @@ COPY --from=build /install_root /
       <a href="https://yiuterran.github.io/blog/authors/tryao/" class="md:me-4 text-primary-text h-24 w-24">
         
         
-          <i class="fas fa-user-circle fa-6x"></i>
+          <img
+            src="https://yiuterran.github.io/blog/images/avatar.png"
+            class="bg-primary-bg w-full rounded-full"
+            alt="Avatar"
+          />
         
       </a>
       <div class="mt-4 w-full md:mt-0 md:w-auto">
@@ -445,9 +437,25 @@ COPY --from=build /install_root /
           href="https://yiuterran.github.io/blog/authors/tryao/"
           class="mb-2 block border-b pb-1 text-lg font-bold"
         >
-          <h3>“Tryao&#34;</h3>
+          <h3>个人介绍</h3>
         </a>
-        <span class="block pb-2"></span>
+        <span class="block pb-2">兴趣使然的程序员，博而不精，乐学不倦</span>
+        
+          
+          
+          
+          
+          <a href="mailto:yaotairan@gmail.com" class="me-2">
+            <i class="fas fa-envelope"></i>
+          </a>
+        
+          
+          
+          
+          
+          <a href="https://github.com/YiuTerran" class="me-2">
+            <i class="fab fa-github"></i>
+          </a>
         
       </div>
     </div>

@@ -43,7 +43,7 @@
 <link rel="stylesheet" href="https://yiuterran.github.io/blog/css/highlightjs.min.2958991528e43eb6fc9b8c4f2b8e052f79c4010718e1d1e888a777620e9ee63021c2c57ec7417a3108019bb8c41943e6.css" media="print" onload="this.media='all';this.onload=null">
 
 
-<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.78e494ccd35d494929874dc88a1c7963e597460caafa2ea0b64b9f5cd2ed626a7348522a90f0b37886181ab1ed34301f.js"></script>
+<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.8c77c7521b1f95ec2031c2a79f5c6a698aa4a0dba5ba649dfbc7f73994cddf3f494be6aac7e5724f35cbf72cfde09703.js"></script>
 
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
@@ -69,18 +69,10 @@
 
 <script defer src="https://cdn.jsdelivr.net/npm/mermaid@8.14.0/dist/mermaid.min.js" 
   integrity="sha384-atOyb0FxAgN9LyAc6PEf9BjgwLISyansgdH8/VXQH8p2o5vfrRgmGIJ2Sg22L0A0"  crossorigin></script>
-<link rel="preconnect" href="https://www.google-analytics.com" crossorigin>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-C0R8DENDJ0"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag() { dataLayer.push(arguments); }
-  gtag('js', new Date());
-  gtag('config', 'G-C0R8DENDJ0');
-</script>
 
 
-<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu546329292729773971.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu16414047889438337432.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
 
 <meta name="description"
   content="始于2022年初mbp2015归天之后...">
@@ -95,33 +87,33 @@
     "itemListElement":[{
             "@type":"ListItem",
             "position":  1 ,
-            "name": "Configmap挂载的几种情况",
-            "description": "\u003cp\u003eConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理：\u003c/p\u003e\n\u003ch2 id=\"将某个key的值挂载为环境变量\"\u003e将某个key的值挂载为环境变量\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"language-yaml\"\u003eapiVersion: v1\nkind: Pod\nmetadata:\n  name: dapi-test-pod\nspec:\n  containers:\n    - name: test-container\n      image: gcr.io/google_containers/busybox\n      command: [ \u0026quot;/bin/sh\u0026quot;, \u0026quot;-c\u0026quot;, \u0026quot;env\u0026quot; ]\n      env:\n        - name: SPECIAL_LEVEL_KEY\n          valueFrom:\n            configMapKeyRef:\n              name: special-config\n              key: special.how\n        - name: SPECIAL_TYPE_KEY\n          valueFrom:\n            configMapKeyRef:\n              name: special-config\n              key: special.type\n              optional: true\n  restartPolicy: Never\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e这里在\u003ccode\u003ecommand\u003c/code\u003e里可以通过\u003ccode\u003e$(SPECIAL_TYPE_KEY)\u003c/code\u003e的格式来引用这些环境变量作为命令行参数。\u003c/p\u003e",
-            "url": "https://yiuterran.github.io/blog/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/"
+            "name": "Ytt试用",
+            "description": "jsonnet最大的问题其实是：它支持的是json，而不是yaml. 其实这也不是什么问题，因为yaml是json的超集，json本身就是一个合法的ya",
+            "url": "https://yiuterran.github.io/blog/posts/ytt%E8%AF%95%E7%94%A8/"
         },{
             "@type":"ListItem",
             "position":  2 ,
-            "name": "Sqlx备忘录",
-            "description": "\u003cp\u003e很少用golang写增删改查，sqlx的用法和java差别很大，用的时候总是要从头看文档。这里写个备忘录方便以后查询，使用sqlx和go-sqlbuilder来完成增删改查。\u003c/p\u003e",
-            "url": "https://yiuterran.github.io/blog/posts/sqlx%E5%A4%87%E5%BF%98%E5%BD%95/"
+            "name": "Jsonnet试用",
+            "description": "jsonnet这个语言很有意思，它存在的目的就是为了编辑配置。其实使用任何一门带有字符串模板的语言都能完成类似的目的，但是jsonnet的好处是它的封",
+            "url": "https://yiuterran.github.io/blog/posts/jsonnet%E8%AF%95%E7%94%A8/"
         },{
             "@type":"ListItem",
             "position":  3 ,
-            "name": "边侧高可用解决方案",
-            "description": "\u003cp\u003e边侧服务高可用其实就是当年服务还没上云的时候，使用的那套技术栈。不过稍微有些不同的是，边缘计算需要考虑完全封闭的局域网，有点像组态软件的场景。\u003c/p\u003e\n\u003ch2 id=\"基于域名\"\u003e基于域名\u003c/h2\u003e\n\u003cp\u003e本地域名一般使用\u003ccode\u003e.local\u003c/code\u003e/\u003ccode\u003e.lan\u003c/code\u003e之类的后缀，避免和\u003ccode\u003e.com\u003c/code\u003e等云上域名冲突。\u003c/p\u003e",
-            "url": "https://yiuterran.github.io/blog/posts/%E8%BE%B9%E4%BE%A7%E9%AB%98%E5%8F%AF%E7%94%A8%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/"
+            "name": "linux日常使用记录",
+            "description": "由于公司开始强制使用Linux桌面系统，记录一下使用中遇到的问题。 发行版选择 本来先尝试了Ubuntu 22.04和KDE Neon做为开发环境，但是体验都",
+            "url": "https://yiuterran.github.io/blog/posts/linux%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/"
         },{
             "@type":"ListItem",
             "position":  4 ,
-            "name": "边侧监控选型",
-            "description": "\u003ch1 id=\"边侧监控方案\"\u003e边侧监控方案\u003c/h1\u003e\n\u003ch2 id=\"问题\"\u003e问题\u003c/h2\u003e\n\u003cp\u003e边缘计算v2适配了目前所有流行的应用部署方式：\u003c/p\u003e\n\u003col\u003e\n\u003cli\u003e裸系统（物理机）部署；\u003c/li\u003e\n\u003cli\u003edocker部署；\u003c/li\u003e\n\u003cli\u003ek8s部署；\u003c/li\u003e\n\u003c/ol\u003e\n\u003cp\u003e因此对应的监控系统也要考虑兼顾各种部署方式。并且，随着时间的发展，平台会接入越来越多的边侧集群或者设备，因此要考虑负载问题。\u003c/p\u003e",
-            "url": "https://yiuterran.github.io/blog/posts/%E8%BE%B9%E4%BE%A7%E7%9B%91%E6%8E%A7%E9%80%89%E5%9E%8B/"
+            "name": "ES和kibana简要笔记",
+            "description": "由于比赛需要用到es和kibana，重新复习一下这块的内容。 基础概念 ES的概念和其他数据库截然不同，虽然和mongodb同为文档型数据库，但是后者的很",
+            "url": "https://yiuterran.github.io/blog/posts/es%E5%92%8Ckibana%E7%AE%80%E8%A6%81%E7%AC%94%E8%AE%B0/"
         },{
             "@type":"ListItem",
             "position":  5 ,
-            "name": "PromQL笔记",
-            "description": "\u003ch2 id=\"格式\"\u003e格式\u003c/h2\u003e\n\u003cp\u003e类似influxdb，prometheus也有自己的line protocol：\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e\u0026lt;--------------- metric ---------------------\u0026gt;\u0026lt;-timestamp -\u0026gt;\u0026lt;-value-\u0026gt;\n\u0026lt;---metric name---\u0026gt;{labelname=labelvalue,....}\nhttp_request_total{status=\u0026quot;200\u0026quot;, method=\u0026quot;GET\u0026quot;}@1434417560938 =\u0026gt; 94355\nhttp_request_total{status=\u0026quot;200\u0026quot;, method=\u0026quot;GET\u0026quot;}@1434417561287 =\u0026gt; 94334\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e上面就表示在某个时间戳系统http GET请求中200的数量。\u003c/p\u003e",
-            "url": "https://yiuterran.github.io/blog/posts/promql%E7%AC%94%E8%AE%B0/"
+            "name": "StatefulSet使用思路梳理",
+            "description": "一般服务都是使用deployment部署，deploy的使用非常简单，无状态，随意调度。但是各种需要持久化数据的中间件都需要使用StatefulSet",
+            "url": "https://yiuterran.github.io/blog/posts/statefulset%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86/"
         }
     ]
 }
@@ -156,7 +148,7 @@
 
 
 
-<meta property="og:updated_time" content="2024-11-11T14:56:12&#43;08:00" />
+<meta property="og:updated_time" content="2025-09-29T11:56:08&#43;08:00" />
 
 
 
@@ -250,13 +242,175 @@
   
   <div class="w-full ">
     <div class="prose">
-  <a href="https://yiuterran.github.io/blog/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/" class="no-underline">
-    <h3 class="mt-0">Configmap挂载的几种情况</h3>
+  <a href="https://yiuterran.github.io/blog/posts/ytt%E8%AF%95%E7%94%A8/" class="no-underline">
+    <h3 class="mt-0">Ytt试用</h3>
   </a>
   
-    ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理：
-将某个key的值挂载为环境变量 apiVersion: v1 kind: Pod metadata: name: dapi-test-pod spec: containers: - name: test-container image: gcr.io/google_containers/busybox command: [ &#34;/bin/sh&#34;, &#34;-c&#34;, &#34;env&#34; ] env: - name: SPECIAL_LEVEL_KEY valueFrom: configMapKeyRef: name: special-config key: special.how - name: SPECIAL_TYPE_KEY valueFrom: configMapKeyRef: name: special-config key: special.type optional: true restartPolicy: Never 这里在command里可以通过$(SPECIAL_TYPE_KEY)的格式来引用这些环境变量作为命令行参数。
+    jsonnet最大的问题其实是：它支持的是json，而不是yaml. 其实这也不是什么问题，因为yaml是json的超集，json本身就是一个合法的ya
+  
 
+  
+    <div
+  class="text-tertiary-text not-prose mt-2 flex flex-row flex-wrap items-center"
+>
+  <div class="me-6 my-2">
+    <i class="fas fa-calendar me-1"></i>
+    <span
+      >2023-12-29</span
+    >
+  </div>
+  <div class="me-6 my-2">
+    <i class="fas fa-clock me-1"></i>
+    <span>5分钟阅读时长</span>
+  </div>
+
+  
+
+  
+</div>
+
+  
+</div>
+
+  </div>
+
+  
+</div>
+  </div>
+  
+  <div class="py-6">
+    <div class="flex flex-col-reverse lg:flex-row justify-between">
+  
+  <div class="w-full ">
+    <div class="prose">
+  <a href="https://yiuterran.github.io/blog/posts/jsonnet%E8%AF%95%E7%94%A8/" class="no-underline">
+    <h3 class="mt-0">Jsonnet试用</h3>
+  </a>
+  
+    jsonnet这个语言很有意思，它存在的目的就是为了编辑配置。其实使用任何一门带有字符串模板的语言都能完成类似的目的，但是jsonnet的好处是它的封
+  
+
+  
+    <div
+  class="text-tertiary-text not-prose mt-2 flex flex-row flex-wrap items-center"
+>
+  <div class="me-6 my-2">
+    <i class="fas fa-calendar me-1"></i>
+    <span
+      >2023-12-29</span
+    >
+  </div>
+  <div class="me-6 my-2">
+    <i class="fas fa-clock me-1"></i>
+    <span>4分钟阅读时长</span>
+  </div>
+
+  
+
+  
+</div>
+
+  
+</div>
+
+  </div>
+
+  
+</div>
+  </div>
+  
+  <div class="py-6">
+    <div class="flex flex-col-reverse lg:flex-row justify-between">
+  
+  <div class="w-full ">
+    <div class="prose">
+  <a href="https://yiuterran.github.io/blog/posts/linux%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/" class="no-underline">
+    <h3 class="mt-0">linux日常使用记录</h3>
+  </a>
+  
+    由于公司开始强制使用Linux桌面系统，记录一下使用中遇到的问题。 发行版选择 本来先尝试了Ubuntu 22.04和KDE Neon做为开发环境，但是体验都
+  
+
+  
+    <div
+  class="text-tertiary-text not-prose mt-2 flex flex-row flex-wrap items-center"
+>
+  <div class="me-6 my-2">
+    <i class="fas fa-calendar me-1"></i>
+    <span
+      >2023-11-24</span
+    >
+  </div>
+  <div class="me-6 my-2">
+    <i class="fas fa-clock me-1"></i>
+    <span>13分钟阅读时长</span>
+  </div>
+
+  
+
+  
+</div>
+
+  
+</div>
+
+  </div>
+
+  
+</div>
+  </div>
+  
+  <div class="py-6">
+    <div class="flex flex-col-reverse lg:flex-row justify-between">
+  
+  <div class="w-full ">
+    <div class="prose">
+  <a href="https://yiuterran.github.io/blog/posts/es%E5%92%8Ckibana%E7%AE%80%E8%A6%81%E7%AC%94%E8%AE%B0/" class="no-underline">
+    <h3 class="mt-0">ES和kibana简要笔记</h3>
+  </a>
+  
+    由于比赛需要用到es和kibana，重新复习一下这块的内容。 基础概念 ES的概念和其他数据库截然不同，虽然和mongodb同为文档型数据库，但是后者的很
+  
+
+  
+    <div
+  class="text-tertiary-text not-prose mt-2 flex flex-row flex-wrap items-center"
+>
+  <div class="me-6 my-2">
+    <i class="fas fa-calendar me-1"></i>
+    <span
+      >2023-11-13</span
+    >
+  </div>
+  <div class="me-6 my-2">
+    <i class="fas fa-clock me-1"></i>
+    <span>6分钟阅读时长</span>
+  </div>
+
+  
+
+  
+</div>
+
+  
+</div>
+
+  </div>
+
+  
+</div>
+  </div>
+  
+  <div class="py-6">
+    <div class="flex flex-col-reverse lg:flex-row justify-between">
+  
+  <div class="w-full ">
+    <div class="prose">
+  <a href="https://yiuterran.github.io/blog/posts/statefulset%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86/" class="no-underline">
+    <h3 class="mt-0">StatefulSet使用思路梳理</h3>
+  </a>
+  
+    一般服务都是使用deployment部署，deploy的使用非常简单，无状态，随意调度。但是各种需要持久化数据的中间件都需要使用StatefulSet
   
 
   
@@ -271,178 +425,7 @@
   </div>
   <div class="me-6 my-2">
     <i class="fas fa-clock me-1"></i>
-    <span>2分钟阅读时长</span>
-  </div>
-
-  
-
-  
-</div>
-
-  
-</div>
-
-  </div>
-
-  
-</div>
-  </div>
-  
-  <div class="py-6">
-    <div class="flex flex-col-reverse lg:flex-row justify-between">
-  
-  <div class="w-full ">
-    <div class="prose">
-  <a href="https://yiuterran.github.io/blog/posts/sqlx%E5%A4%87%E5%BF%98%E5%BD%95/" class="no-underline">
-    <h3 class="mt-0">Sqlx备忘录</h3>
-  </a>
-  
-    很少用golang写增删改查，sqlx的用法和java差别很大，用的时候总是要从头看文档。这里写个备忘录方便以后查询，使用sqlx和go-sqlbuilder来完成增删改查。
-
-  
-
-  
-    <div
-  class="text-tertiary-text not-prose mt-2 flex flex-row flex-wrap items-center"
->
-  <div class="me-6 my-2">
-    <i class="fas fa-calendar me-1"></i>
-    <span
-      >2023-09-12</span
-    >
-  </div>
-  <div class="me-6 my-2">
-    <i class="fas fa-clock me-1"></i>
     <span>4分钟阅读时长</span>
-  </div>
-
-  
-
-  
-</div>
-
-  
-</div>
-
-  </div>
-
-  
-</div>
-  </div>
-  
-  <div class="py-6">
-    <div class="flex flex-col-reverse lg:flex-row justify-between">
-  
-  <div class="w-full ">
-    <div class="prose">
-  <a href="https://yiuterran.github.io/blog/posts/%E8%BE%B9%E4%BE%A7%E9%AB%98%E5%8F%AF%E7%94%A8%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" class="no-underline">
-    <h3 class="mt-0">边侧高可用解决方案</h3>
-  </a>
-  
-    边侧服务高可用其实就是当年服务还没上云的时候，使用的那套技术栈。不过稍微有些不同的是，边缘计算需要考虑完全封闭的局域网，有点像组态软件的场景。
-基于域名 本地域名一般使用.local/.lan之类的后缀，避免和.com等云上域名冲突。
-
-  
-
-  
-    <div
-  class="text-tertiary-text not-prose mt-2 flex flex-row flex-wrap items-center"
->
-  <div class="me-6 my-2">
-    <i class="fas fa-calendar me-1"></i>
-    <span
-      >2023-08-01</span
-    >
-  </div>
-  <div class="me-6 my-2">
-    <i class="fas fa-clock me-1"></i>
-    <span>4分钟阅读时长</span>
-  </div>
-
-  
-
-  
-</div>
-
-  
-</div>
-
-  </div>
-
-  
-</div>
-  </div>
-  
-  <div class="py-6">
-    <div class="flex flex-col-reverse lg:flex-row justify-between">
-  
-  <div class="w-full ">
-    <div class="prose">
-  <a href="https://yiuterran.github.io/blog/posts/%E8%BE%B9%E4%BE%A7%E7%9B%91%E6%8E%A7%E9%80%89%E5%9E%8B/" class="no-underline">
-    <h3 class="mt-0">边侧监控选型</h3>
-  </a>
-  
-    边侧监控方案 问题 边缘计算v2适配了目前所有流行的应用部署方式：
-裸系统（物理机）部署； docker部署； k8s部署； 因此对应的监控系统也要考虑兼顾各种部署方式。并且，随着时间的发展，平台会接入越来越多的边侧集群或者设备，因此要考虑负载问题。
-
-  
-
-  
-    <div
-  class="text-tertiary-text not-prose mt-2 flex flex-row flex-wrap items-center"
->
-  <div class="me-6 my-2">
-    <i class="fas fa-calendar me-1"></i>
-    <span
-      >2023-07-26</span
-    >
-  </div>
-  <div class="me-6 my-2">
-    <i class="fas fa-clock me-1"></i>
-    <span>20分钟阅读时长</span>
-  </div>
-
-  
-
-  
-</div>
-
-  
-</div>
-
-  </div>
-
-  
-</div>
-  </div>
-  
-  <div class="py-6">
-    <div class="flex flex-col-reverse lg:flex-row justify-between">
-  
-  <div class="w-full ">
-    <div class="prose">
-  <a href="https://yiuterran.github.io/blog/posts/promql%E7%AC%94%E8%AE%B0/" class="no-underline">
-    <h3 class="mt-0">PromQL笔记</h3>
-  </a>
-  
-    格式 类似influxdb，prometheus也有自己的line protocol：
-&lt;--------------- metric ---------------------&gt;&lt;-timestamp -&gt;&lt;-value-&gt; &lt;---metric name---&gt;{labelname=labelvalue,....} http_request_total{status=&#34;200&#34;, method=&#34;GET&#34;}@1434417560938 =&gt; 94355 http_request_total{status=&#34;200&#34;, method=&#34;GET&#34;}@1434417561287 =&gt; 94334 上面就表示在某个时间戳系统http GET请求中200的数量。
-
-  
-
-  
-    <div
-  class="text-tertiary-text not-prose mt-2 flex flex-row flex-wrap items-center"
->
-  <div class="me-6 my-2">
-    <i class="fas fa-calendar me-1"></i>
-    <span
-      >2023-07-24</span
-    >
-  </div>
-  <div class="me-6 my-2">
-    <i class="fas fa-clock me-1"></i>
-    <span>5分钟阅读时长</span>
   </div>
 
   
@@ -490,7 +473,7 @@
         <a href="https://yiuterran.github.io/blog/posts/page/5/" aria-label="Next" class="page-link" role="button"><span aria-hidden="true">&raquo;</span></a>
       </li>
       <li class="page-item">
-        <a href="https://yiuterran.github.io/blog/posts/page/8/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
+        <a href="https://yiuterran.github.io/blog/posts/page/9/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
       </li>
     </ul>
 

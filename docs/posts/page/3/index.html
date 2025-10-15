@@ -43,7 +43,7 @@
 <link rel="stylesheet" href="https://yiuterran.github.io/blog/css/highlightjs.min.2958991528e43eb6fc9b8c4f2b8e052f79c4010718e1d1e888a777620e9ee63021c2c57ec7417a3108019bb8c41943e6.css" media="print" onload="this.media='all';this.onload=null">
 
 
-<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.78e494ccd35d494929874dc88a1c7963e597460caafa2ea0b64b9f5cd2ed626a7348522a90f0b37886181ab1ed34301f.js"></script>
+<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.8c77c7521b1f95ec2031c2a79f5c6a698aa4a0dba5ba649dfbc7f73994cddf3f494be6aac7e5724f35cbf72cfde09703.js"></script>
 
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
@@ -69,18 +69,10 @@
 
 <script defer src="https://cdn.jsdelivr.net/npm/mermaid@8.14.0/dist/mermaid.min.js" 
   integrity="sha384-atOyb0FxAgN9LyAc6PEf9BjgwLISyansgdH8/VXQH8p2o5vfrRgmGIJ2Sg22L0A0"  crossorigin></script>
-<link rel="preconnect" href="https://www.google-analytics.com" crossorigin>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-C0R8DENDJ0"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag() { dataLayer.push(arguments); }
-  gtag('js', new Date());
-  gtag('config', 'G-C0R8DENDJ0');
-</script>
 
 
-<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu546329292729773971.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu16414047889438337432.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
 
 <meta name="description"
   content="始于2022年初mbp2015归天之后...">
@@ -95,33 +87,33 @@
     "itemListElement":[{
             "@type":"ListItem",
             "position":  1 ,
-            "name": "Ytt试用",
-            "description": "\u003cp\u003ejsonnet最大的问题其实是：它支持的是json，而不是yaml. 其实这也不是什么问题，因为yaml是json的超集，json本身就是一个合法的yaml. 但是写起来需要将原来的yaml转成jsonnet，输出成yaml就更麻烦，需要在外围加上\u003ccode\u003estd.YamlManifest()\u003c/code\u003e，这种侵入式的设计感觉很蛋疼。\u003c/p\u003e",
-            "url": "https://yiuterran.github.io/blog/posts/ytt%E8%AF%95%E7%94%A8/"
+            "name": "K3s安装注意事项",
+            "description": "k3s自带了containerd作为CRI实现，不过我们一般习惯上还是使用docker作为运行时。但是两者结合使用有一些坑，这里做一下记录。 不用con",
+            "url": "https://yiuterran.github.io/blog/posts/k3s%E5%AE%89%E8%A3%85%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/"
         },{
             "@type":"ListItem",
             "position":  2 ,
-            "name": "Jsonnet试用",
-            "description": "\u003cp\u003e\u003ccode\u003ejsonnet\u003c/code\u003e这个语言很有意思，它存在的目的就是为了编辑配置。其实使用任何一门带有字符串模板的语言都能完成类似的目的，但是\u003ccode\u003ejsonnet\u003c/code\u003e的好处是它的封闭性：不要使用额外的依赖完成配置。\u003c/p\u003e",
-            "url": "https://yiuterran.github.io/blog/posts/jsonnet%E8%AF%95%E7%94%A8/"
+            "name": "Python技术栈更新",
+            "description": "有段时间没用Python写工程了，基本都是写脚本，最近接了个活帮忙搞个爬虫相关项目，需要更新一下技术栈，做个笔记。 web开发：fastapi, 其实还可",
+            "url": "https://yiuterran.github.io/blog/posts/python%E6%8A%80%E6%9C%AF%E6%A0%88%E6%9B%B4%E6%96%B0/"
         },{
             "@type":"ListItem",
             "position":  3 ,
-            "name": "linux日常使用记录",
-            "description": "\u003cp\u003e由于公司开始强制使用Linux桌面系统，记录一下使用中遇到的问题。\u003c/p\u003e\n\u003ch2 id=\"发行版选择\"\u003e发行版选择\u003c/h2\u003e\n\u003cp\u003e本来先尝试了Ubuntu 22.04和KDE Neon做为开发环境，但是体验都不太好：\u003c/p\u003e\n\u003cp\u003eKDE Neon与日常使用的软件兼容性很差，主要是大部分软件都是GTK搞的；\u003c/p\u003e",
-            "url": "https://yiuterran.github.io/blog/posts/linux%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/"
+            "name": "Jinja2小结",
+            "description": "之前写Python的时候其实有接触过一些jinja2，不过没有怎么用过实际上。毕竟前后端分离之后，这些模板语言在web开发上用处并不大。不过ansib",
+            "url": "https://yiuterran.github.io/blog/posts/jinja2%E5%B0%8F%E7%BB%93/"
         },{
             "@type":"ListItem",
             "position":  4 ,
-            "name": "ES和kibana简要笔记",
-            "description": "\u003cp\u003e由于比赛需要用到es和kibana，重新复习一下这块的内容。\u003c/p\u003e\n\u003ch2 id=\"基础概念\"\u003e基础概念\u003c/h2\u003e\n\u003cp\u003eES的概念和其他数据库截然不同，虽然和mongodb同为文档型数据库，但是后者的很多概念更接近于普通的关系型数据库。\u003c/p\u003e",
-            "url": "https://yiuterran.github.io/blog/posts/es%E5%92%8Ckibana%E7%AE%80%E8%A6%81%E7%AC%94%E8%AE%B0/"
+            "name": "Ansible速成",
+            "description": "虽然iac(infracture as code)流行以来，新的技术栈层出不穷，但是一般都是面向k8s或者云服务商的。传统的部署还是用ansible这种仅依",
+            "url": "https://yiuterran.github.io/blog/posts/ansible%E9%80%9F%E6%88%90/"
         },{
             "@type":"ListItem",
             "position":  5 ,
-            "name": "StatefulSet使用思路梳理",
-            "description": "\u003cp\u003e一般服务都是使用deployment部署，deploy的使用非常简单，无状态，随意调度。但是各种需要持久化数据的中间件都需要使用StatefulSet来部署，这个玩意儿实际上有点复杂。\u003c/p\u003e",
-            "url": "https://yiuterran.github.io/blog/posts/statefulset%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86/"
+            "name": "Kcl试用",
+            "description": "kcl是蚂蚁金服开源的配置DSL，诞生比较晚，所以吸纳了已有的jsonnet、hcl、cue等方案的优点。 安装 对于linux： wget -q https://kcl-lang.io/script/install-cli.sh -O - | /bin/bash 这个脚本本",
+            "url": "https://yiuterran.github.io/blog/posts/kcl%E8%AF%95%E7%94%A8/"
         }
     ]
 }
@@ -156,7 +148,7 @@
 
 
 
-<meta property="og:updated_time" content="2024-11-11T14:56:12&#43;08:00" />
+<meta property="og:updated_time" content="2025-09-29T11:56:08&#43;08:00" />
 
 
 
@@ -250,12 +242,11 @@
   
   <div class="w-full ">
     <div class="prose">
-  <a href="https://yiuterran.github.io/blog/posts/ytt%E8%AF%95%E7%94%A8/" class="no-underline">
-    <h3 class="mt-0">Ytt试用</h3>
+  <a href="https://yiuterran.github.io/blog/posts/k3s%E5%AE%89%E8%A3%85%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/" class="no-underline">
+    <h3 class="mt-0">K3s安装注意事项</h3>
   </a>
   
-    jsonnet最大的问题其实是：它支持的是json，而不是yaml. 其实这也不是什么问题，因为yaml是json的超集，json本身就是一个合法的yaml. 但是写起来需要将原来的yaml转成jsonnet，输出成yaml就更麻烦，需要在外围加上std.YamlManifest()，这种侵入式的设计感觉很蛋疼。
-
+    k3s自带了containerd作为CRI实现，不过我们一般习惯上还是使用docker作为运行时。但是两者结合使用有一些坑，这里做一下记录。 不用con
   
 
   
@@ -265,12 +256,12 @@
   <div class="me-6 my-2">
     <i class="fas fa-calendar me-1"></i>
     <span
-      >2023-12-29</span
+      >2024-02-19</span
     >
   </div>
   <div class="me-6 my-2">
     <i class="fas fa-clock me-1"></i>
-    <span>5分钟阅读时长</span>
+    <span>9分钟阅读时长</span>
   </div>
 
   
@@ -292,12 +283,11 @@
   
   <div class="w-full ">
     <div class="prose">
-  <a href="https://yiuterran.github.io/blog/posts/jsonnet%E8%AF%95%E7%94%A8/" class="no-underline">
-    <h3 class="mt-0">Jsonnet试用</h3>
+  <a href="https://yiuterran.github.io/blog/posts/python%E6%8A%80%E6%9C%AF%E6%A0%88%E6%9B%B4%E6%96%B0/" class="no-underline">
+    <h3 class="mt-0">Python技术栈更新</h3>
   </a>
   
-    jsonnet这个语言很有意思，它存在的目的就是为了编辑配置。其实使用任何一门带有字符串模板的语言都能完成类似的目的，但是jsonnet的好处是它的封闭性：不要使用额外的依赖完成配置。
-
+    有段时间没用Python写工程了，基本都是写脚本，最近接了个活帮忙搞个爬虫相关项目，需要更新一下技术栈，做个笔记。 web开发：fastapi, 其实还可
   
 
   
@@ -307,7 +297,7 @@
   <div class="me-6 my-2">
     <i class="fas fa-calendar me-1"></i>
     <span
-      >2023-12-29</span
+      >2024-01-09</span
     >
   </div>
   <div class="me-6 my-2">
@@ -334,14 +324,11 @@
   
   <div class="w-full ">
     <div class="prose">
-  <a href="https://yiuterran.github.io/blog/posts/linux%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/" class="no-underline">
-    <h3 class="mt-0">linux日常使用记录</h3>
+  <a href="https://yiuterran.github.io/blog/posts/jinja2%E5%B0%8F%E7%BB%93/" class="no-underline">
+    <h3 class="mt-0">Jinja2小结</h3>
   </a>
   
-    由于公司开始强制使用Linux桌面系统，记录一下使用中遇到的问题。
-发行版选择 本来先尝试了Ubuntu 22.04和KDE Neon做为开发环境，但是体验都不太好：
-KDE Neon与日常使用的软件兼容性很差，主要是大部分软件都是GTK搞的；
-
+    之前写Python的时候其实有接触过一些jinja2，不过没有怎么用过实际上。毕竟前后端分离之后，这些模板语言在web开发上用处并不大。不过ansib
   
 
   
@@ -351,12 +338,12 @@ KDE Neon与日常使用的软件兼容性很差，主要是大部分软件都是
   <div class="me-6 my-2">
     <i class="fas fa-calendar me-1"></i>
     <span
-      >2023-11-24</span
+      >2024-01-05</span
     >
   </div>
   <div class="me-6 my-2">
     <i class="fas fa-clock me-1"></i>
-    <span>13分钟阅读时长</span>
+    <span>2分钟阅读时长</span>
   </div>
 
   
@@ -378,13 +365,11 @@ KDE Neon与日常使用的软件兼容性很差，主要是大部分软件都是
   
   <div class="w-full ">
     <div class="prose">
-  <a href="https://yiuterran.github.io/blog/posts/es%E5%92%8Ckibana%E7%AE%80%E8%A6%81%E7%AC%94%E8%AE%B0/" class="no-underline">
-    <h3 class="mt-0">ES和kibana简要笔记</h3>
+  <a href="https://yiuterran.github.io/blog/posts/ansible%E9%80%9F%E6%88%90/" class="no-underline">
+    <h3 class="mt-0">Ansible速成</h3>
   </a>
   
-    由于比赛需要用到es和kibana，重新复习一下这块的内容。
-基础概念 ES的概念和其他数据库截然不同，虽然和mongodb同为文档型数据库，但是后者的很多概念更接近于普通的关系型数据库。
-
+    虽然iac(infracture as code)流行以来，新的技术栈层出不穷，但是一般都是面向k8s或者云服务商的。传统的部署还是用ansible这种仅依
   
 
   
@@ -394,7 +379,7 @@ KDE Neon与日常使用的软件兼容性很差，主要是大部分软件都是
   <div class="me-6 my-2">
     <i class="fas fa-calendar me-1"></i>
     <span
-      >2023-11-13</span
+      >2024-01-04</span
     >
   </div>
   <div class="me-6 my-2">
@@ -421,12 +406,11 @@ KDE Neon与日常使用的软件兼容性很差，主要是大部分软件都是
   
   <div class="w-full ">
     <div class="prose">
-  <a href="https://yiuterran.github.io/blog/posts/statefulset%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86/" class="no-underline">
-    <h3 class="mt-0">StatefulSet使用思路梳理</h3>
+  <a href="https://yiuterran.github.io/blog/posts/kcl%E8%AF%95%E7%94%A8/" class="no-underline">
+    <h3 class="mt-0">Kcl试用</h3>
   </a>
   
-    一般服务都是使用deployment部署，deploy的使用非常简单，无状态，随意调度。但是各种需要持久化数据的中间件都需要使用StatefulSet来部署，这个玩意儿实际上有点复杂。
-
+    kcl是蚂蚁金服开源的配置DSL，诞生比较晚，所以吸纳了已有的jsonnet、hcl、cue等方案的优点。 安装 对于linux： wget -q https://kcl-lang.io/script/install-cli.sh -O - | /bin/bash 这个脚本本
   
 
   
@@ -436,7 +420,7 @@ KDE Neon与日常使用的软件兼容性很差，主要是大部分软件都是
   <div class="me-6 my-2">
     <i class="fas fa-calendar me-1"></i>
     <span
-      >2023-09-15</span
+      >2024-01-02</span
     >
   </div>
   <div class="me-6 my-2">
@@ -489,7 +473,7 @@ KDE Neon与日常使用的软件兼容性很差，主要是大部分软件都是
         <a href="https://yiuterran.github.io/blog/posts/page/4/" aria-label="Next" class="page-link" role="button"><span aria-hidden="true">&raquo;</span></a>
       </li>
       <li class="page-item">
-        <a href="https://yiuterran.github.io/blog/posts/page/8/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
+        <a href="https://yiuterran.github.io/blog/posts/page/9/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
       </li>
     </ul>
 

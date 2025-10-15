@@ -43,7 +43,7 @@
 <link rel="stylesheet" href="https://yiuterran.github.io/blog/css/highlightjs.min.2958991528e43eb6fc9b8c4f2b8e052f79c4010718e1d1e888a777620e9ee63021c2c57ec7417a3108019bb8c41943e6.css" media="print" onload="this.media='all';this.onload=null">
 
 
-<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.78e494ccd35d494929874dc88a1c7963e597460caafa2ea0b64b9f5cd2ed626a7348522a90f0b37886181ab1ed34301f.js"></script>
+<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.8c77c7521b1f95ec2031c2a79f5c6a698aa4a0dba5ba649dfbc7f73994cddf3f494be6aac7e5724f35cbf72cfde09703.js"></script>
 
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
@@ -69,18 +69,10 @@
 
 <script defer src="https://cdn.jsdelivr.net/npm/mermaid@8.14.0/dist/mermaid.min.js" 
   integrity="sha384-atOyb0FxAgN9LyAc6PEf9BjgwLISyansgdH8/VXQH8p2o5vfrRgmGIJ2Sg22L0A0"  crossorigin></script>
-<link rel="preconnect" href="https://www.google-analytics.com" crossorigin>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-C0R8DENDJ0"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag() { dataLayer.push(arguments); }
-  gtag('js', new Date());
-  gtag('config', 'G-C0R8DENDJ0');
-</script>
 
 
-<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu546329292729773971.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu16414047889438337432.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
 
 <meta name="description"
   content="始于2022年初mbp2015归天之后...">
@@ -95,33 +87,33 @@
     "itemListElement":[{
             "@type":"ListItem",
             "position":  1 ,
-            "name": "K3s安装注意事项",
-            "description": "\u003cp\u003ek3s自带了containerd作为CRI实现，不过我们一般习惯上还是使用docker作为运行时。但是两者结合使用有一些坑，这里做一下记录。\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cp\u003e不用containerd的主要原因是它的命令太难记，ctr/ctictl做的什么jb玩意儿。还有一个原因是，如果只想用容器不想用k8s，docker的功能是最完善的。\u003c/p\u003e",
-            "url": "https://yiuterran.github.io/blog/posts/k3s%E5%AE%89%E8%A3%85%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/"
+            "name": "Typescript速成",
+            "description": "安装\u0026amp;使用 npm install -g typscript tsc hello.ts 生成1个js文件。 教程推荐：https://wangdoc.com/typescript/ 基础 使用let ok: boolean = false",
+            "url": "https://yiuterran.github.io/blog/posts/typescript%E9%80%9F%E6%88%90/"
         },{
             "@type":"ListItem",
             "position":  2 ,
-            "name": "Python技术栈更新",
-            "description": "\u003cp\u003e有段时间没用Python写工程了，基本都是写脚本，最近接了个活帮忙搞个爬虫相关项目，需要更新一下技术栈，做个笔记。\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eweb开发：\u003ccode\u003efastapi\u003c/code\u003e, 其实还可以接着用flask，不过前者对asyncio支持更完善一些，顺便学一下新东西；至于django还是太重了，写单体估计有点用；\u003c/li\u003e\n\u003cli\u003e数据库ORM：仍然可以继续使用\u003ccode\u003esqlalchemy\u003c/code\u003e，最新的是2.0版本，已经支持asyncio；\u003c/li\u003e\n\u003cli\u003e爬虫：爬虫相关的技术栈变化不大…scrapy其实不太好用，封装的太厚，而且\u003ccode\u003etwisted\u003c/code\u003e早就过时了。自己写的话就：\n\u003cul\u003e\n\u003cli\u003e用\u003ccode\u003eaiohttp\u003c/code\u003e做网络请求；\u003c/li\u003e\n\u003cli\u003e\u003ccode\u003edom\u003c/code\u003e解析：仍然是基于\u003ccode\u003elxml\u003c/code\u003e的技术栈，主要还是\u003ccode\u003expath\u003c/code\u003e和\u003ccode\u003ecss-selector\u003c/code\u003e来获取元素；\u003c/li\u003e\n\u003cli\u003e浏览器模拟（动态网页）：\u003ccode\u003ePlaywright\u003c/code\u003e代替了\u003ccode\u003eSelenium\u003c/code\u003e等古早的框架；\u003c/li\u003e\n\u003cli\u003e打包：用docker就行；\u003c/li\u003e\n\u003cli\u003e验证码破解：这个相关的网站蛮多的，但是好不好使需要测试一下才知道。包括：\u003ccode\u003eyesCapture\u003c/code\u003e, \u003ccode\u003e2Capture\u003c/code\u003e和穿云等；\u003c/li\u003e\n\u003cli\u003e其他反爬技术：这个只能随机应变了，现在很多网站都做了反爬，具体手段不一，需要尝试解决；\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"fastapihttpsfastapitiangolocomzh\"\u003e\u003ca href=\"https://fastapi.tiangolo.com/zh/\"\u003eFastAPI\u003c/a\u003e\u003c/h2\u003e\n\u003cp\u003efastapi顾名思义，专注于提供API框架，不关心模版引擎、ORM之类的东西，但是自带了API文档(即\u003ccode\u003eswagger\u003c/code\u003e集成)。所以代码非常简单，不需要Django那套复杂的框架：\u003c/p\u003e",
-            "url": "https://yiuterran.github.io/blog/posts/python%E6%8A%80%E6%9C%AF%E6%A0%88%E6%9B%B4%E6%96%B0/"
+            "name": "基于LiteFlow的规则引擎设计",
+            "description": "始于2022年初mbp2015归天之后...",
+            "url": "https://yiuterran.github.io/blog/posts/%E5%9F%BA%E4%BA%8Eliteflow%E7%9A%84%E8%A7%84%E5%88%99%E5%BC%95%E6%93%8E%E8%AE%BE%E8%AE%A1/"
         },{
             "@type":"ListItem",
             "position":  3 ,
-            "name": "Jinja2小结",
-            "description": "\u003cp\u003e之前写Python的时候其实有接触过一些jinja2，不过没有怎么用过实际上。毕竟前后端分离之后，这些模板语言在web开发上用处并不大。不过\u003ccode\u003eansible\u003c/code\u003e选用了它做渲染模板，所以还是需要深入学习一下。比较蛋疼的是，k8s这边因为都是golang生态，所以用的是\u003ccode\u003ego template\u003c/code\u003e，那就是另外一套东西了。\u003c/p\u003e",
-            "url": "https://yiuterran.github.io/blog/posts/jinja2%E5%B0%8F%E7%BB%93/"
+            "name": "eBPF学习笔记",
+            "description": "eBPF的理论看起来有点抽象，实际上就是注册到内核的回调函数，可以拦截系统调用，然后用来完成自己的事情。 只是这个回调函数在内核空间只能用C来写，门槛还",
+            "url": "https://yiuterran.github.io/blog/posts/bpf%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"
         },{
             "@type":"ListItem",
             "position":  4 ,
-            "name": "Ansible速成",
-            "description": "\u003cp\u003e虽然iac(infracture as code)流行以来，新的技术栈层出不穷，但是一般都是面向k8s或者云服务商的。传统的部署还是用ansible这种仅依赖ssh的最简单。\u003c/p\u003e",
-            "url": "https://yiuterran.github.io/blog/posts/ansible%E9%80%9F%E6%88%90/"
+            "name": "时序数据规则引擎设计思路",
+            "description": "规则引擎的大致组成包括： 触发条件：如某个设备某种消息在某个时间点内到达；或周期性，每隔多久触发一次； 触发响应：即触发条件后要做什么，一般是告警、通知、",
+            "url": "https://yiuterran.github.io/blog/posts/%E6%97%B6%E5%BA%8F%E6%95%B0%E6%8D%AE%E8%A7%84%E5%88%99%E5%BC%95%E6%93%8E%E8%AE%BE%E8%AE%A1%E6%80%9D%E8%B7%AF/"
         },{
             "@type":"ListItem",
             "position":  5 ,
-            "name": "Kcl试用",
-            "description": "\u003cp\u003ekcl是蚂蚁金服开源的配置DSL，诞生比较晚，所以吸纳了已有的\u003ccode\u003ejsonnet\u003c/code\u003e、\u003ccode\u003ehcl\u003c/code\u003e、\u003ccode\u003ecue\u003c/code\u003e等方案的优点。\u003c/p\u003e\n\u003ch2 id=\"安装\"\u003e安装\u003c/h2\u003e\n\u003cp\u003e对于linux：\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-bash\"\u003ewget -q https://kcl-lang.io/script/install-cli.sh -O - | /bin/bash\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e这个脚本本质上还是从github中下载发行版，所以也需要翻墙。\u003c/p\u003e",
-            "url": "https://yiuterran.github.io/blog/posts/kcl%E8%AF%95%E7%94%A8/"
+            "name": "K8s应用调试技巧",
+            "description": "注意： 谨慎使用本文所述的工具，尤其是不要直接修改生产环境数据，风险自负！！！ rancher只读账号也可以登录服务pod的终端，而能登录到pod里就可以",
+            "url": "https://yiuterran.github.io/blog/posts/k8s%E5%BA%94%E7%94%A8%E8%B0%83%E8%AF%95%E6%8A%80%E5%B7%A7/"
         }
     ]
 }
@@ -156,7 +148,7 @@
 
 
 
-<meta property="og:updated_time" content="2024-11-11T14:56:12&#43;08:00" />
+<meta property="og:updated_time" content="2025-09-29T11:56:08&#43;08:00" />
 
 
 
@@ -250,13 +242,11 @@
   
   <div class="w-full ">
     <div class="prose">
-  <a href="https://yiuterran.github.io/blog/posts/k3s%E5%AE%89%E8%A3%85%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/" class="no-underline">
-    <h3 class="mt-0">K3s安装注意事项</h3>
+  <a href="https://yiuterran.github.io/blog/posts/typescript%E9%80%9F%E6%88%90/" class="no-underline">
+    <h3 class="mt-0">Typescript速成</h3>
   </a>
   
-    k3s自带了containerd作为CRI实现，不过我们一般习惯上还是使用docker作为运行时。但是两者结合使用有一些坑，这里做一下记录。
-不用containerd的主要原因是它的命令太难记，ctr/ctictl做的什么jb玩意儿。还有一个原因是，如果只想用容器不想用k8s，docker的功能是最完善的。
-
+    安装&amp;使用 npm install -g typscript tsc hello.ts 生成1个js文件。 教程推荐：https://wangdoc.com/typescript/ 基础 使用let ok: boolean = false
   
 
   
@@ -266,12 +256,12 @@
   <div class="me-6 my-2">
     <i class="fas fa-calendar me-1"></i>
     <span
-      >2024-02-19</span
+      >2024-11-11</span
     >
   </div>
   <div class="me-6 my-2">
     <i class="fas fa-clock me-1"></i>
-    <span>9分钟阅读时长</span>
+    <span>8分钟阅读时长</span>
   </div>
 
   
@@ -293,13 +283,9 @@
   
   <div class="w-full ">
     <div class="prose">
-  <a href="https://yiuterran.github.io/blog/posts/python%E6%8A%80%E6%9C%AF%E6%A0%88%E6%9B%B4%E6%96%B0/" class="no-underline">
-    <h3 class="mt-0">Python技术栈更新</h3>
+  <a href="https://yiuterran.github.io/blog/posts/%E5%9F%BA%E4%BA%8Eliteflow%E7%9A%84%E8%A7%84%E5%88%99%E5%BC%95%E6%93%8E%E8%AE%BE%E8%AE%A1/" class="no-underline">
+    <h3 class="mt-0">基于LiteFlow的规则引擎设计</h3>
   </a>
-  
-    有段时间没用Python写工程了，基本都是写脚本，最近接了个活帮忙搞个爬虫相关项目，需要更新一下技术栈，做个笔记。
-web开发：fastapi, 其实还可以接着用flask，不过前者对asyncio支持更完善一些，顺便学一下新东西；至于django还是太重了，写单体估计有点用； 数据库ORM：仍然可以继续使用sqlalchemy，最新的是2.0版本，已经支持asyncio； 爬虫：爬虫相关的技术栈变化不大…scrapy其实不太好用，封装的太厚，而且twisted早就过时了。自己写的话就： 用aiohttp做网络请求； dom解析：仍然是基于lxml的技术栈，主要还是xpath和css-selector来获取元素； 浏览器模拟（动态网页）：Playwright代替了Selenium等古早的框架； 打包：用docker就行； 验证码破解：这个相关的网站蛮多的，但是好不好使需要测试一下才知道。包括：yesCapture, 2Capture和穿云等； 其他反爬技术：这个只能随机应变了，现在很多网站都做了反爬，具体手段不一，需要尝试解决； FastAPI fastapi顾名思义，专注于提供API框架，不关心模版引擎、ORM之类的东西，但是自带了API文档(即swagger集成)。所以代码非常简单，不需要Django那套复杂的框架：
-
   
 
   
@@ -309,12 +295,12 @@ web开发：fastapi, 其实还可以接着用flask，不过前者对asyncio支�
   <div class="me-6 my-2">
     <i class="fas fa-calendar me-1"></i>
     <span
-      >2024-01-09</span
+      >2024-10-24</span
     >
   </div>
   <div class="me-6 my-2">
     <i class="fas fa-clock me-1"></i>
-    <span>4分钟阅读时长</span>
+    <span>0分钟阅读时长</span>
   </div>
 
   
@@ -336,12 +322,11 @@ web开发：fastapi, 其实还可以接着用flask，不过前者对asyncio支�
   
   <div class="w-full ">
     <div class="prose">
-  <a href="https://yiuterran.github.io/blog/posts/jinja2%E5%B0%8F%E7%BB%93/" class="no-underline">
-    <h3 class="mt-0">Jinja2小结</h3>
+  <a href="https://yiuterran.github.io/blog/posts/bpf%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="no-underline">
+    <h3 class="mt-0">eBPF学习笔记</h3>
   </a>
   
-    之前写Python的时候其实有接触过一些jinja2，不过没有怎么用过实际上。毕竟前后端分离之后，这些模板语言在web开发上用处并不大。不过ansible选用了它做渲染模板，所以还是需要深入学习一下。比较蛋疼的是，k8s这边因为都是golang生态，所以用的是go template，那就是另外一套东西了。
-
+    eBPF的理论看起来有点抽象，实际上就是注册到内核的回调函数，可以拦截系统调用，然后用来完成自己的事情。 只是这个回调函数在内核空间只能用C来写，门槛还
   
 
   
@@ -351,7 +336,7 @@ web开发：fastapi, 其实还可以接着用flask，不过前者对asyncio支�
   <div class="me-6 my-2">
     <i class="fas fa-calendar me-1"></i>
     <span
-      >2024-01-05</span
+      >2024-04-14</span
     >
   </div>
   <div class="me-6 my-2">
@@ -378,12 +363,11 @@ web开发：fastapi, 其实还可以接着用flask，不过前者对asyncio支�
   
   <div class="w-full ">
     <div class="prose">
-  <a href="https://yiuterran.github.io/blog/posts/ansible%E9%80%9F%E6%88%90/" class="no-underline">
-    <h3 class="mt-0">Ansible速成</h3>
+  <a href="https://yiuterran.github.io/blog/posts/%E6%97%B6%E5%BA%8F%E6%95%B0%E6%8D%AE%E8%A7%84%E5%88%99%E5%BC%95%E6%93%8E%E8%AE%BE%E8%AE%A1%E6%80%9D%E8%B7%AF/" class="no-underline">
+    <h3 class="mt-0">时序数据规则引擎设计思路</h3>
   </a>
   
-    虽然iac(infracture as code)流行以来，新的技术栈层出不穷，但是一般都是面向k8s或者云服务商的。传统的部署还是用ansible这种仅依赖ssh的最简单。
-
+    规则引擎的大致组成包括： 触发条件：如某个设备某种消息在某个时间点内到达；或周期性，每隔多久触发一次； 触发响应：即触发条件后要做什么，一般是告警、通知、
   
 
   
@@ -393,12 +377,12 @@ web开发：fastapi, 其实还可以接着用flask，不过前者对asyncio支�
   <div class="me-6 my-2">
     <i class="fas fa-calendar me-1"></i>
     <span
-      >2024-01-04</span
+      >2024-03-08</span
     >
   </div>
   <div class="me-6 my-2">
     <i class="fas fa-clock me-1"></i>
-    <span>6分钟阅读时长</span>
+    <span>3分钟阅读时长</span>
   </div>
 
   
@@ -420,14 +404,11 @@ web开发：fastapi, 其实还可以接着用flask，不过前者对asyncio支�
   
   <div class="w-full ">
     <div class="prose">
-  <a href="https://yiuterran.github.io/blog/posts/kcl%E8%AF%95%E7%94%A8/" class="no-underline">
-    <h3 class="mt-0">Kcl试用</h3>
+  <a href="https://yiuterran.github.io/blog/posts/k8s%E5%BA%94%E7%94%A8%E8%B0%83%E8%AF%95%E6%8A%80%E5%B7%A7/" class="no-underline">
+    <h3 class="mt-0">K8s应用调试技巧</h3>
   </a>
   
-    kcl是蚂蚁金服开源的配置DSL，诞生比较晚，所以吸纳了已有的jsonnet、hcl、cue等方案的优点。
-安装 对于linux：
-wget -q https://kcl-lang.io/script/install-cli.sh -O - | /bin/bash 这个脚本本质上还是从github中下载发行版，所以也需要翻墙。
-
+    注意： 谨慎使用本文所述的工具，尤其是不要直接修改生产环境数据，风险自负！！！ rancher只读账号也可以登录服务pod的终端，而能登录到pod里就可以
   
 
   
@@ -437,12 +418,12 @@ wget -q https://kcl-lang.io/script/install-cli.sh -O - | /bin/bash 这个脚本�
   <div class="me-6 my-2">
     <i class="fas fa-calendar me-1"></i>
     <span
-      >2024-01-02</span
+      >2024-03-05</span
     >
   </div>
   <div class="me-6 my-2">
     <i class="fas fa-clock me-1"></i>
-    <span>4分钟阅读时长</span>
+    <span>3分钟阅读时长</span>
   </div>
 
   
@@ -490,7 +471,7 @@ wget -q https://kcl-lang.io/script/install-cli.sh -O - | /bin/bash 这个脚本�
         <a href="https://yiuterran.github.io/blog/posts/page/3/" aria-label="Next" class="page-link" role="button"><span aria-hidden="true">&raquo;</span></a>
       </li>
       <li class="page-item">
-        <a href="https://yiuterran.github.io/blog/posts/page/8/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
+        <a href="https://yiuterran.github.io/blog/posts/page/9/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
       </li>
     </ul>
 

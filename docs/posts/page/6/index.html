@@ -43,7 +43,7 @@
 <link rel="stylesheet" href="https://yiuterran.github.io/blog/css/highlightjs.min.2958991528e43eb6fc9b8c4f2b8e052f79c4010718e1d1e888a777620e9ee63021c2c57ec7417a3108019bb8c41943e6.css" media="print" onload="this.media='all';this.onload=null">
 
 
-<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.78e494ccd35d494929874dc88a1c7963e597460caafa2ea0b64b9f5cd2ed626a7348522a90f0b37886181ab1ed34301f.js"></script>
+<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.8c77c7521b1f95ec2031c2a79f5c6a698aa4a0dba5ba649dfbc7f73994cddf3f494be6aac7e5724f35cbf72cfde09703.js"></script>
 
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
@@ -69,18 +69,10 @@
 
 <script defer src="https://cdn.jsdelivr.net/npm/mermaid@8.14.0/dist/mermaid.min.js" 
   integrity="sha384-atOyb0FxAgN9LyAc6PEf9BjgwLISyansgdH8/VXQH8p2o5vfrRgmGIJ2Sg22L0A0"  crossorigin></script>
-<link rel="preconnect" href="https://www.google-analytics.com" crossorigin>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-C0R8DENDJ0"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag() { dataLayer.push(arguments); }
-  gtag('js', new Date());
-  gtag('config', 'G-C0R8DENDJ0');
-</script>
 
 
-<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu546329292729773971.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu16414047889438337432.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
 
 <meta name="description"
   content="始于2022年初mbp2015归天之后...">
@@ -95,33 +87,33 @@
     "itemListElement":[{
             "@type":"ListItem",
             "position":  1 ,
-            "name": "K8s要点简记",
-            "description": "\u003cp\u003e22年的时候需要使用CICD的时候，看了一遍k8s相关的知识点。买了一本《深入剖析Kubernetes》，大致熟悉了常用的概念。\u003c/p\u003e\n\u003cp\u003e最近因为工作调动需要做云原生相关的开发，有必要重新复习一遍相关概念，并深入部分章节的细节。\u003c/p\u003e",
-            "url": "https://yiuterran.github.io/blog/posts/k8s%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/"
+            "name": "解决k8s的javaSDK与jackson不兼容问题",
+            "description": "k8s的java sdk中json序列化使用了google自家的gosn，但是springboot中默认使用Jackson，我们的业务代码里面也习惯上使",
+            "url": "https://yiuterran.github.io/blog/posts/%E8%A7%A3%E5%86%B3k8s%E7%9A%84javasdk%E4%B8%8Ejackson%E4%B8%8D%E5%85%BC%E5%AE%B9%E9%97%AE%E9%A2%98/"
         },{
             "@type":"ListItem",
             "position":  2 ,
-            "name": "Makefile要点简记",
-            "description": "\u003cp\u003e虽然现代C/CPP一般使用cmake作为工具链，但是如果要看陈年老项目，makefile相关的知识还是要掌握一些的，不然估计很难理清编译逻辑。这也是c/cpp的技术负债之一。\u003c/p\u003e",
-            "url": "https://yiuterran.github.io/blog/posts/makefile%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/"
+            "name": "K3s存储插件使用笔记",
+            "description": "原理 k8s存储主要依赖PV和PVC的机制，前者由运维人员声明可用的存储，如： apiVersion: v1 kind: PersistentVolume metadata: name: nfs spec: storageClassName: manual capacity: storage: 10Gi accessModes: - ReadWriteMany nfs: server: 10.244.1.4 path: \u0026quot;/\u0026quot; 后者是用户（开发人员）声明的需求",
+            "url": "https://yiuterran.github.io/blog/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/"
         },{
             "@type":"ListItem",
             "position":  3 ,
-            "name": "CMake速记",
-            "description": "\u003cp\u003e主要参考书籍《Modern CMake for C++》，以及《CMake Best Practices》，使用CMake版本3.25.\u003c/p\u003e\n\u003cp\u003e建议先看第一本，再看第二本。\u003c/p\u003e\n\u003ch2 id=\"使用\"\u003e使用\u003c/h2\u003e\n\u003cp\u003e一般而言，cmake的使用方式非常简单。在命令行下使用\u003c/p\u003e",
-            "url": "https://yiuterran.github.io/blog/posts/cmake%E9%80%9F%E8%AE%B0/"
+            "name": "边缘服务器管理工具选型",
+            "description": "这里我们主要的需求是能够穿透内网管理服务器，服务器大部分情况下应当是linux，但是也可能是windows。我们的服务要通过API和这个服务器管理软件",
+            "url": "https://yiuterran.github.io/blog/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/"
         },{
             "@type":"ListItem",
             "position":  4 ,
-            "name": "Golang服务接入OpenTelemetry",
-            "description": "\u003cp\u003e三大支柱中，Log是最简单的，metric也不难。对于golang而言，最麻烦的是trace，这时候就分外羡慕java这种可以自动注入的语言了。\u003c/p\u003e\n\u003ch2 id=\"基本设计\"\u003e基本设计\u003c/h2\u003e\n\u003cp\u003e首先是一个Trace Provider，用来实例化Tracer。某些语言里Provider和Tracer都是全局预创建好的。\u003c/p\u003e",
-            "url": "https://yiuterran.github.io/blog/posts/golang%E6%9C%8D%E5%8A%A1%E6%8E%A5%E5%85%A5opentelemetry/"
+            "name": "Kotlin要点笔记",
+            "description": "实际上学习kotlin的动力一直不足，因为java is enough. 不过最近打算写一个QQ机器人玩，现在流行的框架是基于kotlin的，虽然可以用HTTP API进行",
+            "url": "https://yiuterran.github.io/blog/posts/kotlin%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/"
         },{
             "@type":"ListItem",
             "position":  5 ,
-            "name": "Tinode源码解析",
-            "description": "\u003ch2 id=\"概述\"\u003e概述\u003c/h2\u003e\n\u003cp\u003e有朋友需要做一个im，简单做了一下技术调研，\u003ca href=\"https://github.com/haiiiiiyun/awesome-selfhosted-cn#%E9%80%9A%E8%AE%AF%E7%B3%BB%E7%BB%9F\"\u003e开源的实现\u003c/a\u003e其实蛮多的，这里挑几个说一下：\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eSynapse/dendrite，matrix系，客户端比较多，比较推荐的应该是element.io. 稳定版本是python写的，性能很一般，golang/rust的服务端还没有stable，不建议使用；\u003c/li\u003e\n\u003cli\u003eTinode/chat: 即本文主角，golang编写，架构比较简单，有MySQL就能跑，轻量级方案。支持web/ios/android，界面长得比较像telegram；支持chatbot. 国内用有点水土不服，主要是推送等组件依赖国外大厂的服务(S3, Firebase等），国内根本连不上，需要自己改成个推之类的方案。由于方案比较轻量，消息可靠性上有一些缺陷，内置了chatbot支持（可以用Python写）；\u003c/li\u003e\n\u003cli\u003eOpen-IM-Server：据说是某个腾讯核心人员离职后自己开源的。服务端golang，架构基于微服务，有商业产品，自己试了一下目前版本大概有16个微服务，依赖kafka\u0026amp;zk、mysql、etcd、redis、miniIO和MongoDB。架构比较合理，早期是写扩散模型，v2.3之后群聊改为读扩散模型。主要问题是架构比较重，文档写的烂，需要自己分析代码，小团队维护比较吃力；另外客户端开源的只是demo，bug满天飞，不能直接拿来用。\u003c/li\u003e\n\u003cli\u003eturms-im/turms：java写的，读扩散模型。maintainer比较有自信，号称开源界最先进的方案，文档确实写的不错，很详细的技术分析。不过star数不多，实际使用者估计也寥寥。而且作者喜欢自研，Log/注册中心/配置中心这些都是自研的…有种自嗨过了头的感觉。整体来讲架构比较中庸，技术细节把控的比较好。java团队可以考虑，代码还比较易读，而且没有商业版，作者没有恰饭需求；客户端没有开源产品，只有sdk；\u003c/li\u003e\n\u003cli\u003ewildfirechat/im-server：也是java做的，主要卖商业版，开源的功能做的很全了，和国内生态也结合的蛮好。开源版强行指定了使用七牛云做文件夹存储，然后服务端端口强行指定了80/1883，另外开源版不支持集群模式；国内的小规模内部使用推荐使用该项目（\u0026lt;10w人）；\u003c/li\u003e\n\u003cli\u003eRocket.chat/mattermost：面向B端，类似zulip/Slack这种IM，有复杂B端需求的团队建议优先考虑。界面不太符合普通人使用im(qq/微信/钉钉)的习惯，办公人士用比较合适；\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003e这几个项目是客户端生态做的最好的了，基本能开箱即用。其他一些如goim之类的，没有客户端只有服务器，那还不如用mqtt自己写一个，毕竟有emqx这种高性能broker，写一个im真不算啥难事。聊天存储用influxdb或者MongoDB，元数据存MySQL。设计好推拉模型，读写扩散，消息时序，topic规则，一个基本的im软件还是能很快成型的。\u003c/p\u003e",
-            "url": "https://yiuterran.github.io/blog/posts/tinode%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/"
+            "name": "KubeEdge要点笔记",
+            "description": "安装流程 首先要在云端安装k8s，理论上只需要master节点，可以没有worker，换句话说可以是一个单节点集群（但是要关闭NoSchedule的ta",
+            "url": "https://yiuterran.github.io/blog/posts/kubeedge%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/"
         }
     ]
 }
@@ -156,7 +148,7 @@
 
 
 
-<meta property="og:updated_time" content="2024-11-11T14:56:12&#43;08:00" />
+<meta property="og:updated_time" content="2025-09-29T11:56:08&#43;08:00" />
 
 
 
@@ -250,13 +242,11 @@
   
   <div class="w-full ">
     <div class="prose">
-  <a href="https://yiuterran.github.io/blog/posts/k8s%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/" class="no-underline">
-    <h3 class="mt-0">K8s要点简记</h3>
+  <a href="https://yiuterran.github.io/blog/posts/%E8%A7%A3%E5%86%B3k8s%E7%9A%84javasdk%E4%B8%8Ejackson%E4%B8%8D%E5%85%BC%E5%AE%B9%E9%97%AE%E9%A2%98/" class="no-underline">
+    <h3 class="mt-0">解决k8s的javaSDK与jackson不兼容问题</h3>
   </a>
   
-    22年的时候需要使用CICD的时候，看了一遍k8s相关的知识点。买了一本《深入剖析Kubernetes》，大致熟悉了常用的概念。
-最近因为工作调动需要做云原生相关的开发，有必要重新复习一遍相关概念，并深入部分章节的细节。
-
+    k8s的java sdk中json序列化使用了google自家的gosn，但是springboot中默认使用Jackson，我们的业务代码里面也习惯上使
   
 
   
@@ -266,49 +256,7 @@
   <div class="me-6 my-2">
     <i class="fas fa-calendar me-1"></i>
     <span
-      >2023-02-10</span
-    >
-  </div>
-  <div class="me-6 my-2">
-    <i class="fas fa-clock me-1"></i>
-    <span>28分钟阅读时长</span>
-  </div>
-
-  
-
-  
-</div>
-
-  
-</div>
-
-  </div>
-
-  
-</div>
-  </div>
-  
-  <div class="py-6">
-    <div class="flex flex-col-reverse lg:flex-row justify-between">
-  
-  <div class="w-full ">
-    <div class="prose">
-  <a href="https://yiuterran.github.io/blog/posts/makefile%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/" class="no-underline">
-    <h3 class="mt-0">Makefile要点简记</h3>
-  </a>
-  
-    虽然现代C/CPP一般使用cmake作为工具链，但是如果要看陈年老项目，makefile相关的知识还是要掌握一些的，不然估计很难理清编译逻辑。这也是c/cpp的技术负债之一。
-
-  
-
-  
-    <div
-  class="text-tertiary-text not-prose mt-2 flex flex-row flex-wrap items-center"
->
-  <div class="me-6 my-2">
-    <i class="fas fa-calendar me-1"></i>
-    <span
-      >2023-01-25</span
+      >2023-07-10</span
     >
   </div>
   <div class="me-6 my-2">
@@ -335,14 +283,11 @@
   
   <div class="w-full ">
     <div class="prose">
-  <a href="https://yiuterran.github.io/blog/posts/cmake%E9%80%9F%E8%AE%B0/" class="no-underline">
-    <h3 class="mt-0">CMake速记</h3>
+  <a href="https://yiuterran.github.io/blog/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/" class="no-underline">
+    <h3 class="mt-0">K3s存储插件使用笔记</h3>
   </a>
   
-    主要参考书籍《Modern CMake for C&#43;&#43;》，以及《CMake Best Practices》，使用CMake版本3.25.
-建议先看第一本，再看第二本。
-使用 一般而言，cmake的使用方式非常简单。在命令行下使用
-
+    原理 k8s存储主要依赖PV和PVC的机制，前者由运维人员声明可用的存储，如： apiVersion: v1 kind: PersistentVolume metadata: name: nfs spec: storageClassName: manual capacity: storage: 10Gi accessModes: - ReadWriteMany nfs: server: 10.244.1.4 path: &#34;/&#34; 后者是用户（开发人员）声明的需求
   
 
   
@@ -352,12 +297,12 @@
   <div class="me-6 my-2">
     <i class="fas fa-calendar me-1"></i>
     <span
-      >2023-01-09</span
+      >2023-06-12</span
     >
   </div>
   <div class="me-6 my-2">
     <i class="fas fa-clock me-1"></i>
-    <span>17分钟阅读时长</span>
+    <span>6分钟阅读时长</span>
   </div>
 
   
@@ -379,13 +324,11 @@
   
   <div class="w-full ">
     <div class="prose">
-  <a href="https://yiuterran.github.io/blog/posts/golang%E6%9C%8D%E5%8A%A1%E6%8E%A5%E5%85%A5opentelemetry/" class="no-underline">
-    <h3 class="mt-0">Golang服务接入OpenTelemetry</h3>
+  <a href="https://yiuterran.github.io/blog/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/" class="no-underline">
+    <h3 class="mt-0">边缘服务器管理工具选型</h3>
   </a>
   
-    三大支柱中，Log是最简单的，metric也不难。对于golang而言，最麻烦的是trace，这时候就分外羡慕java这种可以自动注入的语言了。
-基本设计 首先是一个Trace Provider，用来实例化Tracer。某些语言里Provider和Tracer都是全局预创建好的。
-
+    这里我们主要的需求是能够穿透内网管理服务器，服务器大部分情况下应当是linux，但是也可能是windows。我们的服务要通过API和这个服务器管理软件
   
 
   
@@ -395,12 +338,12 @@
   <div class="me-6 my-2">
     <i class="fas fa-calendar me-1"></i>
     <span
-      >2022-12-05</span
+      >2023-03-06</span
     >
   </div>
   <div class="me-6 my-2">
     <i class="fas fa-clock me-1"></i>
-    <span>9分钟阅读时长</span>
+    <span>4分钟阅读时长</span>
   </div>
 
   
@@ -422,13 +365,11 @@
   
   <div class="w-full ">
     <div class="prose">
-  <a href="https://yiuterran.github.io/blog/posts/tinode%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="no-underline">
-    <h3 class="mt-0">Tinode源码解析</h3>
+  <a href="https://yiuterran.github.io/blog/posts/kotlin%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/" class="no-underline">
+    <h3 class="mt-0">Kotlin要点笔记</h3>
   </a>
   
-    概述 有朋友需要做一个im，简单做了一下技术调研，开源的实现其实蛮多的，这里挑几个说一下：
-Synapse/dendrite，matrix系，客户端比较多，比较推荐的应该是element.io. 稳定版本是python写的，性能很一般，golang/rust的服务端还没有stable，不建议使用； Tinode/chat: 即本文主角，golang编写，架构比较简单，有MySQL就能跑，轻量级方案。支持web/ios/android，界面长得比较像telegram；支持chatbot. 国内用有点水土不服，主要是推送等组件依赖国外大厂的服务(S3, Firebase等），国内根本连不上，需要自己改成个推之类的方案。由于方案比较轻量，消息可靠性上有一些缺陷，内置了chatbot支持（可以用Python写）； Open-IM-Server：据说是某个腾讯核心人员离职后自己开源的。服务端golang，架构基于微服务，有商业产品，自己试了一下目前版本大概有16个微服务，依赖kafka&amp;zk、mysql、etcd、redis、miniIO和MongoDB。架构比较合理，早期是写扩散模型，v2.3之后群聊改为读扩散模型。主要问题是架构比较重，文档写的烂，需要自己分析代码，小团队维护比较吃力；另外客户端开源的只是demo，bug满天飞，不能直接拿来用。 turms-im/turms：java写的，读扩散模型。maintainer比较有自信，号称开源界最先进的方案，文档确实写的不错，很详细的技术分析。不过star数不多，实际使用者估计也寥寥。而且作者喜欢自研，Log/注册中心/配置中心这些都是自研的…有种自嗨过了头的感觉。整体来讲架构比较中庸，技术细节把控的比较好。java团队可以考虑，代码还比较易读，而且没有商业版，作者没有恰饭需求；客户端没有开源产品，只有sdk； wildfirechat/im-server：也是java做的，主要卖商业版，开源的功能做的很全了，和国内生态也结合的蛮好。开源版强行指定了使用七牛云做文件夹存储，然后服务端端口强行指定了80/1883，另外开源版不支持集群模式；国内的小规模内部使用推荐使用该项目（&lt;10w人）； Rocket.chat/mattermost：面向B端，类似zulip/Slack这种IM，有复杂B端需求的团队建议优先考虑。界面不太符合普通人使用im(qq/微信/钉钉)的习惯，办公人士用比较合适； 这几个项目是客户端生态做的最好的了，基本能开箱即用。其他一些如goim之类的，没有客户端只有服务器，那还不如用mqtt自己写一个，毕竟有emqx这种高性能broker，写一个im真不算啥难事。聊天存储用influxdb或者MongoDB，元数据存MySQL。设计好推拉模型，读写扩散，消息时序，topic规则，一个基本的im软件还是能很快成型的。
-
+    实际上学习kotlin的动力一直不足，因为java is enough. 不过最近打算写一个QQ机器人玩，现在流行的框架是基于kotlin的，虽然可以用HTTP API进行
   
 
   
@@ -438,12 +379,53 @@ Synapse/dendrite，matrix系，客户端比较多，比较推荐的应该是elem
   <div class="me-6 my-2">
     <i class="fas fa-calendar me-1"></i>
     <span
-      >2022-11-14</span
+      >2023-03-05</span
     >
   </div>
   <div class="me-6 my-2">
     <i class="fas fa-clock me-1"></i>
-    <span>12分钟阅读时长</span>
+    <span>11分钟阅读时长</span>
+  </div>
+
+  
+
+  
+</div>
+
+  
+</div>
+
+  </div>
+
+  
+</div>
+  </div>
+  
+  <div class="py-6">
+    <div class="flex flex-col-reverse lg:flex-row justify-between">
+  
+  <div class="w-full ">
+    <div class="prose">
+  <a href="https://yiuterran.github.io/blog/posts/kubeedge%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/" class="no-underline">
+    <h3 class="mt-0">KubeEdge要点笔记</h3>
+  </a>
+  
+    安装流程 首先要在云端安装k8s，理论上只需要master节点，可以没有worker，换句话说可以是一个单节点集群（但是要关闭NoSchedule的ta
+  
+
+  
+    <div
+  class="text-tertiary-text not-prose mt-2 flex flex-row flex-wrap items-center"
+>
+  <div class="me-6 my-2">
+    <i class="fas fa-calendar me-1"></i>
+    <span
+      >2023-02-21</span
+    >
+  </div>
+  <div class="me-6 my-2">
+    <i class="fas fa-clock me-1"></i>
+    <span>2分钟阅读时长</span>
   </div>
 
   
@@ -491,7 +473,7 @@ Synapse/dendrite，matrix系，客户端比较多，比较推荐的应该是elem
         <a href="https://yiuterran.github.io/blog/posts/page/7/" aria-label="Next" class="page-link" role="button"><span aria-hidden="true">&raquo;</span></a>
       </li>
       <li class="page-item">
-        <a href="https://yiuterran.github.io/blog/posts/page/8/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
+        <a href="https://yiuterran.github.io/blog/posts/page/9/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
       </li>
     </ul>
 

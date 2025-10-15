@@ -43,7 +43,7 @@
 <link rel="stylesheet" href="https://yiuterran.github.io/blog/css/highlightjs.min.2958991528e43eb6fc9b8c4f2b8e052f79c4010718e1d1e888a777620e9ee63021c2c57ec7417a3108019bb8c41943e6.css" media="print" onload="this.media='all';this.onload=null">
 
 
-<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.78e494ccd35d494929874dc88a1c7963e597460caafa2ea0b64b9f5cd2ed626a7348522a90f0b37886181ab1ed34301f.js"></script>
+<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.8c77c7521b1f95ec2031c2a79f5c6a698aa4a0dba5ba649dfbc7f73994cddf3f494be6aac7e5724f35cbf72cfde09703.js"></script>
 
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
@@ -69,29 +69,13 @@
 
 <script defer src="https://cdn.jsdelivr.net/npm/mermaid@8.14.0/dist/mermaid.min.js" 
   integrity="sha384-atOyb0FxAgN9LyAc6PEf9BjgwLISyansgdH8/VXQH8p2o5vfrRgmGIJ2Sg22L0A0"  crossorigin></script>
-<link rel="preconnect" href="https://www.google-analytics.com" crossorigin>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-C0R8DENDJ0"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag() { dataLayer.push(arguments); }
-  gtag('js', new Date());
-  gtag('config', 'G-C0R8DENDJ0');
-</script>
 
 
-<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu546329292729773971.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu16414047889438337432.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
 
 <meta name="description"
-  content="边侧监控方案
-问题
-边缘计算v2适配了目前所有流行的应用部署方式：
-
-裸系统（物理机）部署；
-docker部署；
-k8s部署；
-
-因此对应的监控系统也要考虑兼顾各种部署方式。并且，随着时间的发展，平台会接入越来越多的边侧集群或者设备，因此要考虑负载问题。">
+  content="边侧监控方案 问题 边缘计算v2适配了目前所有流行的应用部署方式： 裸系统（物理机）部署； docker部署； k8s部署； 因此对应的监控系统也要考虑兼顾各种部">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -129,7 +113,7 @@ k8s部署；
             "url": "https://yiuterran.github.io/blog/images/icon.png"
         }
         },
-    "description": "\u003ch1 id=\u0022边侧监控方案\u0022\u003e边侧监控方案\u003c\/h1\u003e\n\u003ch2 id=\u0022问题\u0022\u003e问题\u003c\/h2\u003e\n\u003cp\u003e边缘计算v2适配了目前所有流行的应用部署方式：\u003c\/p\u003e\n\u003col\u003e\n\u003cli\u003e裸系统（物理机）部署；\u003c\/li\u003e\n\u003cli\u003edocker部署；\u003c\/li\u003e\n\u003cli\u003ek8s部署；\u003c\/li\u003e\n\u003c\/ol\u003e\n\u003cp\u003e因此对应的监控系统也要考虑兼顾各种部署方式。并且，随着时间的发展，平台会接入越来越多的边侧集群或者设备，因此要考虑负载问题。\u003c\/p\u003e"
+    "description": "边侧监控方案 问题 边缘计算v2适配了目前所有流行的应用部署方式： 裸系统（物理机）部署； docker部署； k8s部署； 因此对应的监控系统也要考虑兼顾各种部"
 }
 </script><meta property="og:title" content="边侧监控选型 | 应许之地" />
 <meta property="og:type" content="article" />
@@ -143,15 +127,7 @@ k8s部署；
 
 
 
-<meta property="og:description" content="边侧监控方案
-问题
-边缘计算v2适配了目前所有流行的应用部署方式：
-
-裸系统（物理机）部署；
-docker部署；
-k8s部署；
-
-因此对应的监控系统也要考虑兼顾各种部署方式。并且，随着时间的发展，平台会接入越来越多的边侧集群或者设备，因此要考虑负载问题。" />
+<meta property="og:description" content="边侧监控方案 问题 边缘计算v2适配了目前所有流行的应用部署方式： 裸系统（物理机）部署； docker部署； k8s部署； 因此对应的监控系统也要考虑兼顾各种部" />
 
 
 
@@ -315,7 +291,7 @@ k8s部署；
 <p>如果Log/Metric/Trace都需要收集，那还是直接用EFK这种大型系统吧，零零碎碎的部署更麻烦。</p>
 <h2 id="架构">架构</h2>
 <p>这套架构是很成熟的方案，资料较多。核心思想就是<code>prometheus</code>定时拉取各种exporter暴露出来的metrics端口，将数据存入时序数据库。<code>AlertManager</code>等工具通过<code>PromQL</code>查询语言与时序数据库交互，从而查询想要的数据：</p>
-<p><img alt="img" src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/1349539-20191210163705605-1556613127.png"></p>
+<p><img src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/1349539-20191210163705605-1556613127.png" alt="img"></p>
 <p>在我们这里，主要使用<code>prometheus</code>和<code>AlertManager</code>，图形化的<code>grafana</code>不是<strong>这个阶段</strong>的重点。这主要是因为<code>prometheus</code>是部署在边缘侧的，图形化工具在云端无法正常浏览，除非做端口转发。</p>
 <p>端口转发需要引入其他agent（如<code>rport</code>或者<code>frp</code>），云端也需要打开端口段或者引入三级域名才能正常工作，运维上比较麻烦，现在暂时不考虑。</p>
 <h2 id="metric--alarm">Metric &amp; Alarm</h2>
@@ -534,7 +510,7 @@ statefulset.apps/prometheus-kube-prometheus-prometheus       1/1     40m
 
 </code></pre>
 <p>主要是安装了prometheus、alertmanager和node exporter，满足基本使用需求. 其中prometheus和alertmanager都是sts，存储用的是emptydir：</p>
-<p><img alt="image-20230721094436210" src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/image-20230721094436210.png"></p>
+<p><img src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/image-20230721094436210.png" alt="image-20230721094436210"></p>
 <p>这也意味着重启pod会导致时序数据库中的数据丢失，如果想要不丢失需要配置一下pvc（不过丢失一般也没啥，毕竟只是监控数据）：</p>
 <pre><code class="language-bash"># ref: https://artifacthub.io/packages/helm/bitnami/kube-prometheus
 kubectl create ns monitor

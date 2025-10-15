@@ -43,7 +43,7 @@
 <link rel="stylesheet" href="https://yiuterran.github.io/blog/css/highlightjs.min.2958991528e43eb6fc9b8c4f2b8e052f79c4010718e1d1e888a777620e9ee63021c2c57ec7417a3108019bb8c41943e6.css" media="print" onload="this.media='all';this.onload=null">
 
 
-<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.78e494ccd35d494929874dc88a1c7963e597460caafa2ea0b64b9f5cd2ed626a7348522a90f0b37886181ab1ed34301f.js"></script>
+<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.8c77c7521b1f95ec2031c2a79f5c6a698aa4a0dba5ba649dfbc7f73994cddf3f494be6aac7e5724f35cbf72cfde09703.js"></script>
 
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
@@ -69,27 +69,13 @@
 
 <script defer src="https://cdn.jsdelivr.net/npm/mermaid@8.14.0/dist/mermaid.min.js" 
   integrity="sha384-atOyb0FxAgN9LyAc6PEf9BjgwLISyansgdH8/VXQH8p2o5vfrRgmGIJ2Sg22L0A0"  crossorigin></script>
-<link rel="preconnect" href="https://www.google-analytics.com" crossorigin>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-C0R8DENDJ0"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag() { dataLayer.push(arguments); }
-  gtag('js', new Date());
-  gtag('config', 'G-C0R8DENDJ0');
-</script>
 
 
-<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu546329292729773971.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu16414047889438337432.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
 
 <meta name="description"
-  content="规则引擎的大致组成包括：
-
-触发条件：如某个设备某种消息在某个时间点内到达；或周期性，每隔多久触发一次；
-触发响应：即触发条件后要做什么，一般是告警、通知、联动其他设备、联动其他系统等；
-边界情况：重复触发如何处理、回调频率控制等细节；
-
-实现思路大致包括以下几种：">
+  content="规则引擎的大致组成包括： 触发条件：如某个设备某种消息在某个时间点内到达；或周期性，每隔多久触发一次； 触发响应：即触发条件后要做什么，一般是告警、通知、">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -127,7 +113,7 @@
             "url": "https://yiuterran.github.io/blog/images/icon.png"
         }
         },
-    "description": "\u003cp\u003e规则引擎的大致组成包括：\u003c\/p\u003e\n\u003col\u003e\n\u003cli\u003e触发条件：如某个设备某种消息在某个时间点内到达；或周期性，每隔多久触发一次；\u003c\/li\u003e\n\u003cli\u003e触发响应：即触发条件后要做什么，一般是告警、通知、联动其他设备、联动其他系统等；\u003c\/li\u003e\n\u003cli\u003e边界情况：重复触发如何处理、回调频率控制等细节；\u003c\/li\u003e\n\u003c\/ol\u003e\n\u003cp\u003e实现思路大致包括以下几种：\u003c\/p\u003e"
+    "description": "规则引擎的大致组成包括： 触发条件：如某个设备某种消息在某个时间点内到达；或周期性，每隔多久触发一次； 触发响应：即触发条件后要做什么，一般是告警、通知、"
 }
 </script><meta property="og:title" content="时序数据规则引擎设计思路 | 应许之地" />
 <meta property="og:type" content="article" />
@@ -141,13 +127,7 @@
 
 
 
-<meta property="og:description" content="规则引擎的大致组成包括：
-
-触发条件：如某个设备某种消息在某个时间点内到达；或周期性，每隔多久触发一次；
-触发响应：即触发条件后要做什么，一般是告警、通知、联动其他设备、联动其他系统等；
-边界情况：重复触发如何处理、回调频率控制等细节；
-
-实现思路大致包括以下几种：" />
+<meta property="og:description" content="规则引擎的大致组成包括： 触发条件：如某个设备某种消息在某个时间点内到达；或周期性，每隔多久触发一次； 触发响应：即触发条件后要做什么，一般是告警、通知、" />
 
 
 
@@ -293,7 +273,7 @@
 <p>目前墨斗平台内置的规则引擎即基于此架构，不过触发响应是写死的几种，还不包括上面这些更灵活的方式。<strong>理论上来说</strong>，客户基于rabbitmq自己订阅消息来实现对应的逻辑也是一样的。</p>
 <h2 id="基于周期性计算">基于周期性计算</h2>
 <p>比如kibana、zabbix等，使用SQL或其他DSL创建告警条件，服务器会周期性地运行这些条件，判断满足则触发动作。</p>
-<p><img alt="image-20221021090656229" src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/EqnO2xCD1f6Hb8R.png"></p>
+<p><img src="https://csceciti-iot-devfile.oss-cn-shenzhen.aliyuncs.com/docs/EqnO2xCD1f6Hb8R.png" alt="image-20221021090656229"></p>
 <p>上图是kibana的一个基于日志等级预警的例子，可以看出来其实大概就是<code>select count(*) from logs-golang* where log.level='ERROR' and ts &gt; now()-1m</code>的结果与1进行比较的意思。</p>
 <p>每分钟运行上述规则一次，即可以判断是否发生预警。</p>
 <p>数据先入库，然后再定时计算，这样做的好处是架构比较简单，基于SQL或类SQL的DSL来写表达式即可，同时可以提供类似上面的图形界面，用于简化配置，对于使用者的要求不高。坏处是不够即时，kibana这里要求间隔至少是1分钟1次，所以告警可能会延迟1分钟。此外，频繁的周期性调度，对性能影响也比较大。</p>
@@ -304,40 +284,40 @@
 <p>Flink支持CEP功能，但是不支持动态规则更新（FLIP-200），如果使用阿里云商业的Flink，可以考虑使用该功能。</p>
 <p>除了Flink，还有siddhi、esper和drools等方案，但是都有一些问题。</p>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">选型</th>
-          <th style="text-align: left">优点</th>
-          <th style="text-align: left">缺点</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">drools fusion</td>
-          <td style="text-align: left">同上，语法drl</td>
-          <td style="text-align: left">不支持集群</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">esper</td>
-          <td style="text-align: left">支持嵌入式运行（即作为一个库）java语言，符合公司技术栈类似SQL的语法</td>
-          <td style="text-align: left">集群是收费功能</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Flink-CEP</td>
-          <td style="text-align: left">性能最好，也最灵活</td>
-          <td style="text-align: left">需要二次开发，不支持动态更新规则（FLIP-200）没有用户友好界面</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">siddhi</td>
-          <td style="text-align: left">比较轻量级，自带图形界面可以编排规则</td>
-          <td style="text-align: left">不是很活跃，性能未知</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">lite-flow</td>
-          <td style="text-align: left">java嵌入式运行，规则可以持久化到数据库，支持动态刷新规则，支持常用脚本语言，中文文档齐全</td>
-          <td style="text-align: left">前端需要自行开发</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th style="text-align:left">选型</th>
+<th style="text-align:left">优点</th>
+<th style="text-align:left">缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">drools fusion</td>
+<td style="text-align:left">同上，语法drl</td>
+<td style="text-align:left">不支持集群</td>
+</tr>
+<tr>
+<td style="text-align:left">esper</td>
+<td style="text-align:left">支持嵌入式运行（即作为一个库）java语言，符合公司技术栈类似SQL的语法</td>
+<td style="text-align:left">集群是收费功能</td>
+</tr>
+<tr>
+<td style="text-align:left">Flink-CEP</td>
+<td style="text-align:left">性能最好，也最灵活</td>
+<td style="text-align:left">需要二次开发，不支持动态更新规则（FLIP-200）没有用户友好界面</td>
+</tr>
+<tr>
+<td style="text-align:left">siddhi</td>
+<td style="text-align:left">比较轻量级，自带图形界面可以编排规则</td>
+<td style="text-align:left">不是很活跃，性能未知</td>
+</tr>
+<tr>
+<td style="text-align:left">lite-flow</td>
+<td style="text-align:left">java嵌入式运行，规则可以持久化到数据库，支持动态刷新规则，支持常用脚本语言，中文文档齐全</td>
+<td style="text-align:left">前端需要自行开发</td>
+</tr>
+</tbody>
 </table>
 <p>这里个人推荐lite-flow，功能比较健全，配合脚本功能可以满足大部分需求。</p>
 <h2 id="建议实施步骤">建议实施步骤</h2>
