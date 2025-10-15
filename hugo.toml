@@ -53,7 +53,7 @@ parent = ""
 pre = ""
 # you can add extra information after the name (HTML format is supported), such as icons
 post = ""
-name = "Archives"
+name = "归档"
 url = "/archives/"
 # title will be shown when you hover on this menu link
 title = ""
@@ -73,24 +73,11 @@ type = ""
 divided = false
 
 [[menu.main]]
-identifier = "categories"
-parent = ""
-pre = ""
-post = ""
-name = "Categories"
-url = "/categories/"
-title = ""
-weight = 2
-
-[menu.main.params]
-icon = "fa-solid fa-folder-tree"
-
-[[menu.main]]
 identifier = "tags"
 parent = ""
 pre = ""
 post = ""
-name = "Tags"
+name = "标签"
 url = "/tags/"
 title = ""
 weight = 3
