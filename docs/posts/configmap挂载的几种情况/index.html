@@ -1,585 +1,443 @@
 <!DOCTYPE html>
-<html
-  lang="zh"
-  dir="ltr"
-  
-><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>Configmap挂载的几种情况 - 思海沉钩</title><meta name="author" content="tryao">
+<meta name="description" content="ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理：
+将某个key的值挂载为环境变量 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 apiVersion: v1 kind: Pod metadata: name: dapi-test-pod spec: containers: - name: test-container image: gcr.io/google_containers/busybox command: [ &#34;/bin/sh&#34;, &#34;-c&#34;, &#34;env&#34; ] env: - name: SPECIAL_LEVEL_KEY valueFrom: configMapKeyRef: name: special-config key: special.how - name: SPECIAL_TYPE_KEY valueFrom: configMapKeyRef: name: special-config key: special.type optional: true restartPolicy: Never 这里在command里可以通过$(SPECIAL_TYPE_KEY)的格式来引用这些环境变量作为命令行参数。
+"><meta name="keywords" content='k8s'>
+  <meta itemprop="name" content="Configmap挂载的几种情况">
+  <meta itemprop="description" content="ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理：
+将某个key的值挂载为环境变量 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 apiVersion: v1 kind: Pod metadata: name: dapi-test-pod spec: containers: - name: test-container image: gcr.io/google_containers/busybox command: [ &#34;/bin/sh&#34;, &#34;-c&#34;, &#34;env&#34; ] env: - name: SPECIAL_LEVEL_KEY valueFrom: configMapKeyRef: name: special-config key: special.how - name: SPECIAL_TYPE_KEY valueFrom: configMapKeyRef: name: special-config key: special.type optional: true restartPolicy: Never 这里在command里可以通过$(SPECIAL_TYPE_KEY)的格式来引用这些环境变量作为命令行参数。">
+  <meta itemprop="datePublished" content="2023-09-15T09:33:41+08:00">
+  <meta itemprop="dateModified" content="2023-09-15T10:20:28+08:00">
+  <meta itemprop="wordCount" content="1043">
+  <meta itemprop="keywords" content="K8s"><meta property="og:url" content="https://yiuterran.github.io/blogs/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/">
+  <meta property="og:site_name" content="思海沉钩">
+  <meta property="og:title" content="Configmap挂载的几种情况">
+  <meta property="og:description" content="ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理：
+将某个key的值挂载为环境变量 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 apiVersion: v1 kind: Pod metadata: name: dapi-test-pod spec: containers: - name: test-container image: gcr.io/google_containers/busybox command: [ &#34;/bin/sh&#34;, &#34;-c&#34;, &#34;env&#34; ] env: - name: SPECIAL_LEVEL_KEY valueFrom: configMapKeyRef: name: special-config key: special.how - name: SPECIAL_TYPE_KEY valueFrom: configMapKeyRef: name: special-config key: special.type optional: true restartPolicy: Never 这里在command里可以通过$(SPECIAL_TYPE_KEY)的格式来引用这些环境变量作为命令行参数。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2023-09-15T09:33:41+08:00">
+    <meta property="article:modified_time" content="2023-09-15T10:20:28+08:00">
+    <meta property="article:tag" content="K8s">
 
-
-<title>Configmap挂载的几种情况 | 应许之地</title>
-
-<meta name="generator" content="Hugo Eureka 0.9.3" />
-<link rel="stylesheet" href="https://yiuterran.github.io/blog/css/eureka.min.30cfa2a7d2b5754cd246875caad26d69af1d8567ea53339f6729fe1d0ceee8917d33fcd191d4284da2a5da6359d79cb7.css">
-<script defer src="https://yiuterran.github.io/blog/js/eureka.min.e8043b71b627e3cfd9b2a5de56adf007f5af83dee672ca0c186aa2e29a10d6f648632064d0c00b2fa4d1b11e0f196af3.js"></script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload"
-  href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&amp;family=Noto&#43;Serif&#43;SC:wght@400;600;700&amp;display=swap"
-  as="style" onload="this.onload=null;this.rel='stylesheet'">
-
-
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.4.0/build/styles/solarized-light.min.css"
-   media="print"
-  onload="this.media='all';this.onload=null" crossorigin>
-<script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.4.0/build/highlight.min.js"
-   crossorigin></script>
-  <script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.4.0/build/languages/dart.min.js"
-     crossorigin></script>
-<link rel="stylesheet" href="https://yiuterran.github.io/blog/css/highlightjs.min.2958991528e43eb6fc9b8c4f2b8e052f79c4010718e1d1e888a777620e9ee63021c2c57ec7417a3108019bb8c41943e6.css" media="print" onload="this.media='all';this.onload=null">
-
-
-<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.8c77c7521b1f95ec2031c2a79f5c6a698aa4a0dba5ba649dfbc7f73994cddf3f494be6aac7e5724f35cbf72cfde09703.js"></script>
-
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
-   integrity="sha384-MlJdn/WNKDGXveldHDdyRP1R4CTHr3FeuDNfhsLPYrq2t0UBkUdK2jyTnXPEK1NQ"  media="print"
-  onload="this.media='all';this.onload=null" crossorigin>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js" 
-  integrity="sha384-VQ8d8WVFw0yHhCk5E8I86oOhv48xLpnDZx5T9GogA/Y84DcCKWXDmSDfn13bzFZY"  crossorigin></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js"
-   integrity="sha384-&#43;XBljXPPiv&#43;OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR"  crossorigin></script>
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    renderMathInElement(document.body, {
-      delimiters: [
-        { left: "$$", right: "$$", display: true },
-        { left: "$", right: "$", display: false },
-        { left: "\\(", right: "\\)", display: false },
-        { left: "\\[", right: "\\]", display: true }
-      ],
-    });
-  });
-</script>
-
-
-<script defer src="https://cdn.jsdelivr.net/npm/mermaid@8.14.0/dist/mermaid.min.js" 
-  integrity="sha384-atOyb0FxAgN9LyAc6PEf9BjgwLISyansgdH8/VXQH8p2o5vfrRgmGIJ2Sg22L0A0"  crossorigin></script>
-
-
-<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
-
-<meta name="description"
-  content="ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理： 将某个key的值挂载为环境变量 apiVersion: v1 kind: Pod metadata: name: dapi-test-pod spec: containers: - name: test-container image: gcr.io/google_containers/busybox command: [ &quot;/bin/sh&quot;, &quot;-c&quot;, &quot;env&quot; ] env: - name: SPECIAL_LEVEL_KEY valueFrom: configMapKeyRef:">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [{
-      "@type": "ListItem",
-      "position": 1 ,
-      "name":"文章列表",
-      "item":"https://yiuterran.github.io/blog/posts/"},{
-      "@type": "ListItem",
-      "position": 2 ,
-      "name":"Configmap挂载的几种情况",
-      "item":"https://yiuterran.github.io/blog/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/"}]
-}
-</script>
-
-
-
-<script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "Article",
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Configmap挂载的几种情况">
+  <meta name="twitter:description" content="ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理：
+将某个key的值挂载为环境变量 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 apiVersion: v1 kind: Pod metadata: name: dapi-test-pod spec: containers: - name: test-container image: gcr.io/google_containers/busybox command: [ &#34;/bin/sh&#34;, &#34;-c&#34;, &#34;env&#34; ] env: - name: SPECIAL_LEVEL_KEY valueFrom: configMapKeyRef: name: special-config key: special.how - name: SPECIAL_TYPE_KEY valueFrom: configMapKeyRef: name: special-config key: special.type optional: true restartPolicy: Never 这里在command里可以通过$(SPECIAL_TYPE_KEY)的格式来引用这些环境变量作为命令行参数。">
+<meta name="application-name" content="思海沉钩">
+<meta name="apple-mobile-web-app-title" content="思海沉钩"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/blogs/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/blogs/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/blogs/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/blogs/apple-touch-icon.png"><link rel="mask-icon" href="/blogs/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="https://yiuterran.github.io/blogs/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/" title="Configmap挂载的几种情况 - 思海沉钩" /><link rel="prev" type="text/html" href="https://yiuterran.github.io/blogs/posts/sqlx%E5%A4%87%E5%BF%98%E5%BD%95/" title="Sqlx备忘录" /><link rel="next" type="text/html" href="https://yiuterran.github.io/blogs/posts/statefulset%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86/" title="StatefulSet使用思路梳理" /><link rel="alternate" type="text/markdown" href="https://yiuterran.github.io/blogs/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/index.md" title="Configmap挂载的几种情况 - 思海沉钩"><link rel="stylesheet" href="/blogs/css/config.min.css"><link rel="stylesheet" href="/blogs/css/style.min.css"><link rel="preload" href="/blogs/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/blogs/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/blogs/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/blogs/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Configmap挂载的几种情况",
+    "inLanguage": "zh-CN",
     "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "https://yiuterran.github.io/blog/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/"
-    },
-    "headline": "Configmap挂载的几种情况 | 应许之地","datePublished": "2023-09-15T09:33:41+08:00",
-    "dateModified": "2023-09-15T09:33:41+08:00",
-    "wordCount":  939 ,
-    "author": {
+      "@type": "WebPage",
+      "@id": "https:\/\/yiuterran.github.io\/blogs\/posts\/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5\/"
+    },"genre": "posts","keywords": "k8s","wordcount":  1043 ,
+    "url": "https:\/\/yiuterran.github.io\/blogs\/posts\/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5\/","datePublished": "2023-09-15T09:33:41+08:00","dateModified": "2023-09-15T10:20:28+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
         "@type": "Person",
-        "name": ["“tryao\""]
-    },
-    "publisher": {
-        "@type": "Person",
-        "name": "C. Wang",
-        "logo": {
-            "@type": "ImageObject",
-            "url": "https://yiuterran.github.io/blog/images/icon.png"
-        }
-        },
-    "description": "ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理： 将某个key的值挂载为环境变量 apiVersion: v1 kind: Pod metadata: name: dapi-test-pod spec: containers: - name: test-container image: gcr.io\/google_containers\/busybox command: [ \u0026quot;\/bin\/sh\u0026quot;, \u0026quot;-c\u0026quot;, \u0026quot;env\u0026quot; ] env: - name: SPECIAL_LEVEL_KEY valueFrom: configMapKeyRef:"
-}
-</script><meta property="og:title" content="Configmap挂载的几种情况 | 应许之地" />
-<meta property="og:type" content="article" />
-
-
-<meta property="og:image" content="https://yiuterran.github.io/blog/images/icon.png">
-
-
-<meta property="og:url" content="https://yiuterran.github.io/blog/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/" />
-
-
-
-
-<meta property="og:description" content="ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理： 将某个key的值挂载为环境变量 apiVersion: v1 kind: Pod metadata: name: dapi-test-pod spec: containers: - name: test-container image: gcr.io/google_containers/busybox command: [ &quot;/bin/sh&quot;, &quot;-c&quot;, &quot;env&quot; ] env: - name: SPECIAL_LEVEL_KEY valueFrom: configMapKeyRef:" />
-
-
-
-
-<meta property="og:locale" content="zh" />
-
-
-
-
-<meta property="og:site_name" content="应许之地" />
-
-
-
-
-
-
-<meta property="article:published_time" content="2023-09-15T09:33:41&#43;08:00" />
-
-
-<meta property="article:modified_time" content="2023-09-15T09:33:41&#43;08:00" />
-
-
-
-<meta property="article:section" content="posts" />
-
-
-<meta property="article:tag" content="k8s" />
-
-
-
-
-
-<meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/promql%E7%AC%94%E8%AE%B0/" />
-
-<meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/" />
-
-<meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/kubeedge%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/" />
-
-<meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/k8s%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/" />
-
-
-
-
-  <body class="flex min-h-screen flex-col">
-    <header
-      class="min-h-16 pl-scrollbar bg-secondary-bg fixed z-50 flex w-full items-center shadow-sm"
-    >
-      <div class="mx-auto w-full max-w-screen-xl"><script>
-    let storageColorScheme = localStorage.getItem("lightDarkMode")
-    if (((storageColorScheme == 'Auto' || storageColorScheme == null) && window.matchMedia("(prefers-color-scheme: dark)").matches) || storageColorScheme == "Dark") {
-        document.getElementsByTagName('html')[0].classList.add('dark')
-    }
-</script>
-<nav class="flex items-center justify-between flex-wrap px-4 py-4 md:py-0">
-    <a href="https://yiuterran.github.io/blog/" class="me-6 text-primary-text text-xl font-bold">应许之地</a>
-    <button id="navbar-btn" class="md:hidden flex items-center px-3 py-2" aria-label="Open Navbar">
-        <i class="fas fa-bars"></i>
-    </button>
-
-    <div id="target"
-        class="hidden block md:flex md:grow md:justify-between md:items-center w-full md:w-auto text-primary-text z-20">
-        <div class="md:flex md:h-16 text-sm md:grow pb-4 md:pb-0 border-b md:border-b-0">
-            <a href="https://yiuterran.github.io/blog/authors/tryao/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  border-transparent  me-4">作者</a>
-            <a href="https://yiuterran.github.io/blog/posts/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  selected-menu-item  me-4">文章</a>
-        </div>
-
-        <div class="flex">
-            <div class="relative pt-4 md:pt-0">
-                <div class="cursor-pointer hover:text-eureka" id="lightDarkMode">
-                    <i class="fas fa-adjust"></i>
-                </div>
-                <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-30" id="is-open">
-                </div>
-                <div class="absolute flex flex-col start-0 md:start-auto end-auto md:end-0 hidden bg-secondary-bg w-48 rounded py-2 border border-tertiary-bg cursor-pointer z-40"
-                    id='lightDarkOptions'>
-                    <span class="px-4 py-1 hover:text-eureka" name="Light">浅色</span>
-                    <span class="px-4 py-1 hover:text-eureka" name="Dark">深色</span>
-                    <span class="px-4 py-1 hover:text-eureka" name="Auto">自动</span>
-                </div>
+        "name": "tryao"
+      },"description": ""
+  }
+  </script><script src="/blogs/js/head/color-scheme.min.js"></script></head>
+  <body data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/blogs/" title="思海沉钩"><span class="header-title-text">思海沉钩</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/blogs/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item">
+              <a class="menu-link" href="/blogs/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item">
+              <a class="menu-link" href="/blogs/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+              <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch" title="切换主题">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/blogs/" title="思海沉钩"><span class="header-title-text">思海沉钩</span></a><span class="header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+              </span>
             </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li class="menu-item"><a class="menu-link" href="/blogs/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item"><a class="menu-link" href="/blogs/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item"><a class="menu-link" href="/blogs/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item menu-system">
+          <span class="menu-system-item theme-switch" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
+      </ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>Configmap挂载的几种情况</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://gravatar.com/afxmessagebox" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img class="avatar" src='https://avatars.githubusercontent.com/u/5930695?v=4' alt="tryao" height="16" width="16">&nbsp;tryao</a></span></div><div class="post-meta-line"><span title="发布于 2023-09-15 09:33:41"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2023-09-15">2023-09-15</time></span>&nbsp;<span title="更新于 2023-09-15 10:20:28"><i class="fa-regular fa-calendar-check fa-fw me-1" aria-hidden="true"></i><time datetime="2023-09-15">2023-09-15</time></span>&nbsp;<span title="1043 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 1100 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 3 分钟</span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
         </div>
-    </div>
-
-    <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-0" id="is-open-mobile">
-    </div>
-
-</nav>
-<script>
-    
-    let element = document.getElementById('lightDarkMode')
-    if (storageColorScheme == null || storageColorScheme == 'Auto') {
-        document.addEventListener('DOMContentLoaded', () => {
-            window.matchMedia("(prefers-color-scheme: dark)").addEventListener('change', switchDarkMode)
-        })
-    } else if (storageColorScheme == "Light") {
-        element.firstElementChild.classList.remove('fa-adjust')
-        element.firstElementChild.setAttribute("data-icon", 'sun')
-        element.firstElementChild.classList.add('fa-sun')
-    } else if (storageColorScheme == "Dark") {
-        element.firstElementChild.classList.remove('fa-adjust')
-        element.firstElementChild.setAttribute("data-icon", 'moon')
-        element.firstElementChild.classList.add('fa-moon')
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        getcolorscheme();
-        switchBurger();
-    });
-</script>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#将某个key的值挂载为环境变量">将某个key的值挂载为环境变量</a></li>
+        <li><a href="#整个configmap挂载为目录">整个ConfigMap挂载为目录</a></li>
+        <li><a href="#将某个key挂载为文件">将某个key挂载为文件</a></li>
+        <li><a href="#多个configmap挂载到同一个目录">多个ConfigMap挂载到同一个目录</a></li>
+        <li><a href="#特殊情况">特殊情况</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p>ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理：</p>
+<h2 class="heading-element" id="将某个key的值挂载为环境变量"><span>将某个key的值挂载为环境变量</span>
+  <a href="#%e5%b0%86%e6%9f%90%e4%b8%aakey%e7%9a%84%e5%80%bc%e6%8c%82%e8%bd%bd%e4%b8%ba%e7%8e%af%e5%a2%83%e5%8f%98%e9%87%8f" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">dapi-test-pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">test-container</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">gcr.io/google_containers/busybox</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&#34;/bin/sh&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;-c&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;env&#34;</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">env</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">SPECIAL_LEVEL_KEY</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">valueFrom</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="nt">configMapKeyRef</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">              </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">special-config</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">              </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l">special.how</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">SPECIAL_TYPE_KEY</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">valueFrom</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="nt">configMapKeyRef</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">              </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">special-config</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">              </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l">special.type</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">              </span><span class="nt">optional</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">restartPolicy</span><span class="p">:</span><span class="w"> </span><span class="l">Never</span></span></span></code></pre></td></tr></table>
 </div>
-    </header>
-    <main class="grow pt-16">
-        <div class="pl-scrollbar">
-          <div class="mx-auto w-full max-w-screen-xl lg:px-4 xl:px-8">
-  
-  
-  <div class="grid grid-cols-2 gap-4 lg:grid-cols-8 lg:pt-12">
-    <div
-      class=" bg-secondary-bg col-span-2 rounded px-6 py-8 lg:col-span-6"
-    >
-      <article class="prose">
-  <h1 class="mb-4">Configmap挂载的几种情况</h1>
-
-  <div
-  class="text-tertiary-text not-prose mt-2 flex flex-row flex-wrap items-center"
->
-  <div class="me-6 my-2">
-    <i class="fas fa-calendar me-1"></i>
-    <span
-      >2023-09-15</span
-    >
-  </div>
-  <div class="me-6 my-2">
-    <i class="fas fa-clock me-1"></i>
-    <span>2分钟阅读时长</span>
-  </div>
-
-  
-
-  
+</div><p>这里在<code>command</code>里可以通过<code>$(SPECIAL_TYPE_KEY)</code>的格式来引用这些环境变量作为命令行参数。</p>
+<h2 class="heading-element" id="整个configmap挂载为目录"><span>整个ConfigMap挂载为目录</span>
+  <a href="#%e6%95%b4%e4%b8%aaconfigmap%e6%8c%82%e8%bd%bd%e4%b8%ba%e7%9b%ae%e5%bd%95" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>这种情况最简单，每个key都会生成一个同名文件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">dapi-test-pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">test-container</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">gcr.io/google_containers/busybox</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&#34;/bin/sh&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;-c&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;cat /etc/config/special.how&#34;</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">config-volume</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/etc/config</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">config-volume</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">configMap</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">special-config</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">restartPolicy</span><span class="p">:</span><span class="w"> </span><span class="l">Never</span></span></span></code></pre></td></tr></table>
 </div>
-
-
-  
-  
-
-  <p>ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理：</p>
-<h2 id="将某个key的值挂载为环境变量">将某个key的值挂载为环境变量</h2>
-<pre><code class="language-yaml">apiVersion: v1
-kind: Pod
-metadata:
-  name: dapi-test-pod
-spec:
-  containers:
-    - name: test-container
-      image: gcr.io/google_containers/busybox
-      command: [ &quot;/bin/sh&quot;, &quot;-c&quot;, &quot;env&quot; ]
-      env:
-        - name: SPECIAL_LEVEL_KEY
-          valueFrom:
-            configMapKeyRef:
-              name: special-config
-              key: special.how
-        - name: SPECIAL_TYPE_KEY
-          valueFrom:
-            configMapKeyRef:
-              name: special-config
-              key: special.type
-              optional: true
-  restartPolicy: Never
-</code></pre>
-<p>这里在<code>command</code>里可以通过<code>$(SPECIAL_TYPE_KEY)</code>的格式来引用这些环境变量作为命令行参数。</p>
-<h2 id="整个configmap挂载为目录">整个ConfigMap挂载为目录</h2>
-<p>这种情况最简单，每个key都会生成一个同名文件：</p>
-<pre><code class="language-yaml">apiVersion: v1
-kind: Pod
-metadata:
-  name: dapi-test-pod
-spec:
-  containers:
-    - name: test-container
-      image: gcr.io/google_containers/busybox
-      command: [ &quot;/bin/sh&quot;, &quot;-c&quot;, &quot;cat /etc/config/special.how&quot; ]
-      volumeMounts:
-      - name: config-volume
-        mountPath: /etc/config
-  volumes:
-    - name: config-volume
-      configMap:
-        name: special-config
-  restartPolicy: Never
-</code></pre>
-<h2 id="将某个key挂载为文件">将某个key挂载为文件</h2>
-<pre><code class="language-yaml">apiVersion: v1
-kind: Pod
-metadata:
-  name: dapi-test-pod
-spec:
-  containers:
-    - name: test-container
-      image: gcr.io/google_containers/busybox
-      command: [ &quot;/bin/sh&quot;,&quot;-c&quot;,&quot;cat /etc/config/special-key&quot; ]
-      volumeMounts:
-      - name: config-volume
-        mountPath: /etc/config
-  volumes:
-    - name: config-volume
-      configMap:
-        name: special-config
-        items:
-        - key: special.how
-          path: path/to/special-key
-  restartPolicy: Never
-</code></pre>
-<p>如果<code>/etc/config</code>下有同名文件（使用path中最后一级为文件名，这里即<code>special-key</code>），会覆盖掉。</p>
+</div><h2 class="heading-element" id="将某个key挂载为文件"><span>将某个key挂载为文件</span>
+  <a href="#%e5%b0%86%e6%9f%90%e4%b8%aakey%e6%8c%82%e8%bd%bd%e4%b8%ba%e6%96%87%e4%bb%b6" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">dapi-test-pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">test-container</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">gcr.io/google_containers/busybox</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&#34;/bin/sh&#34;</span><span class="p">,</span><span class="s2">&#34;-c&#34;</span><span class="p">,</span><span class="s2">&#34;cat /etc/config/special-key&#34;</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">config-volume</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/etc/config</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">config-volume</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">configMap</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">special-config</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">items</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l">special.how</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">path/to/special-key</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">restartPolicy</span><span class="p">:</span><span class="w"> </span><span class="l">Never</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果<code>/etc/config</code>下有同名文件（使用path中最后一级为文件名，这里即<code>special-key</code>），会覆盖掉。</p>
 <p>默认情况下<code>key</code>的名字和<code>path</code>是一样的，可以不指定<code>path</code>，而修改path相当于对key进行了<strong>重命名</strong>。</p>
-<h2 id="多个configmap挂载到同一个目录">多个ConfigMap挂载到同一个目录</h2>
-<p>直接使用上面的方法，如果多个configmap需要挂载到同一个目录，后挂载的会将之前的覆盖掉，必须使用<code>subPath</code>来解决这个问题：</p>
-<pre><code class="language-yaml">apiVersion: v1
-kind: Pod
-metadata:
-  name: dapi-test-pod
-spec:
-  containers:
-    - name: test-container
-      image: gcr.io/google_containers/busybox
-      command: [ &quot;/bin/sh&quot;, &quot;-c&quot;, &quot;cat /etc/config/special.how&quot; ]
-      volumeMounts:
-      - name: config1
-        mountPath: /etc/config
-        subPath: key1
-      - name: config2
-        mountPath: /etc/config
-        subPath: key2
-  volumes:
-    - name: config1
-      configMap:
-        name: configmap1
-    - name: config2
-      configMap:
-        name: configmap2
-  restartPolicy: Never
-</code></pre>
-<p>这里就是从<code>configmap1</code>中选出key为<code>key1</code>的键值挂载到<code>/etc/config</code>下，然后又从<code>configmap2</code>中选出<code>key2</code>挂载。</p>
+<h2 class="heading-element" id="多个configmap挂载到同一个目录"><span>多个ConfigMap挂载到同一个目录</span>
+  <a href="#%e5%a4%9a%e4%b8%aaconfigmap%e6%8c%82%e8%bd%bd%e5%88%b0%e5%90%8c%e4%b8%80%e4%b8%aa%e7%9b%ae%e5%bd%95" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>直接使用上面的方法，如果多个configmap需要挂载到同一个目录，后挂载的会将之前的覆盖掉，必须使用<code>subPath</code>来解决这个问题：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">dapi-test-pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">test-container</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">gcr.io/google_containers/busybox</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&#34;/bin/sh&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;-c&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;cat /etc/config/special.how&#34;</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">config1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/etc/config</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">subPath</span><span class="p">:</span><span class="w"> </span><span class="l">key1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">config2</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/etc/config</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">subPath</span><span class="p">:</span><span class="w"> </span><span class="l">key2</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">config1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">configMap</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">configmap1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">config2</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">configMap</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">configmap2</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">restartPolicy</span><span class="p">:</span><span class="w"> </span><span class="l">Never</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>这里就是从<code>configmap1</code>中选出key为<code>key1</code>的键值挂载到<code>/etc/config</code>下，然后又从<code>configmap2</code>中选出<code>key2</code>挂载。</p>
 <p>这里的<code>subPath</code>起到筛选的作用，如果对应的key不存在，则什么都不挂载。但是pod内会创建<code>mountPath</code>指定的文件夹。<code>subPath</code>需要和<code>path</code>保持一致才能正确匹配到，而不是和<code>key</code>进行匹配。</p>
-<h2 id="特殊情况">特殊情况</h2>
-<p>如上文所述，正常情况下，使用<code>path</code>进行重命名；<code>mountPath</code>指定存储目录，<code>subPath</code>则进行筛选。</p>
+<h2 class="heading-element" id="特殊情况"><span>特殊情况</span>
+  <a href="#%e7%89%b9%e6%ae%8a%e6%83%85%e5%86%b5" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>如上文所述，正常情况下，使用<code>path</code>进行重命名；<code>mountPath</code>指定存储目录，<code>subPath</code>则进行筛选。</p>
 <p>但是如果在<code>mountPath</code>里面直接指定文件名，则会对最终挂载的<strong>文件</strong>再次进行重命名。</p>
-<pre><code class="language-yaml">apiVersion: v1
-kind: Pod
-metadata:
-  name: dapi-test-pod
-spec:
-  containers:
-    - name: test-container
-      image: gcr.io/google_containers/busybox
-      command: [ &quot;/bin/sh&quot;,&quot;-c&quot;,&quot;cat /etc/config/special-key&quot; ]
-      volumeMounts:
-      - name: config-volume
-        mountPath: /etc/config/x.txt
-        subPath: path/to/special-key
-  volumes:
-    - name: config-volume
-      configMap:
-        name: special-config
-        items:
-        - key: special.how
-          path: path/to/special-key
-  restartPolicy: Never
-</code></pre>
-<p>如上，最终挂载的文件会变成<code>x.txt</code>，而不再是<code>special-key</code>.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">dapi-test-pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">test-container</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">gcr.io/google_containers/busybox</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&#34;/bin/sh&#34;</span><span class="p">,</span><span class="s2">&#34;-c&#34;</span><span class="p">,</span><span class="s2">&#34;cat /etc/config/special-key&#34;</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">config-volume</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/etc/config/x.txt</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">subPath</span><span class="p">:</span><span class="w"> </span><span class="l">path/to/special-key</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">config-volume</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">configMap</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">special-config</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">items</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l">special.how</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">path/to/special-key</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">restartPolicy</span><span class="p">:</span><span class="w"> </span><span class="l">Never</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>如上，最终挂载的文件会变成<code>x.txt</code>，而不再是<code>special-key</code>.</p>
 <p>说实话这个技术最好不要用到，通过path重命名+subPath筛选，就能满足需求了。使用mountPath直接指定文件名这个方法有点绕，容易造成误解。</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2023-09-15 10:20:28">更新于 2023-09-15&nbsp;<a class="git-hash" href="YiuTerran/blog/commit/85253a3490e77b7e7fa7e85cb1ef0ea468ab9521" rel="external nofollow noopener noreferrer" target="_blank" title="doc: configmap related&#10&#10Commit: 85253a3490e77b7e7fa7e85cb1ef0ea468ab9521 [85253a3]&#10Author: 姚泰然&#10Date: 2023-09-15 10:20:28"><i class="fa-solid fa-hashtag fa-fw" aria-hidden="true"></i>85253a3</a></span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="/blogs/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="YiuTerran/blog/blob/monolingual/content/posts/configmap%e6%8c%82%e8%bd%bd%e7%9a%84%e5%87%a0%e7%a7%8d%e6%83%85%e5%86%b5.md?plain=1" title="查看源码" class="link-to-source">查看源码</a></span><span><a href="YiuTerran/blog/edit/monolingual/content/posts/configmap%e6%8c%82%e8%bd%bd%e7%9a%84%e5%87%a0%e7%a7%8d%e6%83%85%e5%86%b5.md" title="编辑此页" class="link-to-edit">编辑此页</a></span><span><a href="YiuTerran/blog/issues/new?title=[BUG]%20Configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5&amp;body=%7cField%7cValue%7c%0A%7c-%7c-%7c%0A%7cTitle%7cConfigmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5%7c%0A%7cURL%7chttps://yiuterran.github.io/blogs/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/%7c%0A%7cFilename%7cYiuTerran/blog/blob/monolingual/content/posts/configmap%e6%8c%82%e8%bd%bd%e7%9a%84%e5%87%a0%e7%a7%8d%e6%83%85%e5%86%b5.md?plain=1%7c" title="报告问题" class="link-to-report">报告问题</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://yiuterran.github.io/blogs/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/" data-title="Configmap挂载的几种情况" data-hashtags="k8s"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://yiuterran.github.io/blogs/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/" data-hashtag="k8s"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://yiuterran.github.io/blogs/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/" data-title="Configmap挂载的几种情况"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
 
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/blogs/tags/k8s/" class="post-tag" title="标签 - K8s">K8s</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blogs/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/blogs/posts/sqlx%E5%A4%87%E5%BF%98%E5%BD%95/" class="post-nav-item" rel="prev" title="Sqlx备忘录"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>Sqlx备忘录</a><a href="/blogs/posts/statefulset%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86/" class="post-nav-item" rel="next" title="StatefulSet使用思路梳理">StatefulSet使用思路梳理<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
 </article>
 
-
-      
-        <div class="my-4">
-    
-    <a href="https://yiuterran.github.io/blog/tags/k8s/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#k8s</a>
-    
-</div>
-      
-
-      
-
-
-
-      
-        <div class="py-2">
-  
-    <div class="my-8 flex flex-col items-center md:flex-row">
-      <a href="https://yiuterran.github.io/blog/authors/tryao/" class="md:me-4 text-primary-text h-24 w-24">
-        
-        
-          <img
-            src="https://yiuterran.github.io/blog/images/avatar.png"
-            class="bg-primary-bg w-full rounded-full"
-            alt="Avatar"
-          />
-        
-      </a>
-      <div class="mt-4 w-full md:mt-0 md:w-auto">
-        <a
-          href="https://yiuterran.github.io/blog/authors/tryao/"
-          class="mb-2 block border-b pb-1 text-lg font-bold"
-        >
-          <h3>个人介绍</h3>
-        </a>
-        <span class="block pb-2">兴趣使然的程序员，博而不精，乐学不倦</span>
-        
-          
-          
-          
-          
-          <a href="mailto:yaotairan@gmail.com" class="me-2">
-            <i class="fas fa-envelope"></i>
-          </a>
-        
-          
-          
-          
-          
-          <a href="https://github.com/YiuTerran" class="me-2">
-            <i class="fab fa-github"></i>
-          </a>
-        
-      </div>
-    </div>
-  
-</div>
-
-      
-
-      
-  <div
-    class="-mx-2 mt-4 flex flex-col border-t px-2 pt-4 md:flex-row md:justify-between"
-  >
-    <div>
-      
-        <span class="text-primary-text block font-bold"
-          >上一页</span
-        >
-        <a href="https://yiuterran.github.io/blog/posts/statefulset%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86/" class="block">StatefulSet使用思路梳理</a>
-      
-    </div>
-    <div class="mt-4 md:mt-0 md:text-right">
-      
-        <span class="text-primary-text block font-bold">下一页</span>
-        <a href="https://yiuterran.github.io/blog/posts/sqlx%E5%A4%87%E5%BF%98%E5%BD%95/" class="block">Sqlx备忘录</a>
-      
-    </div>
-  </div>
-
-
-      
-
-
-
-  <script id="utterances" src="https://utteranc.es/client.js"
-            issue-term=title
-            repo=YiuTerran/blog-comment
-              theme=preferred-color-scheme
-        crossorigin="anonymous"
-        async>
-</script>
-<script>
-    if (storageColorScheme == "Light") {
-      document.getElementById('utterances').setAttribute('theme', 'github-light')
-    } else if (storageColorScheme == "Dark") {
-      document.getElementById('utterances').setAttribute('theme', 'github-dark')
-    }
-</script>
-
-    </div>
-    
-      <div class="col-span-2">
-        
-        
-          <div
-  class="
-    bg-primary-bg
-   prose sticky top-16 z-10 hidden px-6 py-4 lg:block"
->
-  <h3>本页内容</h3>
-</div>
-<div
-  class="sticky-toc  hidden px-6 pb-6 lg:block"
->
-  <nav id="TableOfContents">
-  <ul>
-    <li><a href="#将某个key的值挂载为环境变量">将某个key的值挂载为环境变量</a></li>
-    <li><a href="#整个configmap挂载为目录">整个ConfigMap挂载为目录</a></li>
-    <li><a href="#将某个key挂载为文件">将某个key挂载为文件</a></li>
-    <li><a href="#多个configmap挂载到同一个目录">多个ConfigMap挂载到同一个目录</a></li>
-    <li><a href="#特殊情况">特殊情况</a></li>
-  </ul>
-</nav>
-</div>
-<script>
-  window.addEventListener("DOMContentLoaded", () => {
-    enableStickyToc();
-  });
-</script>
-
-        
-      </div>
-    
-
-    
-    
-      <div
-        class=" bg-secondary-bg prose col-span-2 rounded p-6 lg:col-span-6"
-      >
-        <h3>相关</h3>
-        
-          <a href="https://yiuterran.github.io/blog/posts/promql%E7%AC%94%E8%AE%B0/" class="no-underline">PromQL笔记</a>
-          <br />
-        
-          <a href="https://yiuterran.github.io/blog/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/" class="no-underline">K3s存储插件使用笔记</a>
-          <br />
-        
-          <a href="https://yiuterran.github.io/blog/posts/kubeedge%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/" class="no-underline">KubeEdge要点笔记</a>
-          <br />
-        
-          <a href="https://yiuterran.github.io/blog/posts/k8s%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/" class="no-underline">K8s要点简记</a>
-          <br />
-        
-      </div>
-    
-  </div>
-
-  
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        hljs.highlightAll();
-      });
-    </script>
-
-          </div>
-        </div>
-      
-    </main>
-    <footer class="pl-scrollbar">
-      <div class="mx-auto w-full max-w-screen-xl"><div class="text-center p-6 pin-b">
-    <p class="text-sm text-tertiary-text">&copy; 2021 <a href="https://github.com/YiuTerran">tryao</a>
- &middot;  Powered by the <a href="https://github.com/wangchucheng/hugo-eureka" class="hover:text-eureka">Eureka</a> theme for <a href="https://gohugo.io" class="hover:text-eureka">Hugo</a></p>
-</div></div>
-    </footer>
-  </body>
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.151.0"><img class="hugo-icon" src="/blogs/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.4.0-alpha.2-20251014082535-5c74d431"><img class="fixit-icon" src="/blogs/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2025</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://gravatar.com/afxmessagebox"target="_blank" rel="external nofollow noopener noreferrer">tryao</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/blogs/lib/cookieconsent/cookieconsent.min.css"><script src="/blogs/lib/autocomplete/autocomplete.min.js" defer></script><script src="/blogs/lib/fuse/fuse.min.js" defer></script><script src="/blogs/lib/sharer/sharer.min.js" async defer></script><script src="/blogs/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/blogs/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/config/page.js" defer></script><script src="/blogs/js/theme.min.js" defer></script><script>
+      window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
+      gtag('config', 'G-C0R8DENDJ0', { 'anonymize_ip': true });
+    </script><script src="https://www.googletagmanager.com/gtag/js?id=G-C0R8DENDJ0" async></script></body>
 </html>

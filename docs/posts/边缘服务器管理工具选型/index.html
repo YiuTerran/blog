@@ -1,287 +1,125 @@
 <!DOCTYPE html>
-<html
-  lang="zh"
-  dir="ltr"
-  
-><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>边缘服务器管理工具选型 - 思海沉钩</title><meta name="author" content="tryao">
+<meta name="description" content="这里我们主要的需求是能够穿透内网管理服务器，服务器大部分情况下应当是linux，但是也可能是windows。我们的服务要通过API和这个服务器管理软件进行交互，也就是说要做二次开发，不能直接用。
+"><meta name="keywords" content='edge, devops'>
+  <meta itemprop="name" content="边缘服务器管理工具选型">
+  <meta itemprop="description" content="这里我们主要的需求是能够穿透内网管理服务器，服务器大部分情况下应当是linux，但是也可能是windows。我们的服务要通过API和这个服务器管理软件进行交互，也就是说要做二次开发，不能直接用。">
+  <meta itemprop="datePublished" content="2023-03-06T14:37:28+08:00">
+  <meta itemprop="dateModified" content="2023-03-07T20:00:59+08:00">
+  <meta itemprop="wordCount" content="1723">
+  <meta itemprop="keywords" content="Edge,Devops"><meta property="og:url" content="https://yiuterran.github.io/blogs/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/">
+  <meta property="og:site_name" content="思海沉钩">
+  <meta property="og:title" content="边缘服务器管理工具选型">
+  <meta property="og:description" content="这里我们主要的需求是能够穿透内网管理服务器，服务器大部分情况下应当是linux，但是也可能是windows。我们的服务要通过API和这个服务器管理软件进行交互，也就是说要做二次开发，不能直接用。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2023-03-06T14:37:28+08:00">
+    <meta property="article:modified_time" content="2023-03-07T20:00:59+08:00">
+    <meta property="article:tag" content="Edge">
+    <meta property="article:tag" content="Devops">
 
-
-<title>边缘服务器管理工具选型 | 应许之地</title>
-
-<meta name="generator" content="Hugo Eureka 0.9.3" />
-<link rel="stylesheet" href="https://yiuterran.github.io/blog/css/eureka.min.30cfa2a7d2b5754cd246875caad26d69af1d8567ea53339f6729fe1d0ceee8917d33fcd191d4284da2a5da6359d79cb7.css">
-<script defer src="https://yiuterran.github.io/blog/js/eureka.min.e8043b71b627e3cfd9b2a5de56adf007f5af83dee672ca0c186aa2e29a10d6f648632064d0c00b2fa4d1b11e0f196af3.js"></script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload"
-  href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&amp;family=Noto&#43;Serif&#43;SC:wght@400;600;700&amp;display=swap"
-  as="style" onload="this.onload=null;this.rel='stylesheet'">
-
-
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.4.0/build/styles/solarized-light.min.css"
-   media="print"
-  onload="this.media='all';this.onload=null" crossorigin>
-<script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.4.0/build/highlight.min.js"
-   crossorigin></script>
-  <script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.4.0/build/languages/dart.min.js"
-     crossorigin></script>
-<link rel="stylesheet" href="https://yiuterran.github.io/blog/css/highlightjs.min.2958991528e43eb6fc9b8c4f2b8e052f79c4010718e1d1e888a777620e9ee63021c2c57ec7417a3108019bb8c41943e6.css" media="print" onload="this.media='all';this.onload=null">
-
-
-<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.8c77c7521b1f95ec2031c2a79f5c6a698aa4a0dba5ba649dfbc7f73994cddf3f494be6aac7e5724f35cbf72cfde09703.js"></script>
-
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
-   integrity="sha384-MlJdn/WNKDGXveldHDdyRP1R4CTHr3FeuDNfhsLPYrq2t0UBkUdK2jyTnXPEK1NQ"  media="print"
-  onload="this.media='all';this.onload=null" crossorigin>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js" 
-  integrity="sha384-VQ8d8WVFw0yHhCk5E8I86oOhv48xLpnDZx5T9GogA/Y84DcCKWXDmSDfn13bzFZY"  crossorigin></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js"
-   integrity="sha384-&#43;XBljXPPiv&#43;OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR"  crossorigin></script>
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    renderMathInElement(document.body, {
-      delimiters: [
-        { left: "$$", right: "$$", display: true },
-        { left: "$", right: "$", display: false },
-        { left: "\\(", right: "\\)", display: false },
-        { left: "\\[", right: "\\]", display: true }
-      ],
-    });
-  });
-</script>
-
-
-<script defer src="https://cdn.jsdelivr.net/npm/mermaid@8.14.0/dist/mermaid.min.js" 
-  integrity="sha384-atOyb0FxAgN9LyAc6PEf9BjgwLISyansgdH8/VXQH8p2o5vfrRgmGIJ2Sg22L0A0"  crossorigin></script>
-
-
-<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
-
-<meta name="description"
-  content="这里我们主要的需求是能够穿透内网管理服务器，服务器大部分情况下应当是linux，但是也可能是windows。我们的服务要通过API和这个服务器管理软件">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [{
-      "@type": "ListItem",
-      "position": 1 ,
-      "name":"文章列表",
-      "item":"https://yiuterran.github.io/blog/posts/"},{
-      "@type": "ListItem",
-      "position": 2 ,
-      "name":"边缘服务器管理工具选型",
-      "item":"https://yiuterran.github.io/blog/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/"}]
-}
-</script>
-
-
-
-<script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "Article",
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="边缘服务器管理工具选型">
+  <meta name="twitter:description" content="这里我们主要的需求是能够穿透内网管理服务器，服务器大部分情况下应当是linux，但是也可能是windows。我们的服务要通过API和这个服务器管理软件进行交互，也就是说要做二次开发，不能直接用。">
+<meta name="application-name" content="思海沉钩">
+<meta name="apple-mobile-web-app-title" content="思海沉钩"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/blogs/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/blogs/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/blogs/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/blogs/apple-touch-icon.png"><link rel="mask-icon" href="/blogs/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="https://yiuterran.github.io/blogs/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/" title="边缘服务器管理工具选型 - 思海沉钩" /><link rel="prev" type="text/html" href="https://yiuterran.github.io/blogs/posts/kotlin%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/" title="Kotlin要点笔记" /><link rel="next" type="text/html" href="https://yiuterran.github.io/blogs/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/" title="K3s存储插件使用笔记" /><link rel="alternate" type="text/markdown" href="https://yiuterran.github.io/blogs/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/index.md" title="边缘服务器管理工具选型 - 思海沉钩"><link rel="stylesheet" href="/blogs/css/config.min.css"><link rel="stylesheet" href="/blogs/css/style.min.css"><link rel="preload" href="/blogs/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/blogs/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/blogs/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/blogs/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "边缘服务器管理工具选型",
+    "inLanguage": "zh-CN",
     "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "https://yiuterran.github.io/blog/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/"
-    },
-    "headline": "边缘服务器管理工具选型 | 应许之地","datePublished": "2023-03-06T14:37:28+08:00",
-    "dateModified": "2023-03-06T14:37:28+08:00",
-    "wordCount":  1723 ,
-    "author": {
+      "@type": "WebPage",
+      "@id": "https:\/\/yiuterran.github.io\/blogs\/posts\/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B\/"
+    },"genre": "posts","keywords": "edge, devops","wordcount":  1723 ,
+    "url": "https:\/\/yiuterran.github.io\/blogs\/posts\/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B\/","datePublished": "2023-03-06T14:37:28+08:00","dateModified": "2023-03-07T20:00:59+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
         "@type": "Person",
-        "name": ["tryao"]
-    },
-    "publisher": {
-        "@type": "Person",
-        "name": "C. Wang",
-        "logo": {
-            "@type": "ImageObject",
-            "url": "https://yiuterran.github.io/blog/images/icon.png"
-        }
-        },
-    "description": "这里我们主要的需求是能够穿透内网管理服务器，服务器大部分情况下应当是linux，但是也可能是windows。我们的服务要通过API和这个服务器管理软件"
-}
-</script><meta property="og:title" content="边缘服务器管理工具选型 | 应许之地" />
-<meta property="og:type" content="article" />
-
-
-<meta property="og:image" content="https://yiuterran.github.io/blog/images/icon.png">
-
-
-<meta property="og:url" content="https://yiuterran.github.io/blog/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/" />
-
-
-
-
-<meta property="og:description" content="这里我们主要的需求是能够穿透内网管理服务器，服务器大部分情况下应当是linux，但是也可能是windows。我们的服务要通过API和这个服务器管理软件" />
-
-
-
-
-<meta property="og:locale" content="zh" />
-
-
-
-
-<meta property="og:site_name" content="应许之地" />
-
-
-
-
-
-
-<meta property="article:published_time" content="2023-03-06T14:37:28&#43;08:00" />
-
-
-<meta property="article:modified_time" content="2023-03-06T14:37:28&#43;08:00" />
-
-
-
-<meta property="article:section" content="posts" />
-
-
-<meta property="article:tag" content="edge" />
-
-<meta property="article:tag" content="devops" />
-
-
-
-
-
-<meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/kubeedge%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/" />
-
-<meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/sre%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" />
-
-<meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/zabbix%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/" />
-
-
-
-
-  <body class="flex min-h-screen flex-col">
-    <header
-      class="min-h-16 pl-scrollbar bg-secondary-bg fixed z-50 flex w-full items-center shadow-sm"
-    >
-      <div class="mx-auto w-full max-w-screen-xl"><script>
-    let storageColorScheme = localStorage.getItem("lightDarkMode")
-    if (((storageColorScheme == 'Auto' || storageColorScheme == null) && window.matchMedia("(prefers-color-scheme: dark)").matches) || storageColorScheme == "Dark") {
-        document.getElementsByTagName('html')[0].classList.add('dark')
-    }
-</script>
-<nav class="flex items-center justify-between flex-wrap px-4 py-4 md:py-0">
-    <a href="https://yiuterran.github.io/blog/" class="me-6 text-primary-text text-xl font-bold">应许之地</a>
-    <button id="navbar-btn" class="md:hidden flex items-center px-3 py-2" aria-label="Open Navbar">
-        <i class="fas fa-bars"></i>
-    </button>
-
-    <div id="target"
-        class="hidden block md:flex md:grow md:justify-between md:items-center w-full md:w-auto text-primary-text z-20">
-        <div class="md:flex md:h-16 text-sm md:grow pb-4 md:pb-0 border-b md:border-b-0">
-            <a href="https://yiuterran.github.io/blog/authors/tryao/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  border-transparent  me-4">作者</a>
-            <a href="https://yiuterran.github.io/blog/posts/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  selected-menu-item  me-4">文章</a>
-        </div>
-
-        <div class="flex">
-            <div class="relative pt-4 md:pt-0">
-                <div class="cursor-pointer hover:text-eureka" id="lightDarkMode">
-                    <i class="fas fa-adjust"></i>
-                </div>
-                <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-30" id="is-open">
-                </div>
-                <div class="absolute flex flex-col start-0 md:start-auto end-auto md:end-0 hidden bg-secondary-bg w-48 rounded py-2 border border-tertiary-bg cursor-pointer z-40"
-                    id='lightDarkOptions'>
-                    <span class="px-4 py-1 hover:text-eureka" name="Light">浅色</span>
-                    <span class="px-4 py-1 hover:text-eureka" name="Dark">深色</span>
-                    <span class="px-4 py-1 hover:text-eureka" name="Auto">自动</span>
-                </div>
+        "name": "tryao"
+      },"description": ""
+  }
+  </script><script src="/blogs/js/head/color-scheme.min.js"></script></head>
+  <body data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/blogs/" title="思海沉钩"><span class="header-title-text">思海沉钩</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/blogs/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item">
+              <a class="menu-link" href="/blogs/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item">
+              <a class="menu-link" href="/blogs/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+              <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch" title="切换主题">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/blogs/" title="思海沉钩"><span class="header-title-text">思海沉钩</span></a><span class="header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+              </span>
             </div>
-        </div>
-    </div>
-
-    <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-0" id="is-open-mobile">
-    </div>
-
-</nav>
-<script>
-    
-    let element = document.getElementById('lightDarkMode')
-    if (storageColorScheme == null || storageColorScheme == 'Auto') {
-        document.addEventListener('DOMContentLoaded', () => {
-            window.matchMedia("(prefers-color-scheme: dark)").addEventListener('change', switchDarkMode)
-        })
-    } else if (storageColorScheme == "Light") {
-        element.firstElementChild.classList.remove('fa-adjust')
-        element.firstElementChild.setAttribute("data-icon", 'sun')
-        element.firstElementChild.classList.add('fa-sun')
-    } else if (storageColorScheme == "Dark") {
-        element.firstElementChild.classList.remove('fa-adjust')
-        element.firstElementChild.setAttribute("data-icon", 'moon')
-        element.firstElementChild.classList.add('fa-moon')
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        getcolorscheme();
-        switchBurger();
-    });
-</script>
-</div>
-    </header>
-    <main class="grow pt-16">
-        <div class="pl-scrollbar">
-          <div class="mx-auto w-full max-w-screen-xl lg:px-4 xl:px-8">
-  
-  
-  <div class="grid grid-cols-2 gap-4 lg:grid-cols-8 lg:pt-12">
-    <div
-      class="lg:col-start-2 bg-secondary-bg col-span-2 rounded px-6 py-8 lg:col-span-6"
-    >
-      <article class="prose">
-  <h1 class="mb-4">边缘服务器管理工具选型</h1>
-
-  <div
-  class="text-tertiary-text not-prose mt-2 flex flex-row flex-wrap items-center"
->
-  <div class="me-6 my-2">
-    <i class="fas fa-calendar me-1"></i>
-    <span
-      >2023-03-06</span
-    >
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li class="menu-item"><a class="menu-link" href="/blogs/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item"><a class="menu-link" href="/blogs/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item"><a class="menu-link" href="/blogs/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item menu-system">
+          <span class="menu-system-item theme-switch" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
+      </ul>
+    </nav>
   </div>
-  <div class="me-6 my-2">
-    <i class="fas fa-clock me-1"></i>
-    <span>4分钟阅读时长</span>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
   </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
 
-  
-
-  
-</div>
-
-
-  
-  
-
-  <p>这里我们主要的需求是能够穿透内网管理服务器，服务器大部分情况下应当是linux，但是也可能是windows。我们的服务要通过API和这个服务器管理软件进行交互，也就是说要做二次开发，不能直接用。</p>
-<p>刚开始调研的是<a href="https://rport.io/">rport</a>，不太成熟，主要有几个问题：</p>
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>边缘服务器管理工具选型</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://gravatar.com/afxmessagebox" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img class="avatar" src='https://avatars.githubusercontent.com/u/5930695?v=4' alt="tryao" height="16" width="16">&nbsp;tryao</a></span></div><div class="post-meta-line"><span title="发布于 2023-03-06 14:37:28"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2023-03-06">2023-03-06</time></span>&nbsp;<span title="更新于 2023-03-07 20:00:59"><i class="fa-regular fa-calendar-check fa-fw me-1" aria-hidden="true"></i><time datetime="2023-03-07">2023-03-07</time></span>&nbsp;<span title="1723 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 1800 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 4 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><p>这里我们主要的需求是能够穿透内网管理服务器，服务器大部分情况下应当是linux，但是也可能是windows。我们的服务要通过API和这个服务器管理软件进行交互，也就是说要做二次开发，不能直接用。</p>
+<p>刚开始调研的是<a href="https://rport.io/"target="_blank" rel="external nofollow noopener noreferrer">rport</a>，不太成熟，主要有几个问题：</p>
 <ol>
-<li>不支持高可用部署。这个软件目前只能单机部署，高可用的唯一方式是用冷备的方式，参考<a href="https://github.com/cloudradar-monitoring/rport/discussions/643">这里</a>；</li>
+<li>不支持高可用部署。这个软件目前只能单机部署，高可用的唯一方式是用冷备的方式，参考<a href="https://github.com/cloudradar-monitoring/rport/discussions/643"target="_blank" rel="external nofollow noopener noreferrer">这里</a>；</li>
 <li>不支持docker/k8s部署，至少官方目前不支持。这个和1组合起来就是无解了，只能单实例部署。虽然说这玩意儿的负载一般也不会有多大：能管理的机器节点一般最多也就几千个，但是这种无法水平扩展的设计用起来还是很崩溃；目前单机极限应当不到2000台，discussion里面说月底的0.9.7版本会解决这个问题；我在discussion里面发了一个帖子希望他们重新考虑HA设计；</li>
 <li>存储用的是sqlite，仅有用户相关的存储可以改为MySQL；水平扩展困难；</li>
 <li>仅对已有的协议提供反向代理，比如ssh/rdp。密钥、密码管理还是需要线下自己进行的，换句话说你ssh通道有了，但是怎么认证还是走的原生认证：你需要有机器的登陆密码或者私钥；当然这不一定是缺点（因为可以直接用已有的设施进行连接，使用起来比较简单），不过如果你想在线管理这些权限就要二次开发了；</li>
@@ -294,171 +132,63 @@
 <li>提供REST接口，功能齐全；</li>
 <li>所有功能全部免费；</li>
 </ol>
-<p>后面我经过调研又重新发现一款更加成熟的产品：<a href="https://goteleport.com">Teleport</a>，这个版本号已经到12了，star数也够多。不过读了文档也发现几个问题：</p>
+<p>后面我经过调研又重新发现一款更加成熟的产品：<a href="https://goteleport.com"target="_blank" rel="external nofollow noopener noreferrer">Teleport</a>，这个版本号已经到12了，star数也够多。不过读了文档也发现几个问题：</p>
 <ol>
 <li>高可用部署，如果选用传统部署，那么后端存储仅支持AW3或者GoogleCloud，这个设计也太蛋疼了；</li>
-<li>好在1是可以解决的：部署在k8s里面，参考<a href="https://goteleport.com/docs/deploy-a-cluster/helm-deployments/kubernetes-cluster/?scope=enterprise">这里</a>；</li>
+<li>好在1是可以解决的：部署在k8s里面，参考<a href="https://goteleport.com/docs/deploy-a-cluster/helm-deployments/kubernetes-cluster/?scope=enterprise"target="_blank" rel="external nofollow noopener noreferrer">这里</a>；</li>
 <li>auth server仅提供了GRPC客户端，而且SDK只支持go语言；当然理论上也可以通过proto文件生成其他语言的服务，不过那就要你自己动手了；</li>
-<li>和rport相反，由于该平台设计是为了提供无密码服务，所以他用的不是原生的OpenSSH，而是自己重新实现了协议（所以它的github上写的是“wire protocols”）；这就导致客户端用起来非常麻烦，如<a href="https://goteleport.com/docs/desktop-access/getting-started/">windows</a>桌面的准备工作（而且这个是企业用户专用的功能）。不过看起来也可以代理任意TCP协议，这个方案应该简单一点；</li>
+<li>和rport相反，由于该平台设计是为了提供无密码服务，所以他用的不是原生的OpenSSH，而是自己重新实现了协议（所以它的github上写的是“wire protocols”）；这就导致客户端用起来非常麻烦，如<a href="https://goteleport.com/docs/desktop-access/getting-started/"target="_blank" rel="external nofollow noopener noreferrer">windows</a>桌面的准备工作（而且这个是企业用户专用的功能）。不过看起来也可以代理任意TCP协议，这个方案应该简单一点；</li>
 <li>需要在客户端进行命令行操作；</li>
 <li>使用local user的RDP功能是收费的；</li>
 </ol>
 <p>总的来说teleport可以满足一般设备/机器管理需求，而且支持水平扩展。缺点是设计的可能有点过于复杂了，内置了很多用不上的功能，而且配置比较麻烦。如果rport支持更好的部署方式的话，其实我还是更倾向于这种简单的设计，可以后续跟进看一下rport的变化。</p>
-<p>与Teleport类似的还有<a href="https://www.pomerium.com/docs/capabilities/enterprise-api">pomerium</a>，不过这个API只对企业版开放，所以不予考虑了。</p>
-<p>后面在Reddit搜了一下，发现推荐最多的是<a href="https://github.com/Ylianst/MeshCentral">MeshCentral</a>，仔细看了一遍User Guide，总结如下：</p>
+<p>与Teleport类似的还有<a href="https://www.pomerium.com/docs/capabilities/enterprise-api"target="_blank" rel="external nofollow noopener noreferrer">pomerium</a>，不过这个API只对企业版开放，所以不予考虑了。</p>
+<p>后面在Reddit搜了一下，发现推荐最多的是<a href="https://github.com/Ylianst/MeshCentral"target="_blank" rel="external nofollow noopener noreferrer">MeshCentral</a>，仔细看了一遍User Guide，总结如下：</p>
 <ol>
 <li>设计理念比较老派，和云原生不沾边，可以自己搬到k8s里，就是有点麻烦，尤其是目前集群地址是静态配置的；</li>
 <li>支持大规模部署，后端用的是MongoDB（默认使用轻量级数据库），没有其他依赖；</li>
 <li>仅需要开放3个端口，不像其他方案需要开放一堆或者使用三级泛域名；</li>
-<li>文档非常详尽，但是没有API文档，官方推荐的集成方式是iframe嵌入（实际上也可以满足一般需求）。如果想要写接口通信，可以参考<a href="https://github.com/Ylianst/MeshCentral/issues/1466">作者的意见</a>，就是写websocket客户端通信；</li>
+<li>文档非常详尽，但是没有API文档，官方推荐的集成方式是iframe嵌入（实际上也可以满足一般需求）。如果想要写接口通信，可以参考<a href="https://github.com/Ylianst/MeshCentral/issues/1466"target="_blank" rel="external nofollow noopener noreferrer">作者的意见</a>，就是写websocket客户端通信；</li>
 <li>远程桌面支持WebRTC打洞，可以节省服务器流量；</li>
 <li>前端原生支持中文本地化；</li>
 </ol>
 <p>小规模使用感觉用rport就够了，大规模使用如果不嫌麻烦的话可以用teleport（前提是不需要远程桌面）。如果不想开发前端，用SSO（自己实现SAML）登录meshCentral是最好的，该软件没有收费功能，全部免费；能够接受iframe嵌入也可以。</p>
 <p>经过仔细对比，最后还是选用meshCentral，主要是易用且稳定，而且集成也挺方便的，iframe足以满足一般需求，前期使用SSO跳转即可。</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2023-03-07 20:00:59">更新于 2023-03-07&nbsp;<a class="git-hash" href="YiuTerran/blog/commit/b8a9f2c86304a7b8379316c2e1dcfc91d3743d27" rel="external nofollow noopener noreferrer" target="_blank" title="fix: some desc change&#10&#10Commit: b8a9f2c86304a7b8379316c2e1dcfc91d3743d27 [b8a9f2c]&#10Author: tryao&#10Date: 2023-03-07 20:00:59"><i class="fa-solid fa-hashtag fa-fw" aria-hidden="true"></i>b8a9f2c</a></span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="/blogs/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="YiuTerran/blog/blob/monolingual/content/posts/%e8%be%b9%e7%bc%98%e6%9c%8d%e5%8a%a1%e5%99%a8%e7%ae%a1%e7%90%86%e5%b7%a5%e5%85%b7%e9%80%89%e5%9e%8b.md?plain=1" title="查看源码" class="link-to-source">查看源码</a></span><span><a href="YiuTerran/blog/edit/monolingual/content/posts/%e8%be%b9%e7%bc%98%e6%9c%8d%e5%8a%a1%e5%99%a8%e7%ae%a1%e7%90%86%e5%b7%a5%e5%85%b7%e9%80%89%e5%9e%8b.md" title="编辑此页" class="link-to-edit">编辑此页</a></span><span><a href="YiuTerran/blog/issues/new?title=[BUG]%20%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B&amp;body=%7cField%7cValue%7c%0A%7c-%7c-%7c%0A%7cTitle%7c%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B%7c%0A%7cURL%7chttps://yiuterran.github.io/blogs/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/%7c%0A%7cFilename%7cYiuTerran/blog/blob/monolingual/content/posts/%e8%be%b9%e7%bc%98%e6%9c%8d%e5%8a%a1%e5%99%a8%e7%ae%a1%e7%90%86%e5%b7%a5%e5%85%b7%e9%80%89%e5%9e%8b.md?plain=1%7c" title="报告问题" class="link-to-report">报告问题</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://yiuterran.github.io/blogs/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/" data-title="边缘服务器管理工具选型" data-hashtags="edge,devops"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://yiuterran.github.io/blogs/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/" data-hashtag="edge"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://yiuterran.github.io/blogs/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/" data-title="边缘服务器管理工具选型"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
 
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/blogs/tags/edge/" class="post-tag" title="标签 - Edge">Edge</a><a href="/blogs/tags/devops/" class="post-tag" title="标签 - Devops">Devops</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blogs/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/blogs/posts/kotlin%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/" class="post-nav-item" rel="prev" title="Kotlin要点笔记"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>Kotlin要点笔记</a><a href="/blogs/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/" class="post-nav-item" rel="next" title="K3s存储插件使用笔记">K3s存储插件使用笔记<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
 </article>
 
-
-      
-        <div class="my-4">
-    
-    <a href="https://yiuterran.github.io/blog/tags/edge/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#edge</a>
-    
-    <a href="https://yiuterran.github.io/blog/tags/devops/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#devops</a>
-    
-</div>
-      
-
-      
-
-
-
-      
-        <div class="py-2">
-  
-    <div class="my-8 flex flex-col items-center md:flex-row">
-      <a href="https://yiuterran.github.io/blog/authors/tryao/" class="md:me-4 text-primary-text h-24 w-24">
-        
-        
-          <img
-            src="https://yiuterran.github.io/blog/images/avatar.png"
-            class="bg-primary-bg w-full rounded-full"
-            alt="Avatar"
-          />
-        
-      </a>
-      <div class="mt-4 w-full md:mt-0 md:w-auto">
-        <a
-          href="https://yiuterran.github.io/blog/authors/tryao/"
-          class="mb-2 block border-b pb-1 text-lg font-bold"
-        >
-          <h3>个人介绍</h3>
-        </a>
-        <span class="block pb-2">兴趣使然的程序员，博而不精，乐学不倦</span>
-        
-          
-          
-          
-          
-          <a href="mailto:yaotairan@gmail.com" class="me-2">
-            <i class="fas fa-envelope"></i>
-          </a>
-        
-          
-          
-          
-          
-          <a href="https://github.com/YiuTerran" class="me-2">
-            <i class="fab fa-github"></i>
-          </a>
-        
-      </div>
-    </div>
-  
-</div>
-
-      
-
-      
-  <div
-    class="-mx-2 mt-4 flex flex-col border-t px-2 pt-4 md:flex-row md:justify-between"
-  >
-    <div>
-      
-        <span class="text-primary-text block font-bold"
-          >上一页</span
-        >
-        <a href="https://yiuterran.github.io/blog/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/" class="block">K3s存储插件使用笔记</a>
-      
-    </div>
-    <div class="mt-4 md:mt-0 md:text-right">
-      
-        <span class="text-primary-text block font-bold">下一页</span>
-        <a href="https://yiuterran.github.io/blog/posts/kotlin%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/" class="block">Kotlin要点笔记</a>
-      
-    </div>
-  </div>
-
-
-      
-
-
-
-  <script id="utterances" src="https://utteranc.es/client.js"
-            issue-term=title
-            repo=YiuTerran/blog-comment
-              theme=preferred-color-scheme
-        crossorigin="anonymous"
-        async>
-</script>
-<script>
-    if (storageColorScheme == "Light") {
-      document.getElementById('utterances').setAttribute('theme', 'github-light')
-    } else if (storageColorScheme == "Dark") {
-      document.getElementById('utterances').setAttribute('theme', 'github-dark')
-    }
-</script>
-
-    </div>
-    
-
-    
-    
-      <div
-        class="lg:col-start-2 bg-secondary-bg prose col-span-2 rounded p-6 lg:col-span-6"
-      >
-        <h3>相关</h3>
-        
-          <a href="https://yiuterran.github.io/blog/posts/kubeedge%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/" class="no-underline">KubeEdge要点笔记</a>
-          <br />
-        
-          <a href="https://yiuterran.github.io/blog/posts/sre%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" class="no-underline">SRE读书笔记</a>
-          <br />
-        
-          <a href="https://yiuterran.github.io/blog/posts/zabbix%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/" class="no-underline">Zabbix配置记录</a>
-          <br />
-        
-      </div>
-    
-  </div>
-
-  
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        hljs.highlightAll();
-      });
-    </script>
-
-          </div>
-        </div>
-      
-    </main>
-    <footer class="pl-scrollbar">
-      <div class="mx-auto w-full max-w-screen-xl"><div class="text-center p-6 pin-b">
-    <p class="text-sm text-tertiary-text">&copy; 2021 <a href="https://github.com/YiuTerran">tryao</a>
- &middot;  Powered by the <a href="https://github.com/wangchucheng/hugo-eureka" class="hover:text-eureka">Eureka</a> theme for <a href="https://gohugo.io" class="hover:text-eureka">Hugo</a></p>
-</div></div>
-    </footer>
-  </body>
+  <aside class="toc" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.151.0"><img class="hugo-icon" src="/blogs/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.4.0-alpha.2-20251014082535-5c74d431"><img class="fixit-icon" src="/blogs/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2025</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://gravatar.com/afxmessagebox"target="_blank" rel="external nofollow noopener noreferrer">tryao</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/blogs/lib/cookieconsent/cookieconsent.min.css"><script src="/blogs/lib/autocomplete/autocomplete.min.js" defer></script><script src="/blogs/lib/fuse/fuse.min.js" defer></script><script src="/blogs/lib/sharer/sharer.min.js" async defer></script><script src="/blogs/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/blogs/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/config/page.js" defer></script><script src="/blogs/js/theme.min.js" defer></script><script>
+      window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
+      gtag('config', 'G-C0R8DENDJ0', { 'anonymize_ip': true });
+    </script><script src="https://www.googletagmanager.com/gtag/js?id=G-C0R8DENDJ0" async></script></body>
 </html>

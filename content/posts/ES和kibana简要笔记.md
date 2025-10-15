@@ -7,7 +7,6 @@ tags: ["elasticsearch"]
 categories: []
 series: []
 date: 2023-11-13T10:11:35+08:00
-lastmod: 2023-11-13T10:11:35+08:00
 featuredVideo:
 featuredImage:
 draft: false

@@ -1,285 +1,174 @@
 <!DOCTYPE html>
-<html
-  lang="zh"
-  dir="ltr"
-  
-><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>Jsonnet试用 - 思海沉钩</title><meta name="author" content="tryao">
+<meta name="description" content="jsonnet这个语言很有意思，它存在的目的就是为了编辑配置。其实使用任何一门带有字符串模板的语言都能完成类似的目的，但是jsonnet的好处是它的封闭性：不要使用额外的依赖完成配置。
+"><meta name="keywords" content='jsonnet, json'>
+  <meta itemprop="name" content="Jsonnet试用">
+  <meta itemprop="description" content="jsonnet这个语言很有意思，它存在的目的就是为了编辑配置。其实使用任何一门带有字符串模板的语言都能完成类似的目的，但是jsonnet的好处是它的封闭性：不要使用额外的依赖完成配置。">
+  <meta itemprop="datePublished" content="2023-12-29T10:21:59+08:00">
+  <meta itemprop="dateModified" content="2023-12-29T18:37:11+08:00">
+  <meta itemprop="wordCount" content="1718">
+  <meta itemprop="keywords" content="Jsonnet,Json"><meta property="og:url" content="https://yiuterran.github.io/blogs/posts/jsonnet%E8%AF%95%E7%94%A8/">
+  <meta property="og:site_name" content="思海沉钩">
+  <meta property="og:title" content="Jsonnet试用">
+  <meta property="og:description" content="jsonnet这个语言很有意思，它存在的目的就是为了编辑配置。其实使用任何一门带有字符串模板的语言都能完成类似的目的，但是jsonnet的好处是它的封闭性：不要使用额外的依赖完成配置。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2023-12-29T10:21:59+08:00">
+    <meta property="article:modified_time" content="2023-12-29T18:37:11+08:00">
+    <meta property="article:tag" content="Jsonnet">
+    <meta property="article:tag" content="Json">
 
-
-<title>Jsonnet试用 | 应许之地</title>
-
-<meta name="generator" content="Hugo Eureka 0.9.3" />
-<link rel="stylesheet" href="https://yiuterran.github.io/blog/css/eureka.min.30cfa2a7d2b5754cd246875caad26d69af1d8567ea53339f6729fe1d0ceee8917d33fcd191d4284da2a5da6359d79cb7.css">
-<script defer src="https://yiuterran.github.io/blog/js/eureka.min.e8043b71b627e3cfd9b2a5de56adf007f5af83dee672ca0c186aa2e29a10d6f648632064d0c00b2fa4d1b11e0f196af3.js"></script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload"
-  href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&amp;family=Noto&#43;Serif&#43;SC:wght@400;600;700&amp;display=swap"
-  as="style" onload="this.onload=null;this.rel='stylesheet'">
-
-
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.4.0/build/styles/solarized-light.min.css"
-   media="print"
-  onload="this.media='all';this.onload=null" crossorigin>
-<script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.4.0/build/highlight.min.js"
-   crossorigin></script>
-  <script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.4.0/build/languages/dart.min.js"
-     crossorigin></script>
-<link rel="stylesheet" href="https://yiuterran.github.io/blog/css/highlightjs.min.2958991528e43eb6fc9b8c4f2b8e052f79c4010718e1d1e888a777620e9ee63021c2c57ec7417a3108019bb8c41943e6.css" media="print" onload="this.media='all';this.onload=null">
-
-
-<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.8c77c7521b1f95ec2031c2a79f5c6a698aa4a0dba5ba649dfbc7f73994cddf3f494be6aac7e5724f35cbf72cfde09703.js"></script>
-
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
-   integrity="sha384-MlJdn/WNKDGXveldHDdyRP1R4CTHr3FeuDNfhsLPYrq2t0UBkUdK2jyTnXPEK1NQ"  media="print"
-  onload="this.media='all';this.onload=null" crossorigin>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js" 
-  integrity="sha384-VQ8d8WVFw0yHhCk5E8I86oOhv48xLpnDZx5T9GogA/Y84DcCKWXDmSDfn13bzFZY"  crossorigin></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js"
-   integrity="sha384-&#43;XBljXPPiv&#43;OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR"  crossorigin></script>
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    renderMathInElement(document.body, {
-      delimiters: [
-        { left: "$$", right: "$$", display: true },
-        { left: "$", right: "$", display: false },
-        { left: "\\(", right: "\\)", display: false },
-        { left: "\\[", right: "\\]", display: true }
-      ],
-    });
-  });
-</script>
-
-
-<script defer src="https://cdn.jsdelivr.net/npm/mermaid@8.14.0/dist/mermaid.min.js" 
-  integrity="sha384-atOyb0FxAgN9LyAc6PEf9BjgwLISyansgdH8/VXQH8p2o5vfrRgmGIJ2Sg22L0A0"  crossorigin></script>
-
-
-<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
-
-<meta name="description"
-  content="jsonnet这个语言很有意思，它存在的目的就是为了编辑配置。其实使用任何一门带有字符串模板的语言都能完成类似的目的，但是jsonnet的好处是它的封">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [{
-      "@type": "ListItem",
-      "position": 1 ,
-      "name":"文章列表",
-      "item":"https://yiuterran.github.io/blog/posts/"},{
-      "@type": "ListItem",
-      "position": 2 ,
-      "name":"Jsonnet试用",
-      "item":"https://yiuterran.github.io/blog/posts/jsonnet%E8%AF%95%E7%94%A8/"}]
-}
-</script>
-
-
-
-<script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "Article",
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Jsonnet试用">
+  <meta name="twitter:description" content="jsonnet这个语言很有意思，它存在的目的就是为了编辑配置。其实使用任何一门带有字符串模板的语言都能完成类似的目的，但是jsonnet的好处是它的封闭性：不要使用额外的依赖完成配置。">
+<meta name="application-name" content="思海沉钩">
+<meta name="apple-mobile-web-app-title" content="思海沉钩"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/blogs/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/blogs/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/blogs/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/blogs/apple-touch-icon.png"><link rel="mask-icon" href="/blogs/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="https://yiuterran.github.io/blogs/posts/jsonnet%E8%AF%95%E7%94%A8/" title="Jsonnet试用 - 思海沉钩" /><link rel="prev" type="text/html" href="https://yiuterran.github.io/blogs/posts/linux%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/" title="linux日常使用记录" /><link rel="next" type="text/html" href="https://yiuterran.github.io/blogs/posts/ytt%E8%AF%95%E7%94%A8/" title="Ytt试用" /><link rel="alternate" type="text/markdown" href="https://yiuterran.github.io/blogs/posts/jsonnet%E8%AF%95%E7%94%A8/index.md" title="Jsonnet试用 - 思海沉钩"><link rel="stylesheet" href="/blogs/css/config.min.css"><link rel="stylesheet" href="/blogs/css/style.min.css"><link rel="preload" href="/blogs/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/blogs/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/blogs/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/blogs/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Jsonnet试用",
+    "inLanguage": "zh-CN",
     "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "https://yiuterran.github.io/blog/posts/jsonnet%E8%AF%95%E7%94%A8/"
-    },
-    "headline": "Jsonnet试用 | 应许之地","datePublished": "2023-12-29T10:21:59+08:00",
-    "dateModified": "2023-12-29T10:21:59+08:00",
-    "wordCount":  1683 ,
-    "author": {
+      "@type": "WebPage",
+      "@id": "https:\/\/yiuterran.github.io\/blogs\/posts\/jsonnet%E8%AF%95%E7%94%A8\/"
+    },"genre": "posts","keywords": "jsonnet, json","wordcount":  1718 ,
+    "url": "https:\/\/yiuterran.github.io\/blogs\/posts\/jsonnet%E8%AF%95%E7%94%A8\/","datePublished": "2023-12-29T10:21:59+08:00","dateModified": "2023-12-29T18:37:11+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
         "@type": "Person",
-        "name": ["tryao"]
-    },
-    "publisher": {
-        "@type": "Person",
-        "name": "C. Wang",
-        "logo": {
-            "@type": "ImageObject",
-            "url": "https://yiuterran.github.io/blog/images/icon.png"
-        }
-        },
-    "description": "jsonnet这个语言很有意思，它存在的目的就是为了编辑配置。其实使用任何一门带有字符串模板的语言都能完成类似的目的，但是jsonnet的好处是它的封"
-}
-</script><meta property="og:title" content="Jsonnet试用 | 应许之地" />
-<meta property="og:type" content="article" />
-
-
-<meta property="og:image" content="https://yiuterran.github.io/blog/images/icon.png">
-
-
-<meta property="og:url" content="https://yiuterran.github.io/blog/posts/jsonnet%E8%AF%95%E7%94%A8/" />
-
-
-
-
-<meta property="og:description" content="jsonnet这个语言很有意思，它存在的目的就是为了编辑配置。其实使用任何一门带有字符串模板的语言都能完成类似的目的，但是jsonnet的好处是它的封" />
-
-
-
-
-<meta property="og:locale" content="zh" />
-
-
-
-
-<meta property="og:site_name" content="应许之地" />
-
-
-
-
-
-
-<meta property="article:published_time" content="2023-12-29T10:21:59&#43;08:00" />
-
-
-<meta property="article:modified_time" content="2023-12-29T10:21:59&#43;08:00" />
-
-
-
-<meta property="article:section" content="posts" />
-
-
-<meta property="article:tag" content="jsonnet" />
-
-<meta property="article:tag" content="json" />
-
-
-
-
-
-
-  <body class="flex min-h-screen flex-col">
-    <header
-      class="min-h-16 pl-scrollbar bg-secondary-bg fixed z-50 flex w-full items-center shadow-sm"
-    >
-      <div class="mx-auto w-full max-w-screen-xl"><script>
-    let storageColorScheme = localStorage.getItem("lightDarkMode")
-    if (((storageColorScheme == 'Auto' || storageColorScheme == null) && window.matchMedia("(prefers-color-scheme: dark)").matches) || storageColorScheme == "Dark") {
-        document.getElementsByTagName('html')[0].classList.add('dark')
-    }
-</script>
-<nav class="flex items-center justify-between flex-wrap px-4 py-4 md:py-0">
-    <a href="https://yiuterran.github.io/blog/" class="me-6 text-primary-text text-xl font-bold">应许之地</a>
-    <button id="navbar-btn" class="md:hidden flex items-center px-3 py-2" aria-label="Open Navbar">
-        <i class="fas fa-bars"></i>
-    </button>
-
-    <div id="target"
-        class="hidden block md:flex md:grow md:justify-between md:items-center w-full md:w-auto text-primary-text z-20">
-        <div class="md:flex md:h-16 text-sm md:grow pb-4 md:pb-0 border-b md:border-b-0">
-            <a href="https://yiuterran.github.io/blog/authors/tryao/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  border-transparent  me-4">作者</a>
-            <a href="https://yiuterran.github.io/blog/posts/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  selected-menu-item  me-4">文章</a>
-        </div>
-
-        <div class="flex">
-            <div class="relative pt-4 md:pt-0">
-                <div class="cursor-pointer hover:text-eureka" id="lightDarkMode">
-                    <i class="fas fa-adjust"></i>
-                </div>
-                <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-30" id="is-open">
-                </div>
-                <div class="absolute flex flex-col start-0 md:start-auto end-auto md:end-0 hidden bg-secondary-bg w-48 rounded py-2 border border-tertiary-bg cursor-pointer z-40"
-                    id='lightDarkOptions'>
-                    <span class="px-4 py-1 hover:text-eureka" name="Light">浅色</span>
-                    <span class="px-4 py-1 hover:text-eureka" name="Dark">深色</span>
-                    <span class="px-4 py-1 hover:text-eureka" name="Auto">自动</span>
-                </div>
+        "name": "tryao"
+      },"description": ""
+  }
+  </script><script src="/blogs/js/head/color-scheme.min.js"></script></head>
+  <body data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/blogs/" title="思海沉钩"><span class="header-title-text">思海沉钩</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/blogs/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item">
+              <a class="menu-link" href="/blogs/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item">
+              <a class="menu-link" href="/blogs/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+              <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch" title="切换主题">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/blogs/" title="思海沉钩"><span class="header-title-text">思海沉钩</span></a><span class="header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+              </span>
             </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li class="menu-item"><a class="menu-link" href="/blogs/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item"><a class="menu-link" href="/blogs/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item"><a class="menu-link" href="/blogs/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item menu-system">
+          <span class="menu-system-item theme-switch" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
+      </ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>Jsonnet试用</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://gravatar.com/afxmessagebox" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img class="avatar" src='https://avatars.githubusercontent.com/u/5930695?v=4' alt="tryao" height="16" width="16">&nbsp;tryao</a></span></div><div class="post-meta-line"><span title="发布于 2023-12-29 10:21:59"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2023-12-29">2023-12-29</time></span>&nbsp;<span title="更新于 2023-12-29 18:37:11"><i class="fa-regular fa-calendar-check fa-fw me-1" aria-hidden="true"></i><time datetime="2023-12-29">2023-12-29</time></span>&nbsp;<span title="1718 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 1800 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 4 分钟</span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
         </div>
-    </div>
-
-    <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-0" id="is-open-mobile">
-    </div>
-
-</nav>
-<script>
-    
-    let element = document.getElementById('lightDarkMode')
-    if (storageColorScheme == null || storageColorScheme == 'Auto') {
-        document.addEventListener('DOMContentLoaded', () => {
-            window.matchMedia("(prefers-color-scheme: dark)").addEventListener('change', switchDarkMode)
-        })
-    } else if (storageColorScheme == "Light") {
-        element.firstElementChild.classList.remove('fa-adjust')
-        element.firstElementChild.setAttribute("data-icon", 'sun')
-        element.firstElementChild.classList.add('fa-sun')
-    } else if (storageColorScheme == "Dark") {
-        element.firstElementChild.classList.remove('fa-adjust')
-        element.firstElementChild.setAttribute("data-icon", 'moon')
-        element.firstElementChild.classList.add('fa-moon')
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        getcolorscheme();
-        switchBurger();
-    });
-</script>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#安装">安装</a></li>
+        <li><a href="#语法">语法</a>
+          <ul>
+            <li><a href="#变量">变量</a></li>
+            <li><a href="#函数">函数</a></li>
+            <li><a href="#条件语句">条件语句</a></li>
+            <li><a href="#动态key">动态key</a></li>
+            <li><a href="#列表生成">列表生成</a></li>
+            <li><a href="#文件导入">文件导入</a></li>
+            <li><a href="#异常">异常</a></li>
+            <li><a href="#外部变量">外部变量</a></li>
+            <li><a href="#面向对象">面向对象</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p><code>jsonnet</code>这个语言很有意思，它存在的目的就是为了编辑配置。其实使用任何一门带有字符串模板的语言都能完成类似的目的，但是<code>jsonnet</code>的好处是它的封闭性：不要使用额外的依赖完成配置。</p>
+<h2 class="heading-element" id="安装"><span>安装</span>
+  <a href="#%e5%ae%89%e8%a3%85" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p><code>jsonnet</code>有两个版本的编译器，一个是C++的，一个是Go的，推荐使用Go的，安装比较简单：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">go install github.com/google/go-jsonnet/cmd/jsonnet@latest</span></span></code></pre></td></tr></table>
 </div>
-    </header>
-    <main class="grow pt-16">
-        <div class="pl-scrollbar">
-          <div class="mx-auto w-full max-w-screen-xl lg:px-4 xl:px-8">
-  
-  
-  <div class="grid grid-cols-2 gap-4 lg:grid-cols-8 lg:pt-12">
-    <div
-      class=" bg-secondary-bg col-span-2 rounded px-6 py-8 lg:col-span-6"
-    >
-      <article class="prose">
-  <h1 class="mb-4">Jsonnet试用</h1>
-
-  <div
-  class="text-tertiary-text not-prose mt-2 flex flex-row flex-wrap items-center"
->
-  <div class="me-6 my-2">
-    <i class="fas fa-calendar me-1"></i>
-    <span
-      >2023-12-29</span
-    >
-  </div>
-  <div class="me-6 my-2">
-    <i class="fas fa-clock me-1"></i>
-    <span>4分钟阅读时长</span>
-  </div>
-
-  
-
-  
+</div><p>如果你使用go语言写脚本，可以直接代码里使用：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="s">&#34;github.com/google/go-jsonnet&#34;</span></span></span></code></pre></td></tr></table>
 </div>
-
-
-  
-  
-
-  <p><code>jsonnet</code>这个语言很有意思，它存在的目的就是为了编辑配置。其实使用任何一门带有字符串模板的语言都能完成类似的目的，但是<code>jsonnet</code>的好处是它的封闭性：不要使用额外的依赖完成配置。</p>
-<h2 id="安装">安装</h2>
-<p><code>jsonnet</code>有两个版本的编译器，一个是C++的，一个是Go的，推荐使用Go的，安装比较简单：</p>
-<pre><code class="language-bash">go install github.com/google/go-jsonnet/cmd/jsonnet@latest
-</code></pre>
-<p>如果你使用go语言写脚本，可以直接代码里使用：</p>
-<pre><code class="language-go">import &quot;github.com/google/go-jsonnet&quot;
-</code></pre>
-<h2 id="语法">语法</h2>
-<p>jsonnet的语法和json是一致的，但是增加了很多扩展：</p>
+</div><h2 class="heading-element" id="语法"><span>语法</span>
+  <a href="#%e8%af%ad%e6%b3%95" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>jsonnet的语法和json是一致的，但是增加了很多扩展：</p>
 <ul>
 <li>支持C/Python风格的注释支持；</li>
 <li>允许使用<code>|||</code>增加多行字符串，类似Python中的<code>'''</code>；</li>
@@ -287,8 +176,11 @@
 <li>类似yaml，支持单引号和双引号；</li>
 <li>类似js/yaml，key可以不加引号；</li>
 </ul>
-<h3 id="变量">变量</h3>
-<p>变量使用<code>local</code>关键字，类似lua，需要注意的是：</p>
+<h3 class="heading-element" id="变量"><span>变量</span>
+  <a href="#%e5%8f%98%e9%87%8f" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>变量使用<code>local</code>关键字，类似lua，需要注意的是：</p>
 <ul>
 <li>如果变量定义在json里面（挨着字段），尾部要使用逗号；</li>
 <li>否则，使用分号；</li>
@@ -311,87 +203,171 @@
 <li>变量转bool原则和Python类似，即<code>if x</code>的计算；</li>
 </ul>
 <p>另外，jsonnet还支持一种特殊风格的字符串格式化：</p>
-<pre><code class="language-json">{
-    ex1: 1+2,
-    str: |||
-    s=%(ex1)0.2f
-   ||| % self,
-}
-</code></pre>
-<p>这里把<code>self</code>当作变量传进去，然后在字符串里面提取出字段用来渲染，有点类似python里面的<code>.format</code>，但是语法不一样。</p>
-<h3 id="函数">函数</h3>
-<p>jsonnet是一门图灵完备的语言，所以它也有函数，语法有点类似js中的<code>function</code>:</p>
-<pre><code>local fuc(k1, k2=3) = 
-  local k3 = k1 + k2;
-  [k1, k2, k3];
-</code></pre>
-<p>注意：函数必然会返回一个值，所以最后一个值标示函数的结束。</p>
-<h3 id="条件语句">条件语句</h3>
-<p>支持类似Python的<code>if xx then zz else yy</code>的语法，默认<code>else null</code></p>
-<h3 id="动态key">动态key</h3>
-<p>如果key也需要动态计算，可以使用：</p>
-<pre><code class="language-python">{
-    [if x then 'k1']: 'v',
-}
-</code></pre>
-<p>上面如果x是false，则key是<code>null</code>，此时会排除对应的key.</p>
+<json-viewer value="&#34;{\n    ex1: 1&#43;2,\n    str: |||\n    s=%(ex1)0.2f\n   ||| % self,\n}&#34;" expand-depth="1" boxed copyable="{&#34;copiedText&#34;:&#34;已复制&#34;,&#34;copyText&#34;:&#34;复制&#34;}"></json-viewer><p>这里把<code>self</code>当作变量传进去，然后在字符串里面提取出字段用来渲染，有点类似python里面的<code>.format</code>，但是语法不一样。</p>
+<h3 class="heading-element" id="函数"><span>函数</span>
+  <a href="#%e5%87%bd%e6%95%b0" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>jsonnet是一门图灵完备的语言，所以它也有函数，语法有点类似js中的<code>function</code>:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">local fuc(k1, k2=3) = 
+</span></span><span class="line"><span class="cl">  local k3 = k1 + k2;
+</span></span><span class="line"><span class="cl">  [k1, k2, k3];</span></span></code></pre></td></tr></table>
+</div>
+</div><p>注意：函数必然会返回一个值，所以最后一个值标示函数的结束。</p>
+<h3 class="heading-element" id="条件语句"><span>条件语句</span>
+  <a href="#%e6%9d%a1%e4%bb%b6%e8%af%ad%e5%8f%a5" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>支持类似Python的<code>if xx then zz else yy</code>的语法，默认<code>else null</code></p>
+<h3 class="heading-element" id="动态key"><span>动态key</span>
+  <a href="#%e5%8a%a8%e6%80%81key" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>如果key也需要动态计算，可以使用：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="k">if</span> <span class="n">x</span> <span class="n">then</span> <span class="s1">&#39;k1&#39;</span><span class="p">]:</span> <span class="s1">&#39;v&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>上面如果x是false，则key是<code>null</code>，此时会排除对应的key.</p>
 <p>需要注意的是，key里面无法使用<code>self</code>或者需要运行时计算的变量，这是因为需要先构建key才能生成object，此时<code>self</code>还不存在。</p>
-<h3 id="列表生成">列表生成</h3>
-<p>支持Python风格的列表生成表达式，官网的例子：</p>
-<pre><code class="language-python">local arr = std.range(5, 8);
-{
-  array_comprehensions: {
-    higher: [x + 3 for x in arr],
-    lower: [x - 3 for x in arr],
-    evens: [x for x in arr if x % 2 == 0],
-    odds: [x for x in arr if x % 2 == 1],
-    evens_and_odds: [
-      '%d-%d' % [x, y]
-      for x in arr
-      if x % 2 == 0
-      for y in arr
-      if y % 2 == 1
-    ],
-  },
-  object_comprehensions: {
-    evens: {
-      ['f' + x]: true
-      for x in arr
-      if x % 2 == 0
-    },
-    // Use object composition (+) to add in
-    // static fields:
-    mixture: {
-      f: 1,
-      g: 2,
-    } + {
-      [x]: 0
-      for x in ['a', 'b', 'c']
-    },
-  },
-}
-</code></pre>
-<h3 id="文件导入">文件导入</h3>
-<p>被导入的文件习惯上使用<code>.libsonnet</code>后缀，但是实际上任意后缀都可以。</p>
+<h3 class="heading-element" id="列表生成"><span>列表生成</span>
+  <a href="#%e5%88%97%e8%a1%a8%e7%94%9f%e6%88%90" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>支持Python风格的列表生成表达式，官网的例子：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">local</span> <span class="n">arr</span> <span class="o">=</span> <span class="n">std</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">array_comprehensions</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">higher</span><span class="p">:</span> <span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="mi">3</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">arr</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">    <span class="n">lower</span><span class="p">:</span> <span class="p">[</span><span class="n">x</span> <span class="o">-</span> <span class="mi">3</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">arr</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">    <span class="n">evens</span><span class="p">:</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">arr</span> <span class="k">if</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">    <span class="n">odds</span><span class="p">:</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">arr</span> <span class="k">if</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">    <span class="n">evens_and_odds</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">      <span class="s1">&#39;</span><span class="si">%d</span><span class="s1">-</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">      <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">arr</span>
+</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">      <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">arr</span>
+</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="n">y</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">    <span class="p">],</span>
+</span></span><span class="line"><span class="cl">  <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="n">object_comprehensions</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">evens</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="p">[</span><span class="s1">&#39;f&#39;</span> <span class="o">+</span> <span class="n">x</span><span class="p">]:</span> <span class="n">true</span>
+</span></span><span class="line"><span class="cl">      <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">arr</span>
+</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="o">//</span> <span class="n">Use</span> <span class="nb">object</span> <span class="n">composition</span> <span class="p">(</span><span class="o">+</span><span class="p">)</span> <span class="n">to</span> <span class="n">add</span> <span class="ow">in</span>
+</span></span><span class="line"><span class="cl">    <span class="o">//</span> <span class="n">static</span> <span class="n">fields</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mixture</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">f</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="n">g</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="o">+</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="p">[</span><span class="n">x</span><span class="p">]:</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">      <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="p">},</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 class="heading-element" id="文件导入"><span>文件导入</span>
+  <a href="#%e6%96%87%e4%bb%b6%e5%af%bc%e5%85%a5" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>被导入的文件习惯上使用<code>.libsonnet</code>后缀，但是实际上任意后缀都可以。</p>
 <p>文件的内容是纯文本、json文件或者jsonnet文件都可以。如果是<code>yaml</code>，可以用<code>std.parseYaml</code>将其转为json。</p>
-<h3 id="异常">异常</h3>
-<p>直接使用<code>error</code>抛出异常，或者使用<code>assert xxx: message</code>抛出断言异常。</p>
+<h3 class="heading-element" id="异常"><span>异常</span>
+  <a href="#%e5%bc%82%e5%b8%b8" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>直接使用<code>error</code>抛出异常，或者使用<code>assert xxx: message</code>抛出断言异常。</p>
 <p>出现error会立即中断配置文件生成。</p>
-<h3 id="外部变量">外部变量</h3>
-<p>可以通过</p>
-<pre><code class="language-bash">jsonnet --ext-str x=y --ext-code z=true
-</code></pre>
-<p>传入外部变量进行渲染，代码里面使用<code>std.extVar('x')</code>获取传进来的参数值。</p>
+<h3 class="heading-element" id="外部变量"><span>外部变量</span>
+  <a href="#%e5%a4%96%e9%83%a8%e5%8f%98%e9%87%8f" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>可以通过</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">jsonnet --ext-str <span class="nv">x</span><span class="o">=</span>y --ext-code <span class="nv">z</span><span class="o">=</span>true</span></span></code></pre></td></tr></table>
+</div>
+</div><p>传入外部变量进行渲染，代码里面使用<code>std.extVar('x')</code>获取传进来的参数值。</p>
 <p>也可以通过</p>
-<pre><code class="language-bash">jsonnet --tla-str x=y --tla-code z=true
-</code></pre>
-<p>传入外部变量，此时生成配置的top level需要是一个function，用来接受传过来的数据：</p>
-<pre><code class="language-js">function(x, z=false){
-    //object content
-}
-</code></pre>
-<h3 id="面向对象">面向对象</h3>
-<p>jsonnet支持object的继承（显然jsonnet并没有class），实际上就是用新的object的值覆盖旧的。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">jsonnet --tla-str <span class="nv">x</span><span class="o">=</span>y --tla-code <span class="nv">z</span><span class="o">=</span>true</span></span></code></pre></td></tr></table>
+</div>
+</div><p>传入外部变量，此时生成配置的top level需要是一个function，用来接受传过来的数据：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">z</span><span class="o">=</span><span class="kc">false</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">//object content
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 class="heading-element" id="面向对象"><span>面向对象</span>
+  <a href="#%e9%9d%a2%e5%90%91%e5%af%b9%e8%b1%a1" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>jsonnet支持object的继承（显然jsonnet并没有class），实际上就是用新的object的值覆盖旧的。</p>
 <p>有一些特殊语法：</p>
 <ul>
 <li><code>::</code>，标示这个key不会在最终生成的object里，但是可以用来引用或者计算；也可以用来移除super中的字段；</li>
@@ -400,174 +376,42 @@
 <li>两个object相加，<code>+</code>是可以省略的；</li>
 </ul>
 <p>之所以说有面向对象的特性，是因为<code>self</code>是动态解释的。</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2023-12-29 18:37:11">更新于 2023-12-29&nbsp;<a class="git-hash" href="YiuTerran/blog/commit/31eccb05e785fb7ab4f5a7d5d074b102956cd4de" rel="external nofollow noopener noreferrer" target="_blank" title="feat: add ytt doc&#10&#10Commit: 31eccb05e785fb7ab4f5a7d5d074b102956cd4de [31eccb0]&#10Author: 姚泰然&#10Date: 2023-12-29 18:37:11"><i class="fa-solid fa-hashtag fa-fw" aria-hidden="true"></i>31eccb0</a></span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="/blogs/posts/jsonnet%E8%AF%95%E7%94%A8/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="YiuTerran/blog/blob/monolingual/content/posts/jsonnet%e8%af%95%e7%94%a8.md?plain=1" title="查看源码" class="link-to-source">查看源码</a></span><span><a href="YiuTerran/blog/edit/monolingual/content/posts/jsonnet%e8%af%95%e7%94%a8.md" title="编辑此页" class="link-to-edit">编辑此页</a></span><span><a href="YiuTerran/blog/issues/new?title=[BUG]%20Jsonnet%E8%AF%95%E7%94%A8&amp;body=%7cField%7cValue%7c%0A%7c-%7c-%7c%0A%7cTitle%7cJsonnet%E8%AF%95%E7%94%A8%7c%0A%7cURL%7chttps://yiuterran.github.io/blogs/posts/jsonnet%E8%AF%95%E7%94%A8/%7c%0A%7cFilename%7cYiuTerran/blog/blob/monolingual/content/posts/jsonnet%e8%af%95%e7%94%a8.md?plain=1%7c" title="报告问题" class="link-to-report">报告问题</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://yiuterran.github.io/blogs/posts/jsonnet%E8%AF%95%E7%94%A8/" data-title="Jsonnet试用" data-hashtags="jsonnet,json"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://yiuterran.github.io/blogs/posts/jsonnet%E8%AF%95%E7%94%A8/" data-hashtag="jsonnet"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://yiuterran.github.io/blogs/posts/jsonnet%E8%AF%95%E7%94%A8/" data-title="Jsonnet试用"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
 
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/blogs/tags/jsonnet/" class="post-tag" title="标签 - Jsonnet">Jsonnet</a><a href="/blogs/tags/json/" class="post-tag" title="标签 - Json">Json</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blogs/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/blogs/posts/linux%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/" class="post-nav-item" rel="prev" title="linux日常使用记录"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>linux日常使用记录</a><a href="/blogs/posts/ytt%E8%AF%95%E7%94%A8/" class="post-nav-item" rel="next" title="Ytt试用">Ytt试用<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
 </article>
 
-
-      
-        <div class="my-4">
-    
-    <a href="https://yiuterran.github.io/blog/tags/jsonnet/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#jsonnet</a>
-    
-    <a href="https://yiuterran.github.io/blog/tags/json/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#json</a>
-    
-</div>
-      
-
-      
-
-
-
-      
-        <div class="py-2">
-  
-    <div class="my-8 flex flex-col items-center md:flex-row">
-      <a href="https://yiuterran.github.io/blog/authors/tryao/" class="md:me-4 text-primary-text h-24 w-24">
-        
-        
-          <img
-            src="https://yiuterran.github.io/blog/images/avatar.png"
-            class="bg-primary-bg w-full rounded-full"
-            alt="Avatar"
-          />
-        
-      </a>
-      <div class="mt-4 w-full md:mt-0 md:w-auto">
-        <a
-          href="https://yiuterran.github.io/blog/authors/tryao/"
-          class="mb-2 block border-b pb-1 text-lg font-bold"
-        >
-          <h3>个人介绍</h3>
-        </a>
-        <span class="block pb-2">兴趣使然的程序员，博而不精，乐学不倦</span>
-        
-          
-          
-          
-          
-          <a href="mailto:yaotairan@gmail.com" class="me-2">
-            <i class="fas fa-envelope"></i>
-          </a>
-        
-          
-          
-          
-          
-          <a href="https://github.com/YiuTerran" class="me-2">
-            <i class="fab fa-github"></i>
-          </a>
-        
-      </div>
-    </div>
-  
-</div>
-
-      
-
-      
-  <div
-    class="-mx-2 mt-4 flex flex-col border-t px-2 pt-4 md:flex-row md:justify-between"
-  >
-    <div>
-      
-        <span class="text-primary-text block font-bold"
-          >上一页</span
-        >
-        <a href="https://yiuterran.github.io/blog/posts/ytt%E8%AF%95%E7%94%A8/" class="block">Ytt试用</a>
-      
-    </div>
-    <div class="mt-4 md:mt-0 md:text-right">
-      
-        <span class="text-primary-text block font-bold">下一页</span>
-        <a href="https://yiuterran.github.io/blog/posts/linux%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/" class="block">linux日常使用记录</a>
-      
-    </div>
-  </div>
-
-
-      
-
-
-
-  <script id="utterances" src="https://utteranc.es/client.js"
-            issue-term=title
-            repo=YiuTerran/blog-comment
-              theme=preferred-color-scheme
-        crossorigin="anonymous"
-        async>
-</script>
-<script>
-    if (storageColorScheme == "Light") {
-      document.getElementById('utterances').setAttribute('theme', 'github-light')
-    } else if (storageColorScheme == "Dark") {
-      document.getElementById('utterances').setAttribute('theme', 'github-dark')
-    }
-</script>
-
-    </div>
-    
-      <div class="col-span-2">
-        
-        
-          <div
-  class="
-    bg-primary-bg
-   prose sticky top-16 z-10 hidden px-6 py-4 lg:block"
->
-  <h3>本页内容</h3>
-</div>
-<div
-  class="sticky-toc  hidden px-6 pb-6 lg:block"
->
-  <nav id="TableOfContents">
-  <ul>
-    <li><a href="#安装">安装</a></li>
-    <li><a href="#语法">语法</a>
-      <ul>
-        <li><a href="#变量">变量</a></li>
-        <li><a href="#函数">函数</a></li>
-        <li><a href="#条件语句">条件语句</a></li>
-        <li><a href="#动态key">动态key</a></li>
-        <li><a href="#列表生成">列表生成</a></li>
-        <li><a href="#文件导入">文件导入</a></li>
-        <li><a href="#异常">异常</a></li>
-        <li><a href="#外部变量">外部变量</a></li>
-        <li><a href="#面向对象">面向对象</a></li>
-      </ul>
-    </li>
-  </ul>
-</nav>
-</div>
-<script>
-  window.addEventListener("DOMContentLoaded", () => {
-    enableStickyToc();
-  });
-</script>
-
-        
-      </div>
-    
-
-    
-    
-  </div>
-
-  
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        hljs.highlightAll();
-      });
-    </script>
-
-          </div>
-        </div>
-      
-    </main>
-    <footer class="pl-scrollbar">
-      <div class="mx-auto w-full max-w-screen-xl"><div class="text-center p-6 pin-b">
-    <p class="text-sm text-tertiary-text">&copy; 2021 <a href="https://github.com/YiuTerran">tryao</a>
- &middot;  Powered by the <a href="https://github.com/wangchucheng/hugo-eureka" class="hover:text-eureka">Eureka</a> theme for <a href="https://gohugo.io" class="hover:text-eureka">Hugo</a></p>
-</div></div>
-    </footer>
-  </body>
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.151.0"><img class="hugo-icon" src="/blogs/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.4.0-alpha.2-20251014082535-5c74d431"><img class="fixit-icon" src="/blogs/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2025</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://gravatar.com/afxmessagebox"target="_blank" rel="external nofollow noopener noreferrer">tryao</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/blogs/lib/cookieconsent/cookieconsent.min.css"><script src="/blogs/lib/autocomplete/autocomplete.min.js" defer></script><script src="/blogs/lib/fuse/fuse.min.js" defer></script><script src="/blogs/lib/json-viewer-element/json-viewer-element.umd.js" defer></script><script src="/blogs/lib/sharer/sharer.min.js" async defer></script><script src="/blogs/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/blogs/posts/jsonnet%E8%AF%95%E7%94%A8/config/page.js" defer></script><script src="/blogs/js/theme.min.js" defer></script><script>
+      window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
+      gtag('config', 'G-C0R8DENDJ0', { 'anonymize_ip': true });
+    </script><script src="https://www.googletagmanager.com/gtag/js?id=G-C0R8DENDJ0" async></script></body>
 </html>

@@ -7,7 +7,6 @@ tags: ["golang","sqlx"]
 categories: []
 series: []
 date: 2023-09-12T15:22:00+08:00
-lastmod: 2023-09-12T15:22:00+08:00
 featuredVideo:
 featuredImage:
 draft: false

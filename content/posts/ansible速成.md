@@ -7,7 +7,6 @@ tags: ["devops", "ansible"]
 categories: []
 series: []
 date: 2024-01-04T14:00:55+08:00
-lastmod: 2024-01-04T14:00:55+08:00
 featuredVideo:
 featuredImage:
 draft: false

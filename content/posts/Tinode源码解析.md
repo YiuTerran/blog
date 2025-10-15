@@ -7,7 +7,6 @@ tags: ["golang", "im", "tinode"]
 categories: []
 series: []
 date: 2022-11-14T19:21:38+08:00
-lastmod: 2022-11-14T19:21:38+08:00
 featuredVideo:
 featuredImage:
 draft: false

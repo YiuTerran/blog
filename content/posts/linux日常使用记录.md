@@ -7,7 +7,6 @@ tags: ["linux"]
 categories: []
 series: []
 date: 2023-11-24T10:51:31+08:00
-lastmod: 2023-11-24T10:51:31+08:00
 featuredVideo:
 featuredImage:
 draft: false

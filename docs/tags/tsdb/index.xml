@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>tsdb on 应许之地</title>
-    <link>https://yiuterran.github.io/blog/tags/tsdb/</link>
-    <description>Recent content in tsdb on 应许之地</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>zh</language>
-    <copyright>&amp;copy; 2021 &lt;a href=&#34;https://github.com/YiuTerran&#34;&gt;tryao&lt;/a&gt;
-</copyright>
-    <lastBuildDate>Thu, 01 Sep 2022 15:47:56 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/tags/tsdb/index.xml" rel="self" type="application/rss+xml" />
+    <title>Tsdb - 标签 - 思海沉钩</title>
+    <link>https://yiuterran.github.io/blogs/tags/tsdb/</link>
+    <description>一些工作学习笔记</description>
+    <generator>Hugo 0.151.0 &amp; FixIt v0.4.0-alpha.2-20251014082535-5c74d431</generator>
+    <language>zh-CN</language>
+    <managingEditor>yaotairan@gmail.com (tryao)</managingEditor>
+    <webMaster>yaotairan@gmail.com (tryao)</webMaster>
+    <lastBuildDate>Mon, 29 May 2023 10:36:13 +0800</lastBuildDate>
+    <atom:link href="https://yiuterran.github.io/blogs/tags/tsdb/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Influxdb Cluster集成</title>
-      <link>https://yiuterran.github.io/blog/posts/influxdb-cluster%E9%9B%86%E6%88%90/</link>
-      <pubDate>Thu, 01 Sep 2022 15:47:56 +0800</pubDate>
-      
-      <guid>https://yiuterran.github.io/blog/posts/influxdb-cluster%E9%9B%86%E6%88%90/</guid>
-      <description>本文记录在golang项目中集成influxdb-cluster需要的知识储备。 术语 database 和MySQL中一致 batch \n分割的多行数据，用来批量写入。 influ</description>
+      <link>https://yiuterran.github.io/blogs/posts/influxdb-cluster%E9%9B%86%E6%88%90/</link>
+      <pubDate>Thu, 01 Sep 2022 15:47:56 +0800</pubDate><author>yaotairan@gmail.com (tryao)</author>
+      <guid>https://yiuterran.github.io/blogs/posts/influxdb-cluster%E9%9B%86%E6%88%90/</guid>
+      <description>&lt;p&gt;本文记录在golang项目中集成&lt;code&gt;influxdb-cluster&lt;/code&gt;需要的知识储备。&lt;/p&gt;&#xA;&lt;h2 class=&#34;heading-element&#34; id=&#34;术语&#34;&gt;&lt;span&gt;术语&lt;/span&gt;&#xA;  &lt;a href=&#34;#%e6%9c%af%e8%af%ad&#34; class=&#34;heading-mark&#34;&gt;&#xA;    &lt;svg class=&#34;octicon octicon-link&#34; viewBox=&#34;0 0 16 16&#34; version=&#34;1.1&#34; width=&#34;16&#34; height=&#34;16&#34; aria-hidden=&#34;true&#34;&gt;&lt;path d=&#34;m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z&#34;&gt;&lt;/path&gt;&lt;/svg&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h2&gt;&lt;h3 class=&#34;heading-element&#34; id=&#34;database&#34;&gt;&lt;span&gt;database&lt;/span&gt;&#xA;  &lt;a href=&#34;#database&#34; class=&#34;heading-mark&#34;&gt;&#xA;    &lt;svg class=&#34;octicon octicon-link&#34; viewBox=&#34;0 0 16 16&#34; version=&#34;1.1&#34; width=&#34;16&#34; height=&#34;16&#34; aria-hidden=&#34;true&#34;&gt;&lt;path d=&#34;m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z&#34;&gt;&lt;/path&gt;&lt;/svg&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h3&gt;&lt;p&gt;和MySQL中一致&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

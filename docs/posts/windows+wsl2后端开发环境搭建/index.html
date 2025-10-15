@@ -1,393 +1,385 @@
 <!DOCTYPE html>
-<html
-  lang="zh"
-  dir="ltr"
-  
-><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>Windows&#43;wsl2后端开发环境搭建 - 思海沉钩</title><meta name="author" content="tryao">
+<meta name="description" content="2023/11/16 Update: wsl2 2.0通过镜像网络解决了所有网络问题，已经不用折腾了。
+2023/2/2 Update: wsl已经解决了systemd和网络问题，现在已经基本无障碍使用，移除了大部分无用的配置步骤。
+"><meta name="keywords" content='wsl'>
+  <meta itemprop="name" content="Windows&#43;wsl2后端开发环境搭建">
+  <meta itemprop="description" content="2023/11/16 Update: wsl2 2.0通过镜像网络解决了所有网络问题，已经不用折腾了。
+2023/2/2 Update: wsl已经解决了systemd和网络问题，现在已经基本无障碍使用，移除了大部分无用的配置步骤。">
+  <meta itemprop="datePublished" content="2022-03-04T20:54:01+08:00">
+  <meta itemprop="dateModified" content="2023-11-16T15:00:50+08:00">
+  <meta itemprop="wordCount" content="3066">
+  <meta itemprop="keywords" content="Wsl"><meta property="og:url" content="https://yiuterran.github.io/blogs/posts/windows&#43;wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+  <meta property="og:site_name" content="思海沉钩">
+  <meta property="og:title" content="Windows&#43;wsl2后端开发环境搭建">
+  <meta property="og:description" content="2023/11/16 Update: wsl2 2.0通过镜像网络解决了所有网络问题，已经不用折腾了。
+2023/2/2 Update: wsl已经解决了systemd和网络问题，现在已经基本无障碍使用，移除了大部分无用的配置步骤。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2022-03-04T20:54:01+08:00">
+    <meta property="article:modified_time" content="2023-11-16T15:00:50+08:00">
+    <meta property="article:tag" content="Wsl">
 
-
-<title>Windows&#43;wsl2后端开发环境搭建 | 应许之地</title>
-
-<meta name="generator" content="Hugo Eureka 0.9.3" />
-<link rel="stylesheet" href="https://yiuterran.github.io/blog/css/eureka.min.30cfa2a7d2b5754cd246875caad26d69af1d8567ea53339f6729fe1d0ceee8917d33fcd191d4284da2a5da6359d79cb7.css">
-<script defer src="https://yiuterran.github.io/blog/js/eureka.min.e8043b71b627e3cfd9b2a5de56adf007f5af83dee672ca0c186aa2e29a10d6f648632064d0c00b2fa4d1b11e0f196af3.js"></script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload"
-  href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&amp;family=Noto&#43;Serif&#43;SC:wght@400;600;700&amp;display=swap"
-  as="style" onload="this.onload=null;this.rel='stylesheet'">
-
-
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.4.0/build/styles/solarized-light.min.css"
-   media="print"
-  onload="this.media='all';this.onload=null" crossorigin>
-<script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.4.0/build/highlight.min.js"
-   crossorigin></script>
-  <script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.4.0/build/languages/dart.min.js"
-     crossorigin></script>
-<link rel="stylesheet" href="https://yiuterran.github.io/blog/css/highlightjs.min.2958991528e43eb6fc9b8c4f2b8e052f79c4010718e1d1e888a777620e9ee63021c2c57ec7417a3108019bb8c41943e6.css" media="print" onload="this.media='all';this.onload=null">
-
-
-<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.8c77c7521b1f95ec2031c2a79f5c6a698aa4a0dba5ba649dfbc7f73994cddf3f494be6aac7e5724f35cbf72cfde09703.js"></script>
-
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
-   integrity="sha384-MlJdn/WNKDGXveldHDdyRP1R4CTHr3FeuDNfhsLPYrq2t0UBkUdK2jyTnXPEK1NQ"  media="print"
-  onload="this.media='all';this.onload=null" crossorigin>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js" 
-  integrity="sha384-VQ8d8WVFw0yHhCk5E8I86oOhv48xLpnDZx5T9GogA/Y84DcCKWXDmSDfn13bzFZY"  crossorigin></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js"
-   integrity="sha384-&#43;XBljXPPiv&#43;OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR"  crossorigin></script>
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    renderMathInElement(document.body, {
-      delimiters: [
-        { left: "$$", right: "$$", display: true },
-        { left: "$", right: "$", display: false },
-        { left: "\\(", right: "\\)", display: false },
-        { left: "\\[", right: "\\]", display: true }
-      ],
-    });
-  });
-</script>
-
-
-<script defer src="https://cdn.jsdelivr.net/npm/mermaid@8.14.0/dist/mermaid.min.js" 
-  integrity="sha384-atOyb0FxAgN9LyAc6PEf9BjgwLISyansgdH8/VXQH8p2o5vfrRgmGIJ2Sg22L0A0"  crossorigin></script>
-
-
-<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
-
-<meta name="description"
-  content="2023/11/16 Update: wsl2 2.0通过镜像网络解决了所有网络问题，已经不用折腾了。 2023/2/2 Update: wsl已经解决了systemd和网络问题，现在已经基本无障碍使用，移除了大部分无用的配">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [{
-      "@type": "ListItem",
-      "position": 1 ,
-      "name":"文章列表",
-      "item":"https://yiuterran.github.io/blog/posts/"},{
-      "@type": "ListItem",
-      "position": 2 ,
-      "name":"Windows+wsl2后端开发环境搭建",
-      "item":"https://yiuterran.github.io/blog/posts/windows+wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"}]
-}
-</script>
-
-
-
-<script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "Article",
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Windows&#43;wsl2后端开发环境搭建">
+  <meta name="twitter:description" content="2023/11/16 Update: wsl2 2.0通过镜像网络解决了所有网络问题，已经不用折腾了。
+2023/2/2 Update: wsl已经解决了systemd和网络问题，现在已经基本无障碍使用，移除了大部分无用的配置步骤。">
+<meta name="application-name" content="思海沉钩">
+<meta name="apple-mobile-web-app-title" content="思海沉钩"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/blogs/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/blogs/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/blogs/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/blogs/apple-touch-icon.png"><link rel="mask-icon" href="/blogs/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="https://yiuterran.github.io/blogs/posts/windows&#43;wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" title="Windows&#43;wsl2后端开发环境搭建 - 思海沉钩" /><link rel="prev" type="text/html" href="https://yiuterran.github.io/blogs/posts/gb28181%E8%A7%A3%E6%9E%90/" title="Gb28181解析" /><link rel="next" type="text/html" href="https://yiuterran.github.io/blogs/posts/golang%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A6%81%E7%82%B9/" title="Golang定时器要点" /><link rel="alternate" type="text/markdown" href="https://yiuterran.github.io/blogs/posts/windows+wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/index.md" title="Windows+wsl2后端开发环境搭建 - 思海沉钩"><link rel="stylesheet" href="/blogs/css/config.min.css"><link rel="stylesheet" href="/blogs/css/style.min.css"><link rel="preload" href="/blogs/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/blogs/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/blogs/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/blogs/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Windows+wsl2后端开发环境搭建",
+    "inLanguage": "zh-CN",
     "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "https://yiuterran.github.io/blog/posts/windows+wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"
-    },
-    "headline": "Windows\u002bwsl2后端开发环境搭建 | 应许之地","datePublished": "2022-03-04T20:54:01+08:00",
-    "dateModified": "2022-03-04T20:54:01+08:00",
-    "wordCount":  3014 ,
-    "author": {
+      "@type": "WebPage",
+      "@id": "https:\/\/yiuterran.github.io\/blogs\/posts\/windows\u002bwsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA\/"
+    },"genre": "posts","keywords": "wsl","wordcount":  3066 ,
+    "url": "https:\/\/yiuterran.github.io\/blogs\/posts\/windows\u002bwsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA\/","datePublished": "2022-03-04T20:54:01+08:00","dateModified": "2023-11-16T15:00:50+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
         "@type": "Person",
-        "name": ["tryao"]
-    },
-    "publisher": {
-        "@type": "Person",
-        "name": "C. Wang",
-        "logo": {
-            "@type": "ImageObject",
-            "url": "https://yiuterran.github.io/blog/images/icon.png"
-        }
-        },
-    "description": "2023\/11\/16 Update: wsl2 2.0通过镜像网络解决了所有网络问题，已经不用折腾了。 2023\/2\/2 Update: wsl已经解决了systemd和网络问题，现在已经基本无障碍使用，移除了大部分无用的配"
-}
-</script><meta property="og:title" content="Windows&#43;wsl2后端开发环境搭建 | 应许之地" />
-<meta property="og:type" content="article" />
-
-
-<meta property="og:image" content="https://yiuterran.github.io/blog/images/icon.png">
-
-
-<meta property="og:url" content="https://yiuterran.github.io/blog/posts/windows&#43;wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" />
-
-
-
-
-<meta property="og:description" content="2023/11/16 Update: wsl2 2.0通过镜像网络解决了所有网络问题，已经不用折腾了。 2023/2/2 Update: wsl已经解决了systemd和网络问题，现在已经基本无障碍使用，移除了大部分无用的配" />
-
-
-
-
-<meta property="og:locale" content="zh" />
-
-
-
-
-<meta property="og:site_name" content="应许之地" />
-
-
-
-
-
-
-<meta property="article:published_time" content="2022-03-04T20:54:01&#43;08:00" />
-
-
-<meta property="article:modified_time" content="2022-03-04T20:54:01&#43;08:00" />
-
-
-
-<meta property="article:section" content="posts" />
-
-
-<meta property="article:tag" content="wsl" />
-
-
-
-
-
-
-  <body class="flex min-h-screen flex-col">
-    <header
-      class="min-h-16 pl-scrollbar bg-secondary-bg fixed z-50 flex w-full items-center shadow-sm"
-    >
-      <div class="mx-auto w-full max-w-screen-xl"><script>
-    let storageColorScheme = localStorage.getItem("lightDarkMode")
-    if (((storageColorScheme == 'Auto' || storageColorScheme == null) && window.matchMedia("(prefers-color-scheme: dark)").matches) || storageColorScheme == "Dark") {
-        document.getElementsByTagName('html')[0].classList.add('dark')
-    }
-</script>
-<nav class="flex items-center justify-between flex-wrap px-4 py-4 md:py-0">
-    <a href="https://yiuterran.github.io/blog/" class="me-6 text-primary-text text-xl font-bold">应许之地</a>
-    <button id="navbar-btn" class="md:hidden flex items-center px-3 py-2" aria-label="Open Navbar">
-        <i class="fas fa-bars"></i>
-    </button>
-
-    <div id="target"
-        class="hidden block md:flex md:grow md:justify-between md:items-center w-full md:w-auto text-primary-text z-20">
-        <div class="md:flex md:h-16 text-sm md:grow pb-4 md:pb-0 border-b md:border-b-0">
-            <a href="https://yiuterran.github.io/blog/authors/tryao/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  border-transparent  me-4">作者</a>
-            <a href="https://yiuterran.github.io/blog/posts/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  selected-menu-item  me-4">文章</a>
-        </div>
-
-        <div class="flex">
-            <div class="relative pt-4 md:pt-0">
-                <div class="cursor-pointer hover:text-eureka" id="lightDarkMode">
-                    <i class="fas fa-adjust"></i>
-                </div>
-                <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-30" id="is-open">
-                </div>
-                <div class="absolute flex flex-col start-0 md:start-auto end-auto md:end-0 hidden bg-secondary-bg w-48 rounded py-2 border border-tertiary-bg cursor-pointer z-40"
-                    id='lightDarkOptions'>
-                    <span class="px-4 py-1 hover:text-eureka" name="Light">浅色</span>
-                    <span class="px-4 py-1 hover:text-eureka" name="Dark">深色</span>
-                    <span class="px-4 py-1 hover:text-eureka" name="Auto">自动</span>
-                </div>
+        "name": "tryao"
+      },"description": ""
+  }
+  </script><script src="/blogs/js/head/color-scheme.min.js"></script></head>
+  <body data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/blogs/" title="思海沉钩"><span class="header-title-text">思海沉钩</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/blogs/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item">
+              <a class="menu-link" href="/blogs/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item">
+              <a class="menu-link" href="/blogs/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+              <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch" title="切换主题">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/blogs/" title="思海沉钩"><span class="header-title-text">思海沉钩</span></a><span class="header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+              </span>
             </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li class="menu-item"><a class="menu-link" href="/blogs/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item"><a class="menu-link" href="/blogs/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item"><a class="menu-link" href="/blogs/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item menu-system">
+          <span class="menu-system-item theme-switch" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
+      </ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>Windows&#43;wsl2后端开发环境搭建</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://gravatar.com/afxmessagebox" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img class="avatar" src='https://avatars.githubusercontent.com/u/5930695?v=4' alt="tryao" height="16" width="16">&nbsp;tryao</a></span><span class="post-included-in">&nbsp;收录于 <a href="/blogs/categories/%E7%9E%8E%E6%8A%98%E8%85%BE/" class="post-category" title="分类 - 瞎折腾"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 瞎折腾</a></span></div><div class="post-meta-line"><span title="发布于 2022-03-04 20:54:01"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2022-03-04">2022-03-04</time></span>&nbsp;<span title="更新于 2023-11-16 15:00:50"><i class="fa-regular fa-calendar-check fa-fw me-1" aria-hidden="true"></i><time datetime="2023-11-16">2023-11-16</time></span>&nbsp;<span title="3066 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 3100 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 7 分钟</span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
         </div>
-    </div>
-
-    <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-0" id="is-open-mobile">
-    </div>
-
-</nav>
-<script>
-    
-    let element = document.getElementById('lightDarkMode')
-    if (storageColorScheme == null || storageColorScheme == 'Auto') {
-        document.addEventListener('DOMContentLoaded', () => {
-            window.matchMedia("(prefers-color-scheme: dark)").addEventListener('change', switchDarkMode)
-        })
-    } else if (storageColorScheme == "Light") {
-        element.firstElementChild.classList.remove('fa-adjust')
-        element.firstElementChild.setAttribute("data-icon", 'sun')
-        element.firstElementChild.classList.add('fa-sun')
-    } else if (storageColorScheme == "Dark") {
-        element.firstElementChild.classList.remove('fa-adjust')
-        element.firstElementChild.setAttribute("data-icon", 'moon')
-        element.firstElementChild.classList.add('fa-moon')
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        getcolorscheme();
-        switchBurger();
-    });
-</script>
-</div>
-    </header>
-    <main class="grow pt-16">
-        <div class="pl-scrollbar">
-          <div class="mx-auto w-full max-w-screen-xl lg:px-4 xl:px-8">
-  
-  
-  <div class="grid grid-cols-2 gap-4 lg:grid-cols-8 lg:pt-12">
-    <div
-      class=" bg-secondary-bg col-span-2 rounded px-6 py-8 lg:col-span-6"
-    >
-      <article class="prose">
-  <h1 class="mb-4">Windows&#43;wsl2后端开发环境搭建</h1>
-
-  <div
-  class="text-tertiary-text not-prose mt-2 flex flex-row flex-wrap items-center"
->
-  <div class="me-6 my-2">
-    <i class="fas fa-calendar me-1"></i>
-    <span
-      >2022-03-04</span
-    >
-  </div>
-  <div class="me-6 my-2">
-    <i class="fas fa-clock me-1"></i>
-    <span>7分钟阅读时长</span>
-  </div>
-
-  
-    <div class="me-6 my-2">
-      <i class="fas fa-folder me-1"></i>
-      
-        <a href="https://yiuterran.github.io/blog/categories/%E7%9E%8E%E6%8A%98%E8%85%BE/" class="hover:text-eureka"
-          >瞎折腾</a
-        >
-      
-    </div>
-  
-
-  
-</div>
-
-
-  
-  
-
-  <p>2023/11/16 Update: wsl2 2.0通过镜像网络解决了所有网络问题，已经不用折腾了。</p>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#准备工作">准备工作</a>
+          <ul>
+            <li><a href="#网络准备">网络准备</a></li>
+            <li><a href="#windows命令行工具">windows命令行工具</a></li>
+            <li><a href="#安装包管理器">安装包管理器</a></li>
+            <li><a href="#安装字体">安装字体</a></li>
+            <li><a href="#配置pwsh">配置pwsh</a></li>
+          </ul>
+        </li>
+        <li><a href="#安装wsl2">安装wsl2</a>
+          <ul>
+            <li><a href="#配置linux">配置linux</a></li>
+            <li><a href="#配置wsl">配置wsl</a></li>
+          </ul>
+        </li>
+        <li><a href="#注意事项">注意事项</a></li>
+        <li><a href="#附常用alias">附：常用alias</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p>2023/11/16 Update: wsl2 2.0通过镜像网络解决了所有网络问题，已经不用折腾了。</p>
 <p>2023/2/2 Update: wsl已经解决了systemd和网络问题，现在已经基本无障碍使用，移除了大部分无用的配置步骤。</p>
 <p>就我个人而言，目前感觉最理想的后端开发环境还是Intel CPU的MacOS，基本所有常用的后端依赖都可以用homebrew安装，GUI和命令行的结合也是最方便的。不过Windows从10代之后添加了WSL/WSL2，将Linux命令行和Windows开发环境完美的结合起来，目前来说可用性还算不错了。</p>
-<h2 id="准备工作">准备工作</h2>
-<h3 id="网络准备">网络准备</h3>
-<p>由于下面会大量从GitHub下载软件，所以请自备工具保证能够顺利下载。</p>
-<h3 id="windows命令行工具">windows命令行工具</h3>
-<p>win10之前，系统的命令行工具分裂为cmd和pwsh两种，界面都难看的很。所以首先安装<a href="https://github.com/microsoft/terminal/releases">Windows Terminal</a>（以下简称wt），整一个好看一点的终端用。对于天天用命令行的人来说，这个比啥都重要。如果是win11，系统自带了wt，但是版本较老，建议更新到最新版。</p>
-<p>然后安装最新的powershell，下载地址在<a href="https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.2">这里</a>，目前最新版是powershell7.  pwsh7其实是开源的shell，在linux/macos上都能用，不过这玩意最大的问题是启动速度实在太慢，而且语法设计和bash差别太大。bash是把一切都看作文本，pwsh是把一切都看作对象……都是辣鸡设计，还是python好使。</p>
+<h2 class="heading-element" id="准备工作"><span>准备工作</span>
+  <a href="#%e5%87%86%e5%a4%87%e5%b7%a5%e4%bd%9c" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h3 class="heading-element" id="网络准备"><span>网络准备</span>
+  <a href="#%e7%bd%91%e7%bb%9c%e5%87%86%e5%a4%87" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>由于下面会大量从GitHub下载软件，所以请自备工具保证能够顺利下载。</p>
+<h3 class="heading-element" id="windows命令行工具"><span>windows命令行工具</span>
+  <a href="#windows%e5%91%bd%e4%bb%a4%e8%a1%8c%e5%b7%a5%e5%85%b7" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>win10之前，系统的命令行工具分裂为cmd和pwsh两种，界面都难看的很。所以首先安装<a href="https://github.com/microsoft/terminal/releases"target="_blank" rel="external nofollow noopener noreferrer">Windows Terminal</a>（以下简称wt），整一个好看一点的终端用。对于天天用命令行的人来说，这个比啥都重要。如果是win11，系统自带了wt，但是版本较老，建议更新到最新版。</p>
+<p>然后安装最新的powershell，下载地址在<a href="https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.2"target="_blank" rel="external nofollow noopener noreferrer">这里</a>，目前最新版是powershell7.  pwsh7其实是开源的shell，在linux/macos上都能用，不过这玩意最大的问题是启动速度实在太慢，而且语法设计和bash差别太大。bash是把一切都看作文本，pwsh是把一切都看作对象……都是辣鸡设计，还是python好使。</p>
 <p>安装的时候请注意选中添加环境变量，<code>Open here</code>那个那个建议不要选中，wt自带有这个功能。装完之后pwsh7会自动注册到wt里。</p>
-<h3 id="安装包管理器">安装包管理器</h3>
-<p>linux下有apt/yum/pacman之类的包管理工具，mac也有homebrew/macport，windows下实际上也有对应的包管理工具，如scoop/Chocolatey或者官方的winget. 这里以scoop为例（choco不需要翻墙，但是源里面包要少一些）：</p>
+<h3 class="heading-element" id="安装包管理器"><span>安装包管理器</span>
+  <a href="#%e5%ae%89%e8%a3%85%e5%8c%85%e7%ae%a1%e7%90%86%e5%99%a8" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>linux下有apt/yum/pacman之类的包管理工具，mac也有homebrew/macport，windows下实际上也有对应的包管理工具，如scoop/Chocolatey或者官方的winget. 这里以scoop为例（choco不需要翻墙，但是源里面包要少一些）：</p>
 <p>打开wt，输入<code>Set-ExecutionPolicy RemoteSigned -scope CurrentUser</code>打开安装权限。然后输入</p>
-<pre><code class="language-powershell">iwr -useb get.scoop.sh | iex
-</code></pre>
-<p>安装即可。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">iwr </span><span class="n">-useb</span> <span class="n">get</span><span class="p">.</span><span class="py">scoop</span><span class="p">.</span><span class="py">sh</span> <span class="p">|</span> <span class="n">iex</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>安装即可。</p>
 <p>然后替换掉scoop的源，官方源太慢了：</p>
-<pre><code class="language-powershell">scoop bucket rm main
-scoop bucket add main https://mirror.nju.edu.cn/git/scoop-extras.git/ 
-scoop bucket add extras https://mirror.nju.edu.cn/git/scoop-extras.git/ 
-scoop update
-</code></pre>
-<p>使用aria2开启16线程加速下载：</p>
-<pre><code>scoop install aria2
-scoop config aria2-max-connection-per-server 16
-scoop config aria2-split 16
-scoop config aria2-min-split-size 1M
-</code></pre>
-<p>常用的软件可以使用scoop直接安装，如：</p>
-<pre><code class="language-powershell">scoop install git 7zip aria2 python3 typora vlc sumatrapdf
-</code></pre>
-<p>注意：类似vscode这种自带更新功能的软件，不建议使用scoop安装。</p>
-<p>国内有人把其他bucket综合成一个<a href="https://gitee.com/kkzzhizhou/scoop-apps">bucket</a>，也可以根据自己需求使用。默认会安装到C盘，空间紧张的在安装之前可以修改一下：</p>
-<pre><code class="language-powershell">[environment]::setEnvironmentVariable('SCOOP','D:\scoop','User')
-</code></pre>
-<h3 id="安装字体">安装字体</h3>
-<p>类似美化zsh的思路，先安装能显示复杂Unicode符号的字体，到<a href="https://github.com/romkatv/dotfiles-public/tree/master/.local/share/fonts/NerdFonts">这里</a>下载所有的字体并安装到Windows.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">scoop</span> <span class="n">bucket</span> <span class="nb">rm </span><span class="n">main</span>
+</span></span><span class="line"><span class="cl"><span class="n">scoop</span> <span class="n">bucket</span> <span class="n">add</span> <span class="n">main</span> <span class="n">https</span><span class="err">:</span><span class="p">//</span><span class="n">mirror</span><span class="p">.</span><span class="py">nju</span><span class="p">.</span><span class="py">edu</span><span class="p">.</span><span class="n">cn</span><span class="p">/</span><span class="n">git</span><span class="p">/</span><span class="nb">scoop-extras</span><span class="p">.</span><span class="n">git</span><span class="p">/</span> 
+</span></span><span class="line"><span class="cl"><span class="n">scoop</span> <span class="n">bucket</span> <span class="n">add</span> <span class="n">extras</span> <span class="n">https</span><span class="err">:</span><span class="p">//</span><span class="n">mirror</span><span class="p">.</span><span class="py">nju</span><span class="p">.</span><span class="py">edu</span><span class="p">.</span><span class="n">cn</span><span class="p">/</span><span class="n">git</span><span class="p">/</span><span class="nb">scoop-extras</span><span class="p">.</span><span class="n">git</span><span class="p">/</span> 
+</span></span><span class="line"><span class="cl"><span class="n">scoop</span> <span class="n">update</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>使用aria2开启16线程加速下载：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">scoop install aria2
+</span></span><span class="line"><span class="cl">scoop config aria2-max-connection-per-server 16
+</span></span><span class="line"><span class="cl">scoop config aria2-split 16
+</span></span><span class="line"><span class="cl">scoop config aria2-min-split-size 1M</span></span></code></pre></td></tr></table>
+</div>
+</div><p>常用的软件可以使用scoop直接安装，如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">scoop</span> <span class="n">install</span> <span class="n">git</span> <span class="n">7zip</span> <span class="n">aria2</span> <span class="n">python3</span> <span class="n">typora</span> <span class="n">vlc</span> <span class="n">sumatrapdf</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>注意：类似vscode这种自带更新功能的软件，不建议使用scoop安装。</p>
+<p>国内有人把其他bucket综合成一个<a href="https://gitee.com/kkzzhizhou/scoop-apps"target="_blank" rel="external nofollow noopener noreferrer">bucket</a>，也可以根据自己需求使用。默认会安装到C盘，空间紧张的在安装之前可以修改一下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="p">[</span><span class="no">environment</span><span class="p">]::</span><span class="n">setEnvironmentVariable</span><span class="p">(</span><span class="s1">&#39;SCOOP&#39;</span><span class="p">,</span><span class="s1">&#39;D:\scoop&#39;</span><span class="p">,</span><span class="s1">&#39;User&#39;</span><span class="p">)</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 class="heading-element" id="安装字体"><span>安装字体</span>
+  <a href="#%e5%ae%89%e8%a3%85%e5%ad%97%e4%bd%93" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>类似美化zsh的思路，先安装能显示复杂Unicode符号的字体，到<a href="https://github.com/romkatv/dotfiles-public/tree/master/.local/share/fonts/NerdFonts"target="_blank" rel="external nofollow noopener noreferrer">这里</a>下载所有的字体并安装到Windows.</p>
 <p>然后在window terminal里面设置字体，位置见下图 ：</p>
-<p><img src="https://s2.loli.net/2022/03/04/fdsXjivpm18NEoJ.png" alt="image-20220304215714707"></p>
+<p><img loading="lazy" src='https://s2.loli.net/2022/03/04/fdsXjivpm18NEoJ.png' alt="image-20220304215714707"></p>
 <p>设为刚安装的字体就行。</p>
-<h3 id="配置pwsh">配置pwsh</h3>
-<p>类似zsh安装<code>oh-my-zsh</code>，pwsh也有<code>oh-my-posh</code>用来辅助配置：</p>
-<pre><code class="language-powershell">Install-Module oh-my-posh -Scope CurrentUser
-</code></pre>
-<p>有选择的话选全部同意(A)。</p>
+<h3 class="heading-element" id="配置pwsh"><span>配置pwsh</span>
+  <a href="#%e9%85%8d%e7%bd%aepwsh" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>类似zsh安装<code>oh-my-zsh</code>，pwsh也有<code>oh-my-posh</code>用来辅助配置：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">Install-Module</span> <span class="nb">oh-my</span><span class="n">-posh</span> <span class="n">-Scope</span> <span class="n">CurrentUser</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>有选择的话选全部同意(A)。</p>
 <p>然后<code>Update-Module oh-my-posh</code>更新一下。</p>
 <p>然后安装git插件和readLine插件：</p>
-<pre><code class="language-powershell">Install-Module posh-git -Scope CurrentUser
-Update-Module posh-git
-Install-Module PSReadLine -Scope CurrentUser
-</code></pre>
-<p>然后选命令行风格主题，输入<code>Get-PoshThemes</code>，界面上会输出所有风格的主题，找一个自己喜欢的，把名字复制下来。如果你是zsh的<code>powershell10k</code>主题爱好者，pwsh也有个<a href="https://github.com/Kudostoy0u/pwsh10k">类似的</a>供你选择。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">Install-Module</span> <span class="nb">posh-git</span> <span class="n">-Scope</span> <span class="n">CurrentUser</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Update-Module</span> <span class="nb">posh-git</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Install-Module</span> <span class="n">PSReadLine</span> <span class="n">-Scope</span> <span class="n">CurrentUser</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后选命令行风格主题，输入<code>Get-PoshThemes</code>，界面上会输出所有风格的主题，找一个自己喜欢的，把名字复制下来。如果你是zsh的<code>powershell10k</code>主题爱好者，pwsh也有个<a href="https://github.com/Kudostoy0u/pwsh10k"target="_blank" rel="external nofollow noopener noreferrer">类似的</a>供你选择。</p>
 <p>输入</p>
-<pre><code class="language-powershell">notepad $profile
-</code></pre>
-<p>会打开powershell的配置文件，输入：</p>
-<pre><code class="language-powershell"># ========================= Import Modules =======================
-Import-Module posh-git
-Import-Module oh-my-posh
-Import-Module PSReadLine
-
-Set-PoshPrompt -Theme avit
-# ========================= PSReadLine =======================
-# 使用历史命令记录来应用自动补全
-Set-PSReadLineOption -PredictionSource History
-# bash风格快捷键
-Set-PSReadLineOption -EditMode Emacs
-
-# 每次回溯输入历史，光标定位于输入内容末尾
-Set-PSReadLineOption -HistorySearchCursorMovesToEnd
-
-# 设置 Tab 为补全的快捷键
-Set-PSReadLineKeyHandler -Key &quot;Tab&quot; -Function MenuComplete
-
-# 设置向上键为后向搜索历史记录
-Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
-
-# 设置向下键为前向搜索历史纪录
-Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
-</code></pre>
-<p>配置完成后保存关闭，重启pwsh即可生效。</p>
-<p>在oh-my-zsh中的z，可以在powershell中安装<a href="https://github.com/vors/ZLocation">ZLocation</a>来完成类似功能。</p>
-<h2 id="安装wsl2">安装wsl2</h2>
-<p>参考<a href="https://learn.microsoft.com/zh-cn/windows/wsl/install">WSL 安装</a>，新版wsl安装步骤非常简单，比之前手动安装容易的多。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">notepad</span> <span class="nv">$profile</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>会打开powershell的配置文件，输入：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="c"># ========================= Import Modules =======================</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Import-Module</span> <span class="nb">posh-git</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Import-Module</span> <span class="nb">oh-my</span><span class="n">-posh</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Import-Module</span> <span class="n">PSReadLine</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">Set-PoshPrompt</span> <span class="n">-Theme</span> <span class="n">avit</span>
+</span></span><span class="line"><span class="cl"><span class="c"># ========================= PSReadLine =======================</span>
+</span></span><span class="line"><span class="cl"><span class="c"># 使用历史命令记录来应用自动补全</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Set-PSReadLineOption</span> <span class="n">-PredictionSource</span> <span class="nb">History
+</span></span></span><span class="line"><span class="cl"><span class="nb"></span><span class="c"># bash风格快捷键</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Set-PSReadLineOption</span> <span class="n">-EditMode</span> <span class="n">Emacs</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c"># 每次回溯输入历史，光标定位于输入内容末尾</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Set-PSReadLineOption</span> <span class="n">-HistorySearchCursorMovesToEnd</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c"># 设置 Tab 为补全的快捷键</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Set-PSReadLineKeyHandler</span> <span class="n">-Key</span> <span class="s2">&#34;Tab&#34;</span> <span class="n">-Function</span> <span class="n">MenuComplete</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c"># 设置向上键为后向搜索历史记录</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Set-PSReadLineKeyHandler</span> <span class="n">-Key</span> <span class="n">UpArrow</span> <span class="n">-Function</span> <span class="n">HistorySearchBackward</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c"># 设置向下键为前向搜索历史纪录</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Set-PSReadLineKeyHandler</span> <span class="n">-Key</span> <span class="n">DownArrow</span> <span class="n">-Function</span> <span class="n">HistorySearchForward</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>配置完成后保存关闭，重启pwsh即可生效。</p>
+<p>在oh-my-zsh中的z，可以在powershell中安装<a href="https://github.com/vors/ZLocation"target="_blank" rel="external nofollow noopener noreferrer">ZLocation</a>来完成类似功能。</p>
+<h2 class="heading-element" id="安装wsl2"><span>安装wsl2</span>
+  <a href="#%e5%ae%89%e8%a3%85wsl2" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>参考<a href="https://learn.microsoft.com/zh-cn/windows/wsl/install"target="_blank" rel="external nofollow noopener noreferrer">WSL 安装</a>，新版wsl安装步骤非常简单，比之前手动安装容易的多。</p>
 <p>安装完成后可以运行<code>wsl --version</code>，结果中WSL版本应该&gt;2.0了。</p>
-<h3 id="配置linux">配置linux</h3>
-<p>打开Windows Terminal，安装的linux发行版入口应该会自动加到下拉选单里，选中后进入。</p>
+<h3 class="heading-element" id="配置linux"><span>配置linux</span>
+  <a href="#%e9%85%8d%e7%bd%aelinux" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>打开Windows Terminal，安装的linux发行版入口应该会自动加到下拉选单里，选中后进入。</p>
 <p>至于怎么配置Linux我就不写了，根据个人习惯来吧。几个点：</p>
 <ul>
 <li>先用<code>sudo visudo</code>取消sudo必须输入密码，不然能烦死你；</li>
-<li>用<code>zsh</code>替换掉bash，可以使用<a href="https://ohmyz.sh/"><code>oh-my-zsh</code></a>或者<a href="https://z-shell.pages.dev/"><code>zi</code></a>之类的进行配置管理；</li>
+<li>用<code>zsh</code>替换掉bash，可以使用<a href="https://ohmyz.sh/"target="_blank" rel="external nofollow noopener noreferrer"><code>oh-my-zsh</code></a>或者<a href="https://z-shell.pages.dev/"target="_blank" rel="external nofollow noopener noreferrer"><code>zi</code></a>之类的进行配置管理；</li>
 <li>安装<code>lsd</code>, <code>fd</code>, <code>ripgrep</code>, <code>fzf</code>, <code>trash-cli</code>,  <code>z.lua</code>等工具，做好<code>alias</code>；</li>
 <li>使用<code>screen</code>或者<code>tmux</code>进行进程管理；</li>
 <li>配置好vim等；</li>
 </ul>
-<h3 id="配置wsl">配置wsl</h3>
-<p>激活systemd，先确定发行版里面已经安装了<code>systemd</code>，然后编辑<code>/etc/wsl.conf</code>添加：</p>
-<pre><code>[boot]
-systemd=true
-</code></pre>
-<p>然后重启wsl即可，建议等下面操作结束之后再一起重启。</p>
+<h3 class="heading-element" id="配置wsl"><span>配置wsl</span>
+  <a href="#%e9%85%8d%e7%bd%aewsl" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>激活systemd，先确定发行版里面已经安装了<code>systemd</code>，然后编辑<code>/etc/wsl.conf</code>添加：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[boot]
+</span></span><span class="line"><span class="cl">systemd=true</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后重启wsl即可，建议等下面操作结束之后再一起重启。</p>
 <p>配置网络，在windows的home目录下添加<code>.wslconfig</code>，里面内容是：</p>
-<pre><code>[experimental]
-networkingMode=mirrored
-dnsTunneling=true
-firewall=true
-autoProxy=true
-</code></pre>
-<p>如果你是在windows中安装docker desktop，那么直接用就可以。如果是在wsl里面安装了docker，需要配置<code>/etc/docker/daemon.json</code>，在里面加入：<code>&quot;iptables&quot;:false</code>，否则docker可能无法正常使用。</p>
-<h2 id="注意事项">注意事项</h2>
-<ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[experimental]
+</span></span><span class="line"><span class="cl">networkingMode=mirrored
+</span></span><span class="line"><span class="cl">dnsTunneling=true
+</span></span><span class="line"><span class="cl">firewall=true
+</span></span><span class="line"><span class="cl">autoProxy=true</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果你是在windows中安装docker desktop，那么直接用就可以。如果是在wsl里面安装了docker，需要配置<code>/etc/docker/daemon.json</code>，在里面加入：<code>&quot;iptables&quot;:false</code>，否则docker可能无法正常使用。</p>
+<h2 class="heading-element" id="注意事项"><span>注意事项</span>
+  <a href="#%e6%b3%a8%e6%84%8f%e4%ba%8b%e9%a1%b9" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><ol>
 <li>wsl2和windows之间传输文件io性能很差；</li>
 <li>idea支持ssh远程开发，但目前还是beta，不好用；vscode还是比较流畅的，习惯ssh开发的推荐使用该方式；</li>
 <li>如果是本地开发，优先建议在windows下直接使用IDE开发，不要使用wslg，因为很难用；</li>
@@ -400,183 +392,63 @@ autoProxy=true
 <li>在idea里面讲终端设置为：<code>&quot;cmd.exe&quot; /k &quot;wsl.exe&quot;</code>，就可以使用bash做终端了；当然也可以直接用bash的路径；</li>
 <li>如果原来是macos用户，可以在win下使用quicklook实现空格预览，utools实现spotlight（或者直接用powertools里面那个简化的run工具也行），并使用powertoys做快捷键映射：个人比较怀恋ctrl+a/ctrl+e映射到home和end的功能，然后把alt+a/c/v/s/w/r都映射成ctrl，alt+q映射成alt+f4；</li>
 </ol>
-<h2 id="附常用alias">附：常用alias</h2>
-<pre><code class="language-bash">alias ls=&quot;lsd&quot;
-alias rm=&quot;trash&quot;
-alias py=&quot;python3&quot;
-alias find=&quot;fd&quot;
-alias tailf=&quot;tail -F&quot;
-alias start=&quot;cmd.exe /C start&quot;
-</code></pre>
+<h2 class="heading-element" id="附常用alias"><span>附：常用alias</span>
+  <a href="#%e9%99%84%e5%b8%b8%e7%94%a8alias" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">alias</span> <span class="nv">ls</span><span class="o">=</span><span class="s2">&#34;lsd&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">alias</span> <span class="nv">rm</span><span class="o">=</span><span class="s2">&#34;trash&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">alias</span> <span class="nv">py</span><span class="o">=</span><span class="s2">&#34;python3&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">alias</span> <span class="nv">find</span><span class="o">=</span><span class="s2">&#34;fd&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">alias</span> <span class="nv">tailf</span><span class="o">=</span><span class="s2">&#34;tail -F&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">alias</span> <span class="nv">start</span><span class="o">=</span><span class="s2">&#34;cmd.exe /C start&#34;</span></span></span></code></pre></td></tr></table>
+</div>
+</div></div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2023-11-16 15:00:50">更新于 2023-11-16&nbsp;<a class="git-hash" href="YiuTerran/blog/commit/0fc53d9e6877b777c2e31a89fdcb424ebd337ec8" rel="external nofollow noopener noreferrer" target="_blank" title="更新wsl环境配置&#10&#10Commit: 0fc53d9e6877b777c2e31a89fdcb424ebd337ec8 [0fc53d9]&#10Author: 姚泰然&#10Date: 2023-11-16 15:00:50"><i class="fa-solid fa-hashtag fa-fw" aria-hidden="true"></i>0fc53d9</a></span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="/blogs/posts/windows&#43;wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="YiuTerran/blog/blob/monolingual/content/posts/windows&#43;wsl2%e5%90%8e%e7%ab%af%e5%bc%80%e5%8f%91%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba.md?plain=1" title="查看源码" class="link-to-source">查看源码</a></span><span><a href="YiuTerran/blog/edit/monolingual/content/posts/windows&#43;wsl2%e5%90%8e%e7%ab%af%e5%bc%80%e5%8f%91%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba.md" title="编辑此页" class="link-to-edit">编辑此页</a></span><span><a href="YiuTerran/blog/issues/new?title=[BUG]%20Windows%2Bwsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA&amp;body=%7cField%7cValue%7c%0A%7c-%7c-%7c%0A%7cTitle%7cWindows%2Bwsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%7c%0A%7cURL%7chttps://yiuterran.github.io/blogs/posts/windows&#43;wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/%7c%0A%7cFilename%7cYiuTerran/blog/blob/monolingual/content/posts/windows&#43;wsl2%e5%90%8e%e7%ab%af%e5%bc%80%e5%8f%91%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba.md?plain=1%7c" title="报告问题" class="link-to-report">报告问题</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://yiuterran.github.io/blogs/posts/windows&#43;wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" data-title="Windows&#43;wsl2后端开发环境搭建" data-hashtags="wsl"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://yiuterran.github.io/blogs/posts/windows&#43;wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" data-hashtag="wsl"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://yiuterran.github.io/blogs/posts/windows&#43;wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" data-title="Windows&#43;wsl2后端开发环境搭建"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
 
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/blogs/tags/wsl/" class="post-tag" title="标签 - Wsl">Wsl</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blogs/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/blogs/posts/gb28181%E8%A7%A3%E6%9E%90/" class="post-nav-item" rel="prev" title="Gb28181解析"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>Gb28181解析</a><a href="/blogs/posts/golang%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A6%81%E7%82%B9/" class="post-nav-item" rel="next" title="Golang定时器要点">Golang定时器要点<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
 </article>
 
-
-      
-        <div class="my-4">
-    
-    <a href="https://yiuterran.github.io/blog/tags/wsl/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#wsl</a>
-    
-</div>
-      
-
-      
-
-
-
-      
-        <div class="py-2">
-  
-    <div class="my-8 flex flex-col items-center md:flex-row">
-      <a href="https://yiuterran.github.io/blog/authors/tryao/" class="md:me-4 text-primary-text h-24 w-24">
-        
-        
-          <img
-            src="https://yiuterran.github.io/blog/images/avatar.png"
-            class="bg-primary-bg w-full rounded-full"
-            alt="Avatar"
-          />
-        
-      </a>
-      <div class="mt-4 w-full md:mt-0 md:w-auto">
-        <a
-          href="https://yiuterran.github.io/blog/authors/tryao/"
-          class="mb-2 block border-b pb-1 text-lg font-bold"
-        >
-          <h3>个人介绍</h3>
-        </a>
-        <span class="block pb-2">兴趣使然的程序员，博而不精，乐学不倦</span>
-        
-          
-          
-          
-          
-          <a href="mailto:yaotairan@gmail.com" class="me-2">
-            <i class="fas fa-envelope"></i>
-          </a>
-        
-          
-          
-          
-          
-          <a href="https://github.com/YiuTerran" class="me-2">
-            <i class="fab fa-github"></i>
-          </a>
-        
-      </div>
-    </div>
-  
-</div>
-
-      
-
-      
-  <div
-    class="-mx-2 mt-4 flex flex-col border-t px-2 pt-4 md:flex-row md:justify-between"
-  >
-    <div>
-      
-        <span class="text-primary-text block font-bold"
-          >上一页</span
-        >
-        <a href="https://yiuterran.github.io/blog/posts/golang%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A6%81%E7%82%B9/" class="block">Golang定时器要点</a>
-      
-    </div>
-    <div class="mt-4 md:mt-0 md:text-right">
-      
-        <span class="text-primary-text block font-bold">下一页</span>
-        <a href="https://yiuterran.github.io/blog/posts/gb28181%E8%A7%A3%E6%9E%90/" class="block">Gb28181解析</a>
-      
-    </div>
-  </div>
-
-
-      
-
-
-
-  <script id="utterances" src="https://utteranc.es/client.js"
-            issue-term=title
-            repo=YiuTerran/blog-comment
-              theme=preferred-color-scheme
-        crossorigin="anonymous"
-        async>
-</script>
-<script>
-    if (storageColorScheme == "Light") {
-      document.getElementById('utterances').setAttribute('theme', 'github-light')
-    } else if (storageColorScheme == "Dark") {
-      document.getElementById('utterances').setAttribute('theme', 'github-dark')
-    }
-</script>
-
-    </div>
-    
-      <div class="col-span-2">
-        
-        
-          <div
-  class="
-    bg-primary-bg
-   prose sticky top-16 z-10 hidden px-6 py-4 lg:block"
->
-  <h3>本页内容</h3>
-</div>
-<div
-  class="sticky-toc  hidden px-6 pb-6 lg:block"
->
-  <nav id="TableOfContents">
-  <ul>
-    <li><a href="#准备工作">准备工作</a>
-      <ul>
-        <li><a href="#网络准备">网络准备</a></li>
-        <li><a href="#windows命令行工具">windows命令行工具</a></li>
-        <li><a href="#安装包管理器">安装包管理器</a></li>
-        <li><a href="#安装字体">安装字体</a></li>
-        <li><a href="#配置pwsh">配置pwsh</a></li>
-      </ul>
-    </li>
-    <li><a href="#安装wsl2">安装wsl2</a>
-      <ul>
-        <li><a href="#配置linux">配置linux</a></li>
-        <li><a href="#配置wsl">配置wsl</a></li>
-      </ul>
-    </li>
-    <li><a href="#注意事项">注意事项</a></li>
-    <li><a href="#附常用alias">附：常用alias</a></li>
-  </ul>
-</nav>
-</div>
-<script>
-  window.addEventListener("DOMContentLoaded", () => {
-    enableStickyToc();
-  });
-</script>
-
-        
-      </div>
-    
-
-    
-    
-  </div>
-
-  
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        hljs.highlightAll();
-      });
-    </script>
-
-          </div>
-        </div>
-      
-    </main>
-    <footer class="pl-scrollbar">
-      <div class="mx-auto w-full max-w-screen-xl"><div class="text-center p-6 pin-b">
-    <p class="text-sm text-tertiary-text">&copy; 2021 <a href="https://github.com/YiuTerran">tryao</a>
- &middot;  Powered by the <a href="https://github.com/wangchucheng/hugo-eureka" class="hover:text-eureka">Eureka</a> theme for <a href="https://gohugo.io" class="hover:text-eureka">Hugo</a></p>
-</div></div>
-    </footer>
-  </body>
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.151.0"><img class="hugo-icon" src="/blogs/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.4.0-alpha.2-20251014082535-5c74d431"><img class="fixit-icon" src="/blogs/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2025</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://gravatar.com/afxmessagebox"target="_blank" rel="external nofollow noopener noreferrer">tryao</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/blogs/lib/cookieconsent/cookieconsent.min.css"><script src="/blogs/lib/autocomplete/autocomplete.min.js" defer></script><script src="/blogs/lib/fuse/fuse.min.js" defer></script><script src="/blogs/lib/sharer/sharer.min.js" async defer></script><script src="/blogs/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/blogs/posts/windows+wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/config/page.js" defer></script><script src="/blogs/js/theme.min.js" defer></script><script>
+      window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
+      gtag('config', 'G-C0R8DENDJ0', { 'anonymize_ip': true });
+    </script><script src="https://www.googletagmanager.com/gtag/js?id=G-C0R8DENDJ0" async></script></body>
 </html>

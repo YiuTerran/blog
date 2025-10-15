@@ -7,7 +7,6 @@ tags: ["golang", "test"]
 categories: []
 series: []
 date: 2022-09-05T18:10:06+08:00
-lastmod: 2022-09-05T18:10:06+08:00
 featuredVideo:
 featuredImage:
 draft: false

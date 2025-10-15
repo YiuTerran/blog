@@ -7,7 +7,6 @@ tags: ["frontend","react"]
 categories: []
 series: []
 date: 2023-11-29T11:23:08+08:00
-lastmod: 2023-11-29T11:23:08+08:00
 featuredVideo:
 featuredImage:
 draft: true

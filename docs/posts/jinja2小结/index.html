@@ -1,486 +1,226 @@
 <!DOCTYPE html>
-<html
-  lang="zh"
-  dir="ltr"
-  
-><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>Jinja2小结 - 思海沉钩</title><meta name="author" content="tryao">
+<meta name="description" content="之前写Python的时候其实有接触过一些jinja2，不过没有怎么用过实际上。毕竟前后端分离之后，这些模板语言在web开发上用处并不大。不过ansible选用了它做渲染模板，所以还是需要深入学习一下。比较蛋疼的是，k8s这边因为都是golang生态，所以用的是go template，那就是另外一套东西了。
+"><meta name="keywords" content='devops'>
+  <meta itemprop="name" content="Jinja2小结">
+  <meta itemprop="description" content="之前写Python的时候其实有接触过一些jinja2，不过没有怎么用过实际上。毕竟前后端分离之后，这些模板语言在web开发上用处并不大。不过ansible选用了它做渲染模板，所以还是需要深入学习一下。比较蛋疼的是，k8s这边因为都是golang生态，所以用的是go template，那就是另外一套东西了。">
+  <meta itemprop="datePublished" content="2024-01-05T08:55:48+08:00">
+  <meta itemprop="dateModified" content="2024-01-08T09:03:35+08:00">
+  <meta itemprop="wordCount" content="840">
+  <meta itemprop="keywords" content="Devops"><meta property="og:url" content="https://yiuterran.github.io/blogs/posts/jinja2%E5%B0%8F%E7%BB%93/">
+  <meta property="og:site_name" content="思海沉钩">
+  <meta property="og:title" content="Jinja2小结">
+  <meta property="og:description" content="之前写Python的时候其实有接触过一些jinja2，不过没有怎么用过实际上。毕竟前后端分离之后，这些模板语言在web开发上用处并不大。不过ansible选用了它做渲染模板，所以还是需要深入学习一下。比较蛋疼的是，k8s这边因为都是golang生态，所以用的是go template，那就是另外一套东西了。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-01-05T08:55:48+08:00">
+    <meta property="article:modified_time" content="2024-01-08T09:03:35+08:00">
+    <meta property="article:tag" content="Devops">
 
-
-<title>Jinja2小结 | 应许之地</title>
-
-<meta name="generator" content="Hugo Eureka 0.9.3" />
-<link rel="stylesheet" href="https://yiuterran.github.io/blog/css/eureka.min.30cfa2a7d2b5754cd246875caad26d69af1d8567ea53339f6729fe1d0ceee8917d33fcd191d4284da2a5da6359d79cb7.css">
-<script defer src="https://yiuterran.github.io/blog/js/eureka.min.e8043b71b627e3cfd9b2a5de56adf007f5af83dee672ca0c186aa2e29a10d6f648632064d0c00b2fa4d1b11e0f196af3.js"></script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload"
-  href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&amp;family=Noto&#43;Serif&#43;SC:wght@400;600;700&amp;display=swap"
-  as="style" onload="this.onload=null;this.rel='stylesheet'">
-
-
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.4.0/build/styles/solarized-light.min.css"
-   media="print"
-  onload="this.media='all';this.onload=null" crossorigin>
-<script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.4.0/build/highlight.min.js"
-   crossorigin></script>
-  <script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.4.0/build/languages/dart.min.js"
-     crossorigin></script>
-<link rel="stylesheet" href="https://yiuterran.github.io/blog/css/highlightjs.min.2958991528e43eb6fc9b8c4f2b8e052f79c4010718e1d1e888a777620e9ee63021c2c57ec7417a3108019bb8c41943e6.css" media="print" onload="this.media='all';this.onload=null">
-
-
-<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.8c77c7521b1f95ec2031c2a79f5c6a698aa4a0dba5ba649dfbc7f73994cddf3f494be6aac7e5724f35cbf72cfde09703.js"></script>
-
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
-   integrity="sha384-MlJdn/WNKDGXveldHDdyRP1R4CTHr3FeuDNfhsLPYrq2t0UBkUdK2jyTnXPEK1NQ"  media="print"
-  onload="this.media='all';this.onload=null" crossorigin>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js" 
-  integrity="sha384-VQ8d8WVFw0yHhCk5E8I86oOhv48xLpnDZx5T9GogA/Y84DcCKWXDmSDfn13bzFZY"  crossorigin></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js"
-   integrity="sha384-&#43;XBljXPPiv&#43;OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR"  crossorigin></script>
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    renderMathInElement(document.body, {
-      delimiters: [
-        { left: "$$", right: "$$", display: true },
-        { left: "$", right: "$", display: false },
-        { left: "\\(", right: "\\)", display: false },
-        { left: "\\[", right: "\\]", display: true }
-      ],
-    });
-  });
-</script>
-
-
-<script defer src="https://cdn.jsdelivr.net/npm/mermaid@8.14.0/dist/mermaid.min.js" 
-  integrity="sha384-atOyb0FxAgN9LyAc6PEf9BjgwLISyansgdH8/VXQH8p2o5vfrRgmGIJ2Sg22L0A0"  crossorigin></script>
-
-
-<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
-
-<meta name="description"
-  content="之前写Python的时候其实有接触过一些jinja2，不过没有怎么用过实际上。毕竟前后端分离之后，这些模板语言在web开发上用处并不大。不过ansib">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [{
-      "@type": "ListItem",
-      "position": 1 ,
-      "name":"文章列表",
-      "item":"https://yiuterran.github.io/blog/posts/"},{
-      "@type": "ListItem",
-      "position": 2 ,
-      "name":"Jinja2小结",
-      "item":"https://yiuterran.github.io/blog/posts/jinja2%E5%B0%8F%E7%BB%93/"}]
-}
-</script>
-
-
-
-<script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "Article",
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Jinja2小结">
+  <meta name="twitter:description" content="之前写Python的时候其实有接触过一些jinja2，不过没有怎么用过实际上。毕竟前后端分离之后，这些模板语言在web开发上用处并不大。不过ansible选用了它做渲染模板，所以还是需要深入学习一下。比较蛋疼的是，k8s这边因为都是golang生态，所以用的是go template，那就是另外一套东西了。">
+<meta name="application-name" content="思海沉钩">
+<meta name="apple-mobile-web-app-title" content="思海沉钩"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/blogs/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/blogs/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/blogs/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/blogs/apple-touch-icon.png"><link rel="mask-icon" href="/blogs/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="https://yiuterran.github.io/blogs/posts/jinja2%E5%B0%8F%E7%BB%93/" title="Jinja2小结 - 思海沉钩" /><link rel="prev" type="text/html" href="https://yiuterran.github.io/blogs/posts/ansible%E9%80%9F%E6%88%90/" title="Ansible速成" /><link rel="next" type="text/html" href="https://yiuterran.github.io/blogs/posts/python%E6%8A%80%E6%9C%AF%E6%A0%88%E6%9B%B4%E6%96%B0/" title="Python技术栈更新" /><link rel="alternate" type="text/markdown" href="https://yiuterran.github.io/blogs/posts/jinja2%E5%B0%8F%E7%BB%93/index.md" title="Jinja2小结 - 思海沉钩"><link rel="stylesheet" href="/blogs/css/config.min.css"><link rel="stylesheet" href="/blogs/css/style.min.css"><link rel="preload" href="/blogs/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/blogs/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/blogs/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/blogs/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Jinja2小结",
+    "inLanguage": "zh-CN",
     "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "https://yiuterran.github.io/blog/posts/jinja2%E5%B0%8F%E7%BB%93/"
-    },
-    "headline": "Jinja2小结 | 应许之地","datePublished": "2024-01-05T08:55:48+08:00",
-    "dateModified": "2024-01-05T08:55:48+08:00",
-    "wordCount":  837 ,
-    "author": {
+      "@type": "WebPage",
+      "@id": "https:\/\/yiuterran.github.io\/blogs\/posts\/jinja2%E5%B0%8F%E7%BB%93\/"
+    },"genre": "posts","keywords": "devops","wordcount":  840 ,
+    "url": "https:\/\/yiuterran.github.io\/blogs\/posts\/jinja2%E5%B0%8F%E7%BB%93\/","datePublished": "2024-01-05T08:55:48+08:00","dateModified": "2024-01-08T09:03:35+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
         "@type": "Person",
-        "name": ["tryao"]
-    },
-    "publisher": {
-        "@type": "Person",
-        "name": "C. Wang",
-        "logo": {
-            "@type": "ImageObject",
-            "url": "https://yiuterran.github.io/blog/images/icon.png"
-        }
-        },
-    "description": "之前写Python的时候其实有接触过一些jinja2，不过没有怎么用过实际上。毕竟前后端分离之后，这些模板语言在web开发上用处并不大。不过ansib"
-}
-</script><meta property="og:title" content="Jinja2小结 | 应许之地" />
-<meta property="og:type" content="article" />
-
-
-<meta property="og:image" content="https://yiuterran.github.io/blog/images/icon.png">
-
-
-<meta property="og:url" content="https://yiuterran.github.io/blog/posts/jinja2%E5%B0%8F%E7%BB%93/" />
-
-
-
-
-<meta property="og:description" content="之前写Python的时候其实有接触过一些jinja2，不过没有怎么用过实际上。毕竟前后端分离之后，这些模板语言在web开发上用处并不大。不过ansib" />
-
-
-
-
-<meta property="og:locale" content="zh" />
-
-
-
-
-<meta property="og:site_name" content="应许之地" />
-
-
-
-
-
-
-<meta property="article:published_time" content="2024-01-05T08:55:48&#43;08:00" />
-
-
-<meta property="article:modified_time" content="2024-01-05T08:55:48&#43;08:00" />
-
-
-
-<meta property="article:section" content="posts" />
-
-
-<meta property="article:tag" content="devops" />
-
-
-
-
-
-<meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/ansible%E9%80%9F%E6%88%90/" />
-
-<meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/" />
-
-<meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/sre%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" />
-
-<meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/zabbix%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/" />
-
-
-
-
-  <body class="flex min-h-screen flex-col">
-    <header
-      class="min-h-16 pl-scrollbar bg-secondary-bg fixed z-50 flex w-full items-center shadow-sm"
-    >
-      <div class="mx-auto w-full max-w-screen-xl"><script>
-    let storageColorScheme = localStorage.getItem("lightDarkMode")
-    if (((storageColorScheme == 'Auto' || storageColorScheme == null) && window.matchMedia("(prefers-color-scheme: dark)").matches) || storageColorScheme == "Dark") {
-        document.getElementsByTagName('html')[0].classList.add('dark')
-    }
-</script>
-<nav class="flex items-center justify-between flex-wrap px-4 py-4 md:py-0">
-    <a href="https://yiuterran.github.io/blog/" class="me-6 text-primary-text text-xl font-bold">应许之地</a>
-    <button id="navbar-btn" class="md:hidden flex items-center px-3 py-2" aria-label="Open Navbar">
-        <i class="fas fa-bars"></i>
-    </button>
-
-    <div id="target"
-        class="hidden block md:flex md:grow md:justify-between md:items-center w-full md:w-auto text-primary-text z-20">
-        <div class="md:flex md:h-16 text-sm md:grow pb-4 md:pb-0 border-b md:border-b-0">
-            <a href="https://yiuterran.github.io/blog/authors/tryao/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  border-transparent  me-4">作者</a>
-            <a href="https://yiuterran.github.io/blog/posts/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  selected-menu-item  me-4">文章</a>
-        </div>
-
-        <div class="flex">
-            <div class="relative pt-4 md:pt-0">
-                <div class="cursor-pointer hover:text-eureka" id="lightDarkMode">
-                    <i class="fas fa-adjust"></i>
-                </div>
-                <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-30" id="is-open">
-                </div>
-                <div class="absolute flex flex-col start-0 md:start-auto end-auto md:end-0 hidden bg-secondary-bg w-48 rounded py-2 border border-tertiary-bg cursor-pointer z-40"
-                    id='lightDarkOptions'>
-                    <span class="px-4 py-1 hover:text-eureka" name="Light">浅色</span>
-                    <span class="px-4 py-1 hover:text-eureka" name="Dark">深色</span>
-                    <span class="px-4 py-1 hover:text-eureka" name="Auto">自动</span>
-                </div>
+        "name": "tryao"
+      },"description": ""
+  }
+  </script><script src="/blogs/js/head/color-scheme.min.js"></script></head>
+  <body data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/blogs/" title="思海沉钩"><span class="header-title-text">思海沉钩</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/blogs/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item">
+              <a class="menu-link" href="/blogs/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item">
+              <a class="menu-link" href="/blogs/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+              <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch" title="切换主题">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/blogs/" title="思海沉钩"><span class="header-title-text">思海沉钩</span></a><span class="header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+              </span>
             </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li class="menu-item"><a class="menu-link" href="/blogs/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item"><a class="menu-link" href="/blogs/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item"><a class="menu-link" href="/blogs/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item menu-system">
+          <span class="menu-system-item theme-switch" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
+      </ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>Jinja2小结</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://gravatar.com/afxmessagebox" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img class="avatar" src='https://avatars.githubusercontent.com/u/5930695?v=4' alt="tryao" height="16" width="16">&nbsp;tryao</a></span></div><div class="post-meta-line"><span title="发布于 2024-01-05 08:55:48"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2024-01-05">2024-01-05</time></span>&nbsp;<span title="更新于 2024-01-08 09:03:35"><i class="fa-regular fa-calendar-check fa-fw me-1" aria-hidden="true"></i><time datetime="2024-01-08">2024-01-08</time></span>&nbsp;<span title="840 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 900 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 2 分钟</span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
         </div>
-    </div>
-
-    <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-0" id="is-open-mobile">
-    </div>
-
-</nav>
-<script>
-    
-    let element = document.getElementById('lightDarkMode')
-    if (storageColorScheme == null || storageColorScheme == 'Auto') {
-        document.addEventListener('DOMContentLoaded', () => {
-            window.matchMedia("(prefers-color-scheme: dark)").addEventListener('change', switchDarkMode)
-        })
-    } else if (storageColorScheme == "Light") {
-        element.firstElementChild.classList.remove('fa-adjust')
-        element.firstElementChild.setAttribute("data-icon", 'sun')
-        element.firstElementChild.classList.add('fa-sun')
-    } else if (storageColorScheme == "Dark") {
-        element.firstElementChild.classList.remove('fa-adjust')
-        element.firstElementChild.setAttribute("data-icon", 'moon')
-        element.firstElementChild.classList.add('fa-moon')
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        getcolorscheme();
-        switchBurger();
-    });
-</script>
-</div>
-    </header>
-    <main class="grow pt-16">
-        <div class="pl-scrollbar">
-          <div class="mx-auto w-full max-w-screen-xl lg:px-4 xl:px-8">
-  
-  
-  <div class="grid grid-cols-2 gap-4 lg:grid-cols-8 lg:pt-12">
-    <div
-      class=" bg-secondary-bg col-span-2 rounded px-6 py-8 lg:col-span-6"
-    >
-      <article class="prose">
-  <h1 class="mb-4">Jinja2小结</h1>
-
-  <div
-  class="text-tertiary-text not-prose mt-2 flex flex-row flex-wrap items-center"
->
-  <div class="me-6 my-2">
-    <i class="fas fa-calendar me-1"></i>
-    <span
-      >2024-01-05</span
-    >
-  </div>
-  <div class="me-6 my-2">
-    <i class="fas fa-clock me-1"></i>
-    <span>2分钟阅读时长</span>
-  </div>
-
-  
-
-  
-</div>
-
-
-  
-  
-
-  <p>之前写Python的时候其实有接触过一些jinja2，不过没有怎么用过实际上。毕竟前后端分离之后，这些模板语言在web开发上用处并不大。不过<code>ansible</code>选用了它做渲染模板，所以还是需要深入学习一下。比较蛋疼的是，k8s这边因为都是golang生态，所以用的是<code>go template</code>，那就是另外一套东西了。</p>
-<h2 id="基础">基础</h2>
-<p>首先是使用<code>{{ x }}</code>来引用变量，这个是最基础的语法。如果想要声明变量，可以用<code>set</code>.</p>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#基础">基础</a></li>
+        <li><a href="#模板继承">模板继承</a></li>
+        <li><a href="#循环">循环</a></li>
+        <li><a href="#宏">宏</a></li>
+        <li><a href="#模板引用">模板引用</a></li>
+        <li><a href="#扩展">扩展</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p>之前写Python的时候其实有接触过一些jinja2，不过没有怎么用过实际上。毕竟前后端分离之后，这些模板语言在web开发上用处并不大。不过<code>ansible</code>选用了它做渲染模板，所以还是需要深入学习一下。比较蛋疼的是，k8s这边因为都是golang生态，所以用的是<code>go template</code>，那就是另外一套东西了。</p>
+<h2 class="heading-element" id="基础"><span>基础</span>
+  <a href="#%e5%9f%ba%e7%a1%80" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>首先是使用<code>{{ x }}</code>来引用变量，这个是最基础的语法。如果想要声明变量，可以用<code>set</code>.</p>
 <p>可以通过过滤器<code>|</code>修改变量，内置了大量常用的过滤器用来修改字符串或者数字。</p>
 <p>如果是逻辑语句，例如<code>for</code>, <code>if</code>等，则使用<code>{% for %}</code>这种格式；这种语句一般有对应的<code>endfor</code>, <code>endif</code>做收口。</p>
 <p>注释使用<code>{#  #}</code>, 可以跨行。</p>
 <p>模板默认不会移除空白，可以使用类似<code>yaml</code>的减号，如<code>{%- if xxx -%}</code>。</p>
 <p>raw字符串，即类似<code>r</code>前缀的：<code>{% raw %}...{% endraw %}</code></p>
 <p>如果启用了行语句，则可以使用更简单的语法，比如规定行语句前缀为<code>#</code>， 就可以直接写 <code># for t in ts</code>了。</p>
-<h2 id="模板继承">模板继承</h2>
-<p>在父模板里面定义<code>{% block xxx %}</code>和<code>{% endblock xxx %}</code>，在子模板里面使用<code>{% extends &quot;xxx.yml&quot; %}</code>，然后再通过覆盖block的方式进行继承。</p>
+<h2 class="heading-element" id="模板继承"><span>模板继承</span>
+  <a href="#%e6%a8%a1%e6%9d%bf%e7%bb%a7%e6%89%bf" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>在父模板里面定义<code>{% block xxx %}</code>和<code>{% endblock xxx %}</code>，在子模板里面使用<code>{% extends &quot;xxx.yml&quot; %}</code>，然后再通过覆盖block的方式进行继承。</p>
 <p>支持通过<code>self</code>和<code>super</code>关键字调用自身或者父级模块。</p>
-<h2 id="循环">循环</h2>
-<p>比较特殊的只有一点：不支持<code>break</code>和<code>continue</code>，不过可以用<code>{% for item in items if item %}</code>这种语法，并且支持<code>for .. else ..</code>语法。</p>
-<h2 id="宏">宏</h2>
-<p>即函数，语法类似：</p>
-<pre><code class="language-jinja2">{% macro input(name, value='', type='text') -%}
-	
-{%- endmacro %}
-</code></pre>
-<h2 id="模板引用">模板引用</h2>
-<p>可以使用<code>{% include 'some.yml' ingore missing %}</code>，直接引用其他模板，相当于直接将模板嵌套进来。</p>
+<h2 class="heading-element" id="循环"><span>循环</span>
+  <a href="#%e5%be%aa%e7%8e%af" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>比较特殊的只有一点：不支持<code>break</code>和<code>continue</code>，不过可以用<code>{% for item in items if item %}</code>这种语法，并且支持<code>for .. else ..</code>语法。</p>
+<h2 class="heading-element" id="宏"><span>宏</span>
+  <a href="#%e5%ae%8f" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>即函数，语法类似：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">{% macro input(name, value=&#39;&#39;, type=&#39;text&#39;) -%}
+</span></span><span class="line"><span class="cl">	
+</span></span><span class="line"><span class="cl">{%- endmacro %}</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 class="heading-element" id="模板引用"><span>模板引用</span>
+  <a href="#%e6%a8%a1%e6%9d%bf%e5%bc%95%e7%94%a8" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>可以使用<code>{% include 'some.yml' ingore missing %}</code>，直接引用其他模板，相当于直接将模板嵌套进来。</p>
 <p>还有一种方法是通过<code>{% import 'xx' as xx %}</code>的方式导入，这种是用来导入模板中的macro，以用来调用的。</p>
 <p>默认下，每个包含的模板会被传递到当前上下文，而导入的模板不会。这样做的原因是导入量不会像包含量被缓存，因为导入量经常只作容纳宏的模块。但是这个行为可以通过在<code>include</code>/<code>import</code>后面增加<code>with/without context</code>来显示的改变。</p>
-<h2 id="扩展">扩展</h2>
-<p>可以通过扩展来修改jinja2的默认行为，比如打开循环扩展，就可以支持<code>continue</code>和<code>break</code>了。</p>
+<h2 class="heading-element" id="扩展"><span>扩展</span>
+  <a href="#%e6%89%a9%e5%b1%95" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>可以通过扩展来修改jinja2的默认行为，比如打开循环扩展，就可以支持<code>continue</code>和<code>break</code>了。</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2024-01-08 09:03:35">更新于 2024-01-08&nbsp;<a class="git-hash" href="YiuTerran/blog/commit/41e769ecaa25fa6039655de1b060285a46f20233" rel="external nofollow noopener noreferrer" target="_blank" title="feat: jinja2 support&#10&#10Commit: 41e769ecaa25fa6039655de1b060285a46f20233 [41e769e]&#10Author: 姚泰然&#10Date: 2024-01-08 09:03:35"><i class="fa-solid fa-hashtag fa-fw" aria-hidden="true"></i>41e769e</a></span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="/blogs/posts/jinja2%E5%B0%8F%E7%BB%93/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="YiuTerran/blog/blob/monolingual/content/posts/jinja2%e5%b0%8f%e7%bb%93.md?plain=1" title="查看源码" class="link-to-source">查看源码</a></span><span><a href="YiuTerran/blog/edit/monolingual/content/posts/jinja2%e5%b0%8f%e7%bb%93.md" title="编辑此页" class="link-to-edit">编辑此页</a></span><span><a href="YiuTerran/blog/issues/new?title=[BUG]%20Jinja2%E5%B0%8F%E7%BB%93&amp;body=%7cField%7cValue%7c%0A%7c-%7c-%7c%0A%7cTitle%7cJinja2%E5%B0%8F%E7%BB%93%7c%0A%7cURL%7chttps://yiuterran.github.io/blogs/posts/jinja2%E5%B0%8F%E7%BB%93/%7c%0A%7cFilename%7cYiuTerran/blog/blob/monolingual/content/posts/jinja2%e5%b0%8f%e7%bb%93.md?plain=1%7c" title="报告问题" class="link-to-report">报告问题</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://yiuterran.github.io/blogs/posts/jinja2%E5%B0%8F%E7%BB%93/" data-title="Jinja2小结" data-hashtags="devops"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://yiuterran.github.io/blogs/posts/jinja2%E5%B0%8F%E7%BB%93/" data-hashtag="devops"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://yiuterran.github.io/blogs/posts/jinja2%E5%B0%8F%E7%BB%93/" data-title="Jinja2小结"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
 
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/blogs/tags/devops/" class="post-tag" title="标签 - Devops">Devops</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blogs/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/blogs/posts/ansible%E9%80%9F%E6%88%90/" class="post-nav-item" rel="prev" title="Ansible速成"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>Ansible速成</a><a href="/blogs/posts/python%E6%8A%80%E6%9C%AF%E6%A0%88%E6%9B%B4%E6%96%B0/" class="post-nav-item" rel="next" title="Python技术栈更新">Python技术栈更新<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
 </article>
 
-
-      
-        <div class="my-4">
-    
-    <a href="https://yiuterran.github.io/blog/tags/devops/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#devops</a>
-    
-</div>
-      
-
-      
-
-
-
-      
-        <div class="py-2">
-  
-    <div class="my-8 flex flex-col items-center md:flex-row">
-      <a href="https://yiuterran.github.io/blog/authors/tryao/" class="md:me-4 text-primary-text h-24 w-24">
-        
-        
-          <img
-            src="https://yiuterran.github.io/blog/images/avatar.png"
-            class="bg-primary-bg w-full rounded-full"
-            alt="Avatar"
-          />
-        
-      </a>
-      <div class="mt-4 w-full md:mt-0 md:w-auto">
-        <a
-          href="https://yiuterran.github.io/blog/authors/tryao/"
-          class="mb-2 block border-b pb-1 text-lg font-bold"
-        >
-          <h3>个人介绍</h3>
-        </a>
-        <span class="block pb-2">兴趣使然的程序员，博而不精，乐学不倦</span>
-        
-          
-          
-          
-          
-          <a href="mailto:yaotairan@gmail.com" class="me-2">
-            <i class="fas fa-envelope"></i>
-          </a>
-        
-          
-          
-          
-          
-          <a href="https://github.com/YiuTerran" class="me-2">
-            <i class="fab fa-github"></i>
-          </a>
-        
-      </div>
-    </div>
-  
-</div>
-
-      
-
-      
-  <div
-    class="-mx-2 mt-4 flex flex-col border-t px-2 pt-4 md:flex-row md:justify-between"
-  >
-    <div>
-      
-        <span class="text-primary-text block font-bold"
-          >上一页</span
-        >
-        <a href="https://yiuterran.github.io/blog/posts/python%E6%8A%80%E6%9C%AF%E6%A0%88%E6%9B%B4%E6%96%B0/" class="block">Python技术栈更新</a>
-      
-    </div>
-    <div class="mt-4 md:mt-0 md:text-right">
-      
-        <span class="text-primary-text block font-bold">下一页</span>
-        <a href="https://yiuterran.github.io/blog/posts/ansible%E9%80%9F%E6%88%90/" class="block">Ansible速成</a>
-      
-    </div>
-  </div>
-
-
-      
-
-
-
-  <script id="utterances" src="https://utteranc.es/client.js"
-            issue-term=title
-            repo=YiuTerran/blog-comment
-              theme=preferred-color-scheme
-        crossorigin="anonymous"
-        async>
-</script>
-<script>
-    if (storageColorScheme == "Light") {
-      document.getElementById('utterances').setAttribute('theme', 'github-light')
-    } else if (storageColorScheme == "Dark") {
-      document.getElementById('utterances').setAttribute('theme', 'github-dark')
-    }
-</script>
-
-    </div>
-    
-      <div class="col-span-2">
-        
-        
-          <div
-  class="
-    bg-primary-bg
-   prose sticky top-16 z-10 hidden px-6 py-4 lg:block"
->
-  <h3>本页内容</h3>
-</div>
-<div
-  class="sticky-toc  hidden px-6 pb-6 lg:block"
->
-  <nav id="TableOfContents">
-  <ul>
-    <li><a href="#基础">基础</a></li>
-    <li><a href="#模板继承">模板继承</a></li>
-    <li><a href="#循环">循环</a></li>
-    <li><a href="#宏">宏</a></li>
-    <li><a href="#模板引用">模板引用</a></li>
-    <li><a href="#扩展">扩展</a></li>
-  </ul>
-</nav>
-</div>
-<script>
-  window.addEventListener("DOMContentLoaded", () => {
-    enableStickyToc();
-  });
-</script>
-
-        
-      </div>
-    
-
-    
-    
-      <div
-        class=" bg-secondary-bg prose col-span-2 rounded p-6 lg:col-span-6"
-      >
-        <h3>相关</h3>
-        
-          <a href="https://yiuterran.github.io/blog/posts/ansible%E9%80%9F%E6%88%90/" class="no-underline">Ansible速成</a>
-          <br />
-        
-          <a href="https://yiuterran.github.io/blog/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/" class="no-underline">边缘服务器管理工具选型</a>
-          <br />
-        
-          <a href="https://yiuterran.github.io/blog/posts/sre%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" class="no-underline">SRE读书笔记</a>
-          <br />
-        
-          <a href="https://yiuterran.github.io/blog/posts/zabbix%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/" class="no-underline">Zabbix配置记录</a>
-          <br />
-        
-      </div>
-    
-  </div>
-
-  
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        hljs.highlightAll();
-      });
-    </script>
-
-          </div>
-        </div>
-      
-    </main>
-    <footer class="pl-scrollbar">
-      <div class="mx-auto w-full max-w-screen-xl"><div class="text-center p-6 pin-b">
-    <p class="text-sm text-tertiary-text">&copy; 2021 <a href="https://github.com/YiuTerran">tryao</a>
- &middot;  Powered by the <a href="https://github.com/wangchucheng/hugo-eureka" class="hover:text-eureka">Eureka</a> theme for <a href="https://gohugo.io" class="hover:text-eureka">Hugo</a></p>
-</div></div>
-    </footer>
-  </body>
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.151.0"><img class="hugo-icon" src="/blogs/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.4.0-alpha.2-20251014082535-5c74d431"><img class="fixit-icon" src="/blogs/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2025</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://gravatar.com/afxmessagebox"target="_blank" rel="external nofollow noopener noreferrer">tryao</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/blogs/lib/cookieconsent/cookieconsent.min.css"><script src="/blogs/lib/autocomplete/autocomplete.min.js" defer></script><script src="/blogs/lib/fuse/fuse.min.js" defer></script><script src="/blogs/lib/sharer/sharer.min.js" async defer></script><script src="/blogs/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/blogs/posts/jinja2%E5%B0%8F%E7%BB%93/config/page.js" defer></script><script src="/blogs/js/theme.min.js" defer></script><script>
+      window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
+      gtag('config', 'G-C0R8DENDJ0', { 'anonymize_ip': true });
+    </script><script src="https://www.googletagmanager.com/gtag/js?id=G-C0R8DENDJ0" async></script></body>
 </html>

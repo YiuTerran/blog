@@ -7,7 +7,6 @@ tags: ["rust"]
 categories: []
 series: []
 date: 2023-02-10T09:50:48+08:00
-lastmod: 2023-09-25T09:50:48+08:00
 featuredVideo:
 featuredImage:
 draft: true

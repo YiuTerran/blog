@@ -7,7 +7,6 @@ tags: ["json", "yaml", "ytt"]
 categories: []
 series: []
 date: 2023-12-29T16:13:12+08:00
-lastmod: 2023-12-29T16:13:12+08:00
 featuredVideo:
 featuredImage:
 draft: false

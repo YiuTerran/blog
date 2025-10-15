@@ -7,7 +7,6 @@ tags: ["kotlin"]
 categories: []
 series: []
 date: 2023-03-05T12:58:37+08:00
-lastmod: 2023-03-05T12:58:37+08:00
 featuredVideo:
 featuredImage:
 draft: false

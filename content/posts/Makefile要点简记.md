@@ -7,7 +7,6 @@ tags: ["make","gnu","cpp"]
 categories: []
 series: []
 date: 2023-01-25T16:49:11+08:00
-lastmod: 2023-01-25T16:49:11+08:00
 featuredVideo:
 featuredImage:
 draft: false

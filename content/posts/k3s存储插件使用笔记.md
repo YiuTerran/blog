@@ -7,7 +7,6 @@ tags: ["k8s"]
 categories: []
 series: []
 date: 2023-06-12T09:20:20+08:00
-lastmod: 2023-06-12T09:20:20+08:00
 featuredVideo:
 featuredImage:
 draft: false

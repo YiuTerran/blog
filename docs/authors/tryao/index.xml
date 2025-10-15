@@ -1,300 +1,836 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
+
   <channel>
-    <title>个人介绍 on 应许之地</title>
-    <link>https://yiuterran.github.io/blog/authors/tryao/</link>
-    <description>Recent content in 个人介绍 on 应许之地</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <title>思海留痕</title>
+    <link>http://localhost:1313/blogs/</link>
+    <description>Recent blog posts on 思海留痕</description>
+    
+    <generator>Hugo (https://gohugo.io)</generator>
+    
     <language>zh</language>
-    <copyright>&amp;copy; 2021 &lt;a href=&#34;https://github.com/YiuTerran&#34;&gt;tryao&lt;/a&gt;
-</copyright>
-    <lastBuildDate>Mon, 29 Sep 2025 11:56:08 +0800</lastBuildDate><atom:link href="https://yiuterran.github.io/blog/authors/tryao/index.xml" rel="self" type="application/rss+xml" />
+    
+    <managingEditor>yaotairan@gmail.com (tryao)</managingEditor>
+    
+    <webMaster>yaotairan@gmail.com (tryao)</webMaster>
+    
+    <lastBuildDate>Mon, 29 Sep 2025 11:56:08 +0800</lastBuildDate>
+    
+    <atom:link href="http://localhost:1313/blogs/authors/tryao/index.xml" rel="self" type="application/rss+xml" />
+    
+
     <item>
       <title>Cicd搭建笔记</title>
-      <link>https://yiuterran.github.io/blog/posts/cicd%E6%90%AD%E5%BB%BA%E7%AC%94%E8%AE%B0/</link>
+      <link>http://localhost:1313/blogs/posts/cicd%E6%90%AD%E5%BB%BA%E7%AC%94%E8%AE%B0/</link>
       <pubDate>Mon, 29 Sep 2025 11:56:08 +0800</pubDate>
       
-      <guid>https://yiuterran.github.io/blog/posts/cicd%E6%90%AD%E5%BB%BA%E7%AC%94%E8%AE%B0/</guid>
-      <description>安装Docker 所有组件使用docker/docker compose搭建，所以先要安装docker。 docker安装过程略过，配置/etc/docke</description>
+      <author>yaotairan@gmail.com (tryao)</author>
+
+      
+      
+      
+      
+
+      <description>
+       ## 安装Docker 所有组件使用docker/docker compose搭建，所以先要安装docker。
+docker安装过程略过，配置/etc/docker/daemon.json如下：
+{ &amp;amp;#34;data-root&amp;amp;#34;: &amp;amp;#34;/data/docker&amp;amp;#34;, &amp;amp;#34;bip&amp;amp;#34;: &amp;amp;#34;192.168.100.1/24&amp;amp;#34;, &amp;amp;#34;default-address-pools&amp;amp;#34;: [ {&amp;amp;#34;base&amp;amp;#34;: &amp;amp;#34;192.168.0.0/16&amp;amp;#34;, &amp;amp;#34;size&amp;amp;#34;: 24} ], &amp;amp;#34;registry-mirrors&amp;amp;#34;: [ &amp;amp;#34;https://docker.1ms.run&amp;amp;#34;, &amp;amp;#34;https://docker.xuanyuan.me&amp;amp;#34; ], &amp;amp;#34;live-restore&amp;amp;#34;: true, &amp;amp;#34;log-driver&amp;amp;#34;:&amp;amp;#34;json-file&amp;amp;#34;, &amp;amp;#34;log-opts&amp;amp;#34;: {&amp;amp;#34;max-size&amp;amp;#34;:&amp;amp;#34;50m&amp;amp;#34;, &amp;amp;#34;max-file&amp;amp;#34;:&amp;amp;#34;3&amp;amp;#34;} } 其中data-root一般调整到外挂磁盘；如果服务器的ip段是172段，需要修改bip到192段或者10段。
+live-restore可以保证重启docker不重启容器（有时候需要关掉这个行为）。
+## 搭建gitlab 首先需要搭建代码仓库，compose文件如下：
+services: gitlab: image: registry.gitlab.cn/omnibus/gitlab-jh container_name: gitlab restart: always hostname: &amp;amp;#39;zop-tools.cscec3b-iti.com&amp;amp;#39; environment: GITLAB_OMNIBUS_CONFIG: | external_url &amp;amp;#39;https://zop-tools.cscec3b-iti.com:7440&amp;amp;#39; gitlab_rails[&amp;amp;#39;trusted_proxies&amp;amp;#39;]=[&amp;amp;#39;172.18.0.0/16&amp;amp;#39;] gitlab_rails[&amp;amp;#39;gitlab_port&amp;amp;#39;] = 7440 gitlab_rails[&amp;amp;#39;gravatar_enabled&amp;amp;#39;] = false nginx[&amp;amp;#39;listen_port&amp;amp;#39;] = 80 nginx[&amp;amp;#39;listen_https&amp;amp;#39;] = false nginx[&amp;amp;#39;redirect_http_to_https&amp;amp;#39;] = false nginx[&amp;amp;#39;proxy_set_headers&amp;amp;#39;] = { &amp;amp;#34;X-Forwarded-Proto&amp;amp;#34; =&amp;amp;gt; &amp;amp;#34;https&amp;amp;#34;, &amp;amp;#34;X-Forwarded-Ssl&amp;amp;#34; =&amp;amp;gt; &amp;amp;#34;on&amp;amp;#34;, &amp;amp;#34;X-Forwarded-Port&amp;amp;#34; =&amp;amp;gt; &amp;amp;#34;7440&amp;amp;#34; } ports: - &amp;amp;#39;7440:80&amp;amp;#39; volumes: - &amp;amp;#39;/data/gitlab/config:/etc/gitlab&amp;amp;#39; - &amp;amp;#39;/data/gitlab/logs:/var/log/gitlab&amp;amp;#39; - &amp;amp;#39;/data/gitlab/data:/var/opt/gitlab&amp;amp;#39; shm_size: &amp;amp;#39;256m&amp;amp;#39; hostname和external_url修改成对外的域名。
+
+      </description>
+      <guid isPermaLink="true">http://localhost:1313/blogs/posts/cicd%E6%90%AD%E5%BB%BA%E7%AC%94%E8%AE%B0/</guid>
     </item>
     
+
     <item>
       <title>Csharp和blazor体验笔记</title>
-      <link>https://yiuterran.github.io/blog/posts/csharp%E5%92%8Cblazor%E4%BD%93%E9%AA%8C%E7%AC%94%E8%AE%B0/</link>
+      <link>http://localhost:1313/blogs/posts/csharp%E5%92%8Cblazor%E4%BD%93%E9%AA%8C%E7%AC%94%E8%AE%B0/</link>
       <pubDate>Wed, 12 Mar 2025 21:12:31 +0800</pubDate>
       
-      <guid>https://yiuterran.github.io/blog/posts/csharp%E5%92%8Cblazor%E4%BD%93%E9%AA%8C%E7%AC%94%E8%AE%B0/</guid>
-      <description>.NET 9已经发了，AOT的支持较为完善了，可以在某些场景替代GO。</description>
+      <author>yaotairan@gmail.com (tryao)</author>
+
+      
+      
+      
+      
+
+      <description>
+      .NET 9已经发了，AOT的支持较为完善了，可以在某些场景替代GO。
+
+      </description>
+      <guid isPermaLink="true">http://localhost:1313/blogs/posts/csharp%E5%92%8Cblazor%E4%BD%93%E9%AA%8C%E7%AC%94%E8%AE%B0/</guid>
     </item>
     
+
     <item>
       <title>Typescript速成</title>
-      <link>https://yiuterran.github.io/blog/posts/typescript%E9%80%9F%E6%88%90/</link>
+      <link>http://localhost:1313/blogs/posts/typescript%E9%80%9F%E6%88%90/</link>
       <pubDate>Mon, 11 Nov 2024 14:56:12 +0800</pubDate>
       
-      <guid>https://yiuterran.github.io/blog/posts/typescript%E9%80%9F%E6%88%90/</guid>
-      <description>安装&amp;amp;使用 npm install -g typscript tsc hello.ts 生成1个js文件。 教程推荐：https://wangdoc.com/typescript/ 基础 使用let ok: boolean = false</description>
+      <author>yaotairan@gmail.com (tryao)</author>
+
+      
+      
+      
+      
+
+      <description>
+       # 安装&amp;amp;amp;使用 npm install -g typscript tsc hello.ts 生成1个js文件。
+教程推荐：https://wangdoc.com/typescript/
+# 基础 使用let ok: boolean = false和let ok = new Boolean(1)不同，前者是基本类型，后者是对象。类似C#/Java中的装箱和拆箱。 可以用void标识函数的任意返回值类型； undefined和null是所有类型的子类型，默认情况下可以给任意类型（除了Object类型）； tsc编译时加上--strictNullChecks选项，可以让其只能赋给any/unknown类型； 内置类型：boolean, string, number, bigint, symbol，最后两个对应的类没法直接构造数据； 可以将变量声明为any，相当于使用js的弱类型；但是any会带来类型污染，可以用unknown类型代替，此时用之前需要判断类型，类似Go的interface{}必须switch x.(type)才能用一样，在ts里面就是if(typeof a == &amp;#39;string&amp;#39;)； never类型标识不可能存在的类型，不接受任何赋值（交叉类型时有点用）； 联合类型。类似Python，可以写出a|b，标识变量可以有多种类型； 值类型：值也可以作为一个类型，可以用来写枚举，let sex: 0| 1; 交叉类型：可以把两个interface合并； 使用type给类型取别名，type A=number|string； 使用typeof获取值的TypeScript类型，注意这里是类型而不是字符串； 但是ts兼容js的typeof用法，此时返回的是字符串。二者的区别是前者一般用于类型声明，编译之后就没了； 元组仍然使用中括号声明：const s:[string, string, boolean] = [&amp;#39;a&amp;#39;, &amp;#39;b&amp;#39;, true]，这就导致元组必须显式声明，否则会被推断为一个数组； 最后x个元组元素可以配置为可选的，方式是在类型尾部增加?； N个元素如果类型一样，可以用...接数组或者数组表示任意多个元素； 只读的值类型，可以作为元组使用，也可以作为数组使用，例如const arr=[1, 2] as const，此时arr的长度和类型都是固定的； symbol类型一般是给库作者使用的，普通用户用到的机会不大； 使用as进行类型转换，或者使用&amp;amp;lt;string&amp;amp;gt; p这种形式； 使用!后缀进行非空断言； 支持模板字符串，语法是```` # 数组 格式为：let array: number[] = [1, 2, 3]； 也可以用泛型格式：let array: Array&amp;amp;lt;number&amp;amp;gt; = [1, 2, 3]； 甚至还可以用接口： interface NumberArray { [index: number]: number; } let array: NumberArray = [1, 2, 3]; 如果数组初始值是空数组，且没有声明类型，在向里面push元素时，会自动推断元素类型，此时可以放入不同类型的元素（推断为联合类型）。但是当初始值非空时，再push不同类型的元素会直接报错； const声明的数组和对象其实是可以改变元素的，需要使用readonly修饰类型：const arr: readonly number[] = [1, 2, 3]，此时数组是不可变的； 但是readonly和泛型数组是不兼容的； # 函数 首先兼容js中的普通函数： function hello(txt: string):void{ console.log(&amp;amp;#39;hello&amp;amp;#39; &#43; txt); } 等价于： const hello: (txt:string)=&amp;amp;gt;void = function(txt){ //... } 注意这里参数名是必须写的，和C语言不一样。包括用type给函数取别名，也要带上参数名。当然实际用的时候的参数名，可以名字不一样。
+
+      </description>
+      <guid isPermaLink="true">http://localhost:1313/blogs/posts/typescript%E9%80%9F%E6%88%90/</guid>
     </item>
     
+
     <item>
       <title>Python技术栈更新</title>
-      <link>https://yiuterran.github.io/blog/posts/python%E6%8A%80%E6%9C%AF%E6%A0%88%E6%9B%B4%E6%96%B0/</link>
+      <link>http://localhost:1313/blogs/posts/python%E6%8A%80%E6%9C%AF%E6%A0%88%E6%9B%B4%E6%96%B0/</link>
       <pubDate>Tue, 09 Jan 2024 09:35:01 +0800</pubDate>
       
-      <guid>https://yiuterran.github.io/blog/posts/python%E6%8A%80%E6%9C%AF%E6%A0%88%E6%9B%B4%E6%96%B0/</guid>
-      <description>有段时间没用Python写工程了，基本都是写脚本，最近接了个活帮忙搞个爬虫相关项目，需要更新一下技术栈，做个笔记。 web开发：fastapi, 其实还可</description>
+      <author>yaotairan@gmail.com (tryao)</author>
+
+      
+      
+      
+      
+
+      <description>
+      有段时间没用Python写工程了，基本都是写脚本，最近接了个活帮忙搞个爬虫相关项目，需要更新一下技术栈，做个笔记。
+web开发：fastapi, 其实还可以接着用flask，不过前者对asyncio支持更完善一些，顺便学一下新东西；至于django还是太重了，写单体估计有点用； 数据库ORM：仍然可以继续使用sqlalchemy，最新的是2.0版本，已经支持asyncio； 爬虫：爬虫相关的技术栈变化不大…scrapy其实不太好用，封装的太厚，而且twisted早就过时了。自己写的话就： 用aiohttp做网络请求； dom解析：仍然是基于lxml的技术栈，主要还是xpath和css-selector来获取元素； 浏览器模拟（动态网页）：Playwright代替了Selenium等古早的框架； 打包：用docker就行； 验证码破解：这个相关的网站蛮多的，但是好不好使需要测试一下才知道。包括：yesCapture, 2Capture和穿云等； 其他反爬技术：这个只能随机应变了，现在很多网站都做了反爬，具体手段不一，需要尝试解决； # FastAPI fastapi顾名思义，专注于提供API框架，不关心模版引擎、ORM之类的东西，但是自带了API文档(即swagger集成)。所以代码非常简单，不需要Django那套复杂的框架：
+from fastapi import FastAPI app = FastAPI() @app.get(&amp;amp;#34;/&amp;amp;#34;) async def root(): return &amp;amp;#34;hello world&amp;amp;#34; 就完事了。运行方式：uvicorn main:app --reload，默认8000端口，并支持/docs和redoc两种文档格式，当然还有/openapi.json这种原始数据。
+## 参数格式 ### 路径参数 路径参数类似java:
+@app.get(&amp;amp;#34;/items/{item_id}&amp;amp;#34;) async def read_item(item_id: int): return {&amp;amp;#34;item_id&amp;amp;#34;: item_id} 不过很遗憾的是，路由优先级是依赖声明的顺序的，而不是像java那样可以保证静态路由优先级高于动态路由。所以必须要注意这一点。
+类型声明可以指定枚举值：
+from enum import Enum, unique @unique class Name(str, Enum): Wang = &amp;amp;#34;WangXiaoMing&amp;amp;#34; Li = &amp;amp;#34;LiXiaoLang&amp;amp;#34; fastAPI支持路径参数里面含有/，即未经转义的路径，这个设计与java不一致。即
+@app.get(&amp;amp;#34;/files/{file_path:path}&amp;amp;#34;) 这里的path说明匹配任意路径。
+### QueryString 不在路径里的其他参数默认都是queryString，如：
+from typing import Union @app.get(&amp;amp;#34;/items&amp;amp;#34;) async def list_item(page=1, size=10, name: Union[str, None] = None): pass 这里的name就是一个查询参数。
+
+      </description>
+      <guid isPermaLink="true">http://localhost:1313/blogs/posts/python%E6%8A%80%E6%9C%AF%E6%A0%88%E6%9B%B4%E6%96%B0/</guid>
     </item>
     
+
     <item>
       <title>Jinja2小结</title>
-      <link>https://yiuterran.github.io/blog/posts/jinja2%E5%B0%8F%E7%BB%93/</link>
+      <link>http://localhost:1313/blogs/posts/jinja2%E5%B0%8F%E7%BB%93/</link>
       <pubDate>Fri, 05 Jan 2024 08:55:48 +0800</pubDate>
       
-      <guid>https://yiuterran.github.io/blog/posts/jinja2%E5%B0%8F%E7%BB%93/</guid>
-      <description>之前写Python的时候其实有接触过一些jinja2，不过没有怎么用过实际上。毕竟前后端分离之后，这些模板语言在web开发上用处并不大。不过ansib</description>
+      <author>yaotairan@gmail.com (tryao)</author>
+
+      
+      
+      
+      
+
+      <description>
+      之前写Python的时候其实有接触过一些jinja2，不过没有怎么用过实际上。毕竟前后端分离之后，这些模板语言在web开发上用处并不大。不过ansible选用了它做渲染模板，所以还是需要深入学习一下。比较蛋疼的是，k8s这边因为都是golang生态，所以用的是go template，那就是另外一套东西了。
+# 基础 首先是使用{{ x }}来引用变量，这个是最基础的语法。如果想要声明变量，可以用set.
+可以通过过滤器|修改变量，内置了大量常用的过滤器用来修改字符串或者数字。
+如果是逻辑语句，例如for, if等，则使用{% for %}这种格式；这种语句一般有对应的endfor, endif做收口。
+注释使用{# #}, 可以跨行。
+模板默认不会移除空白，可以使用类似yaml的减号，如{%- if xxx -%}。
+raw字符串，即类似r前缀的：{% raw %}...{% endraw %}
+如果启用了行语句，则可以使用更简单的语法，比如规定行语句前缀为#， 就可以直接写 # for t in ts了。
+# 模板继承 在父模板里面定义{% block xxx %}和{% endblock xxx %}，在子模板里面使用{% extends &amp;amp;quot;xxx.yml&amp;amp;quot; %}，然后再通过覆盖block的方式进行继承。
+支持通过self和super关键字调用自身或者父级模块。
+# 循环 比较特殊的只有一点：不支持break和continue，不过可以用{% for item in items if item %}这种语法，并且支持for .. else ..语法。
+# 宏 即函数，语法类似：
+{% macro input(name, value=&amp;amp;#39;&amp;amp;#39;, type=&amp;amp;#39;text&amp;amp;#39;) -%} {%- endmacro %} # 模板引用 可以使用{% include &amp;#39;some.yml&amp;#39; ingore missing %}，直接引用其他模板，相当于直接将模板嵌套进来。
+
+      </description>
+      <guid isPermaLink="true">http://localhost:1313/blogs/posts/jinja2%E5%B0%8F%E7%BB%93/</guid>
     </item>
     
+
     <item>
       <title>Ansible速成</title>
-      <link>https://yiuterran.github.io/blog/posts/ansible%E9%80%9F%E6%88%90/</link>
+      <link>http://localhost:1313/blogs/posts/ansible%E9%80%9F%E6%88%90/</link>
       <pubDate>Thu, 04 Jan 2024 14:00:55 +0800</pubDate>
       
-      <guid>https://yiuterran.github.io/blog/posts/ansible%E9%80%9F%E6%88%90/</guid>
-      <description>虽然iac(infracture as code)流行以来，新的技术栈层出不穷，但是一般都是面向k8s或者云服务商的。传统的部署还是用ansible这种仅依</description>
+      <author>yaotairan@gmail.com (tryao)</author>
+
+      
+      
+      
+      
+
+      <description>
+      虽然iac(infracture as code)流行以来，新的技术栈层出不穷，但是一般都是面向k8s或者云服务商的。传统的部署还是用ansible这种仅依赖ssh的最简单。
+数年前我还在主力写Python时，部署工具一般使用Python的一个库，叫fabric的来进行，它底层就是使用ssh远程登录运行命令而已。ansible其实是同样的原理，只不过它的抽象程度更高，可以通过配置文件来驱动，而不再是Python代码。这个配置文件就是所谓的playbook，也是yaml格式。
+# Inventory文件 即需要配置的主机、环境变量相关的配置文件，支持ini或者yaml格式，这里统一用yaml格式（因为其他配置也是yaml）。
+## 语法 例子：
+ungrouped: hosts: mail.example.com: webservers: hosts: foo.example.com: bar.example.com: dbservers: hosts: one.example.com: two.example.com: three.example.com: east: hosts: foo.example.com: one.example.com: two.example.com: west: hosts: bar.example.com: three.example.com: prod: children: east: test: children: west: top key是组的名称，可以通过children配置父子组。
+host可以属于多个group，一个group也可以有复数个parent或者children。
+多个类似的host或者ip地址，可以用类似www[01:50].example.com或者172.16.1.[1:100]这种格式，避免写太多。
+可以写alias：
+ungrouped: hosts: node1: ansible_port: 22 ansible_host: 172.16.11.200 除了上面这些字段外，可以给主机增加任意字段，相当于环境变量：
+ungrouped: hosts: node1: ansible_port: 22 ansible_host: 172.16.11.200 ansible_user: user ansible_password: 明文密码 ansible_ssh_private_key_file: 私钥文件 ansible_become_user: root #切换成高权限用户 ansible_become_password: 高权限用户密码 ansible_python_interpreter: # 远程python解释器地址 foo: bar 一组host也可以共享变量，使用vars：
+
+      </description>
+      <guid isPermaLink="true">http://localhost:1313/blogs/posts/ansible%E9%80%9F%E6%88%90/</guid>
     </item>
     
+
     <item>
       <title>Kcl试用</title>
-      <link>https://yiuterran.github.io/blog/posts/kcl%E8%AF%95%E7%94%A8/</link>
+      <link>http://localhost:1313/blogs/posts/kcl%E8%AF%95%E7%94%A8/</link>
       <pubDate>Tue, 02 Jan 2024 09:26:30 +0800</pubDate>
       
-      <guid>https://yiuterran.github.io/blog/posts/kcl%E8%AF%95%E7%94%A8/</guid>
-      <description>kcl是蚂蚁金服开源的配置DSL，诞生比较晚，所以吸纳了已有的jsonnet、hcl、cue等方案的优点。 安装 对于linux： wget -q https://kcl-lang.io/script/install-cli.sh -O - | /bin/bash 这个脚本本</description>
+      <author>yaotairan@gmail.com (tryao)</author>
+
+      
+      
+      
+      
+
+      <description>
+      kcl是蚂蚁金服开源的配置DSL，诞生比较晚，所以吸纳了已有的jsonnet、hcl、cue等方案的优点。
+# 安装 对于linux：
+wget -q https://kcl-lang.io/script/install-cli.sh -O - | /bin/bash 这个脚本本质上还是从github中下载发行版，所以也需要翻墙。
+不过由于是单文件分发，所以可以直接下载上传到阿里云，甚至直接放到git里也不是不行（不过版本要更新，会占用git体积，放svn更好）。
+或者你可以试试ghproxy:
+wget https://mirror.ghproxy.com/https://github.com/kcl-lang/kcl/releases/download/v0.7.2/kclvm-v0.7.2-linux-amd64.tar.gz &amp;amp;amp;&amp;amp;amp; mv kclvm.*.tar.gz kclvm.tar.gz &amp;amp;amp;&amp;amp;amp; tar xvf kclvm.tar.gz &amp;amp;amp;&amp;amp;amp; sudo mv kclvm/bin/* /usr/local/bin/ &amp;amp;amp;&amp;amp;amp; sudo mv /usr/local/bin/kclvm_cli /usr/local/bin/kcl 或者用go：
+go install kcl-lang.io/cli/cmd/kcl@latest 有支持idea和vscode的插件，可以从这里查看具体安装方法，不过由于语言较新，插件目前功能有限。
+# 语法 和ytt不同，kcl不是基于yaml扩展的，而是完全使用了自己的一套语法，官方向导参考这里. 总的来说还是基于Python语法进行扩展的。缩进使用1个tab或者4个空格。
+## 变量 k = v 如果是非导出变量，类似Python：
+_k = v value支持k8s后缀，即P, T, G M, K, k, m, u, n，以及Pi, Ti, Gi, Mi, Ki.
+units里面甚至定义了进行单位转换的函数，如units.to_K(1000)，输出是1K.
+也可以使用类似Python的类型转换。
+除了None以外，kcl还支持Undefined，类似js的设计。此时key不会输出到生成文件中。
+
+      </description>
+      <guid isPermaLink="true">http://localhost:1313/blogs/posts/kcl%E8%AF%95%E7%94%A8/</guid>
     </item>
     
+
     <item>
       <title>Ytt试用</title>
-      <link>https://yiuterran.github.io/blog/posts/ytt%E8%AF%95%E7%94%A8/</link>
+      <link>http://localhost:1313/blogs/posts/ytt%E8%AF%95%E7%94%A8/</link>
       <pubDate>Fri, 29 Dec 2023 16:13:12 +0800</pubDate>
       
-      <guid>https://yiuterran.github.io/blog/posts/ytt%E8%AF%95%E7%94%A8/</guid>
-      <description>jsonnet最大的问题其实是：它支持的是json，而不是yaml. 其实这也不是什么问题，因为yaml是json的超集，json本身就是一个合法的ya</description>
+      <author>yaotairan@gmail.com (tryao)</author>
+
+      
+      
+      
+      
+
+      <description>
+      jsonnet最大的问题其实是：它支持的是json，而不是yaml. 其实这也不是什么问题，因为yaml是json的超集，json本身就是一个合法的yaml. 但是写起来需要将原来的yaml转成jsonnet，输出成yaml就更麻烦，需要在外围加上std.YamlManifest()，这种侵入式的设计感觉很蛋疼。
+yaml本身也有对应的DSL，ytt就是其中一种。蚂蚁开源的kcl也默认输出的是yaml，不过它和ytt的区别是后者本身是合法的yaml，这里先看一下ytt，再看kcl.
+# 安装 很意外，虽然是go写的，但是并不支持go install，需要使用脚本安装：
+curl https://carvel.dev/install.sh | sudo bash - 安装需要翻墙…所以如果是给别人用，最好还是download下来传到oss之类的地方。
+# 设计 ytt的设计思路和jsonnet还是有一些差别的。他是通过在yaml里面注入注释的方式进行扩展：
+#@data/values --- a: 8 并将yaml分为以下几类：
+值文档。类似helm的values.yaml，其实就是外层的配置；以#@data/values开头； 值模板文档。用来声明值文档中可用的变量和默认值之类的；以#@data/values-schema开头； 纯粹的yaml：不含#@之类的ytt注释； 模板：含有ytt注释的yml； 覆盖文档：含有#@overlay/match注释的文档； 生成yaml的流水线参考上面的图。
+# 语法 使用的是一门叫StarLark的语言，类似Python.
+函数包括两种：
+#@ def fmt(x, y): #@ return x&#43;y #@ end 这种有return，还有一种或者类似jsonnet:
+#@ def labels(x, y): app.kubernetes.io/version: #@ x app.kubernetes.io/name: #@ y #@ end 可以将这两种函数分别放到后缀为.star和.lib.yml的文件里。这种情况下，前者不需要再添加#@前缀。
+在模板文件里面通过#@ load(&amp;amp;quot;format.star&amp;amp;quot;, &amp;amp;quot;fmt&amp;amp;quot;)这种方式进行加载。
+# 使用方法 最简单的使用方法，用值yaml渲染模板yaml：
+ytt -f schema.yml -f config.yml --data-values-file values.yml
+
+      </description>
+      <guid isPermaLink="true">http://localhost:1313/blogs/posts/ytt%E8%AF%95%E7%94%A8/</guid>
     </item>
     
+
     <item>
       <title>Jsonnet试用</title>
-      <link>https://yiuterran.github.io/blog/posts/jsonnet%E8%AF%95%E7%94%A8/</link>
+      <link>http://localhost:1313/blogs/posts/jsonnet%E8%AF%95%E7%94%A8/</link>
       <pubDate>Fri, 29 Dec 2023 10:21:59 +0800</pubDate>
       
-      <guid>https://yiuterran.github.io/blog/posts/jsonnet%E8%AF%95%E7%94%A8/</guid>
-      <description>jsonnet这个语言很有意思，它存在的目的就是为了编辑配置。其实使用任何一门带有字符串模板的语言都能完成类似的目的，但是jsonnet的好处是它的封</description>
+      <author>yaotairan@gmail.com (tryao)</author>
+
+      
+      
+      
+      
+
+      <description>
+      jsonnet这个语言很有意思，它存在的目的就是为了编辑配置。其实使用任何一门带有字符串模板的语言都能完成类似的目的，但是jsonnet的好处是它的封闭性：不要使用额外的依赖完成配置。
+# 安装 jsonnet有两个版本的编译器，一个是C&#43;&#43;的，一个是Go的，推荐使用Go的，安装比较简单：
+go install github.com/google/go-jsonnet/cmd/jsonnet@latest 如果你使用go语言写脚本，可以直接代码里使用：
+import &amp;amp;#34;github.com/google/go-jsonnet&amp;amp;#34; # 语法 jsonnet的语法和json是一致的，但是增加了很多扩展：
+支持C/Python风格的注释支持； 允许使用|||增加多行字符串，类似Python中的&amp;#39;&amp;#39;&amp;#39;； 可以在行尾使用多余的逗号； 类似yaml，支持单引号和双引号； 类似js/yaml，key可以不加引号； ## 变量 变量使用local关键字，类似lua，需要注意的是：
+如果变量定义在json里面（挨着字段），尾部要使用逗号； 否则，使用分号； 引用其他变量：
+使用self引用当前结构中的变量，也可以直接使用变量名字； 使用$引用根中的变量（从json的根节点开始算）； 引用其他字段的变量可以用.foo或者[&amp;#39;foo&amp;#39;]的格式，如$.foo或者$[&amp;#39;foo&amp;#39;]；有点类似jquery； 允许使用数组或者字符串切片（类似Python）； 变量计算：
+强类型：1 == &amp;#39;1&amp;#39;返回false； 但是使用&#43;连接时，如果有一个是字符串，则会全部转为字符串拼接； ==是深层值比较； 支持Python风格的字符串格式化； 支持C风格的位计算、逻辑计算、数学计算； 支持Python 风格的 in操作符； 变量转bool原则和Python类似，即if x的计算； 另外，jsonnet还支持一种特殊风格的字符串格式化：
+{ ex1: 1&#43;2, str: ||| s=%(ex1)0.2f ||| % self, } 这里把self当作变量传进去，然后在字符串里面提取出字段用来渲染，有点类似python里面的.format，但是语法不一样。
+## 函数 jsonnet是一门图灵完备的语言，所以它也有函数，语法有点类似js中的function:
+local fuc(k1, k2=3) = local k3 = k1 &#43; k2; [k1, k2, k3]; 注意：函数必然会返回一个值，所以最后一个值标示函数的结束。
+
+      </description>
+      <guid isPermaLink="true">http://localhost:1313/blogs/posts/jsonnet%E8%AF%95%E7%94%A8/</guid>
     </item>
     
+
     <item>
       <title>linux日常使用记录</title>
-      <link>https://yiuterran.github.io/blog/posts/linux%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</link>
+      <link>http://localhost:1313/blogs/posts/linux%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</link>
       <pubDate>Fri, 24 Nov 2023 10:51:31 +0800</pubDate>
       
-      <guid>https://yiuterran.github.io/blog/posts/linux%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</guid>
-      <description>由于公司开始强制使用Linux桌面系统，记录一下使用中遇到的问题。 发行版选择 本来先尝试了Ubuntu 22.04和KDE Neon做为开发环境，但是体验都</description>
+      <author>yaotairan@gmail.com (tryao)</author>
+
+      
+      
+      
+      
+
+      <description>
+      由于公司开始强制使用Linux桌面系统，记录一下使用中遇到的问题。
+# 发行版选择 本来先尝试了Ubuntu 22.04和KDE Neon做为开发环境，但是体验都不太好：
+KDE Neon与日常使用的软件兼容性很差，主要是大部分软件都是GTK搞的；
+原生Ubuntu的蓝牙耳机连接经常断连；
+Deepin20.9的docker安装有问题，k3s也无法正常使用；Deepin 23就更离谱了，我的连安装界面都进不去。
+优麒麟版本的linux，系统快捷键不能改，很麻烦。
+Debian系还是推荐使用Linux mint Cinamon，或者直接用arch也行，常用软件也比较好装。
+# 软件源 除了发行版自带的软件源之外，还有几个流行的安装方式，比如snap、linuxbrew和flathub.
+国产的还有星火商店，也可以安装一些常用软件，这些都是跨发行版的。
+个人还是推荐星火商店&#43;apt，其他几个也可以用，但是需要配置国内软件源，不然下载速度感人。
+# 字体 全局字体推荐使用霞鹜新晰黑屏幕阅读版，比较清晰。全局字体不推荐使用楷体，主要是太细了，如果想要用的话，可以用这个屏幕阅读版，我的chrome字体和Android字体用的都是这个，感觉还不错。另外字体推荐放在~/.fonts里面，这样重装系统不会丢失。刷新字体使用fc-cache -vf即可，查看字体名称可以用fc-list。
+# WezTerm配置 终端推荐wezterm，可以跨平台使用，配置文件使用lua，比较方便(~/.config/wezterm/wezterm.lua)：
+local wezterm = require &amp;amp;#39;wezterm&amp;amp;#39; local act = wezterm.action local mykeys = {} -- 重新定义Tab切换快捷键 -- 描述：通过alt&#43;1/2/3/../8进行切换Tab标签 for i = 1, 8 do table.insert(mykeys, { key = tostring(i), mods = &amp;amp;#39;ALT&amp;amp;#39;, action = act.ActivateTab(i - 1), }) end -- 重新定义左右分割 -- 描述：通过ctrl&#43;shift&#43;s table.insert(mykeys, { key = &amp;amp;#39;s&amp;amp;#39;, mods = &amp;amp;#39;CTRL|SHIFT&amp;amp;#39;, action = wezterm.action.SplitHorizontal { domain = &amp;amp;#39;CurrentPaneDomain&amp;amp;#39; }, }) -- 重新定义上下分割 -- 描述：通过ctrl&#43;shift&#43;d table.insert(mykeys, { key = &amp;amp;#39;d&amp;amp;#39;, mods = &amp;amp;#39;CTRL|SHIFT&amp;amp;#39;, action = wezterm.action.SplitVertical { domain = &amp;amp;#39;CurrentPaneDomain&amp;amp;#39; }, }) table.insert(mykeys, { key = &amp;amp;#39;F11&amp;amp;#39;, mods = &amp;amp;#39;CTRL&amp;amp;#39;, action = wezterm.action.ToggleFullScreen, }) -- 重新定义分屏窗口切换快捷键 -- 描述：通过ctrl&#43;shift&#43;hjkl table.insert(mykeys, { key = &amp;amp;#39;h&amp;amp;#39;, --左侧的分屏窗口 mods = &amp;amp;#39;CTRL|SHIFT&amp;amp;#39;, action = act.ActivatePaneDirection &amp;amp;#39;Left&amp;amp;#39;, }) table.insert(mykeys, { key = &amp;amp;#39;l&amp;amp;#39;, -- 右侧的分屏窗口 mods = &amp;amp;#39;CTRL|SHIFT&amp;amp;#39;, action = act.ActivatePaneDirection &amp;amp;#39;Right&amp;amp;#39;, }) table.insert(mykeys, { key = &amp;amp;#39;k&amp;amp;#39;, -- 上侧的分屏窗口 mods = &amp;amp;#39;CTRL|SHIFT&amp;amp;#39;, action = act.ActivatePaneDirection &amp;amp;#39;Up&amp;amp;#39;, }) table.insert(mykeys, { key = &amp;amp;#39;j&amp;amp;#39;, -- 下侧的分屏窗口 mods = &amp;amp;#39;CTRL|SHIFT&amp;amp;#39;, action = act.ActivatePaneDirection &amp;amp;#39;Down&amp;amp;#39;, }) local config = { check_for_updates = false, keys = mykeys, window_decorations = &amp;amp;#34;INTEGRATED_BUTTONS|RESIZE&amp;amp;#34;, font = wezterm.font_with_fallback { &amp;amp;#34;FiraCode Nerd Font Mono&amp;amp;#34;, &amp;amp;#34;LXGW WenKai GB Screen&amp;amp;#34;, }, color_scheme = &amp;amp;#39;MaterialDark&amp;amp;#39;, } return config # SSH参考配置 wezterm的问题是不支持zmodem，也就是lrzsz的上传下载，可以用trzsz来代替。
+
+      </description>
+      <guid isPermaLink="true">http://localhost:1313/blogs/posts/linux%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/</guid>
     </item>
     
+
     <item>
       <title>ES和kibana简要笔记</title>
-      <link>https://yiuterran.github.io/blog/posts/es%E5%92%8Ckibana%E7%AE%80%E8%A6%81%E7%AC%94%E8%AE%B0/</link>
+      <link>http://localhost:1313/blogs/posts/es%E5%92%8Ckibana%E7%AE%80%E8%A6%81%E7%AC%94%E8%AE%B0/</link>
       <pubDate>Mon, 13 Nov 2023 10:11:35 +0800</pubDate>
       
-      <guid>https://yiuterran.github.io/blog/posts/es%E5%92%8Ckibana%E7%AE%80%E8%A6%81%E7%AC%94%E8%AE%B0/</guid>
-      <description>由于比赛需要用到es和kibana，重新复习一下这块的内容。 基础概念 ES的概念和其他数据库截然不同，虽然和mongodb同为文档型数据库，但是后者的很</description>
-    </item>
-    
-    <item>
-      <title>StatefulSet使用思路梳理</title>
-      <link>https://yiuterran.github.io/blog/posts/statefulset%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86/</link>
-      <pubDate>Fri, 15 Sep 2023 14:57:05 +0800</pubDate>
+      <author>yaotairan@gmail.com (tryao)</author>
+
       
-      <guid>https://yiuterran.github.io/blog/posts/statefulset%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86/</guid>
-      <description>一般服务都是使用deployment部署，deploy的使用非常简单，无状态，随意调度。但是各种需要持久化数据的中间件都需要使用StatefulSet</description>
-    </item>
-    
-    <item>
-      <title>Configmap挂载的几种情况</title>
-      <link>https://yiuterran.github.io/blog/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/</link>
-      <pubDate>Fri, 15 Sep 2023 09:33:41 +0800</pubDate>
       
-      <guid>https://yiuterran.github.io/blog/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/</guid>
-      <description>ConfigMap挂载的用法比较多，很容易记混淆，这里简单做个梳理： 将某个key的值挂载为环境变量 apiVersion: v1 kind: Pod metadata: name: dapi-test-pod spec: containers: - name: test-container image: gcr.io/google_containers/busybox command: [ &amp;quot;/bin/sh&amp;quot;, &amp;quot;-c&amp;quot;, &amp;quot;env&amp;quot; ] env: - name: SPECIAL_LEVEL_KEY valueFrom: configMapKeyRef:</description>
-    </item>
-    
-    <item>
-      <title>Sqlx备忘录</title>
-      <link>https://yiuterran.github.io/blog/posts/sqlx%E5%A4%87%E5%BF%98%E5%BD%95/</link>
-      <pubDate>Tue, 12 Sep 2023 15:22:00 +0800</pubDate>
       
-      <guid>https://yiuterran.github.io/blog/posts/sqlx%E5%A4%87%E5%BF%98%E5%BD%95/</guid>
-      <description>很少用golang写增删改查，sqlx的用法和java差别很大，用的时候总是要从头看文档。这里写个备忘录方便以后查询，使用sqlx和go-sqlbui</description>
-    </item>
-    
-    <item>
-      <title>边侧高可用解决方案</title>
-      <link>https://yiuterran.github.io/blog/posts/%E8%BE%B9%E4%BE%A7%E9%AB%98%E5%8F%AF%E7%94%A8%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/</link>
-      <pubDate>Tue, 01 Aug 2023 14:57:03 +0800</pubDate>
       
-      <guid>https://yiuterran.github.io/blog/posts/%E8%BE%B9%E4%BE%A7%E9%AB%98%E5%8F%AF%E7%94%A8%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/</guid>
-      <description>边侧服务高可用其实就是当年服务还没上云的时候，使用的那套技术栈。不过稍微有些不同的是，边缘计算需要考虑完全封闭的局域网，有点像组态软件的场景。 基于域名</description>
+
+      <description>
+      由于比赛需要用到es和kibana，重新复习一下这块的内容。
+# 基础概念 ES的概念和其他数据库截然不同，虽然和mongodb同为文档型数据库，但是后者的很多概念更接近于普通的关系型数据库。
+## 集群 ES是分布式数据库，并且自己实现了一致性算法。
+ES7之前，leader选举算法是bully；之后则换成了类似raft的算法，细节可以参考这个博客.
+## 节点 实际上就是一个进程，依靠集群的名称来自动发现集群。
+## 索引 es的索引可以简单理解为MySQL中的表。
+## 文档 可以简单理解为MySQL中的行。
+## 分片与副本 分片是为了水平拆分数据，类似MySQL中的手动分表，但是es是自动分片的。每个分片都是一个完整的Lucene索引。
+副本：为分片创建的备份，可以理解为MySQL中的从库。当主分片失效后，某个副本分片可以被选做主分片。
+在创建索引时，可以指定分片与副本的数量（也可以统一配置）。创建索引之后，副本的数量是可以调整的，但是分片的数量理论上不行（不过也有相关的API，如_shrink或_split.
+默认情况下，会有1个主分片和1个副本。
+# API 默认情况下，内部使用的API都会以_开头，比如
+curl &amp;amp;#34;localhost:9200/_cat/health?v&amp;amp;#34; 统一格式如下：
+&amp;amp;lt;HTTP Verb&amp;amp;gt; /&amp;amp;lt;index&amp;amp;gt;/&amp;amp;lt;endpoint&amp;amp;gt;/&amp;amp;lt;id&amp;amp;gt; endpoint如_doc是操作文档本身，put和post可以通过_doc创建/替换文档。
+更新部分字段可以用POST _update来进行。但是请注意：es底层并不能更新文档，而是删除旧的创建一个新的，所以即使更新的内容不变也会做此操作。可以用&amp;amp;quot;detect_noop&amp;amp;quot;: true来做一次无变更检测。
+POST _bulk可以批量更新/创建/删除文档，如
+POST /idx/_bulk?pretty {&amp;amp;#34;update&amp;amp;#34;:{&amp;amp;#34;_id&amp;amp;#34;: &amp;amp;#34;1&amp;amp;#34;}} {&amp;amp;#34;doc&amp;amp;#34;:{&amp;amp;#34;foo&amp;amp;#34;:&amp;amp;#34;bar&amp;amp;#34;}} {&amp;amp;#34;delete&amp;amp;#34;:{&amp;amp;#34;_id&amp;amp;#34;: &amp;amp;#34;2&amp;amp;#34;}} 这里的批量其实更类似redis的multi，只是为了减少网络io耗时。
+批量导入json数据集，可以用 --data-binary &amp;amp;quot;@name.json&amp;amp;quot; 配合curl.
+真正的批量删除（按查询条件删除），使用_delete_by_query，该接口支持异步化；同理也有_update_by_query的批量操作。
+# schema 作为文档型数据库，类似MongoDB，可以无schema建表。如果需要的话，也可以使用mapping来建立schema.
+
+      </description>
+      <guid isPermaLink="true">http://localhost:1313/blogs/posts/es%E5%92%8Ckibana%E7%AE%80%E8%A6%81%E7%AC%94%E8%AE%B0/</guid>
     </item>
     
-    <item>
-      <title>PromQL笔记</title>
-      <link>https://yiuterran.github.io/blog/posts/promql%E7%AC%94%E8%AE%B0/</link>
-      <pubDate>Mon, 24 Jul 2023 11:21:33 +0800</pubDate>
-      
-      <guid>https://yiuterran.github.io/blog/posts/promql%E7%AC%94%E8%AE%B0/</guid>
-      <description>格式 类似influxdb，prometheus也有自己的line protocol： &amp;lt;--------------- metric ---------------------&amp;gt;&amp;lt;-timestamp -&amp;gt;&amp;lt;-value-&amp;gt; &amp;lt;---metric name---&amp;gt;{labelname=labelvalue,....} http_request_total{status=&amp;quot;200&amp;quot;, method=&amp;quot;GET&amp;quot;}@1434417560938 =&amp;gt; 94355 http_request_total{status=&amp;quot;200&amp;quot;, method=&amp;quot;GET&amp;quot;}@1434417561287 =&amp;gt; 94334 上面就表示在某个时间戳系统http GET</description>
-    </item>
-    
+
     <item>
       <title>解决k8s的javaSDK与jackson不兼容问题</title>
-      <link>https://yiuterran.github.io/blog/posts/%E8%A7%A3%E5%86%B3k8s%E7%9A%84javasdk%E4%B8%8Ejackson%E4%B8%8D%E5%85%BC%E5%AE%B9%E9%97%AE%E9%A2%98/</link>
+      <link>http://localhost:1313/blogs/posts/%E8%A7%A3%E5%86%B3k8s%E7%9A%84javasdk%E4%B8%8Ejackson%E4%B8%8D%E5%85%BC%E5%AE%B9%E9%97%AE%E9%A2%98/</link>
       <pubDate>Mon, 10 Jul 2023 12:29:45 +0800</pubDate>
       
-      <guid>https://yiuterran.github.io/blog/posts/%E8%A7%A3%E5%86%B3k8s%E7%9A%84javasdk%E4%B8%8Ejackson%E4%B8%8D%E5%85%BC%E5%AE%B9%E9%97%AE%E9%A2%98/</guid>
-      <description>k8s的java sdk中json序列化使用了google自家的gosn，但是springboot中默认使用Jackson，我们的业务代码里面也习惯上使</description>
+      <author>yaotairan@gmail.com (tryao)</author>
+
+      
+      
+      
+      
+
+      <description>
+      k8s的java sdk中json序列化使用了google自家的gosn，但是springboot中默认使用Jackson，我们的业务代码里面也习惯上使用了Jackson。所以直接用k8s sdk会出现各种序列化/反序列化错误，需要做适配。
+# 解决方案 其实主要就是修改默认objectMapper的配置：
+@Configuration @AutoConfigureBefore(MvcConfigPlus.class) public class SpringMvcConf { private static void configK8sMapper(ObjectMapper mapper) { mapper.addMixIn(V1ListMeta.class, V1ListMetaMixIn.class); SimpleModule simpleModule = new SimpleModule(); IEnumSerializer iEnumSerializer = new IEnumSerializer(); simpleModule.addSerializer(iEnumSerializer); //截断用户输入中的头尾部空格 simpleModule.addDeserializer(String.class, new StringWithoutSpaceDeserializer()); simpleModule.addSerializer(OffsetDateTime.class, new OffsetDateTimeSerializer()); //k8s中OffsetDateTime需要适配两种格式 simpleModule.addDeserializer(OffsetDateTime.class, new OffsetDateTimeDeserializer()); simpleModule.addSerializer(OffsetDateTime.class, new OffsetDateTimeSerializer()); //字节数组与base64之间的转换 simpleModule.addDeserializer(byte[].class, new ByteArrayDeserializer()); simpleModule.addSerializer(byte[].class, new ByteArraySerializer()); //注册k8s object的特殊类 simpleModule.addSerializer(IntOrString.class, new IntOrStringSerializer()); simpleModule.addDeserializer(IntOrString.class, new IntOrStringDeserializer()); simpleModule.addSerializer(Quantity.class, new QuantitySerializer()); simpleModule.addDeserializer(Quantity.class, new QuantityDeserializer()); mapper.registerModule(simpleModule); } public static ObjectMapper yamlMapper() { ObjectMapper objectMapper = JsonUtils.genYamlObjectMapper(); configK8sMapper(objectMapper); //如果输出yaml，就忽略null字段，减少输出体积 objectMapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL); return objectMapper; } public static ObjectMapper k8sObjectMapper() { ObjectMapper objectMapper = JsonUtils.genCustomObjectMapper(); configK8sMapper(objectMapper); return objectMapper; } @Bean @Primary public ObjectMapper objectMapper() { return k8sObjectMapper(); } @Bean public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() { ObjectMapper mapper = objectMapper(); MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter(); converter.setObjectMapper(mapper); JacksonTypeHandler.setObjectMapper(mapper); return converter; } } 因为我们这边的基础库里已经自定义了一个objectMapper的bean，所以这里需要用AutoConfigureBefore，来保证这边的先初始化（那边的bean上有@ConditionalOnMissingBean)。
+
+      </description>
+      <guid isPermaLink="true">http://localhost:1313/blogs/posts/%E8%A7%A3%E5%86%B3k8s%E7%9A%84javasdk%E4%B8%8Ejackson%E4%B8%8D%E5%85%BC%E5%AE%B9%E9%97%AE%E9%A2%98/</guid>
     </item>
     
+
     <item>
       <title>K3s存储插件使用笔记</title>
-      <link>https://yiuterran.github.io/blog/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/</link>
+      <link>http://localhost:1313/blogs/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/</link>
       <pubDate>Mon, 12 Jun 2023 09:20:20 +0800</pubDate>
       
-      <guid>https://yiuterran.github.io/blog/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/</guid>
-      <description>原理 k8s存储主要依赖PV和PVC的机制，前者由运维人员声明可用的存储，如： apiVersion: v1 kind: PersistentVolume metadata: name: nfs spec: storageClassName: manual capacity: storage: 10Gi accessModes: - ReadWriteMany nfs: server: 10.244.1.4 path: &amp;quot;/&amp;quot; 后者是用户（开发人员）声明的需求</description>
+      <author>yaotairan@gmail.com (tryao)</author>
+
+      
+      
+      
+      
+
+      <description>
+       # 原理 k8s存储主要依赖PV和PVC的机制，前者由运维人员声明可用的存储，如：
+apiVersion: v1 kind: PersistentVolume metadata: name: nfs spec: storageClassName: manual capacity: storage: 10Gi accessModes: - ReadWriteMany nfs: server: 10.244.1.4 path: &amp;amp;#34;/&amp;amp;#34; 后者是用户（开发人员）声明的需求：
+apiVersion: v1 kind: PersistentVolumeClaim metadata: name: nfs spec: accessModes: - ReadWriteMany storageClassName: manual resources: requests: storage: 1Gi 两者的匹配机制：
+存储要求的容量必须满足需求； spec.storageClassName必须完全匹配； 权限要求能够匹配上； 绑定成功之后，在Pod里面就可以正常使用这个PVC了：
+apiVersion: v1 kind: pod metadata: labels: role: web-frontend spec: containers: - name: web image: nginx ports: - name: web containerPort: 80 volumeMounts: - name: nfs mountPath: /usr/share/nginx/html volumes: - name: nfs persistentVolumeClaim: claimName: nfs spec.containers.volumeMounts这里将卷名为nfs的卷挂载到容器中的指定目录； spec.volumes中声明了上面用的名为nfs的volume； 上面那个volume实际上对应了persistentVolumeClaim.claimName； k8s中内置了一个循环调度器，会定期检查并绑定PV和PVC，即使Pod启动的时候PVC还没有成功绑定PV，等到有合适可用的磁盘时也会自动绑定成功。
+
+      </description>
+      <guid isPermaLink="true">http://localhost:1313/blogs/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/</guid>
     </item>
     
+
     <item>
       <title>边缘服务器管理工具选型</title>
-      <link>https://yiuterran.github.io/blog/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/</link>
+      <link>http://localhost:1313/blogs/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/</link>
       <pubDate>Mon, 06 Mar 2023 14:37:28 +0800</pubDate>
       
-      <guid>https://yiuterran.github.io/blog/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/</guid>
-      <description>这里我们主要的需求是能够穿透内网管理服务器，服务器大部分情况下应当是linux，但是也可能是windows。我们的服务要通过API和这个服务器管理软件</description>
+      <author>yaotairan@gmail.com (tryao)</author>
+
+      
+      
+      
+      
+
+      <description>
+      这里我们主要的需求是能够穿透内网管理服务器，服务器大部分情况下应当是linux，但是也可能是windows。我们的服务要通过API和这个服务器管理软件进行交互，也就是说要做二次开发，不能直接用。
+刚开始调研的是rport，不太成熟，主要有几个问题：
+不支持高可用部署。这个软件目前只能单机部署，高可用的唯一方式是用冷备的方式，参考这里； 不支持docker/k8s部署，至少官方目前不支持。这个和1组合起来就是无解了，只能单实例部署。虽然说这玩意儿的负载一般也不会有多大：能管理的机器节点一般最多也就几千个，但是这种无法水平扩展的设计用起来还是很崩溃；目前单机极限应当不到2000台，discussion里面说月底的0.9.7版本会解决这个问题；我在discussion里面发了一个帖子希望他们重新考虑HA设计； 存储用的是sqlite，仅有用户相关的存储可以改为MySQL；水平扩展困难； 仅对已有的协议提供反向代理，比如ssh/rdp。密钥、密码管理还是需要线下自己进行的，换句话说你ssh通道有了，但是怎么认证还是走的原生认证：你需要有机器的登陆密码或者私钥；当然这不一定是缺点（因为可以直接用已有的设施进行连接，使用起来比较简单），不过如果你想在线管理这些权限就要二次开发了； 不支持CentOS7； 但是也有优点：
+部署比较简单，提供完整的脚本一键安装，虽然需要翻墙（脚本不能直接用，不过比较容易修改）； 通道按需创建，平时没有长连接； 提供REST接口，功能齐全； 所有功能全部免费； 后面我经过调研又重新发现一款更加成熟的产品：Teleport，这个版本号已经到12了，star数也够多。不过读了文档也发现几个问题：
+高可用部署，如果选用传统部署，那么后端存储仅支持AW3或者GoogleCloud，这个设计也太蛋疼了； 好在1是可以解决的：部署在k8s里面，参考这里； auth server仅提供了GRPC客户端，而且SDK只支持go语言；当然理论上也可以通过proto文件生成其他语言的服务，不过那就要你自己动手了； 和rport相反，由于该平台设计是为了提供无密码服务，所以他用的不是原生的OpenSSH，而是自己重新实现了协议（所以它的github上写的是“wire protocols”）；这就导致客户端用起来非常麻烦，如windows桌面的准备工作（而且这个是企业用户专用的功能）。不过看起来也可以代理任意TCP协议，这个方案应该简单一点； 需要在客户端进行命令行操作； 使用local user的RDP功能是收费的； 总的来说teleport可以满足一般设备/机器管理需求，而且支持水平扩展。缺点是设计的可能有点过于复杂了，内置了很多用不上的功能，而且配置比较麻烦。如果rport支持更好的部署方式的话，其实我还是更倾向于这种简单的设计，可以后续跟进看一下rport的变化。
+与Teleport类似的还有pomerium，不过这个API只对企业版开放，所以不予考虑了。
+后面在Reddit搜了一下，发现推荐最多的是MeshCentral，仔细看了一遍User Guide，总结如下：
+设计理念比较老派，和云原生不沾边，可以自己搬到k8s里，就是有点麻烦，尤其是目前集群地址是静态配置的； 支持大规模部署，后端用的是MongoDB（默认使用轻量级数据库），没有其他依赖； 仅需要开放3个端口，不像其他方案需要开放一堆或者使用三级泛域名； 文档非常详尽，但是没有API文档，官方推荐的集成方式是iframe嵌入（实际上也可以满足一般需求）。如果想要写接口通信，可以参考作者的意见，就是写websocket客户端通信； 远程桌面支持WebRTC打洞，可以节省服务器流量； 前端原生支持中文本地化； 小规模使用感觉用rport就够了，大规模使用如果不嫌麻烦的话可以用teleport（前提是不需要远程桌面）。如果不想开发前端，用SSO（自己实现SAML）登录meshCentral是最好的，该软件没有收费功能，全部免费；能够接受iframe嵌入也可以。
+经过仔细对比，最后还是选用meshCentral，主要是易用且稳定，而且集成也挺方便的，iframe足以满足一般需求，前期使用SSO跳转即可。
+
+      </description>
+      <guid isPermaLink="true">http://localhost:1313/blogs/posts/%E8%BE%B9%E7%BC%98%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E9%80%89%E5%9E%8B/</guid>
     </item>
     
+
     <item>
       <title>Kotlin要点笔记</title>
-      <link>https://yiuterran.github.io/blog/posts/kotlin%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/</link>
+      <link>http://localhost:1313/blogs/posts/kotlin%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/</link>
       <pubDate>Sun, 05 Mar 2023 12:58:37 +0800</pubDate>
       
-      <guid>https://yiuterran.github.io/blog/posts/kotlin%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/</guid>
-      <description>实际上学习kotlin的动力一直不足，因为java is enough. 不过最近打算写一个QQ机器人玩，现在流行的框架是基于kotlin的，虽然可以用HTTP API进行</description>
+      <author>yaotairan@gmail.com (tryao)</author>
+
+      
+      
+      
+      
+
+      <description>
+      实际上学习kotlin的动力一直不足，因为java is enough. 不过最近打算写一个QQ机器人玩，现在流行的框架是基于kotlin的，虽然可以用HTTP API进行桥接，但是这样部署太麻烦，而且性能有影响，索性简单的学习一下kotlin，然后直接扩展。用的教材是阿里的《kotlin核心编程》。
+# 语法要点 var声明变量，val声明常量（即java里面的final，注意不是immutable），格式类似golang，除了类型前面要加冒号；
+val声明的变量可以不立即赋值；
+支持通过fun定义函数，也支持函数闭包，格式也类似golang，不过返回类型之前要加:；
+类似C&#43;&#43;，函数支持默认参数；
+函数类型声明的格式和函数不一样，返回类型之前要用-&amp;amp;gt;；特别的，没有返回值也要写-&amp;amp;gt;Unit
+返回值同样可以是函数，所以这个格式有点像haskell，如(Int) -&amp;amp;gt;((Int)-&amp;amp;gt;Unit)，可以简化为(Int)-&amp;amp;gt;(Int)-&amp;amp;gt;Unit，这样就更像Haskell了；
+通过class::func_memeber_name来引用函数或者成员变量；
+lambda表达式的格式非常类似函数声明：func f (x:Int,y:Int)-&amp;amp;gt;Int={x,y-&amp;amp;gt;x&#43;y}，或者更简单点val f ={x:Int,y:Int: x&#43;y}；即用{}括起来的表达式；
+单个参数可以不声明，隐式的为it；
+func与lambda的区别：
+fun在没有等号，只有花括号时，就是最常见的函数实现，必须带return； fun有等号，没有花括号时，表示单表达式函数体，此时无须带return； 如果是等号同时有花括号，无论使用val还是fun，都表示lambda表达式； lambda可以定义接收者，语法是val sum: Int.(int) -&amp;amp;gt; Int = {other-&amp;amp;gt;plus(other)}; kotlin的闭包是可以修改外部变量的，比java合理；
+如果一个函数只有一个参数，且参数是函数，则调用该函数时，无须传入外层的括号：
+func t(block: ()-&amp;amp;gt;Unit){ block() } t{ println(&amp;amp;#34;hello world&amp;amp;#34;) } 如果一个函数有多个参数，最后一个参数是函数时，也可以省略最后一个参数直接传入内容，如： func t(s:String, block:(String)-&amp;amp;gt;Unit){ block(s) } t(&amp;amp;#34;hello world&amp;amp;#34;){ s-&amp;amp;gt;println(s) } 与C&#43;&#43;类似，kotlin中很多流程控制语句是一个表达式，即会返回值，所以他可以用类似Python的方式实现3目运算：val t = if(x&amp;amp;gt;3) 5 else 7； kotlin设计Unit代替void，就是为了让所有函数调用都有返回值（即成为表达式）； 枚举是类，语法有点像C&#43;&#43;11：enum class Day{}; 如果要加方法的话，最后一个枚举要加一个; kotlin支持模式匹配，语法有点像rust，关键词是when，当然它也是一个表达式： val k = when(day){ Day.MON -&amp;amp;gt; 1 Day.THU -&amp;amp;gt; 2 else -&amp;amp;gt; 3 } 内置range表达式，类似rust，如for (k in 1..10 step 2)，倒着用10 downTo 1 step -2；全闭区间； 如果想用左闭右开区间，用1 until 10； 数组遍历，如果想带上下标，用array.withIndex()，类似Python的enumerate； 支持中缀函数，类似Haskell，形式是infix func。声明条件比较苛刻： 必须是成员函数或者扩展函数，这样函数左侧的对象是确定的 只能有一个参数，即函数右侧的参数 该参数不能有默认值 kotlin的可变参数用vararg来表示，比较特别的是，它不需要一定是最后一个参数；有点像Python的(*args, **kwargs)； kotlin的字符串支持下标访问；支持三引号（类似Python）；支持字符串模板（类似bash）； 支持==判断结构相等（相当于java里面的equal)，===判断引用相等(相当于java的==)； kotlin支持内联函数，但是设计的很复杂，一般情况下尽量不要使用，除了泛型注入类型； inline可以让lambda表达式非局部返回，即直接return父函数的结果；语法糖是return @func # 面向对象 上面可以看出kotlin实际上是支持函数式编程的，所以不是纯OO语言，但是也支持类。
+
+      </description>
+      <guid isPermaLink="true">http://localhost:1313/blogs/posts/kotlin%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/</guid>
     </item>
     
+
     <item>
       <title>KubeEdge要点笔记</title>
-      <link>https://yiuterran.github.io/blog/posts/kubeedge%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/</link>
+      <link>http://localhost:1313/blogs/posts/kubeedge%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/</link>
       <pubDate>Tue, 21 Feb 2023 15:07:54 +0800</pubDate>
       
-      <guid>https://yiuterran.github.io/blog/posts/kubeedge%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/</guid>
-      <description>安装流程 首先要在云端安装k8s，理论上只需要master节点，可以没有worker，换句话说可以是一个单节点集群（但是要关闭NoSchedule的ta</description>
+      <author>yaotairan@gmail.com (tryao)</author>
+
+      
+      
+      
+      
+
+      <description>
+       # 安装流程 首先要在云端安装k8s，理论上只需要master节点，可以没有worker，换句话说可以是一个单节点集群（但是要关闭NoSchedule的taint）。
+k8s迭代的非常快，kubeEdge适配的版本会落后3~4个大版本，因此k8s的版本不能太新。这里使用的是k8s v1.22.16，对应的是kubeEdge的v1.12.2. 事实上我先尝试了v1.23&#43;1.13的组合，但是kubeEdge的代码质量确实不太行，1.13甚至无法正常卸载…
+另外，注意并不能用k3s代替k8s来充当master，至少用keadm来安装是不行的。
+这里使用helm来安装，因为用二进制安装很麻烦，keadm不像kubeadm那样支持直接使用配置文件初始化，而且keadm安装时需要翻墙，这是一个golang写的二进制文件，而不是bash脚本，没法直接改，在云上翻墙十分麻烦，我放弃了。
+## 云端 从这里将整个cloudcore文件夹clone下来（或者用这个工具打包)，上传到服务器。然后编辑values.yaml，修改镜像版本（我这里用的是v1.12.2），并填入服务器地址（advertiseAddress那里），最后跑一下：
+helm upgrade --install cloudcore ./cloudcore --namespace kubeedge --create-namespace -f ./cloudcore/values.yaml 当然是在文件夹外面一层跑。
+等到pod成为running状态，用ss -nalp|grep 1000可以看到10001-10004，就说明部署成功了。此时运行keadm gettoken获取云端join token备用。
+如果上面出现问题， 可以先卸载：
+helm uninstall cloudcore -n kubeedge kubectl delete ns kubeedge 重新配置之后再安装即可。
+## 边缘端 边缘端只能使用docker来安装，因此先安装好docker并配置：
+// /etc/docker/daemon.json { &amp;amp;#34;registry-mirrors&amp;amp;#34;: [ &amp;amp;#34;https://dockerproxy.com&amp;amp;#34;, &amp;amp;#34;https://mirror.baidubce.com&amp;amp;#34; ] } 然后下载keadm的二进制文件并上传到机器，注意应该和上面helm安装的服务端版本一致。
+然后运行：
+keadm join --cloudcore-ipport=192.168.3.202:10000 --token=cc8a5df855bb7b6a2e407f0dd9f81fa3152b4e3a25b7360871c79b4938972464.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2Nzc0NjM1NjR9.UqJNchqPc-9SKhhQaXzcMx0HnMZ4ZL6F81RjNV-9B_A 在云端查看nodes，可以看到edge.
+如果云端使用containerd，边缘端最好改成一致的，在运行keadm join时，可以指定-r containerd
+在边缘端运行journalctl -u edgecore，以及systemctl status edgecore，一切正常即说明安装完毕。
+
+      </description>
+      <guid isPermaLink="true">http://localhost:1313/blogs/posts/kubeedge%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/</guid>
     </item>
     
+
     <item>
       <title>K8s要点简记</title>
-      <link>https://yiuterran.github.io/blog/posts/k8s%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/</link>
+      <link>http://localhost:1313/blogs/posts/k8s%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/</link>
       <pubDate>Fri, 10 Feb 2023 09:30:19 +0800</pubDate>
       
-      <guid>https://yiuterran.github.io/blog/posts/k8s%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/</guid>
-      <description>22年的时候需要使用CICD的时候，看了一遍k8s相关的知识点。买了一本《深入剖析Kubernetes》，大致熟悉了常用的概念。 最近因为工作调动需要做</description>
+      <author>yaotairan@gmail.com (tryao)</author>
+
+      
+      
+      
+      
+
+      <description>
+      22年的时候需要使用CICD的时候，看了一遍k8s相关的知识点。买了一本《深入剖析Kubernetes》，大致熟悉了常用的概念。
+最近因为工作调动需要做云原生相关的开发，有必要重新复习一遍相关概念，并深入部分章节的细节。
+# 容器基础 ## 容器原理 容器是云原生时代的进程。
+之前大家都是在ECS这种虚拟机里面部署应用，操作系统一般是CentOS/Debian之类的Linux系统，服务通过Supervisor/Systemd等进程管理工具进行管理，CPU/内存等容量规划是以虚拟机为单位的，环境一般使用bash/python脚本进行初始化，监控、服务集群扩容和缩容都是运维手动配置。
+容器最开始是为了解决环境问题（为应用创建隔离的运行环境），有点类似Python的virtualEnv，它的底层原理是基于Linux的资源隔离机制，也就是：
+Namespace. 通过clone创建进程时，可以传入CLONE_NEWPID参数，此时这个进程会“看到”一个新的进程空间，在这里他的进程pid是1。在这个进程空间里，它是被隔离的，只能看到操作系统配置的东西；当然在宿主机看来这就是一个普通的进程； CGroups. 用来为进程设置资源限制，如内存、CPU、磁盘、带宽等，同时还具有优先级设置、审计以及进程挂起、恢复等功能；cgroups通过文件系统实现，可以在/sys/fs/cgroup下看到各种资源目录，在里面建立文件夹，系统会自动创建对应的资源限制文件；将进程pid写入tasks即可； rootfs. 用来与宿主机隔离文件系统，基于Linux的pivot_root/chroot指令； 显然，宿主机上所有容器共享同一个内核。
+Docker on Windows/Mac实际是基于kvm实现的，和linux的docker完全不同。
+## 镜像原理 docker所谓的镜像，其实就是一种rootfs的压缩包，它的创新点主要是引入了层(layer)的概念，后者就是增量的rootfs。
+docker通过联合挂载(union mount)技术将这些层挂载到统一的挂载点上，这通过文件系统的支持（如AuFS）来实现。
+镜像从下到上分别是只读层、Init层和读写层：
+一般只读层就是操作系统镜像，如ubuntu:latest; Init层是启动时写入容器的配置，如hostname、hosts等； 可读写层则是普通用户创建镜像时修改的部分； 由于只读层的文件不能真正被修改或者删除，所以可读写层如果想要修改只读层的东西，aufs实际上是通过创建whiteout文件，把只读层的文件遮挡起来。比如foo文件对应的位置创建一个.wh.foo文件，这种屏蔽一般称为白障。只读层的挂载方式也称为ro&#43;wh.
+Docker用来制作rootfs的工具称为Dockerfile，例如：
+From python:2.7-slim WORKDIR /app ADD . /app RUN pip install --trusted-host pypi.python.org -r requirements.txt EXPOSE 80 ENV NAME world CMD [&amp;amp;#34;python&amp;amp;#34;, &amp;amp;#34;app.py&amp;amp;#34;] 这是一个python服务的打包过程，同目录应当有app.py和requirements.txt两个文件，进入目录，通过docker build -t &amp;amp;lt;tag&amp;amp;gt; .命令即可生成docker镜像。
+## 常用命令 使用docker run -p 4000:80 helloworld来运行镜像，并将镜像的80端口映射到宿主机的4000端口。
+使用docker ps命令即可看到在运行的进程。如果在镜像里做了某些操作，想要把正在运行的镜像提交成一个新的镜像，可以使用docker commit命令。
+
+      </description>
+      <guid isPermaLink="true">http://localhost:1313/blogs/posts/k8s%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/</guid>
     </item>
     
+
     <item>
       <title>Makefile要点简记</title>
-      <link>https://yiuterran.github.io/blog/posts/makefile%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/</link>
+      <link>http://localhost:1313/blogs/posts/makefile%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/</link>
       <pubDate>Wed, 25 Jan 2023 16:49:11 +0800</pubDate>
       
-      <guid>https://yiuterran.github.io/blog/posts/makefile%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/</guid>
-      <description>虽然现代C/CPP一般使用cmake作为工具链，但是如果要看陈年老项目，makefile相关的知识还是要掌握一些的，不然估计很难理清编译逻辑。这也是c</description>
+      <author>yaotairan@gmail.com (tryao)</author>
+
+      
+      
+      
+      
+
+      <description>
+      虽然现代C/CPP一般使用cmake作为工具链，但是如果要看陈年老项目，makefile相关的知识还是要掌握一些的，不然估计很难理清编译逻辑。这也是c/cpp的技术负债之一。
+# 梗概 target ... : prerequisites ... &amp;amp;lt;tab&amp;amp;gt;command &amp;amp;lt;tab&amp;amp;gt;other commands 其实和cmake有点像，也是先定义target，以及其依赖，然后运行命令生成target。
+prerequisites中如果有一个以上的文件比target文件要新的话，command所定义的命令就会被执行。
+也就是增量编译。
+第一个target是默认生成的文件，直接跑make命令即可。其他target需要用make xxx来手动执行。
+# 语法 类似bash，直接obj = a b c就是数组，使用$(obj)来引用变量； 使用include来导入其他makefile，也可以用MAKEFILES的环境变量来隐式include； 通配符默认并不会展开，需要手动指定，如obj := $(wildcard *.c); 使用vpath关键字定义搜索目录，语法是vpath pattern directorys，pattern并不是正则，而是类似glob语法，但是使用%而不是*。如vpath %.h ../headers; .PHONY表示伪目标，并不会真的生成对应的目标，如clean动作； 多个目标可以使用相同的生成语法，使用$@来引用具体的目标名称； $&amp;amp;lt;表示第一个依赖文件； 命令前加@，那么命令将不会显示出来； 如果命令之间有依赖关系，那么不能放在两行，而是同一行用;隔开，例如cd ..;pwd； 命令前加-，表示可以忽略该指令的错误； 可以类似cmake，将makefile拆成多个文件；不过makefile向下级传递变量的方式和cmake不一样，需要显式export； 下级makefile需要手动执行$(MAKE)； 可以用define..endef定义一系列命令组成的命令包； makefile中的变量使用起来是宏展开，使用:=定义时，只允许引用已定义的变量；使用?=定义，则表示如果变量不存在则定义； 我们可以替换变量中的共有的部分，其格式是 $(var:a=b) 或是 ${var:a=b}； 如果有变量是通常make的命令行参数设置的，那么Makefile中对这个变量的赋值会被忽略。如果你想在Makefile中设置这类参数的值，那么，你可以使用“override”指示符。如override obj; := xxx; 目标变量：可以在目标之后定义变量，如target: obj:=yyy，这样，在target相关命令中，$(obj)都是yyy; 模式变量：对目标变量的扩展，如%.o: CFLAGS = -0； 条件语句：ifeq,ifneq,ifdef,ifndef； # 内置函数 请参考这里
+# 隐式规则 同样参考文档即可，这玩意儿只是使用惯例。
+
+      </description>
+      <guid isPermaLink="true">http://localhost:1313/blogs/posts/makefile%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/</guid>
     </item>
     
+
     <item>
       <title>CMake速记</title>
-      <link>https://yiuterran.github.io/blog/posts/cmake%E9%80%9F%E8%AE%B0/</link>
+      <link>http://localhost:1313/blogs/posts/cmake%E9%80%9F%E8%AE%B0/</link>
       <pubDate>Mon, 09 Jan 2023 16:42:44 +0800</pubDate>
       
-      <guid>https://yiuterran.github.io/blog/posts/cmake%E9%80%9F%E8%AE%B0/</guid>
-      <description>主要参考书籍《Modern CMake for C++》，以及《CMake Best Practices》，使用CMake版本3.25. 建议先看第一本，再看第二本。 使用 一般而言，</description>
+      <author>yaotairan@gmail.com (tryao)</author>
+
+      
+      
+      
+      
+
+      <description>
+      主要参考书籍《Modern CMake for C&#43;&#43;》，以及《CMake Best Practices》，使用CMake版本3.25.
+建议先看第一本，再看第二本。
+# 使用 一般而言，cmake的使用方式非常简单。在命令行下使用
+cmake -B &amp;amp;lt;build tree&amp;amp;gt; -S &amp;amp;lt;source tree&amp;amp;gt; cmake --build &amp;amp;lt;build tree&amp;amp;gt; 其中build tree即build结果文件夹，可以直接用build，source tree则是源代码目录，一般就是..
+上面第一步是构建准备（配置阶段&#43;生成阶段），第二步是真正的构建（包括compile/link/test/package）。
+## 准备阶段 可以通过-G指定生成器，通过cmake --help可以看到可用的生成器列表，unix下习惯使用Makefile或者Ninja这两种生成器；windows下则习惯使用Visual Studio的各种版本IDE工程文件。
+可以通过-C指定脚本文件，来预填充缓存信息；或者使用-D k=v 直接在命令行里面指定参数；
+-U与-D的含义相反，是用来删除变量的，这两个参数都可以多次使用。
+--log-level=&amp;amp;lt;level&amp;amp;gt;用来指定日志等级，可以通过CMAKE_MESSAGE_LOG_LEVEL来永久保留设置；
+--trace跟踪模式，类似断点调试；
+开发人员可以提供CMakePresets.json文件，用来预置相关选项，使用的时候通过--preset=&amp;amp;lt;preset&amp;amp;gt;来指定预设文件。
+构建之后，可以通过-L列出已填充的变量，-LA会额外显示出高级变量，-LH会额外显示变量的帮助信息；注意通过-D指定的自定义变量，这里是看不到的；
+## 构建阶段 需要传入的参数可以放在命令末尾。例如-j或者--parallel来指定并发构建数目。
+先清理再构建：--clean-first.
+多配置生成器，可以通过--config &amp;amp;lt;cfg&amp;amp;gt;来指定配置，包括Debug, Release, MinSizeRel 或 RelWithDebInfo，默认是Debug.
+可以通过-v参数，打印更多信息。
+## 安装 类似make install的效果，在cmake中是cmake --install &amp;amp;lt;dir&amp;amp;gt; [options].
+如果是多配置生成器，使用--config &amp;amp;lt;cfg&amp;amp;gt;来指定配置，一般是Release。
+单个组件安装，则通过--component &amp;amp;lt;comp&amp;amp;gt;来指定组件的名字。
+unix系统可以指定安装目录的默认权限，格式为--default-directory-permissions &amp;amp;lt;permissions&amp;amp;gt;，默认权限是755.
+
+      </description>
+      <guid isPermaLink="true">http://localhost:1313/blogs/posts/cmake%E9%80%9F%E8%AE%B0/</guid>
     </item>
     
+
     <item>
       <title>Tinode源码解析</title>
-      <link>https://yiuterran.github.io/blog/posts/tinode%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</link>
+      <link>http://localhost:1313/blogs/posts/tinode%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</link>
       <pubDate>Mon, 14 Nov 2022 19:21:38 +0800</pubDate>
       
-      <guid>https://yiuterran.github.io/blog/posts/tinode%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</guid>
-      <description>概述 有朋友需要做一个im，简单做了一下技术调研，开源的实现其实蛮多的，这里挑几个说一下： Synapse/dendrite，matrix系，客户端比较多</description>
+      <author>yaotairan@gmail.com (tryao)</author>
+
+      
+      
+      
+      
+
+      <description>
+       # 概述 有朋友需要做一个im，简单做了一下技术调研，开源的实现其实蛮多的，这里挑几个说一下：
+Synapse/dendrite，matrix系，客户端比较多，比较推荐的应该是element.io. 稳定版本是python写的，性能很一般，golang/rust的服务端还没有stable，不建议使用； Tinode/chat: 即本文主角，golang编写，架构比较简单，有MySQL就能跑，轻量级方案。支持web/ios/android，界面长得比较像telegram；支持chatbot. 国内用有点水土不服，主要是推送等组件依赖国外大厂的服务(S3, Firebase等），国内根本连不上，需要自己改成个推之类的方案。由于方案比较轻量，消息可靠性上有一些缺陷，内置了chatbot支持（可以用Python写）； Open-IM-Server：据说是某个腾讯核心人员离职后自己开源的。服务端golang，架构基于微服务，有商业产品，自己试了一下目前版本大概有16个微服务，依赖kafka&amp;amp;amp;zk、mysql、etcd、redis、miniIO和MongoDB。架构比较合理，早期是写扩散模型，v2.3之后群聊改为读扩散模型。主要问题是架构比较重，文档写的烂，需要自己分析代码，小团队维护比较吃力；另外客户端开源的只是demo，bug满天飞，不能直接拿来用。 turms-im/turms：java写的，读扩散模型。maintainer比较有自信，号称开源界最先进的方案，文档确实写的不错，很详细的技术分析。不过star数不多，实际使用者估计也寥寥。而且作者喜欢自研，Log/注册中心/配置中心这些都是自研的…有种自嗨过了头的感觉。整体来讲架构比较中庸，技术细节把控的比较好。java团队可以考虑，代码还比较易读，而且没有商业版，作者没有恰饭需求；客户端没有开源产品，只有sdk； wildfirechat/im-server：也是java做的，主要卖商业版，开源的功能做的很全了，和国内生态也结合的蛮好。开源版强行指定了使用七牛云做文件夹存储，然后服务端端口强行指定了80/1883，另外开源版不支持集群模式；国内的小规模内部使用推荐使用该项目（&amp;amp;lt;10w人）； Rocket.chat/mattermost：面向B端，类似zulip/Slack这种IM，有复杂B端需求的团队建议优先考虑。界面不太符合普通人使用im(qq/微信/钉钉)的习惯，办公人士用比较合适； 这几个项目是客户端生态做的最好的了，基本能开箱即用。其他一些如goim之类的，没有客户端只有服务器，那还不如用mqtt自己写一个，毕竟有emqx这种高性能broker，写一个im真不算啥难事。聊天存储用influxdb或者MongoDB，元数据存MySQL。设计好推拉模型，读写扩散，消息时序，topic规则，一个基本的im软件还是能很快成型的。
+由于这次的需求是小团队，少量用户(&amp;amp;lt;1w)聊天场景，需要机器人支持，目前就先用tinode试水。
+# 安装 在github上fork一下chat项目，clone下来。install.md里面的安装指南也是错的，不用看，要跑起来准备一个MySQL5.7&#43;的版本即可。MongoDB不支持集群，因此这里用MongoDB没啥优势，MySQL可以换成tidb.
+在server文件夹下建立static文件夹，将https://github.com/tinode/webapp/archive/master.zip解压到static文件夹下。
+修改build-all.sh，仅保留windows和linux的两个二进制文件，mac可以自己加上darwin&#43;amd64/arm64的配置，数据库仅保留mysql即可。将GOSRC改成..，使其不再依赖GOPATH.
+在平台上安装grpc相关依赖(apt install protobuf-compiler)，以及：
+go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28 go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2 go install google.golang.org/protobuf/cmd/protoc-gen-go@latest 另外安装Python3环境，并pip安装如下依赖：
+tinode-grpc&amp;amp;gt;=0.20.0b3 grpcio==1.50.0 grpcio-tools==1.50.0 protobuf==4.21.9 six==1.16.0 这是给chatbot以及py_grpc这个包用的。
+然后，在linux下运行build-all.sh即可，会在release文件夹下生成打包文件。其中zip结尾的是windows下的，tar.gz结尾的是linux下的。
+# 配置 主要有3个包：
+tinode开头的是主程序 chatbot顾名思义是聊天机器人 cli是命令行客户端主要用来调试 解开tinode开头的压缩包，里面有三个二进制文件：
+keygen 这是密钥生成器，用于配置文件 tinode 这是主程序 init-db 这是初始化数据库的二进制文件 配置文件就是tinode.conf，这是一个json with comments格式，或者说json5格式，也可以用hcl来解析（用viper的话）。可以把后缀改成jsonc或者json5，一般的编辑器就可以语法高亮了。
+配置文件的注释非常详尽，按着配置来就行，如果为了测试，必须修改的就只有MySQL的用户名密码和地址（生产的话，有几个IMPORTANT的地方必须修改以提高安全性）。见store_config部分，修改：
+{ &amp;amp;#34;use_adapter&amp;amp;#34;: &amp;amp;#34;mysql&amp;amp;#34;, &amp;amp;#34;mysql&amp;amp;#34;:{ &amp;amp;#34;Addr&amp;amp;#34;: &amp;amp;#34;&amp;amp;#34;, &amp;amp;#34;User&amp;amp;#34;: &amp;amp;#34;&amp;amp;#34;, &amp;amp;#34;Passwd&amp;amp;#34;: &amp;amp;#34;&amp;amp;#34; } } 这几个参数。MySQL密码可能默认是空的，可以用ALTER USER &amp;#39;root&amp;#39;@&amp;#39;localhost&amp;#39; IDENTIFIED WITH mysql_native_password BY &amp;#39;123456&amp;#39;加一个密码。使用init-db初始化数据库
+
+      </description>
+      <guid isPermaLink="true">http://localhost:1313/blogs/posts/tinode%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</guid>
     </item>
     
+
     <item>
       <title>SRE读书笔记</title>
-      <link>https://yiuterran.github.io/blog/posts/sre%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/</link>
+      <link>http://localhost:1313/blogs/posts/sre%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/</link>
       <pubDate>Thu, 22 Sep 2022 10:01:11 +0800</pubDate>
       
-      <guid>https://yiuterran.github.io/blog/posts/sre%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/</guid>
-      <description>SRE相关的书籍，截止目前google出了2本，分别是2016年的的《Site Reliability Engineering: How Google Runs Production Systems》和2020年的《The Site Reliability Workbook》</description>
+      <author>yaotairan@gmail.com (tryao)</author>
+
+      
+      
+      
+      
+
+      <description>
+      SRE相关的书籍，截止目前google出了2本，分别是2016年的的《Site Reliability Engineering: How Google Runs Production Systems》和2020年的《The Site Reliability Workbook》。这两本书是互补关系，需要先阅读第一本，然后再看第二本。
+第一本网上有免费的电子书，或者看中文也有扫描pdf。
+# 概述 SRE团队必须将50%的精力花在真实的开发工作上；
+SRE团队的主要职责包括：
+可用性改进； 延迟优化； 性能优化； 效率优化； 变更管理； 监控； 紧急事务处理； 容量规划与管理； SRE处理运维工作的一项准则是：在每8~12小时的on-call轮值期间最多只处理两个紧急事件；
+产品事故的事后总结包括：
+事故发生、发现、解决的全过程； 事故的根本原因； 预防或者优化的解决方案； SRE的目标不是0事故运行，而是有一定的错误预算。大部分服务不应该追求100%的可靠性；
+监控系统应该只包含三类输出：
+紧急警报 工单 日志 事故平均恢复时间（MTTR）和平均失败时间（MTTF）是可靠性最重要的指标；
+应当尽可能自动化地恢复事故，并将相关经验记录在运维手册上，后者是SRE团队重点维护的文档；
+70%的生产事故是由某种部署的变更而触发，变更管理的最佳实践：
+渐进式发布（灰度）； 迅速而准确地检测到问题的发生； 当出现问题时，安全迅速地回退改动； 需求预测和容量规划是对未来服务稳定性的预期，应当：
+有一个准确的自然增长需求预测模型，需求预测的时间应当超过资源获取的时间； 应当有准确的非自然增长的需求来源的统计； 周期性压力测试，以便准确地将系统原始资源信息与业务容量对应起来； 高效地利用系统资源，简单来说就是在延迟目标允许范围内，通过合理配置，最大化提高系统资源利用率；
+# Google基础设施 一般应建立N&#43;2个服务实例，保证流量峰值满足需求； 如果业务的生命周期尚未达到成熟/稳定运行阶段，应当执行更低的可用性目标； 如果服务允许停机，那么计划内停机时间应该计算在SLO中； 可用性是最基本的目标，其他业务指标需要根据业务特性来指定。如最大延迟时间等； 基础设施组件由于需要服务多个用户，用户之间的需求可能恰好相反： 比较明确的解决方案是将服务做的尽可能好，不过这可能导致服务成本激增； 另一个方案是将基础设施分割成多个服务，在多个独立的服务水平上提供该服务； 通过SLO预算来管理版本发布的速度，可以有效降低频繁发布造成的风险； # 服务质量目标 几个术语：
+SLI，服务质量指标，可以量化的基础指标；如请求延迟、错误率、吞吐量等； SLO，服务质量目标，基础指标的预期值； SLA，服务质量协议，当基础指标不符合预期时的应对计划； SLI需要按着用户对于服务的期许来制订，常用指标包括：
+用户可见的服务系统：可用性、延迟以及吞吐量； 存储系统：延迟、可用性和数据持久性； 大数据系统：吞吐量和端到端延迟； 指标的收集，一般利用某种监控系统&#43;日志分析系统完成，有时候还要结合客户端数据的收集；
+
+      </description>
+      <guid isPermaLink="true">http://localhost:1313/blogs/posts/sre%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/</guid>
     </item>
     
+
     <item>
       <title>Ginkgo使用笔记</title>
-      <link>https://yiuterran.github.io/blog/posts/ginkgo%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/</link>
+      <link>http://localhost:1313/blogs/posts/ginkgo%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/</link>
       <pubDate>Mon, 05 Sep 2022 18:10:06 +0800</pubDate>
       
-      <guid>https://yiuterran.github.io/blog/posts/ginkgo%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/</guid>
-      <description>go自带的单元测试比较适合测一个小函数，如果要做一系列的流程测试，则显得较为繁琐。 推荐使用ginkgo来做流程测试，BDD风格写出来的测试代码非常容易</description>
+      <author>yaotairan@gmail.com (tryao)</author>
+
+      
+      
+      
+      
+
+      <description>
+      go自带的单元测试比较适合测一个小函数，如果要做一系列的流程测试，则显得较为繁琐。
+推荐使用ginkgo来做流程测试，BDD风格写出来的测试代码非常容易读懂和维护。
+# 安装 这里使用v2版本进行测试，首先安装二进制文件
+go install github.com/onsi/ginkgo/v2/ginkgo@latest 在待测试的项目中运行：
+go get github.com/onsi/gomega # 生成 在待测试的package下面跑
+ginkgo bootstrap 生成suit_test文件。
+然后对单个文件跑
+ginkgo generate xxx xxx是待测试文件的名字。
+# 语法 这个生成的xxx_test.go被称为一个spec. spec分为三类结点：
+容器节点，如Describe、Context和It，可以理解为前端的div，就是用来组织代码的；一般用来说明测试的场景； setup结点，如BeforeEach，用来初始化数据； 主题结点，一般用gomega里面的各种断言，形如Except(xxx).To()，后面会详细解释； ## JustBeforeEach 该节点运行在BeforeEach之后，主题节点之前，可以用来做统一初始化；
+## BeforeEach 运行所有主题节点之前都要跑的函数
+## AfterEach 在主题节点结束之后运行
+## JustAfterEach 在主题节点结束之后，AfterEach节点运行之前
+## DeferCleanUp 可以在BeforeEach里面写的闭包，代替AfterEach清理，代码更为简单
+## BeforeSuite和AfterSuite 在整个测试集开始之前和结束之后运行的代码，通过全局变量写在suite_test文件里；
+## DescribeTable与Entry 可以配合用来测试多个case，避免重复代码
+
+      </description>
+      <guid isPermaLink="true">http://localhost:1313/blogs/posts/ginkgo%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/</guid>
     </item>
     
+
     <item>
       <title>Influxdb Cluster集成</title>
-      <link>https://yiuterran.github.io/blog/posts/influxdb-cluster%E9%9B%86%E6%88%90/</link>
+      <link>http://localhost:1313/blogs/posts/influxdb-cluster%E9%9B%86%E6%88%90/</link>
       <pubDate>Thu, 01 Sep 2022 15:47:56 +0800</pubDate>
       
-      <guid>https://yiuterran.github.io/blog/posts/influxdb-cluster%E9%9B%86%E6%88%90/</guid>
-      <description>本文记录在golang项目中集成influxdb-cluster需要的知识储备。 术语 database 和MySQL中一致 batch \n分割的多行数据，用来批量写入。 influ</description>
+      <author>yaotairan@gmail.com (tryao)</author>
+
+      
+      
+      
+      
+
+      <description>
+      本文记录在golang项目中集成influxdb-cluster需要的知识储备。
+# 术语 ## database 和MySQL中一致
+## batch \n分割的多行数据，用来批量写入。
+influxDB推荐5000~10000个点批量写入以提高性能。
+## bucket database&#43;retain policy（保留策略，简称RP）
+## CQ 连续查询，可以理解为一个物化视图，当数据更新时自动执行的select语句。不过这里要求必须带上GROUP BY time()
+## duration 数据保存时间，自动滚动删除
+## field 没加索引的额外字段，kv pair
+## data point 即点位，可以理解为表中的一行数据。
+## line protocol 写入数据时，数据的格式：
+weather,location=us-midwest temperature=82 1465839830100400200 | -------------------- -------------- | | | | | | | | | &#43;-----------&#43;--------&#43;-&#43;---------&#43;-&#43;---------&#43; |measurement|,tag_set| |field_set| |timestamp| &#43;-----------&#43;--------&#43;-&#43;---------&#43;-&#43;---------&#43; 注意分隔符，时间戳在最后，默认时间精确到纳秒
+
+      </description>
+      <guid isPermaLink="true">http://localhost:1313/blogs/posts/influxdb-cluster%E9%9B%86%E6%88%90/</guid>
     </item>
     
+
     <item>
       <title>Zabbix配置记录</title>
-      <link>https://yiuterran.github.io/blog/posts/zabbix%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/</link>
+      <link>http://localhost:1313/blogs/posts/zabbix%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/</link>
       <pubDate>Wed, 13 Jul 2022 12:21:28 +0800</pubDate>
       
-      <guid>https://yiuterran.github.io/blog/posts/zabbix%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/</guid>
-      <description>安装服务 这里演示的是物理机环境监控场景，容器场景还是更推荐k8s+prom来搞。 版本是zabbix6.0 LTS，官方已经不提供CentOS7的安装包了</description>
+      <author>yaotairan@gmail.com (tryao)</author>
+
+      
+      
+      
+      
+
+      <description>
+       # 安装服务 这里演示的是物理机环境监控场景，容器场景还是更推荐k8s&#43;prom来搞。
+版本是zabbix6.0 LTS，官方已经不提供CentOS7的安装包了，所以这里推荐使用docker安装，后面升级也比较方便。
+推荐直接在裸机上安装MySQL8，因为数据库用docker装的话，需要配置的东西有点多，而且不方便与其他服务共用。
+特别注意：不要使用alpine镜像，会遇到稀奇古怪的问题。
+这里直接贴出来docker-compose.yaml的最小化安装内容，不含java-gateway和snmptraps，因为我这里没有需要监控的java服务。
+version: &amp;amp;#39;3&amp;amp;#39; services: zabbix-server: image: zabbix/zabbix-server-mysql:6.0-ubuntu-latest container_name: zabbix-server volumes: - /etc/localtime:/etc/localtime - /opt/zabbix/alertscripts:/usr/lib/zabbix/alertscripts - /opt/zabbix/externalscripts:/usr/lib/zabbix/externalscripts restart: always privileged: true environment: - ZBX_LISTENPORT=10051 - DB_SERVER_HOST=10.20.121.5 - DB_SERVER_PORT=3333 - MYSQL_DATABASE=zabbix - MYSQL_USER=root - MYSQL_PASSWORD=123456 - MYSQL_ROOT_PASSWORD=123456 - ZBX_CACHESIZE=1G - ZBX_HISTORYCACHESIZE=512M - ZBX_HISTORYINDEXCACHESIZE=16M - ZBX_TRENDCACHESIZE=256M - ZBX_VALUECACHESIZE=256M - ZBX_STARTPINGERS=64 - ZBX_IPMIPOLLERS=1 ports: - &amp;amp;#34;10051:10051&amp;amp;#34; networks: zabbix-net: zabbix-web: image: zabbix/zabbix-web-nginx-mysql:6.0-ubuntu-latest container_name: zabbix-web volumes: - /etc/localtime:/etc/localtime - /opt/zabbix/font/simfang.otf:/usr/share/zabbix/assets/fonts/DejaVuSans.ttf restart: always privileged: true environment: - ZBX_SERVER_NAME=IoT-Zabbix - ZBX_SERVER_HOST=zabbix-server - ZBX_SERVER_PORT=10051 - DB_SERVER_HOST=10.20.121.5 - DB_SERVER_PORT=3333 - MYSQL_DATABASE=zabbix - MYSQL_USER=root - MYSQL_PASSWORD=123456 - MYSQL_ROOT_PASSWORD=123456 - PHP_TZ=Asia/Shanghai ports: - &amp;amp;#34;8080:8080&amp;amp;#34; networks: zabbix-net: links: - zabbix-server networks: zabbix-net: driver: bridge ipam: config: - subnet: 172.22.0.0/24 一点准备工作，首先是安装docker服务，这个就不提了，然后：
+
+      </description>
+      <guid isPermaLink="true">http://localhost:1313/blogs/posts/zabbix%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/</guid>
     </item>
     
+
     <item>
       <title>Golang定时器要点</title>
-      <link>https://yiuterran.github.io/blog/posts/golang%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A6%81%E7%82%B9/</link>
+      <link>http://localhost:1313/blogs/posts/golang%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A6%81%E7%82%B9/</link>
       <pubDate>Thu, 07 Apr 2022 09:35:13 +0800</pubDate>
       
-      <guid>https://yiuterran.github.io/blog/posts/golang%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A6%81%E7%82%B9/</guid>
-      <description>golang内置的定时器是基于多个四叉堆封装调度的，增删定时器的效率是O(lgn)，所以大量定时器本身可能成为性能瓶颈。可以考虑使用开源的时间轮算法实</description>
+      <author>yaotairan@gmail.com (tryao)</author>
+
+      
+      
+      
+      
+
+      <description>
+      golang内置的定时器是基于多个四叉堆封装调度的，增删定时器的效率是O(lgn)，所以大量定时器本身可能成为性能瓶颈。可以考虑使用开源的时间轮算法实现方案进行替换。不过一般情况下不需要考虑该问题，如果时间轮真的万能的话，官方肯定就重构了。
+复用定时器技巧：
+for { t = timer.NewTimer(5 * time.Second) defer t.Stop() select { case b := &amp;amp;lt;- a: fmt.Print(b) break case &amp;amp;lt;-t.C: fmt.Print(&amp;amp;#34;timeout&amp;amp;#34;) continue } } 这种循环场景下回创建大量定时器，对性能有较大影响，所以应该通过Reset进行复用。即：
+t = timer.NewTimer() for{ t.Reset(5 * time.Second) //... } timer.Reset的使用很容易出现各种问题，这主要是timer.Stop实际上并不会关闭t.C这个channel，因此需要：
+if !t.Stop(){ &amp;amp;lt;-t.C } 来判断t是expired还是stop成功，如果expired，需要将t.C里面的信号取出来抛弃掉。
+令人蛋疼的是，在Reset之前是否需要做这一步完全取决于t.C里面是否有数据。如果确认t.C里面的数据已经取出，就必须不能做这一步，否则会卡在&amp;amp;lt;-t.C这里。
+而看似万无一失的:
+if !t.Stop(){ select{ case &amp;amp;lt;-t.C: default: } } 一样有问题。由于go的timer源码里存在竞态条件，导致t.Stop和&amp;amp;lt;-t.C这两部之间存在时序问题，这么干了可能会导致后面用到&amp;amp;lt;-t.C的地方立刻触发。
+所以官方给出的解答是：
+程序始终在同一个 goroutine 中进行 Timer 的 Stop、Reset 和 receive/drain channel 操作 程序需要维护一个状态变量，用于记录它是否已经从 channel 中接收过事件，进而作为 Stop 中 draining 操作的判断依据 一定要小心谨慎地使用。
+
+      </description>
+      <guid isPermaLink="true">http://localhost:1313/blogs/posts/golang%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A6%81%E7%82%B9/</guid>
     </item>
     
+
     <item>
       <title>Windows&#43;wsl2后端开发环境搭建</title>
-      <link>https://yiuterran.github.io/blog/posts/windows&#43;wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</link>
+      <link>http://localhost:1313/blogs/posts/windows&#43;wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</link>
       <pubDate>Fri, 04 Mar 2022 20:54:01 +0800</pubDate>
       
-      <guid>https://yiuterran.github.io/blog/posts/windows&#43;wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</guid>
-      <description>2023/11/16 Update: wsl2 2.0通过镜像网络解决了所有网络问题，已经不用折腾了。 2023/2/2 Update: wsl已经解决了systemd和网络问题，现在已经基本无障碍使用，移除了大部分无用的配</description>
+      <author>yaotairan@gmail.com (tryao)</author>
+
+      
+      
+      
+      
+
+      <description>
+      2023/11/16 Update: wsl2 2.0通过镜像网络解决了所有网络问题，已经不用折腾了。
+2023/2/2 Update: wsl已经解决了systemd和网络问题，现在已经基本无障碍使用，移除了大部分无用的配置步骤。
+就我个人而言，目前感觉最理想的后端开发环境还是Intel CPU的MacOS，基本所有常用的后端依赖都可以用homebrew安装，GUI和命令行的结合也是最方便的。不过Windows从10代之后添加了WSL/WSL2，将Linux命令行和Windows开发环境完美的结合起来，目前来说可用性还算不错了。
+# 准备工作 ## 网络准备 由于下面会大量从GitHub下载软件，所以请自备工具保证能够顺利下载。
+## windows命令行工具 win10之前，系统的命令行工具分裂为cmd和pwsh两种，界面都难看的很。所以首先安装Windows Terminal（以下简称wt），整一个好看一点的终端用。对于天天用命令行的人来说，这个比啥都重要。如果是win11，系统自带了wt，但是版本较老，建议更新到最新版。
+然后安装最新的powershell，下载地址在这里，目前最新版是powershell7. pwsh7其实是开源的shell，在linux/macos上都能用，不过这玩意最大的问题是启动速度实在太慢，而且语法设计和bash差别太大。bash是把一切都看作文本，pwsh是把一切都看作对象……都是辣鸡设计，还是python好使。
+安装的时候请注意选中添加环境变量，Open here那个那个建议不要选中，wt自带有这个功能。装完之后pwsh7会自动注册到wt里。
+## 安装包管理器 linux下有apt/yum/pacman之类的包管理工具，mac也有homebrew/macport，windows下实际上也有对应的包管理工具，如scoop/Chocolatey或者官方的winget. 这里以scoop为例（choco不需要翻墙，但是源里面包要少一些）：
+打开wt，输入Set-ExecutionPolicy RemoteSigned -scope CurrentUser打开安装权限。然后输入
+iwr -useb get.scoop.sh | iex 安装即可。
+然后替换掉scoop的源，官方源太慢了：
+scoop bucket rm main scoop bucket add main https://mirror.nju.edu.cn/git/scoop-extras.git/ scoop bucket add extras https://mirror.nju.edu.cn/git/scoop-extras.git/ scoop update 使用aria2开启16线程加速下载：
+scoop install aria2 scoop config aria2-max-connection-per-server 16 scoop config aria2-split 16 scoop config aria2-min-split-size 1M 常用的软件可以使用scoop直接安装，如：
+
+      </description>
+      <guid isPermaLink="true">http://localhost:1313/blogs/posts/windows&#43;wsl2%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</guid>
     </item>
     
+
     <item>
       <title>Gb28181解析</title>
-      <link>https://yiuterran.github.io/blog/posts/gb28181%E8%A7%A3%E6%9E%90/</link>
+      <link>http://localhost:1313/blogs/posts/gb28181%E8%A7%A3%E6%9E%90/</link>
       <pubDate>Wed, 02 Mar 2022 09:46:50 +0800</pubDate>
       
-      <guid>https://yiuterran.github.io/blog/posts/gb28181%E8%A7%A3%E6%9E%90/</guid>
-      <description>国标GB28181（以下简称国标或者gb）文档分析的文档我去年其实写过一版，但是由于原来的电脑炸了，文档还没来得及传上去就丢了（痛苦），所以还要重写一</description>
+      <author>yaotairan@gmail.com (tryao)</author>
+
+      
+      
+      
+      
+
+      <description>
+      国标GB28181（以下简称国标或者gb）文档分析的文档我去年其实写过一版，但是由于原来的电脑炸了，文档还没来得及传上去就丢了（痛苦），所以还要重写一版做笔记。
+国标目前有两个版本，2011和2016，以下以16版为准。16版本相比11版本，主要是增加了TCP的支持，11版是全部基于UDP传输的。
+# 协议结构 上图是直接从文档中截取的通信协议结构图。国标基于TCP/IP网络，主要分为两个传输通道，即一般会话通道和流媒体传输通道。前者基于SIP协议（图中MANSCDP和MANSRTSP是国标自行扩展的协议，仍然是基于SIP协议的），传输载体是SDP格式字符串；后者基于RTP/RTCP协议，传输载体主要是PS视频流和AAC等格式的音频数据。
+# SIP协议 SIP协议初衷就是用于音视频通话，VOIP等技术大量用到该协议。
+RFC3261规定了SIP协议的基础内容，包括Register, Invite等一系列注册和通信机制。
+SIP协议某些设计非常类似HTTP1.1，比如消息格式，method、header的设计等。但是SIP协议远比HTTP要复杂的多：
+SIP协议的传输层是可选的，可以基于TCP/UDP/Websocket等进行通信；在UDP这种不可靠网络上的通信，需要考虑的问题要复杂很多； 相比于HTTP的请求-应答模型，SIP是基于事务进行通信的，整个流程比较复杂； 相比于HTTP的option/get/post/put/patch/delete/head等有限几个方法，SIP的方法要多得多。除了rfc3261规定的，还有一系列扩展协议（如info, publish, notify, subscribe等）； 对于HTTP而言，代理基本是透明的，只负责转发，相当于SIP的无状态代理；SIP的有状态代理工作机制比较复杂； ## 基础概念 UAC： 在事务中充当请求客户端的一方； UAS：在事务中充当请求服务端的一方； UA：同时充当UAC和UAS的逻辑实体； 在实际运行中，一般节点都既是客户端又是服务器。谈到UAC和UAS时指的往往是在某个事务中的角色，比如INVITE时，呼叫方是UAC，接收方是UAS；但是在BYE的时候，就可能反过来了。
+## Call 一次呼叫由发起方和多个接收方组成。唯一标识是Call-ID，Call由多个Dialog组成。
+Call强调的是终端用户的对话，实际请求中，Call会经过很多代理服务器。
+## 对话(Dialog) 主叫方A呼叫被叫方B：
+步骤1：主叫方A发送INVITE请求到代理服务器； 步骤2：代理服务器发送100 Trying 响应主叫方A； 步骤3~6：代理服务器搜索被叫方B的地址，获取地址后转发INVITE请求； 步骤7~9：被叫方B生成的180 振铃响应，返回给主叫方A； 步骤10~12：被叫方B生成的200 OK响应，返回给主叫方A； 步骤13~17：主叫方A收到被叫方B200 OK响应后，向被叫方B发送一个ACK，会话建立； 步骤18~20：会话结束后，任何参与者（A或B）都可以发送一个BYE请求来终止会话； 步骤21~23：主叫方A发送200 OK响应来确认BYE，会话终止。 以上的整个流程称之为一个Dialog，其中流媒体传输的部分（媒体通道）称为Session。RFC3261里面仅定义了invite可以建立对话，在RFC 3265/6665里面额外添加了Subscribe方法创建对话的机制。Info消息可以对对话进行设置，Bye消息可以结束对话，这些都是对话内消息。ACK属于非对话内非会话消息，直接发出即可，也没有Response。
+对话其实比较容易理解，Message请求是单次请求-应答机制（类似HTTP），无法定义持续性行为。订阅就是典型的持续性行为：在取消订阅之前被订阅端需要持续NOTIFY新的事件，这就需要一个机制来定义这次订阅和相关的响应之间的关联关系，这就是对话。
+按着rfc3261的规定，当UAC发出INVITE请求，收到的2xx和1xx（除了100之外）的响应中To字段包含tag时，视为对话建立。Call-ID, From tag和To tag，共同构成本次会话的唯一ID，即Dialog-ID. 一次呼叫中可能存在多个对话，因此对话中的消息，如BYE, ACK显然需要明确的Dialog-ID才能明确操作的对象。
+
+      </description>
+      <guid isPermaLink="true">http://localhost:1313/blogs/posts/gb28181%E8%A7%A3%E6%9E%90/</guid>
     </item>
     
   </channel>

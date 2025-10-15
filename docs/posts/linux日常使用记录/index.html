@@ -1,1008 +1,1325 @@
 <!DOCTYPE html>
-<html
-  lang="zh"
-  dir="ltr"
-  
-><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>linux日常使用记录 - 思海沉钩</title><meta name="author" content="tryao">
+<meta name="description" content="由于公司开始强制使用Linux桌面系统，记录一下使用中遇到的问题。
+发行版选择 本来先尝试了Ubuntu 22.04和KDE Neon做为开发环境，但是体验都不太好：
+"><meta name="keywords" content='linux'>
+  <meta itemprop="name" content="linux日常使用记录">
+  <meta itemprop="description" content="由于公司开始强制使用Linux桌面系统，记录一下使用中遇到的问题。
+发行版选择 本来先尝试了Ubuntu 22.04和KDE Neon做为开发环境，但是体验都不太好：">
+  <meta itemprop="datePublished" content="2023-11-24T10:51:31+08:00">
+  <meta itemprop="dateModified" content="2024-03-21T08:52:59+08:00">
+  <meta itemprop="wordCount" content="6978">
+  <meta itemprop="keywords" content="Linux"><meta property="og:url" content="https://yiuterran.github.io/blogs/posts/linux%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/">
+  <meta property="og:site_name" content="思海沉钩">
+  <meta property="og:title" content="linux日常使用记录">
+  <meta property="og:description" content="由于公司开始强制使用Linux桌面系统，记录一下使用中遇到的问题。
+发行版选择 本来先尝试了Ubuntu 22.04和KDE Neon做为开发环境，但是体验都不太好：">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2023-11-24T10:51:31+08:00">
+    <meta property="article:modified_time" content="2024-03-21T08:52:59+08:00">
+    <meta property="article:tag" content="Linux">
 
-
-<title>linux日常使用记录 | 应许之地</title>
-
-<meta name="generator" content="Hugo Eureka 0.9.3" />
-<link rel="stylesheet" href="https://yiuterran.github.io/blog/css/eureka.min.30cfa2a7d2b5754cd246875caad26d69af1d8567ea53339f6729fe1d0ceee8917d33fcd191d4284da2a5da6359d79cb7.css">
-<script defer src="https://yiuterran.github.io/blog/js/eureka.min.e8043b71b627e3cfd9b2a5de56adf007f5af83dee672ca0c186aa2e29a10d6f648632064d0c00b2fa4d1b11e0f196af3.js"></script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload"
-  href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&amp;family=Noto&#43;Serif&#43;SC:wght@400;600;700&amp;display=swap"
-  as="style" onload="this.onload=null;this.rel='stylesheet'">
-
-
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.4.0/build/styles/solarized-light.min.css"
-   media="print"
-  onload="this.media='all';this.onload=null" crossorigin>
-<script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.4.0/build/highlight.min.js"
-   crossorigin></script>
-  <script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.4.0/build/languages/dart.min.js"
-     crossorigin></script>
-<link rel="stylesheet" href="https://yiuterran.github.io/blog/css/highlightjs.min.2958991528e43eb6fc9b8c4f2b8e052f79c4010718e1d1e888a777620e9ee63021c2c57ec7417a3108019bb8c41943e6.css" media="print" onload="this.media='all';this.onload=null">
-
-
-<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.8c77c7521b1f95ec2031c2a79f5c6a698aa4a0dba5ba649dfbc7f73994cddf3f494be6aac7e5724f35cbf72cfde09703.js"></script>
-
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
-   integrity="sha384-MlJdn/WNKDGXveldHDdyRP1R4CTHr3FeuDNfhsLPYrq2t0UBkUdK2jyTnXPEK1NQ"  media="print"
-  onload="this.media='all';this.onload=null" crossorigin>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js" 
-  integrity="sha384-VQ8d8WVFw0yHhCk5E8I86oOhv48xLpnDZx5T9GogA/Y84DcCKWXDmSDfn13bzFZY"  crossorigin></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js"
-   integrity="sha384-&#43;XBljXPPiv&#43;OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR"  crossorigin></script>
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    renderMathInElement(document.body, {
-      delimiters: [
-        { left: "$$", right: "$$", display: true },
-        { left: "$", right: "$", display: false },
-        { left: "\\(", right: "\\)", display: false },
-        { left: "\\[", right: "\\]", display: true }
-      ],
-    });
-  });
-</script>
-
-
-<script defer src="https://cdn.jsdelivr.net/npm/mermaid@8.14.0/dist/mermaid.min.js" 
-  integrity="sha384-atOyb0FxAgN9LyAc6PEf9BjgwLISyansgdH8/VXQH8p2o5vfrRgmGIJ2Sg22L0A0"  crossorigin></script>
-
-
-<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
-
-<meta name="description"
-  content="由于公司开始强制使用Linux桌面系统，记录一下使用中遇到的问题。 发行版选择 本来先尝试了Ubuntu 22.04和KDE Neon做为开发环境，但是体验都">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [{
-      "@type": "ListItem",
-      "position": 1 ,
-      "name":"文章列表",
-      "item":"https://yiuterran.github.io/blog/posts/"},{
-      "@type": "ListItem",
-      "position": 2 ,
-      "name":"linux日常使用记录",
-      "item":"https://yiuterran.github.io/blog/posts/linux%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/"}]
-}
-</script>
-
-
-
-<script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "Article",
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="linux日常使用记录">
+  <meta name="twitter:description" content="由于公司开始强制使用Linux桌面系统，记录一下使用中遇到的问题。
+发行版选择 本来先尝试了Ubuntu 22.04和KDE Neon做为开发环境，但是体验都不太好：">
+<meta name="application-name" content="思海沉钩">
+<meta name="apple-mobile-web-app-title" content="思海沉钩"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/blogs/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/blogs/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/blogs/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/blogs/apple-touch-icon.png"><link rel="mask-icon" href="/blogs/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="https://yiuterran.github.io/blogs/posts/linux%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/" title="linux日常使用记录 - 思海沉钩" /><link rel="prev" type="text/html" href="https://yiuterran.github.io/blogs/posts/es%E5%92%8Ckibana%E7%AE%80%E8%A6%81%E7%AC%94%E8%AE%B0/" title="ES和kibana简要笔记" /><link rel="next" type="text/html" href="https://yiuterran.github.io/blogs/posts/jsonnet%E8%AF%95%E7%94%A8/" title="Jsonnet试用" /><link rel="alternate" type="text/markdown" href="https://yiuterran.github.io/blogs/posts/linux%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/index.md" title="linux日常使用记录 - 思海沉钩"><link rel="stylesheet" href="/blogs/css/config.min.css"><link rel="stylesheet" href="/blogs/css/style.min.css"><link rel="preload" href="/blogs/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/blogs/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/blogs/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/blogs/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "linux日常使用记录",
+    "inLanguage": "zh-CN",
     "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "https://yiuterran.github.io/blog/posts/linux%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/"
-    },
-    "headline": "linux日常使用记录 | 应许之地","datePublished": "2023-11-24T10:51:31+08:00",
-    "dateModified": "2023-11-24T10:51:31+08:00",
-    "wordCount":  6149 ,
-    "author": {
+      "@type": "WebPage",
+      "@id": "https:\/\/yiuterran.github.io\/blogs\/posts\/linux%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95\/"
+    },"genre": "posts","keywords": "linux","wordcount":  6978 ,
+    "url": "https:\/\/yiuterran.github.io\/blogs\/posts\/linux%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95\/","datePublished": "2023-11-24T10:51:31+08:00","dateModified": "2024-03-21T08:52:59+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
         "@type": "Person",
-        "name": ["tryao"]
-    },
-    "publisher": {
-        "@type": "Person",
-        "name": "C. Wang",
-        "logo": {
-            "@type": "ImageObject",
-            "url": "https://yiuterran.github.io/blog/images/icon.png"
-        }
-        },
-    "description": "由于公司开始强制使用Linux桌面系统，记录一下使用中遇到的问题。 发行版选择 本来先尝试了Ubuntu 22.04和KDE Neon做为开发环境，但是体验都"
-}
-</script><meta property="og:title" content="linux日常使用记录 | 应许之地" />
-<meta property="og:type" content="article" />
-
-
-<meta property="og:image" content="https://yiuterran.github.io/blog/images/icon.png">
-
-
-<meta property="og:url" content="https://yiuterran.github.io/blog/posts/linux%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/" />
-
-
-
-
-<meta property="og:description" content="由于公司开始强制使用Linux桌面系统，记录一下使用中遇到的问题。 发行版选择 本来先尝试了Ubuntu 22.04和KDE Neon做为开发环境，但是体验都" />
-
-
-
-
-<meta property="og:locale" content="zh" />
-
-
-
-
-<meta property="og:site_name" content="应许之地" />
-
-
-
-
-
-
-<meta property="article:published_time" content="2023-11-24T10:51:31&#43;08:00" />
-
-
-<meta property="article:modified_time" content="2023-11-24T10:51:31&#43;08:00" />
-
-
-
-<meta property="article:section" content="posts" />
-
-
-<meta property="article:tag" content="linux" />
-
-
-
-
-
-
-  <body class="flex min-h-screen flex-col">
-    <header
-      class="min-h-16 pl-scrollbar bg-secondary-bg fixed z-50 flex w-full items-center shadow-sm"
-    >
-      <div class="mx-auto w-full max-w-screen-xl"><script>
-    let storageColorScheme = localStorage.getItem("lightDarkMode")
-    if (((storageColorScheme == 'Auto' || storageColorScheme == null) && window.matchMedia("(prefers-color-scheme: dark)").matches) || storageColorScheme == "Dark") {
-        document.getElementsByTagName('html')[0].classList.add('dark')
-    }
-</script>
-<nav class="flex items-center justify-between flex-wrap px-4 py-4 md:py-0">
-    <a href="https://yiuterran.github.io/blog/" class="me-6 text-primary-text text-xl font-bold">应许之地</a>
-    <button id="navbar-btn" class="md:hidden flex items-center px-3 py-2" aria-label="Open Navbar">
-        <i class="fas fa-bars"></i>
-    </button>
-
-    <div id="target"
-        class="hidden block md:flex md:grow md:justify-between md:items-center w-full md:w-auto text-primary-text z-20">
-        <div class="md:flex md:h-16 text-sm md:grow pb-4 md:pb-0 border-b md:border-b-0">
-            <a href="https://yiuterran.github.io/blog/authors/tryao/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  border-transparent  me-4">作者</a>
-            <a href="https://yiuterran.github.io/blog/posts/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  selected-menu-item  me-4">文章</a>
-        </div>
-
-        <div class="flex">
-            <div class="relative pt-4 md:pt-0">
-                <div class="cursor-pointer hover:text-eureka" id="lightDarkMode">
-                    <i class="fas fa-adjust"></i>
-                </div>
-                <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-30" id="is-open">
-                </div>
-                <div class="absolute flex flex-col start-0 md:start-auto end-auto md:end-0 hidden bg-secondary-bg w-48 rounded py-2 border border-tertiary-bg cursor-pointer z-40"
-                    id='lightDarkOptions'>
-                    <span class="px-4 py-1 hover:text-eureka" name="Light">浅色</span>
-                    <span class="px-4 py-1 hover:text-eureka" name="Dark">深色</span>
-                    <span class="px-4 py-1 hover:text-eureka" name="Auto">自动</span>
-                </div>
+        "name": "tryao"
+      },"description": ""
+  }
+  </script><script src="/blogs/js/head/color-scheme.min.js"></script></head>
+  <body data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/blogs/" title="思海沉钩"><span class="header-title-text">思海沉钩</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/blogs/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item">
+              <a class="menu-link" href="/blogs/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item">
+              <a class="menu-link" href="/blogs/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+              <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch" title="切换主题">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/blogs/" title="思海沉钩"><span class="header-title-text">思海沉钩</span></a><span class="header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+              </span>
             </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li class="menu-item"><a class="menu-link" href="/blogs/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item"><a class="menu-link" href="/blogs/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item"><a class="menu-link" href="/blogs/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item menu-system">
+          <span class="menu-system-item theme-switch" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
+      </ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>linux日常使用记录</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://gravatar.com/afxmessagebox" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img class="avatar" src='https://avatars.githubusercontent.com/u/5930695?v=4' alt="tryao" height="16" width="16">&nbsp;tryao</a></span></div><div class="post-meta-line"><span title="发布于 2023-11-24 10:51:31"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2023-11-24">2023-11-24</time></span>&nbsp;<span title="更新于 2024-03-21 08:52:59"><i class="fa-regular fa-calendar-check fa-fw me-1" aria-hidden="true"></i><time datetime="2024-03-21">2024-03-21</time></span>&nbsp;<span title="6978 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 7000 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 14 分钟</span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
         </div>
-    </div>
-
-    <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-0" id="is-open-mobile">
-    </div>
-
-</nav>
-<script>
-    
-    let element = document.getElementById('lightDarkMode')
-    if (storageColorScheme == null || storageColorScheme == 'Auto') {
-        document.addEventListener('DOMContentLoaded', () => {
-            window.matchMedia("(prefers-color-scheme: dark)").addEventListener('change', switchDarkMode)
-        })
-    } else if (storageColorScheme == "Light") {
-        element.firstElementChild.classList.remove('fa-adjust')
-        element.firstElementChild.setAttribute("data-icon", 'sun')
-        element.firstElementChild.classList.add('fa-sun')
-    } else if (storageColorScheme == "Dark") {
-        element.firstElementChild.classList.remove('fa-adjust')
-        element.firstElementChild.setAttribute("data-icon", 'moon')
-        element.firstElementChild.classList.add('fa-moon')
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        getcolorscheme();
-        switchBurger();
-    });
-</script>
-</div>
-    </header>
-    <main class="grow pt-16">
-        <div class="pl-scrollbar">
-          <div class="mx-auto w-full max-w-screen-xl lg:px-4 xl:px-8">
-  
-  
-  <div class="grid grid-cols-2 gap-4 lg:grid-cols-8 lg:pt-12">
-    <div
-      class=" bg-secondary-bg col-span-2 rounded px-6 py-8 lg:col-span-6"
-    >
-      <article class="prose">
-  <h1 class="mb-4">linux日常使用记录</h1>
-
-  <div
-  class="text-tertiary-text not-prose mt-2 flex flex-row flex-wrap items-center"
->
-  <div class="me-6 my-2">
-    <i class="fas fa-calendar me-1"></i>
-    <span
-      >2023-11-24</span
-    >
-  </div>
-  <div class="me-6 my-2">
-    <i class="fas fa-clock me-1"></i>
-    <span>13分钟阅读时长</span>
-  </div>
-
-  
-
-  
-</div>
-
-
-  
-  
-
-  <p>由于公司开始强制使用Linux桌面系统，记录一下使用中遇到的问题。</p>
-<h2 id="发行版选择">发行版选择</h2>
-<p>本来先尝试了Ubuntu 22.04和KDE Neon做为开发环境，但是体验都不太好：</p>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#发行版选择">发行版选择</a></li>
+        <li><a href="#软件源">软件源</a></li>
+        <li><a href="#字体">字体</a></li>
+        <li><a href="#wezterm配置">WezTerm配置</a></li>
+        <li><a href="#ssh参考配置">SSH参考配置</a></li>
+        <li><a href="#输入法">输入法</a></li>
+        <li><a href="#键盘映射">键盘映射</a></li>
+        <li><a href="#其他">其他</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p>由于公司开始强制使用Linux桌面系统，记录一下使用中遇到的问题。</p>
+<h2 class="heading-element" id="发行版选择"><span>发行版选择</span>
+  <a href="#%e5%8f%91%e8%a1%8c%e7%89%88%e9%80%89%e6%8b%a9" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>本来先尝试了Ubuntu 22.04和KDE Neon做为开发环境，但是体验都不太好：</p>
 <p>KDE Neon与日常使用的软件兼容性很差，主要是大部分软件都是GTK搞的；</p>
 <p>原生Ubuntu的蓝牙耳机连接经常断连；</p>
 <p>Deepin20.9的docker安装有问题，k3s也无法正常使用；Deepin 23就更离谱了，我的连安装界面都进不去。</p>
 <p>优麒麟版本的linux，系统快捷键不能改，很麻烦。</p>
 <p>Debian系还是推荐使用Linux mint Cinamon，或者直接用arch也行，常用软件也比较好装。</p>
-<h2 id="软件源">软件源</h2>
-<p>除了发行版自带的软件源之外，还有几个流行的安装方式，比如snap、linuxbrew和flathub.</p>
+<h2 class="heading-element" id="软件源"><span>软件源</span>
+  <a href="#%e8%bd%af%e4%bb%b6%e6%ba%90" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>除了发行版自带的软件源之外，还有几个流行的安装方式，比如snap、linuxbrew和flathub.</p>
 <p>国产的还有星火商店，也可以安装一些常用软件，这些都是跨发行版的。</p>
 <p>个人还是推荐星火商店+apt，其他几个也可以用，但是需要配置国内软件源，不然下载速度感人。</p>
-<h2 id="字体">字体</h2>
-<p>全局字体推荐使用<a href="https://github.com/lxgw/LxgwNeoXiHei-Screen"><strong>霞鹜新晰黑屏幕阅读版</strong></a>，比较清晰。全局字体不推荐使用楷体，主要是太细了，如果想要用的话，可以用这个<a href="https://github.com/lxgw/LxgwWenKai-Screen">屏幕阅读版</a>，我的chrome字体和Android字体用的都是这个，感觉还不错。另外字体推荐放在<code>~/.fonts</code>里面，这样重装系统不会丢失。刷新字体使用<code>fc-cache -vf</code>即可，查看字体名称可以用<code>fc-list</code>。</p>
-<h2 id="wezterm配置">WezTerm配置</h2>
-<p>终端推荐<code>wezterm</code>，可以跨平台使用，配置文件使用lua，比较方便(~/.config/wezterm/wezterm.lua)：</p>
-<pre><code class="language-lua">local wezterm = require 'wezterm'
-
-local act = wezterm.action
-local mykeys = {}
-
--- 重新定义Tab切换快捷键
--- 描述：通过alt+1/2/3/../8进行切换Tab标签
-for i = 1, 8 do
-  table.insert(mykeys, {
-    key = tostring(i),
-    mods = 'ALT',
-    action = act.ActivateTab(i - 1),
-  })
-end
-
--- 重新定义左右分割
--- 描述：通过ctrl+shift+s
-table.insert(mykeys, {
-    key = 's',
-    mods = 'CTRL|SHIFT',
-    action = wezterm.action.SplitHorizontal { domain = 'CurrentPaneDomain' },
-})
-
--- 重新定义上下分割
--- 描述：通过ctrl+shift+d
-table.insert(mykeys, {
-    key = 'd',
-    mods = 'CTRL|SHIFT',
-    action = wezterm.action.SplitVertical { domain = 'CurrentPaneDomain' },
-})
-
-table.insert(mykeys, {
-    key = 'F11',
-    mods = 'CTRL',
-    action = wezterm.action.ToggleFullScreen,
-})
-
--- 重新定义分屏窗口切换快捷键
--- 描述：通过ctrl+shift+hjkl
-table.insert(mykeys,  {
-    key = 'h', --左侧的分屏窗口
-    mods = 'CTRL|SHIFT',
-    action = act.ActivatePaneDirection 'Left',
-})
-
-table.insert(mykeys, {
-    key = 'l', -- 右侧的分屏窗口
-    mods = 'CTRL|SHIFT',
-    action = act.ActivatePaneDirection 'Right',
-})
-
-table.insert(mykeys, {
-    key = 'k', -- 上侧的分屏窗口
-    mods = 'CTRL|SHIFT',
-    action = act.ActivatePaneDirection 'Up',
-})
-
-table.insert(mykeys, {
-    key = 'j', -- 下侧的分屏窗口
-    mods = 'CTRL|SHIFT',
-    action = act.ActivatePaneDirection 'Down',
-})
-
-local config = {
-  check_for_updates = false,
-
-  keys = mykeys,
-
-  window_decorations = &quot;INTEGRATED_BUTTONS|RESIZE&quot;,
-
-  font = wezterm.font_with_fallback {
-      &quot;FiraCode Nerd Font Mono&quot;,
-      &quot;LXGW WenKai GB Screen&quot;,
-  },
-
-  color_scheme = 'MaterialDark',
-}
-
-return config
-</code></pre>
-<h2 id="ssh参考配置">SSH参考配置</h2>
-<p>wezterm的问题是不支持zmodem，也就是lrzsz的上传下载，可以用<code>trzsz</code>来代替。</p>
-<p>具体方法是在本地安装<a href="https://github.com/trzsz/trzsz-ssh/tree/main">tssh</a>，并打开<a href="https://github.com/trzsz/trzsz-ssh/blob/main/README.cn.md#%E6%94%AF%E6%8C%81-zmodem">zmodem支持</a>，这样就可以正常在服务器使用<code>rz</code>/<code>sz</code>命令了。</p>
+<h2 class="heading-element" id="字体"><span>字体</span>
+  <a href="#%e5%ad%97%e4%bd%93" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>全局字体推荐使用<a href="https://github.com/lxgw/LxgwNeoXiHei-Screen"target="_blank" rel="external nofollow noopener noreferrer"><strong>霞鹜新晰黑屏幕阅读版</strong></a>，比较清晰。全局字体不推荐使用楷体，主要是太细了，如果想要用的话，可以用这个<a href="https://github.com/lxgw/LxgwWenKai-Screen"target="_blank" rel="external nofollow noopener noreferrer">屏幕阅读版</a>，我的chrome字体和Android字体用的都是这个，感觉还不错。另外字体推荐放在<code>~/.fonts</code>里面，这样重装系统不会丢失。刷新字体使用<code>fc-cache -vf</code>即可，查看字体名称可以用<code>fc-list</code>。</p>
+<h2 class="heading-element" id="wezterm配置"><span>WezTerm配置</span>
+  <a href="#wezterm%e9%85%8d%e7%bd%ae" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>终端推荐<code>wezterm</code>，可以跨平台使用，配置文件使用lua，比较方便(~/.config/wezterm/wezterm.lua)：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="kd">local</span> <span class="n">wezterm</span> <span class="o">=</span> <span class="n">require</span> <span class="s1">&#39;wezterm&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">local</span> <span class="n">act</span> <span class="o">=</span> <span class="n">wezterm.action</span>
+</span></span><span class="line"><span class="cl"><span class="kd">local</span> <span class="n">mykeys</span> <span class="o">=</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">-- 重新定义Tab切换快捷键</span>
+</span></span><span class="line"><span class="cl"><span class="c1">-- 描述：通过alt+1/2/3/../8进行切换Tab标签</span>
+</span></span><span class="line"><span class="cl"><span class="kr">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">8</span> <span class="kr">do</span>
+</span></span><span class="line"><span class="cl">  <span class="n">table.insert</span><span class="p">(</span><span class="n">mykeys</span><span class="p">,</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">key</span> <span class="o">=</span> <span class="n">tostring</span><span class="p">(</span><span class="n">i</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mods</span> <span class="o">=</span> <span class="s1">&#39;ALT&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">action</span> <span class="o">=</span> <span class="n">act.ActivateTab</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">  <span class="p">})</span>
+</span></span><span class="line"><span class="cl"><span class="kr">end</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">-- 重新定义左右分割</span>
+</span></span><span class="line"><span class="cl"><span class="c1">-- 描述：通过ctrl+shift+s</span>
+</span></span><span class="line"><span class="cl"><span class="n">table.insert</span><span class="p">(</span><span class="n">mykeys</span><span class="p">,</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">key</span> <span class="o">=</span> <span class="s1">&#39;s&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mods</span> <span class="o">=</span> <span class="s1">&#39;CTRL|SHIFT&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">action</span> <span class="o">=</span> <span class="n">wezterm.action</span><span class="p">.</span><span class="n">SplitHorizontal</span> <span class="p">{</span> <span class="n">domain</span> <span class="o">=</span> <span class="s1">&#39;CurrentPaneDomain&#39;</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl"><span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">-- 重新定义上下分割</span>
+</span></span><span class="line"><span class="cl"><span class="c1">-- 描述：通过ctrl+shift+d</span>
+</span></span><span class="line"><span class="cl"><span class="n">table.insert</span><span class="p">(</span><span class="n">mykeys</span><span class="p">,</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">key</span> <span class="o">=</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mods</span> <span class="o">=</span> <span class="s1">&#39;CTRL|SHIFT&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">action</span> <span class="o">=</span> <span class="n">wezterm.action</span><span class="p">.</span><span class="n">SplitVertical</span> <span class="p">{</span> <span class="n">domain</span> <span class="o">=</span> <span class="s1">&#39;CurrentPaneDomain&#39;</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl"><span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">table.insert</span><span class="p">(</span><span class="n">mykeys</span><span class="p">,</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">key</span> <span class="o">=</span> <span class="s1">&#39;F11&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mods</span> <span class="o">=</span> <span class="s1">&#39;CTRL&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">action</span> <span class="o">=</span> <span class="n">wezterm.action</span><span class="p">.</span><span class="n">ToggleFullScreen</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">-- 重新定义分屏窗口切换快捷键</span>
+</span></span><span class="line"><span class="cl"><span class="c1">-- 描述：通过ctrl+shift+hjkl</span>
+</span></span><span class="line"><span class="cl"><span class="n">table.insert</span><span class="p">(</span><span class="n">mykeys</span><span class="p">,</span>  <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">key</span> <span class="o">=</span> <span class="s1">&#39;h&#39;</span><span class="p">,</span> <span class="c1">--左侧的分屏窗口</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mods</span> <span class="o">=</span> <span class="s1">&#39;CTRL|SHIFT&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">action</span> <span class="o">=</span> <span class="n">act.ActivatePaneDirection</span> <span class="s1">&#39;Left&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">table.insert</span><span class="p">(</span><span class="n">mykeys</span><span class="p">,</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">key</span> <span class="o">=</span> <span class="s1">&#39;l&#39;</span><span class="p">,</span> <span class="c1">-- 右侧的分屏窗口</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mods</span> <span class="o">=</span> <span class="s1">&#39;CTRL|SHIFT&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">action</span> <span class="o">=</span> <span class="n">act.ActivatePaneDirection</span> <span class="s1">&#39;Right&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">table.insert</span><span class="p">(</span><span class="n">mykeys</span><span class="p">,</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">key</span> <span class="o">=</span> <span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="c1">-- 上侧的分屏窗口</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mods</span> <span class="o">=</span> <span class="s1">&#39;CTRL|SHIFT&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">action</span> <span class="o">=</span> <span class="n">act.ActivatePaneDirection</span> <span class="s1">&#39;Up&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">table.insert</span><span class="p">(</span><span class="n">mykeys</span><span class="p">,</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">key</span> <span class="o">=</span> <span class="s1">&#39;j&#39;</span><span class="p">,</span> <span class="c1">-- 下侧的分屏窗口</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mods</span> <span class="o">=</span> <span class="s1">&#39;CTRL|SHIFT&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">action</span> <span class="o">=</span> <span class="n">act.ActivatePaneDirection</span> <span class="s1">&#39;Down&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">local</span> <span class="n">config</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">check_for_updates</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">keys</span> <span class="o">=</span> <span class="n">mykeys</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">window_decorations</span> <span class="o">=</span> <span class="s2">&#34;INTEGRATED_BUTTONS|RESIZE&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">font</span> <span class="o">=</span> <span class="n">wezterm.font_with_fallback</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="s2">&#34;FiraCode Nerd Font Mono&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="s2">&#34;LXGW WenKai GB Screen&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="p">},</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">color_scheme</span> <span class="o">=</span> <span class="s1">&#39;MaterialDark&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kr">return</span> <span class="n">config</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 class="heading-element" id="ssh参考配置"><span>SSH参考配置</span>
+  <a href="#ssh%e5%8f%82%e8%80%83%e9%85%8d%e7%bd%ae" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>wezterm的问题是不支持zmodem，也就是lrzsz的上传下载，可以用<code>trzsz</code>来代替。</p>
+<p>具体方法是在本地安装<a href="https://github.com/trzsz/trzsz-ssh/tree/main"target="_blank" rel="external nofollow noopener noreferrer">tssh</a>，并打开<a href="https://github.com/trzsz/trzsz-ssh/blob/main/README.cn.md#%E6%94%AF%E6%8C%81-zmodem"target="_blank" rel="external nofollow noopener noreferrer">zmodem支持</a>，这样就可以正常在服务器使用<code>rz</code>/<code>sz</code>命令了。</p>
 <p>一个参考的<code>~/.ssh/config</code>配置如下：</p>
-<pre><code>Host *
-ServerAliveInterval 60
-#!! EnableZmodem Yes
-
-Host github.com
-User git
-Port 22
-Hostname github.com
-TCPKeepAlive yes
-ProxyCommand nc -v -x 127.0.0.1:7890 %h %p
-
-Host ssh.github.com
-Hostname ssh.github.com
-Port 443
-User git
-TCPKeepAlive yes
-
-Host prod
-HostName zzzz.bastionhost.aliyuncs.com
-Port 60022
-User zzzz
-#!! encPassword zzzzzzzz
-PubkeyAcceptedKeyTypes +ssh-rsa
-HostKeyAlgorithms +ssh-rsa
-</code></pre>
-<p>这里以<code>#!!</code>开头的配置都是供<code>tssh</code>使用的.</p>
-<h2 id="输入法">输入法</h2>
-<p>输入法框架<strong>只推荐</strong>fcitx，ibus各种延迟卡顿，fcitx5和钉钉的兼容性很差。另外如果用的机械硬盘，换成ssd之后输入法卡顿会有很大改善。</p>
-<p>我目前用的是rime输入法，推荐使用<a href="https://github.com/Mark24Code/rime-auto-deploy">这个</a>脚本进行安装，还是很方便的。个性化配置可以修改<code>~/.config/fcitx/rime/default.yaml</code>文件，可以删除掉<code>default.custom.yaml</code>，不然会被那边的覆盖掉。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Host *
+</span></span><span class="line"><span class="cl">ServerAliveInterval 60
+</span></span><span class="line"><span class="cl">#!! EnableZmodem Yes
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Host github.com
+</span></span><span class="line"><span class="cl">User git
+</span></span><span class="line"><span class="cl">Port 22
+</span></span><span class="line"><span class="cl">Hostname github.com
+</span></span><span class="line"><span class="cl">TCPKeepAlive yes
+</span></span><span class="line"><span class="cl">ProxyCommand nc -v -x 127.0.0.1:7890 %h %p
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Host ssh.github.com
+</span></span><span class="line"><span class="cl">Hostname ssh.github.com
+</span></span><span class="line"><span class="cl">Port 443
+</span></span><span class="line"><span class="cl">User git
+</span></span><span class="line"><span class="cl">TCPKeepAlive yes
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Host prod
+</span></span><span class="line"><span class="cl">HostName zzzz.bastionhost.aliyuncs.com
+</span></span><span class="line"><span class="cl">Port 60022
+</span></span><span class="line"><span class="cl">User zzzz
+</span></span><span class="line"><span class="cl">#!! encPassword zzzzzzzz
+</span></span><span class="line"><span class="cl">PubkeyAcceptedKeyTypes +ssh-rsa
+</span></span><span class="line"><span class="cl">HostKeyAlgorithms +ssh-rsa</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这里以<code>#!!</code>开头的配置都是供<code>tssh</code>使用的.</p>
+<h2 class="heading-element" id="输入法"><span>输入法</span>
+  <a href="#%e8%be%93%e5%85%a5%e6%b3%95" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>输入法框架<strong>只推荐</strong>fcitx，ibus各种延迟卡顿，fcitx5和钉钉的兼容性很差。另外如果用的机械硬盘，换成ssd之后输入法卡顿会有很大改善。</p>
+<p>我目前用的是rime输入法，推荐使用<a href="https://github.com/Mark24Code/rime-auto-deploy"target="_blank" rel="external nofollow noopener noreferrer">这个</a>脚本进行安装，还是很方便的。个性化配置可以修改<code>~/.config/fcitx/rime/default.yaml</code>文件，可以删除掉<code>default.custom.yaml</code>，不然会被那边的覆盖掉。</p>
 <p>参考配置如下：</p>
-<pre><code class="language-yaml"># 要比共享目录的同名文件的 config_version 大才可以生效
-config_version: '2024-02-07'
-
-
-# 方案列表
-schema_list:
-  # 可以直接删除或注释不需要的方案，对应的 *.schema.yaml 方案文件也可以直接删除
-  # 除了 t9，它依赖于 rime_ice，用九宫格别删 rime_ice.schema.yaml
-  - schema: rime_ice               # 雾凇拼音（全拼）
-
-
-# 菜单
-menu:
-  page_size: 9  # 候选词个数
-
-
-# 方案选单相关
-switcher:
-  caption: 「方案选单」
-  hotkeys:
-    - F4
-  save_options:  # 开关记忆（方案中的 switches），从方案选单（而非快捷键）切换时会记住的选项，需要记忆的开关不能设定 reset
-    - traditionalization
-    - emoji
-    - full_shape
-  fold_options: false            # 呼出时是否折叠，多方案时建议折叠 true ，一个方案建议展开 false
-  abbreviate_options: true      # 折叠时是否缩写选项
-  option_list_separator: ' / '  # 折叠时的选项分隔符
-
-
-# 中西文切换
-#
-# good_old_caps_lock:
-# true   切换大写
-# false  切换中英
-# macOS 偏好设置的优先级更高，如果勾选【使用大写锁定键切换“ABC”输入法】则始终会切换输入法。
-#
-# 切换中英：
-# 不同的选项表示：打字打到一半时按下了 CapsLock、Shift、Control 后：
-# commit_code  上屏原始的编码，然后切换到英文
-# commit_text  上屏拼出的词句，然后切换到英文
-# clear        清除未上屏内容，然后切换到英文
-# inline_ascii 切换到临时英文模式，按回车上屏后回到中文状态
-# noop         屏蔽快捷键，不切换中英，但不要屏蔽 CapsLock
-ascii_composer:
-  good_old_caps_lock: true  # true | false
-  switch_key:
-    Caps_Lock: clear      # commit_code | commit_text | clear
-    Shift_L: commit_code  # commit_code | commit_text | inline_ascii | clear | noop
-    Shift_R: noop         # commit_code | commit_text | inline_ascii | clear | noop
-    Control_L: noop       # commit_code | commit_text | inline_ascii | clear | noop
-    Control_R: noop       # commit_code | commit_text | inline_ascii | clear | noop
-
-
-###################################################################################
-
-
-# 下面的 punctuator recognizer key_binder 写了一些所有方案通用的配置项。
-# 写在 default.yaml 里，方便多个方案引用，就是不用每个方案都写一遍了。
-
-
-# 标点符号
-# 设置为一个映射，就自动上屏；设置为多个映射，如 '/' : [ '/', ÷ ] 则进行复选。
-#   full_shape: 全角没改，使用预设值
-#   half_shape: 标点符号全部直接上屏，和 macOS 自带输入法的区别是
-#              '|' 是半角的，
-#              '~' 是半角的，
-#              '`'（反引号）没有改成 '·'（间隔号）。
-punctuator:
-  full_shape:
-    ' ' : { commit: '　' }
-    ',' : { commit: ， }
-    '.' : { commit: 。 }
-    '&lt;' : [ 《, 〈, «, ‹ ]
-    '&gt;' : [ 》, 〉, », › ]
-    '/' : [ ／, ÷ ]
-    '?' : { commit: ？ }
-    ';' : { commit: ； }
-    ':' : { commit: ： }
-    '''' : { pair: [ '‘', '’' ] }
-    '&quot;' : { pair: [ '“', '”' ] }
-    '\' : [ 、, ＼ ]
-    '|' : [ ·, ｜, '§', '¦' ]
-    '`' : ｀
-    '~' : ～
-    '!' : { commit: ！ }
-    '@' : [ ＠, ☯ ]
-    '#' : [ ＃, ⌘ ]
-    '%' : [ ％, '°', '℃' ]
-    '$' : [ ￥, '$', '€', '£', '¥', '¢', '¤' ]
-    '^' : { commit: …… }
-    '&amp;' : ＆
-    '*' : [ ＊, ·, ・, ×, ※, ❂ ]
-    '(' : （
-    ')' : ）
-    '-' : －
-    '_' : ——
-    '+' : ＋
-    '=' : ＝
-    '[' : [ 「, 【, 〔, ［ ]
-    ']' : [ 」, 】, 〕, ］ ]
-    '{' : [ 『, 〖, ｛ ]
-    '}' : [ 』, 〗, ｝ ]
-  half_shape:
-    ',' : '，'
-    '.' : '。'
-    '&lt;' : '《'
-    '&gt;' : '》'
-    '/' : '/'
-    '?' : '？'
-    ';' : '；'
-    ':' : '：'
-    '''' : { pair: [ '‘', '’' ] }
-    '&quot;' : { pair: [ '“', '”' ] }
-    '\' : '、'
-    '|' : '|'
-    '`' : '`'
-    '~' : '~'
-    '!' : '！'
-    '@' : '@'
-    '#' : '#'
-    '%' : '%'
-    '$' : '¥'
-    '^' : '……'
-    '&amp;' : '&amp;'
-    '*' : '*'
-    '(' : '（'
-    ')' : '）'
-    '-' : '-'
-    '_' : ——
-    '+' : '+'
-    '=' : '='
-    '[' : '【'
-    ']' : '】'
-    '{' : '「'
-    '}' : '」'
-
-
-# 处理符合特定规则的输入码，如网址、反查
-# 此处配置所有方案通用的；各方案中另设专有的，比如全拼的拼字用 u，双拼的拼字用 L
-recognizer:
-  patterns:
-    email: &quot;^[A-Za-z][-_.0-9A-Za-z]*@.*$&quot;   # 自带的，email 正则
-    # uppercase: &quot;[A-Z][-_+.'0-9A-Za-z]*$&quot;  # 自带的，大写字母开头后，可以输入[-_+.'0-9A-Za-z]这些字符（和雾凇有些冲突，关闭了）
-    url: &quot;^(www[.]|https?:|ftp[.:]|mailto:|file:).*$|^[a-z]+[.].+$&quot;  # 自带的，URL 正则
-    # 一些不直接上屏的配置示例：
-    # url_2: &quot;^[A-Za-z]+[.].*&quot;     # 句号不上屏，支持 google.com abc.txt 等网址或文件名，使用句号翻页时需要注释掉
-    # colon: &quot;^[A-Za-z]+:.*&quot;       # 冒号不上屏
-    # underscore: &quot;^[A-Za-z]+_.*&quot;  # 下划线不上屏
-
-
-# 快捷键
-key_binder:
-  # Lua 配置: 以词定字（上屏当前词句的第一个或最后一个字），和中括号翻页有冲突
-  select_first_character: &quot;bracketleft&quot;  # 左中括号 [
-  select_last_character: &quot;bracketright&quot;  # 右中括号 ]
-
-  bindings:
-    # 翻页 , .
-    - { when: paging, accept: comma, send: Page_Up }
-    - { when: has_menu, accept: period, send: Page_Down }
-
-    # optimized_mode_switch:
-    # - { when: always, accept: Control+Shift+space, select: .next }
-    # - { when: always, accept: Shift+space, toggle: ascii_mode }
-    # - { when: always, accept: Control+comma, toggle: full_shape }
-    # - { when: always, accept: Control+period, toggle: ascii_punct }
-    # - { when: always, accept: Control+slash, toggle: traditionalization }
-
-    # 将小键盘 0~9 . 映射到主键盘，数字金额大写的 Lua 如 R1234.5678 可使用小键盘输入
-    - {accept: KP_0, send: 0, when: composing}
-    - {accept: KP_1, send: 1, when: composing}
-    - {accept: KP_2, send: 2, when: composing}
-    - {accept: KP_3, send: 3, when: composing}
-    - {accept: KP_4, send: 4, when: composing}
-    - {accept: KP_5, send: 5, when: composing}
-    - {accept: KP_6, send: 6, when: composing}
-    - {accept: KP_7, send: 7, when: composing}
-    - {accept: KP_8, send: 8, when: composing}
-    - {accept: KP_9, send: 9, when: composing}
-    - {accept: KP_Decimal, send: period, when: composing}
-</code></pre>
-<p>大部分配置都可以删掉，只保留必要的快捷键和映射。个人习惯使用逗号和句号翻页，所以仅保留了这个。另外，自动纠错功能建议少用，会导致输入法卡顿，我是直接删除掉自动纠错配置了的。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span><span class="lnt">129
+</span><span class="lnt">130
+</span><span class="lnt">131
+</span><span class="lnt">132
+</span><span class="lnt">133
+</span><span class="lnt">134
+</span><span class="lnt">135
+</span><span class="lnt">136
+</span><span class="lnt">137
+</span><span class="lnt">138
+</span><span class="lnt">139
+</span><span class="lnt">140
+</span><span class="lnt">141
+</span><span class="lnt">142
+</span><span class="lnt">143
+</span><span class="lnt">144
+</span><span class="lnt">145
+</span><span class="lnt">146
+</span><span class="lnt">147
+</span><span class="lnt">148
+</span><span class="lnt">149
+</span><span class="lnt">150
+</span><span class="lnt">151
+</span><span class="lnt">152
+</span><span class="lnt">153
+</span><span class="lnt">154
+</span><span class="lnt">155
+</span><span class="lnt">156
+</span><span class="lnt">157
+</span><span class="lnt">158
+</span><span class="lnt">159
+</span><span class="lnt">160
+</span><span class="lnt">161
+</span><span class="lnt">162
+</span><span class="lnt">163
+</span><span class="lnt">164
+</span><span class="lnt">165
+</span><span class="lnt">166
+</span><span class="lnt">167
+</span><span class="lnt">168
+</span><span class="lnt">169
+</span><span class="lnt">170
+</span><span class="lnt">171
+</span><span class="lnt">172
+</span><span class="lnt">173
+</span><span class="lnt">174
+</span><span class="lnt">175
+</span><span class="lnt">176
+</span><span class="lnt">177
+</span><span class="lnt">178
+</span><span class="lnt">179
+</span><span class="lnt">180
+</span><span class="lnt">181
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># 要比共享目录的同名文件的 config_version 大才可以生效</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">config_version</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;2024-02-07&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 方案列表</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">schema_list</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># 可以直接删除或注释不需要的方案，对应的 *.schema.yaml 方案文件也可以直接删除</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># 除了 t9，它依赖于 rime_ice，用九宫格别删 rime_ice.schema.yaml</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">schema</span><span class="p">:</span><span class="w"> </span><span class="l">rime_ice              </span><span class="w"> </span><span class="c"># 雾凇拼音（全拼）</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 菜单</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">menu</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">page_size</span><span class="p">:</span><span class="w"> </span><span class="m">9</span><span class="w">  </span><span class="c"># 候选词个数</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 方案选单相关</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">switcher</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">caption</span><span class="p">:</span><span class="w"> </span><span class="l">「方案选单」</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">hotkeys</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">F4</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">save_options</span><span class="p">:</span><span class="w">  </span><span class="c"># 开关记忆（方案中的 switches），从方案选单（而非快捷键）切换时会记住的选项，需要记忆的开关不能设定 reset</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">traditionalization</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">emoji</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">full_shape</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">fold_options</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">            </span><span class="c"># 呼出时是否折叠，多方案时建议折叠 true ，一个方案建议展开 false</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">abbreviate_options</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">      </span><span class="c"># 折叠时是否缩写选项</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">option_list_separator</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39; / &#39;</span><span class="w">  </span><span class="c"># 折叠时的选项分隔符</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 中西文切换</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c">#</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># good_old_caps_lock:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># true   切换大写</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># false  切换中英</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># macOS 偏好设置的优先级更高，如果勾选【使用大写锁定键切换“ABC”输入法】则始终会切换输入法。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c">#</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 切换中英：</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 不同的选项表示：打字打到一半时按下了 CapsLock、Shift、Control 后：</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># commit_code  上屏原始的编码，然后切换到英文</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># commit_text  上屏拼出的词句，然后切换到英文</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># clear        清除未上屏内容，然后切换到英文</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># inline_ascii 切换到临时英文模式，按回车上屏后回到中文状态</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># noop         屏蔽快捷键，不切换中英，但不要屏蔽 CapsLock</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">ascii_composer</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">good_old_caps_lock</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">  </span><span class="c"># true | false</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">switch_key</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">Caps_Lock</span><span class="p">:</span><span class="w"> </span><span class="l">clear     </span><span class="w"> </span><span class="c"># commit_code | commit_text | clear</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">Shift_L</span><span class="p">:</span><span class="w"> </span><span class="l">commit_code </span><span class="w"> </span><span class="c"># commit_code | commit_text | inline_ascii | clear | noop</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">Shift_R</span><span class="p">:</span><span class="w"> </span><span class="l">noop        </span><span class="w"> </span><span class="c"># commit_code | commit_text | inline_ascii | clear | noop</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">Control_L</span><span class="p">:</span><span class="w"> </span><span class="l">noop      </span><span class="w"> </span><span class="c"># commit_code | commit_text | inline_ascii | clear | noop</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">Control_R</span><span class="p">:</span><span class="w"> </span><span class="l">noop      </span><span class="w"> </span><span class="c"># commit_code | commit_text | inline_ascii | clear | noop</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c">###################################################################################</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 下面的 punctuator recognizer key_binder 写了一些所有方案通用的配置项。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 写在 default.yaml 里，方便多个方案引用，就是不用每个方案都写一遍了。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 标点符号</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 设置为一个映射，就自动上屏；设置为多个映射，如 &#39;/&#39; : [ &#39;/&#39;, ÷ ] 则进行复选。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c">#   full_shape: 全角没改，使用预设值</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c">#   half_shape: 标点符号全部直接上屏，和 macOS 自带输入法的区别是</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c">#              &#39;|&#39; 是半角的，</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c">#              &#39;~&#39; 是半角的，</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c">#              &#39;`&#39;（反引号）没有改成 &#39;·&#39;（间隔号）。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">punctuator</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">full_shape</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39; &#39; </span><span class="p">:</span><span class="w"> </span>{<span class="w"> </span><span class="nt">commit</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;　&#39;</span><span class="w"> </span>}<span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;,&#39; </span><span class="p">:</span><span class="w"> </span>{<span class="w"> </span><span class="nt">commit</span><span class="p">:</span><span class="w"> </span><span class="l">， }</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;.&#39; </span><span class="p">:</span><span class="w"> </span>{<span class="w"> </span><span class="nt">commit</span><span class="p">:</span><span class="w"> </span><span class="l">。 }</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;&lt;&#39; </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="l">《, 〈, «, ‹ ]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;&gt;&#39; </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="l">》, 〉, », › ]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;/&#39; </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="l">／, ÷ ]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;?&#39; </span><span class="p">:</span><span class="w"> </span>{<span class="w"> </span><span class="nt">commit</span><span class="p">:</span><span class="w"> </span><span class="l">？ }</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;;&#39; </span><span class="p">:</span><span class="w"> </span>{<span class="w"> </span><span class="nt">commit</span><span class="p">:</span><span class="w"> </span><span class="l">； }</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;:&#39; </span><span class="p">:</span><span class="w"> </span>{<span class="w"> </span><span class="nt">commit</span><span class="p">:</span><span class="w"> </span><span class="l">： }</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;&#39;&#39;&#39; </span><span class="p">:</span><span class="w"> </span>{<span class="w"> </span><span class="nt">pair</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s1">&#39;‘&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;’&#39;</span><span class="w"> </span><span class="p">]</span><span class="w"> </span>}<span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="s1">&#39;&#34;&#39;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span>{<span class="w"> </span><span class="nt">pair</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s1">&#39;“&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;”&#39;</span><span class="w"> </span><span class="p">]</span><span class="w"> </span>}<span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;\&#39; </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="l">、, ＼ ]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;|&#39; </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="l">·, ｜, &#39;§&#39;, &#39;¦&#39; ]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;`&#39; </span><span class="p">:</span><span class="w"> </span><span class="l">｀</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;~&#39; </span><span class="p">:</span><span class="w"> </span><span class="l">～</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;!&#39; </span><span class="p">:</span><span class="w"> </span>{<span class="w"> </span><span class="nt">commit</span><span class="p">:</span><span class="w"> </span><span class="l">！ }</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;@&#39; </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="l">＠, ☯ ]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;#&#39; </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="l">＃, ⌘ ]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;%&#39; </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="l">％, &#39;°&#39;, &#39;℃&#39; ]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;$&#39; </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="l">￥, &#39;$&#39;, &#39;€&#39;, &#39;£&#39;, &#39;¥&#39;, &#39;¢&#39;, &#39;¤&#39; ]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;^&#39; </span><span class="p">:</span><span class="w"> </span>{<span class="w"> </span><span class="nt">commit</span><span class="p">:</span><span class="w"> </span><span class="l">…… }</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;&amp;&#39; </span><span class="p">:</span><span class="w"> </span><span class="l">＆</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;*&#39; </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="l">＊, ·, ・, ×, ※, ❂ ]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;(&#39; </span><span class="p">:</span><span class="w"> </span><span class="l">（</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;)&#39; </span><span class="p">:</span><span class="w"> </span><span class="l">）</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;-&#39; </span><span class="p">:</span><span class="w"> </span><span class="l">－</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;_&#39; </span><span class="p">:</span><span class="w"> </span><span class="l">——</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;+&#39; </span><span class="p">:</span><span class="w"> </span><span class="l">＋</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;=&#39; </span><span class="p">:</span><span class="w"> </span><span class="l">＝</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;[&#39; </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="l">「, 【, 〔, ［ ]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;]&#39; </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="l">」, 】, 〕, ］ ]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="s1">&#39;{&#39;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="l">『, 〖, ｛ ]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;}&#39; </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="l">』, 〗, ｝ ]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">half_shape</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;,&#39; </span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;，&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;.&#39; </span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;。&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;&lt;&#39; </span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;《&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;&gt;&#39; </span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;》&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;/&#39; </span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;/&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;?&#39; </span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;？&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;;&#39; </span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;；&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;:&#39; </span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;：&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;&#39;&#39;&#39; </span><span class="p">:</span><span class="w"> </span>{<span class="w"> </span><span class="nt">pair</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s1">&#39;‘&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;’&#39;</span><span class="w"> </span><span class="p">]</span><span class="w"> </span>}<span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="s1">&#39;&#34;&#39;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span>{<span class="w"> </span><span class="nt">pair</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s1">&#39;“&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;”&#39;</span><span class="w"> </span><span class="p">]</span><span class="w"> </span>}<span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;\&#39; </span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;、&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;|&#39; </span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;|&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;`&#39; </span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;`&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;~&#39; </span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;~&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;!&#39; </span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;！&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;@&#39; </span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;@&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;#&#39; </span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;#&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;%&#39; </span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;%&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;$&#39; </span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;¥&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;^&#39; </span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;……&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;&amp;&#39; </span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;&amp;&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;*&#39; </span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;*&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;(&#39; </span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;（&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;)&#39; </span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;）&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;-&#39; </span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;-&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;_&#39; </span><span class="p">:</span><span class="w"> </span><span class="l">——</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;+&#39; </span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;+&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;=&#39; </span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;=&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;[&#39; </span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;【&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;]&#39; </span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;】&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="s1">&#39;{&#39;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;「&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">&#39;}&#39; </span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;」&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 处理符合特定规则的输入码，如网址、反查</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 此处配置所有方案通用的；各方案中另设专有的，比如全拼的拼字用 u，双拼的拼字用 L</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">recognizer</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">patterns</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">email</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;^[A-Za-z][-_.0-9A-Za-z]*@.*$&#34;</span><span class="w">   </span><span class="c"># 自带的，email 正则</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># uppercase: &#34;[A-Z][-_+.&#39;0-9A-Za-z]*$&#34;  # 自带的，大写字母开头后，可以输入[-_+.&#39;0-9A-Za-z]这些字符（和雾凇有些冲突，关闭了）</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;^(www[.]|https?:|ftp[.:]|mailto:|file:).*$|^[a-z]+[.].+$&#34;</span><span class="w">  </span><span class="c"># 自带的，URL 正则</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># 一些不直接上屏的配置示例：</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># url_2: &#34;^[A-Za-z]+[.].*&#34;     # 句号不上屏，支持 google.com abc.txt 等网址或文件名，使用句号翻页时需要注释掉</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># colon: &#34;^[A-Za-z]+:.*&#34;       # 冒号不上屏</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># underscore: &#34;^[A-Za-z]+_.*&#34;  # 下划线不上屏</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 快捷键</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">key_binder</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># Lua 配置: 以词定字（上屏当前词句的第一个或最后一个字），和中括号翻页有冲突</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">select_first_character</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;bracketleft&#34;</span><span class="w">  </span><span class="c"># 左中括号 [</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">select_last_character</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;bracketright&#34;</span><span class="w">  </span><span class="c"># 右中括号 ]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">bindings</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># 翻页 , .</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- {<span class="w"> </span><span class="nt">when: paging, accept: comma, send</span><span class="p">:</span><span class="w"> </span><span class="l">Page_Up }</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- {<span class="w"> </span><span class="nt">when: has_menu, accept: period, send</span><span class="p">:</span><span class="w"> </span><span class="l">Page_Down }</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># optimized_mode_switch:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># - { when: always, accept: Control+Shift+space, select: .next }</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># - { when: always, accept: Shift+space, toggle: ascii_mode }</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># - { when: always, accept: Control+comma, toggle: full_shape }</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># - { when: always, accept: Control+period, toggle: ascii_punct }</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># - { when: always, accept: Control+slash, toggle: traditionalization }</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># 将小键盘 0~9 . 映射到主键盘，数字金额大写的 Lua 如 R1234.5678 可使用小键盘输入</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- {<span class="nt">accept: KP_0, send: 0, when</span><span class="p">:</span><span class="w"> </span><span class="l">composing}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- {<span class="nt">accept: KP_1, send: 1, when</span><span class="p">:</span><span class="w"> </span><span class="l">composing}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- {<span class="nt">accept: KP_2, send: 2, when</span><span class="p">:</span><span class="w"> </span><span class="l">composing}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- {<span class="nt">accept: KP_3, send: 3, when</span><span class="p">:</span><span class="w"> </span><span class="l">composing}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- {<span class="nt">accept: KP_4, send: 4, when</span><span class="p">:</span><span class="w"> </span><span class="l">composing}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- {<span class="nt">accept: KP_5, send: 5, when</span><span class="p">:</span><span class="w"> </span><span class="l">composing}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- {<span class="nt">accept: KP_6, send: 6, when</span><span class="p">:</span><span class="w"> </span><span class="l">composing}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- {<span class="nt">accept: KP_7, send: 7, when</span><span class="p">:</span><span class="w"> </span><span class="l">composing}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- {<span class="nt">accept: KP_8, send: 8, when</span><span class="p">:</span><span class="w"> </span><span class="l">composing}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- {<span class="nt">accept: KP_9, send: 9, when</span><span class="p">:</span><span class="w"> </span><span class="l">composing}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- {<span class="nt">accept: KP_Decimal, send: period, when</span><span class="p">:</span><span class="w"> </span><span class="l">composing}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>大部分配置都可以删掉，只保留必要的快捷键和映射。个人习惯使用逗号和句号翻页，所以仅保留了这个。另外，自动纠错功能建议少用，会导致输入法卡顿，我是直接删除掉自动纠错配置了的。</p>
 <p><code>rime_ice.schema.yml</code>保留如下配置：</p>
-<pre><code class="language-yaml"># 方案说明
-schema:
-  schema_id: rime_ice
-  name: 雾凇拼音
-  version: &quot;2023-10-22&quot;
-  author:
-    - Dvel
-  description: |
-    雾凇拼音
-    https://github.com/iDvel/rime-ice
-  dependencies:
-    - melt_eng  # 英文输入，作为次翻译器挂载到拼音方案
-    - liangfen  # 两分拼字，作为反查挂载到拼音方案
-
-
-# 开关
-# 鼠须管 0.16 后，用快捷键切换时的提示文字由 states 定义
-# states: 方案选单显示的名称。可以注释掉，仍可以通过快捷键切换。
-# reset: 默认状态。 注释掉后，切换窗口时不会重置到默认状态。
-switches:
-  - name: ascii_mode
-    states: [ 中, Ａ ]
-    reset: 0
-  - name: ascii_punct # 中英标点
-    states: [ ¥, $ ]
-    reset: 0
-  - name: traditionalization
-    states: [ 简, 繁 ]
-    reset: 0
-  - name: emoji
-    states: [ 💀, 😄 ]
-    reset: 1
-  - name: full_shape
-    states: [ 半角, 全角 ]
-    reset: 0
-
-
-# 输入引擎
-engine:
-  processors:
-    - lua_processor@select_character      # 以词定字
-    - ascii_composer
-    - recognizer
-    - key_binder
-    - speller
-    - punctuator
-    - selector
-    - navigator
-    - express_editor
-  segmentors:
-    - ascii_segmentor
-    - matcher
-    - abc_segmentor
-    - punct_segmentor
-    - fallback_segmentor
-  translators:
-    - punct_translator
-    - script_translator
-    - lua_translator@date_translator      # 时间、日期、星期
-    - table_translator@custom_phrase      # 自定义短语 custom_phrase.txt
-    - table_translator@melt_eng           # 英文输入
-    - reverse_lookup_translator@liangfen  # 反查，两分拼字
-    - lua_translator@unicode              # Unicode
-    - lua_translator@number_translator    # 数字、金额大写
-  filters:
-    - lua_filter@corrector                # 错音错字提示
-    - simplifier@emoji                    # Emoji
-    - simplifier@traditionalize           # 简繁切换
-    - lua_filter@v_filter                 # v 模式 symbols 优先（否则是英文优先）
-    - lua_filter@autocap_filter           # 英文自动大写
-    - lua_filter@reduce_english_filter    # 降低部分英语单词在候选项的位置
-    - uniquifier                          # 去重
-
-
-# Lua 配置: 日期、时间、星期、ISO 8601、时间戳的触发关键字
-date_translator:
-  date: rq       # 日期： 2022-11-29
-  time: sj       # 时间： 18:13
-  week: xq       # 星期： 星期二
-  datetime: dt   # ISO 8601： 2022-11-29T18:13:11+08:00
-  timestamp: ts  # 时间戳： 1669716794
-
-
-# Lua 配置: 降低部分英语单词在候选项的位置。
-# 详细介绍 https://dvel.me/posts/make-rime-en-better/#短单词置顶的问题
-# 正常情况： 输入 rug 得到 「1.rug 2.如果 …… 」
-# 降低之后： 输入 rug 得到 「1.如果 2.rug …… 」
-# 几种模式：
-# all     降低所有 3~4 位长度、前 2~3 位是完整拼音、最后一位是声母的单词
-# none    不降低任何单词，相当于没有启用这个 Lua
-# custom  自定义，只降低 words 里的
-# （匹配的是编码，不是单词）
-reduce_english_filter:
-  mode: custom  # all | none | custom
-  idx: 2        # 降低到第 idx 个位置
-  # 自定义的单词列表，示例列表没有降低部分常用单词，如 and cat mail Mac but bad shit ……
-  words: [aid, ann,
-  bail, bait, bam, band, bans, bat, bay, bend, bent, benz, bib, bid, bien, biz, boc, bop, bos, bud, buf,
-  cab, cad, cain, cam, cans, cap, cas, cef, chad, chan, chap, chef, cher, chew, chic, chin, chip, chit, coup, cum, cunt, cur,
-  dab, dag, dal, dam, dent, dew, dial, diet, dim, din, dip, dis, dit, doug, dub, dug, dunn,
-  fab, fax, fob, fog, foul, fur,
-  gag, gail, gain, gal, gam, gaol, ged, gel, ger, guam, gus, gut,
-  hail, ham, hank, hans, hat, hay, heil, heir, hem, hep, hud, hum, hung, hunk, hut,
-  jim, jug,
-  kat,
-  lab, lad, lag, laid, lam, laos, lap, lat, lax, lay, led, leg, lex, liam, lib, lid, lied, lien, lies, linn, lip, lit, liz, lob, lug, lund, lung, lux,
-  mag, maid, mann, mar, mat, med, mel, mend, mens, ment, mil, mins, mint, mob, moc, mod, mop, mos, mot, mud, mug, mum, nail,
-  nap, nat, nay, neil, nib, nip, noun, nous, nun, nut,
-  pac, paid, pail, pain, pair, pak, pal, pam, pans, pant, pap, par, pat, paw, pax, pens, pic, pier, pies, pins, pint, pit, pix, pod, pop, pos, pot, pour, pow, pub,
-  rand, rant, rent, rep, res, ret, rex, rib, rid, rig, rim, rub, rug, rum, runs,
-  sac, sail, sal, sam, sans, sap, saw, sax, sew, sham, shaw, shin, sig, sin, sip, sis, suit, sung, suns, sup, sur, sus,
-  tad, tail, taj, tar, tax, tec, ted, tel, ter, tex, tic, tied, tier, ties, tim, tin, tit, tour, tout, tum,
-  wag, wand, womens, wap, wax, weir, won,
-  yan, yen]
-
-
-# 主翻译器，拼音
-translator:
-  dictionary: rime_ice           # 挂载词库 rime_ice.dict.yaml
-  spelling_hints: 8              # corrector.lua ：为了让错音错字提示的 Lua 同时适配全拼双拼，将拼音显示在 comment 中
-  always_show_comments: true     # corrector.lua ：Rime 默认在 preedit 等于 comment 时取消显示 comment，这里强制一直显示，供 corrector.lua 做判断用。
-  initial_quality: 1.2           # 拼音的权重应该比英文大
-  preedit_format:                # preedit_format 影响到输入框的显示和“Shift+回车”上屏的字符
-    - xform/([jqxy])v/$1u/       # 显示为 ju qu xu yu
-    # - xform/([nl])v/$1ü/       # 显示为 nü lü
-    # - xform/([nl])ue/$1üe/     # 显示为 nüe lüe
-    - xform/([nl])v/$1v/         # 显示为 nv lv
-    - xform/([nl])ue/$1ve/       # 显示为 nve lve
-
-
-# 次翻译器，英文
-melt_eng:
-  dictionary: melt_eng     # 挂载词库 melt_eng.dict.yaml
-  enable_sentence: false   # 禁止造句
-  enable_user_dict: false  # 禁用用户词典
-  initial_quality: 1.1     # 初始权重
-  comment_format:          # 自定义提示码
-    - xform/.*//           # 清空提示码
-
-
-# 反查：两分（拼字）
-liangfen:
-  dictionary: liangfen     # 挂载两分词典 liangfen.dict.yaml
-  prefix: &quot;u&quot;              # 以 u 开头来反查
-  enable_completion: true  # 补全提示
-  # tips: 〔两分〕          # 反查时显示的文字，建议注释掉，否则很多 u 开头的英文单词也会显示这个
-
-
-# 自定义短语：custom_phrase.txt
-custom_phrase:
-  dictionary: &quot;&quot;
-  user_dict: custom_phrase
-  db_class: stabledb
-  enable_completion: false # 补全提示
-  enable_sentence: false   # 禁止造句
-  initial_quality: 99      # custom_phrase 的权重应该比 pinyin 和 melt_eng 大
-
-
-# Emoji
-emoji:
-  opencc_config: emoji.json
-  option_name: emoji
-
-
-# 简繁切换
-traditionalize:
-  option_name: traditionalization
-  opencc_config: s2t.json             # s2t.json | s2hk.json | s2tw.json | s2twp.json
-  tips: none                          # 转换提示: all 都显示 | char 仅单字显示 | none 不显示。
-  excluded_types: [ reverse_lookup ]  # 不转换反查（两分拼字）的内容
-
-
-# 标点符号
-# punctuator 下面有三个子项：
-#   full_shape 全角标点映射
-#   half_shape 半角标点映射
-#   symbols    Rime 的预设配置是以 '/' 前缀开头输出一系列字符，自定义的 symbols_v.yaml 修改成了 'v' 开头。
-punctuator:
-  full_shape:
-    __include: default:/punctuator/full_shape  # 从 default.yaml 导入配置
-  half_shape:
-    __include: default:/punctuator/half_shape  # 从 default.yaml 导入配置
-  symbols:
-    __include: symbols_v:/symbols              # 从 symbols_v.yaml 导入配置
-
-
-# 处理符合特定规则的输入码，如网址、反查
-recognizer:
-  import_preset: default  # 从 default.yaml 继承通用的
-  patterns:  # 再增加方案专有的：
-    punct: &quot;^v([0-9]|10|[A-Za-z]+)$&quot;  # 响应 symbols_v.yaml 的 symbols，用 'v' 替换 '/'
-    reverse_lookup: &quot;^u[a-z]+$&quot;       # 响应两分拼字的反查
-    unicode: &quot;^U[a-f0-9]+&quot;            # 响应 Unicode
-    number: &quot;^R[0-9]+[.]?[0-9]*&quot;      # 响应 number_translator
-
-
-# 从 default 继承快捷键
-key_binder:
-  import_preset: default # 从 default.yaml 继承通用的
-
-
-# 拼写设定
-speller:
-  # 如果不想让什么标点直接上屏，可以加在 alphabet，或者编辑标点符号为两个及以上的映射
-  alphabet: zyxwvutsrqponmlkjihgfedcbaZYXWVUTSRQPONMLKJIHGFEDCBA
-  delimiter: &quot; '&quot;  # 第一位&lt;空格&gt;是拼音之间的分隔符；第二位&lt;'&gt;表示可以手动输入单引号来分割拼音。
-  algebra:
-    ### 超级简拼
-    - erase/^hm$/ # 响应超级简拼，取消「噷 hm」的独占
-    - erase/^m$/  # 响应超级简拼，取消「呣 m」的独占
-    - erase/^n$/  # 响应超级简拼，取消「嗯 n」的独占
-    - erase/^ng$/ # 响应超级简拼，取消「嗯 ng」的独占
-    - abbrev/^([a-z]).+$/$1/   # 超级简拼
-    - abbrev/^([zcs]h).+$/$1/  # 超级简拼中，zh ch sh 视为整体（ch'sh → 城市），而不是像这样分开（c'h's'h → 吃好睡好）。
-
-    ### v u 转换，增加对词库中「nue/nve」「qu/qv」等不同注音的支持
-    - derive/^([nl])ue$/$1ve/
-    - derive/^([nl])ve$/$1ue/
-    - derive/^([jqxy])u/$1v/
-    - derive/^([jqxy])v/$1u/
-</code></pre>
-<p>对应的custom文件也建议直接删除，其他配置文件不需要修改。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span><span class="lnt">129
+</span><span class="lnt">130
+</span><span class="lnt">131
+</span><span class="lnt">132
+</span><span class="lnt">133
+</span><span class="lnt">134
+</span><span class="lnt">135
+</span><span class="lnt">136
+</span><span class="lnt">137
+</span><span class="lnt">138
+</span><span class="lnt">139
+</span><span class="lnt">140
+</span><span class="lnt">141
+</span><span class="lnt">142
+</span><span class="lnt">143
+</span><span class="lnt">144
+</span><span class="lnt">145
+</span><span class="lnt">146
+</span><span class="lnt">147
+</span><span class="lnt">148
+</span><span class="lnt">149
+</span><span class="lnt">150
+</span><span class="lnt">151
+</span><span class="lnt">152
+</span><span class="lnt">153
+</span><span class="lnt">154
+</span><span class="lnt">155
+</span><span class="lnt">156
+</span><span class="lnt">157
+</span><span class="lnt">158
+</span><span class="lnt">159
+</span><span class="lnt">160
+</span><span class="lnt">161
+</span><span class="lnt">162
+</span><span class="lnt">163
+</span><span class="lnt">164
+</span><span class="lnt">165
+</span><span class="lnt">166
+</span><span class="lnt">167
+</span><span class="lnt">168
+</span><span class="lnt">169
+</span><span class="lnt">170
+</span><span class="lnt">171
+</span><span class="lnt">172
+</span><span class="lnt">173
+</span><span class="lnt">174
+</span><span class="lnt">175
+</span><span class="lnt">176
+</span><span class="lnt">177
+</span><span class="lnt">178
+</span><span class="lnt">179
+</span><span class="lnt">180
+</span><span class="lnt">181
+</span><span class="lnt">182
+</span><span class="lnt">183
+</span><span class="lnt">184
+</span><span class="lnt">185
+</span><span class="lnt">186
+</span><span class="lnt">187
+</span><span class="lnt">188
+</span><span class="lnt">189
+</span><span class="lnt">190
+</span><span class="lnt">191
+</span><span class="lnt">192
+</span><span class="lnt">193
+</span><span class="lnt">194
+</span><span class="lnt">195
+</span><span class="lnt">196
+</span><span class="lnt">197
+</span><span class="lnt">198
+</span><span class="lnt">199
+</span><span class="lnt">200
+</span><span class="lnt">201
+</span><span class="lnt">202
+</span><span class="lnt">203
+</span><span class="lnt">204
+</span><span class="lnt">205
+</span><span class="lnt">206
+</span><span class="lnt">207
+</span><span class="lnt">208
+</span><span class="lnt">209
+</span><span class="lnt">210
+</span><span class="lnt">211
+</span><span class="lnt">212
+</span><span class="lnt">213
+</span><span class="lnt">214
+</span><span class="lnt">215
+</span><span class="lnt">216
+</span><span class="lnt">217
+</span><span class="lnt">218
+</span><span class="lnt">219
+</span><span class="lnt">220
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># 方案说明</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">schema</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">schema_id</span><span class="p">:</span><span class="w"> </span><span class="l">rime_ice</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">雾凇拼音</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;2023-10-22&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">author</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">Dvel</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">    雾凇拼音
+</span></span></span><span class="line"><span class="cl"><span class="sd">    https://github.com/iDvel/rime-ice</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">dependencies</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">melt_eng </span><span class="w"> </span><span class="c"># 英文输入，作为次翻译器挂载到拼音方案</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">liangfen </span><span class="w"> </span><span class="c"># 两分拼字，作为反查挂载到拼音方案</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 开关</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 鼠须管 0.16 后，用快捷键切换时的提示文字由 states 定义</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># states: 方案选单显示的名称。可以注释掉，仍可以通过快捷键切换。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># reset: 默认状态。 注释掉后，切换窗口时不会重置到默认状态。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">switches</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">ascii_mode</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">states</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="l">中, Ａ ]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">reset</span><span class="p">:</span><span class="w"> </span><span class="m">0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">ascii_punct</span><span class="w"> </span><span class="c"># 中英标点</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">states</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="l">¥, $ ]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">reset</span><span class="p">:</span><span class="w"> </span><span class="m">0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">traditionalization</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">states</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="l">简, 繁 ]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">reset</span><span class="p">:</span><span class="w"> </span><span class="m">0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">emoji</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">states</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="l">💀, 😄 ]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">reset</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">full_shape</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">states</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="l">半角, 全角 ]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">reset</span><span class="p">:</span><span class="w"> </span><span class="m">0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 输入引擎</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">engine</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">processors</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">lua_processor@select_character     </span><span class="w"> </span><span class="c"># 以词定字</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">ascii_composer</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">recognizer</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">key_binder</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">speller</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">punctuator</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">selector</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">navigator</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">express_editor</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">segmentors</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">ascii_segmentor</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">matcher</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">abc_segmentor</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">punct_segmentor</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">fallback_segmentor</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">translators</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">punct_translator</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">script_translator</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">lua_translator@date_translator     </span><span class="w"> </span><span class="c"># 时间、日期、星期</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">table_translator@custom_phrase     </span><span class="w"> </span><span class="c"># 自定义短语 custom_phrase.txt</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">table_translator@melt_eng          </span><span class="w"> </span><span class="c"># 英文输入</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">reverse_lookup_translator@liangfen </span><span class="w"> </span><span class="c"># 反查，两分拼字</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">lua_translator@unicode             </span><span class="w"> </span><span class="c"># Unicode</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">lua_translator@number_translator   </span><span class="w"> </span><span class="c"># 数字、金额大写</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">filters</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">lua_filter@corrector               </span><span class="w"> </span><span class="c"># 错音错字提示</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">simplifier@emoji                   </span><span class="w"> </span><span class="c"># Emoji</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">simplifier@traditionalize          </span><span class="w"> </span><span class="c"># 简繁切换</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">lua_filter@v_filter                </span><span class="w"> </span><span class="c"># v 模式 symbols 优先（否则是英文优先）</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">lua_filter@autocap_filter          </span><span class="w"> </span><span class="c"># 英文自动大写</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">lua_filter@reduce_english_filter   </span><span class="w"> </span><span class="c"># 降低部分英语单词在候选项的位置</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">uniquifier                         </span><span class="w"> </span><span class="c"># 去重</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># Lua 配置: 日期、时间、星期、ISO 8601、时间戳的触发关键字</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">date_translator</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="l">rq      </span><span class="w"> </span><span class="c"># 日期： 2022-11-29</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">time</span><span class="p">:</span><span class="w"> </span><span class="l">sj      </span><span class="w"> </span><span class="c"># 时间： 18:13</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">week</span><span class="p">:</span><span class="w"> </span><span class="l">xq      </span><span class="w"> </span><span class="c"># 星期： 星期二</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">datetime</span><span class="p">:</span><span class="w"> </span><span class="l">dt  </span><span class="w"> </span><span class="c"># ISO 8601： 2022-11-29T18:13:11+08:00</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">timestamp</span><span class="p">:</span><span class="w"> </span><span class="l">ts </span><span class="w"> </span><span class="c"># 时间戳： 1669716794</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># Lua 配置: 降低部分英语单词在候选项的位置。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 详细介绍 https://dvel.me/posts/make-rime-en-better/#短单词置顶的问题</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 正常情况： 输入 rug 得到 「1.rug 2.如果 …… 」</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 降低之后： 输入 rug 得到 「1.如果 2.rug …… 」</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 几种模式：</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># all     降低所有 3~4 位长度、前 2~3 位是完整拼音、最后一位是声母的单词</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># none    不降低任何单词，相当于没有启用这个 Lua</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># custom  自定义，只降低 words 里的</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># （匹配的是编码，不是单词）</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">reduce_english_filter</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l">custom </span><span class="w"> </span><span class="c"># all | none | custom</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">idx</span><span class="p">:</span><span class="w"> </span><span class="m">2</span><span class="w">        </span><span class="c"># 降低到第 idx 个位置</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># 自定义的单词列表，示例列表没有降低部分常用单词，如 and cat mail Mac but bad shit ……</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">words</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="l">aid, ann,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="l">bail, bait, bam, band, bans, bat, bay, bend, bent, benz, bib, bid, bien, biz, boc, bop, bos, bud, buf,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="l">cab, cad, cain, cam, cans, cap, cas, cef, chad, chan, chap, chef, cher, chew, chic, chin, chip, chit, coup, cum, cunt, cur,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="l">dab, dag, dal, dam, dent, dew, dial, diet, dim, din, dip, dis, dit, doug, dub, dug, dunn,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="l">fab, fax, fob, fog, foul, fur,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="l">gag, gail, gain, gal, gam, gaol, ged, gel, ger, guam, gus, gut,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="l">hail, ham, hank, hans, hat, hay, heil, heir, hem, hep, hud, hum, hung, hunk, hut,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="l">jim, jug,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="l">kat,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="l">lab, lad, lag, laid, lam, laos, lap, lat, lax, lay, led, leg, lex, liam, lib, lid, lied, lien, lies, linn, lip, lit, liz, lob, lug, lund, lung, lux,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="l">mag, maid, mann, mar, mat, med, mel, mend, mens, ment, mil, mins, mint, mob, moc, mod, mop, mos, mot, mud, mug, mum, nail,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="l">nap, nat, nay, neil, nib, nip, noun, nous, nun, nut,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="l">pac, paid, pail, pain, pair, pak, pal, pam, pans, pant, pap, par, pat, paw, pax, pens, pic, pier, pies, pins, pint, pit, pix, pod, pop, pos, pot, pour, pow, pub,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="l">rand, rant, rent, rep, res, ret, rex, rib, rid, rig, rim, rub, rug, rum, runs,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="l">sac, sail, sal, sam, sans, sap, saw, sax, sew, sham, shaw, shin, sig, sin, sip, sis, suit, sung, suns, sup, sur, sus,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="l">tad, tail, taj, tar, tax, tec, ted, tel, ter, tex, tic, tied, tier, ties, tim, tin, tit, tour, tout, tum,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="l">wag, wand, womens, wap, wax, weir, won,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="l">yan, yen]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 主翻译器，拼音</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">translator</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">dictionary</span><span class="p">:</span><span class="w"> </span><span class="l">rime_ice          </span><span class="w"> </span><span class="c"># 挂载词库 rime_ice.dict.yaml</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">spelling_hints</span><span class="p">:</span><span class="w"> </span><span class="m">8</span><span class="w">              </span><span class="c"># corrector.lua ：为了让错音错字提示的 Lua 同时适配全拼双拼，将拼音显示在 comment 中</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">always_show_comments</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">     </span><span class="c"># corrector.lua ：Rime 默认在 preedit 等于 comment 时取消显示 comment，这里强制一直显示，供 corrector.lua 做判断用。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">initial_quality</span><span class="p">:</span><span class="w"> </span><span class="m">1.2</span><span class="w">           </span><span class="c"># 拼音的权重应该比英文大</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">preedit_format</span><span class="p">:</span><span class="w">                </span><span class="c"># preedit_format 影响到输入框的显示和“Shift+回车”上屏的字符</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">xform/([jqxy])v/$1u/      </span><span class="w"> </span><span class="c"># 显示为 ju qu xu yu</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># - xform/([nl])v/$1ü/       # 显示为 nü lü</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># - xform/([nl])ue/$1üe/     # 显示为 nüe lüe</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">xform/([nl])v/$1v/        </span><span class="w"> </span><span class="c"># 显示为 nv lv</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">xform/([nl])ue/$1ve/      </span><span class="w"> </span><span class="c"># 显示为 nve lve</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 次翻译器，英文</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">melt_eng</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">dictionary</span><span class="p">:</span><span class="w"> </span><span class="l">melt_eng    </span><span class="w"> </span><span class="c"># 挂载词库 melt_eng.dict.yaml</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">enable_sentence</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">   </span><span class="c"># 禁止造句</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">enable_user_dict</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">  </span><span class="c"># 禁用用户词典</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">initial_quality</span><span class="p">:</span><span class="w"> </span><span class="m">1.1</span><span class="w">     </span><span class="c"># 初始权重</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">comment_format</span><span class="p">:</span><span class="w">          </span><span class="c"># 自定义提示码</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">xform/.*//          </span><span class="w"> </span><span class="c"># 清空提示码</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 反查：两分（拼字）</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">liangfen</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">dictionary</span><span class="p">:</span><span class="w"> </span><span class="l">liangfen    </span><span class="w"> </span><span class="c"># 挂载两分词典 liangfen.dict.yaml</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;u&#34;</span><span class="w">              </span><span class="c"># 以 u 开头来反查</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">enable_completion</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">  </span><span class="c"># 补全提示</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># tips: 〔两分〕          # 反查时显示的文字，建议注释掉，否则很多 u 开头的英文单词也会显示这个</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 自定义短语：custom_phrase.txt</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">custom_phrase</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">dictionary</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">user_dict</span><span class="p">:</span><span class="w"> </span><span class="l">custom_phrase</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">db_class</span><span class="p">:</span><span class="w"> </span><span class="l">stabledb</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">enable_completion</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="c"># 补全提示</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">enable_sentence</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">   </span><span class="c"># 禁止造句</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">initial_quality</span><span class="p">:</span><span class="w"> </span><span class="m">99</span><span class="w">      </span><span class="c"># custom_phrase 的权重应该比 pinyin 和 melt_eng 大</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># Emoji</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">emoji</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">opencc_config</span><span class="p">:</span><span class="w"> </span><span class="l">emoji.json</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">option_name</span><span class="p">:</span><span class="w"> </span><span class="l">emoji</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 简繁切换</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">traditionalize</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">option_name</span><span class="p">:</span><span class="w"> </span><span class="l">traditionalization</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">opencc_config</span><span class="p">:</span><span class="w"> </span><span class="l">s2t.json            </span><span class="w"> </span><span class="c"># s2t.json | s2hk.json | s2tw.json | s2twp.json</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">tips: none                          # 转换提示</span><span class="p">:</span><span class="w"> </span><span class="l">all 都显示 | char 仅单字显示 | none 不显示。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">excluded_types</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="l">reverse_lookup ] </span><span class="w"> </span><span class="c"># 不转换反查（两分拼字）的内容</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 标点符号</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># punctuator 下面有三个子项：</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c">#   full_shape 全角标点映射</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c">#   half_shape 半角标点映射</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c">#   symbols    Rime 的预设配置是以 &#39;/&#39; 前缀开头输出一系列字符，自定义的 symbols_v.yaml 修改成了 &#39;v&#39; 开头。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">punctuator</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">full_shape</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">__include</span><span class="p">:</span><span class="w"> </span><span class="l">default:/punctuator/full_shape </span><span class="w"> </span><span class="c"># 从 default.yaml 导入配置</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">half_shape</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">__include</span><span class="p">:</span><span class="w"> </span><span class="l">default:/punctuator/half_shape </span><span class="w"> </span><span class="c"># 从 default.yaml 导入配置</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">symbols</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">__include</span><span class="p">:</span><span class="w"> </span><span class="l">symbols_v:/symbols             </span><span class="w"> </span><span class="c"># 从 symbols_v.yaml 导入配置</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 处理符合特定规则的输入码，如网址、反查</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">recognizer</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">import_preset</span><span class="p">:</span><span class="w"> </span><span class="l">default </span><span class="w"> </span><span class="c"># 从 default.yaml 继承通用的</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">patterns</span><span class="p">:</span><span class="w">  </span><span class="c"># 再增加方案专有的：</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">punct</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;^v([0-9]|10|[A-Za-z]+)$&#34;</span><span class="w">  </span><span class="c"># 响应 symbols_v.yaml 的 symbols，用 &#39;v&#39; 替换 &#39;/&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">reverse_lookup</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;^u[a-z]+$&#34;</span><span class="w">       </span><span class="c"># 响应两分拼字的反查</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">unicode</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;^U[a-f0-9]+&#34;</span><span class="w">            </span><span class="c"># 响应 Unicode</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">number</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;^R[0-9]+[.]?[0-9]*&#34;</span><span class="w">      </span><span class="c"># 响应 number_translator</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 从 default 继承快捷键</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">key_binder</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">import_preset</span><span class="p">:</span><span class="w"> </span><span class="l">default</span><span class="w"> </span><span class="c"># 从 default.yaml 继承通用的</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 拼写设定</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">speller</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># 如果不想让什么标点直接上屏，可以加在 alphabet，或者编辑标点符号为两个及以上的映射</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">alphabet</span><span class="p">:</span><span class="w"> </span><span class="l">zyxwvutsrqponmlkjihgfedcbaZYXWVUTSRQPONMLKJIHGFEDCBA</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">delimiter</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34; &#39;&#34;</span><span class="w">  </span><span class="c"># 第一位&lt;空格&gt;是拼音之间的分隔符；第二位&lt;&#39;&gt;表示可以手动输入单引号来分割拼音。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">algebra</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c">### 超级简拼</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">erase/^hm$/</span><span class="w"> </span><span class="c"># 响应超级简拼，取消「噷 hm」的独占</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">erase/^m$/ </span><span class="w"> </span><span class="c"># 响应超级简拼，取消「呣 m」的独占</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">erase/^n$/ </span><span class="w"> </span><span class="c"># 响应超级简拼，取消「嗯 n」的独占</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">erase/^ng$/</span><span class="w"> </span><span class="c"># 响应超级简拼，取消「嗯 ng」的独占</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">abbrev/^([a-z]).+$/$1/  </span><span class="w"> </span><span class="c"># 超级简拼</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">abbrev/^([zcs]h).+$/$1/ </span><span class="w"> </span><span class="c"># 超级简拼中，zh ch sh 视为整体（ch&#39;sh → 城市），而不是像这样分开（c&#39;h&#39;s&#39;h → 吃好睡好）。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c">### v u 转换，增加对词库中「nue/nve」「qu/qv」等不同注音的支持</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">derive/^([nl])ue$/$1ve/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">derive/^([nl])ve$/$1ue/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">derive/^([jqxy])u/$1v/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="l">derive/^([jqxy])v/$1u/</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>对应的custom文件也建议直接删除，其他配置文件不需要修改。</p>
 <p>右键点击托盘的输入法图标，<strong>重新启动</strong>，让配置文件生效。</p>
 <p>如果想要修改字体，使用classic皮肤时，直接在界面上修改即可；其他皮肤需要修改配置文件才行。我个人反正是用的classic皮肤，比较简单。</p>
-<h2 id="键盘映射">键盘映射</h2>
-<p>我是一个改键党：必须使用Emacs的一些快捷键， 改键的开源软件其实很多，我先后尝试了几个，其中keyd的设置最简单，但是不知道为啥我设置之后没有生效…</p>
+<h2 class="heading-element" id="键盘映射"><span>键盘映射</span>
+  <a href="#%e9%94%ae%e7%9b%98%e6%98%a0%e5%b0%84" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>我是一个改键党：必须使用Emacs的一些快捷键， 改键的开源软件其实很多，我先后尝试了几个，其中keyd的设置最简单，但是不知道为啥我设置之后没有生效…</p>
 <p>最后能用的是<code>xremap</code>这个rust写的小软件，使用cargo安装即可。配置文件如下：</p>
-<pre><code class="language-yaml">keymap:
-  - name: Emacs
-    application:
-      not: [Emacs, wezterm-gui]
-    remap:
-      C-a: { with_mark: home }
-      C-e: { with_mark: end }
-      M-a: { with_mark: C-a }
-      M-c: { with_mark: C-c }
-      M-v: { with_mark: C-v }
-</code></pre>
-<p>我常用的只有这些，其他的都被我删掉了。不知道为什么，在wezterm中有时候还是无法使用ctrl+a，似乎有什么冲突。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">keymap</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Emacs</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">application</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">not</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="l">Emacs, wezterm-gui]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">remap</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">C-a</span><span class="p">:</span><span class="w"> </span>{<span class="w"> </span><span class="nt">with_mark</span><span class="p">:</span><span class="w"> </span><span class="l">home }</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">C-e</span><span class="p">:</span><span class="w"> </span>{<span class="w"> </span><span class="nt">with_mark</span><span class="p">:</span><span class="w"> </span><span class="l">end }</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">M-a</span><span class="p">:</span><span class="w"> </span>{<span class="w"> </span><span class="nt">with_mark</span><span class="p">:</span><span class="w"> </span><span class="l">C-a }</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">M-c</span><span class="p">:</span><span class="w"> </span>{<span class="w"> </span><span class="nt">with_mark</span><span class="p">:</span><span class="w"> </span><span class="l">C-c }</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">M-v</span><span class="p">:</span><span class="w"> </span>{<span class="w"> </span><span class="nt">with_mark</span><span class="p">:</span><span class="w"> </span><span class="l">C-v }</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>我常用的只有这些，其他的都被我删掉了。不知道为什么，在wezterm中有时候还是无法使用ctrl+a，似乎有什么冲突。</p>
 <p>在root的cronjob里加入：</p>
-<pre><code class="language-bash"> @reboot /home/tryao/.cargo/bin/xremap /home/tryao/.xremap.yml
-</code></pre>
-<p>之后即可开机自启动了。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"> @reboot /home/tryao/.cargo/bin/xremap /home/tryao/.xremap.yml</span></span></code></pre></td></tr></table>
+</div>
+</div><p>之后即可开机自启动了。</p>
 <p>实际体验很好，rust写的小软件性能很强，使用中基本没有延迟。</p>
 <p>上面的映射有个问题：在xterm中无法正常使用<code>home</code>, <code>end</code>，需要加一个配置(~/.Xresources):</p>
-<pre><code>XTerm*termName: xterm-256color
-URxvt*termName: rxvt-unicode
-</code></pre>
-<p>这样才行。</p>
-<h2 id="其他">其他</h2>
-<p>网易云官方的播放器不能用，建议改为<strong>YesPlayMusic音乐播放器</strong>这个开源的播放器。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">XTerm*termName: xterm-256color
+</span></span><span class="line"><span class="cl">URxvt*termName: rxvt-unicode</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这样才行。</p>
+<h2 class="heading-element" id="其他"><span>其他</span>
+  <a href="#%e5%85%b6%e4%bb%96" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>网易云官方的播放器不能用，建议改为<strong>YesPlayMusic音乐播放器</strong>这个开源的播放器。</p>
 <p><del>微信实际上有原生的版本，可以从deepin论坛下载，不过非deepin的debian系需要额外装一些依赖才能使用。也可以使用星火商店，不过依赖的deb包还是要手动安装（如果不是国产发行版）。</del></p>
 <p><del><strong>注意</strong>，原生微信目前（v2.1.9）在LinuxMint下新消息没有提示，这个没办法，可以考虑改用wine版本微信。</del></p>
 <p>2024.03更新：微信重构了原生的版本，现在已经可以正常使用了，星火商店可以下载。</p>
-<p>命令行提示工具推荐使用<a href="https://github.com/starship/starship"><code>starship</code></a>，可以配合zsh使用，也可以直接在bash使用。个人感觉比oh-my-zsh+powerline10k体验更好，而且这个还能配合powershell使用。</p>
+<p>命令行提示工具推荐使用<a href="https://github.com/starship/starship"target="_blank" rel="external nofollow noopener noreferrer"><code>starship</code></a>，可以配合zsh使用，也可以直接在bash使用。个人感觉比oh-my-zsh+powerline10k体验更好，而且这个还能配合powershell使用。</p>
 <p>IDE的话，我买了正版的jetbrain全家桶，所以直接用<code>jetbrain toolbox</code>安装即可，而且默认是装在home目录下，重装系统不会丢失。vscode也是能正常使用的。</p>
 <p>剪贴板软件可以用<code>CopyQ</code>，快捷键绑定到命令<code>copyq toggle</code>即可（不要使用自带的全局快捷键，没用）。</p>
 <p>截图软件可以用<strong>火焰截图</strong>，快捷键绑定到命令<code>flameshot gui</code>即可，功能很丰富。</p>
 <p>办公软件使用wps 2019，这个没啥说的，自带的那个office可以用apt卸载掉。另外xmind也支持Linux，当然你也可以使用wps里面自带的processOn工具。不过wps2019很久没更新了，自带的PDF浏览器不支持高亮标注，也是很蛋疼的。</p>
-<p>番茄钟软件，可以用<a href="https://github.com/RoderickQiu/wnr"><strong>wnr</strong></a>，同样支持Windows。</p>
+<p>番茄钟软件，可以用<a href="https://github.com/RoderickQiu/wnr"target="_blank" rel="external nofollow noopener noreferrer"><strong>wnr</strong></a>，同样支持Windows。</p>
 <p>梯子可以用<code>cfw</code>或者<code>clash verge</code>，星火商店里面可以直接下载…</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2024-03-21 08:52:59">更新于 2024-03-21&nbsp;<a class="git-hash" href="YiuTerran/blog/commit/691fd8500832c07550abf8c1fd4510651ff3362c" rel="external nofollow noopener noreferrer" target="_blank" title="add some tips for linux usage&#10&#10Commit: 691fd8500832c07550abf8c1fd4510651ff3362c [691fd85]&#10Author: 姚泰然&#10Date: 2024-03-21 08:52:59&#10Commit Date: 2024-03-21 08:53:56"><i class="fa-solid fa-hashtag fa-fw" aria-hidden="true"></i>691fd85</a></span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="/blogs/posts/linux%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="YiuTerran/blog/blob/monolingual/content/posts/linux%e6%97%a5%e5%b8%b8%e4%bd%bf%e7%94%a8%e8%ae%b0%e5%bd%95.md?plain=1" title="查看源码" class="link-to-source">查看源码</a></span><span><a href="YiuTerran/blog/edit/monolingual/content/posts/linux%e6%97%a5%e5%b8%b8%e4%bd%bf%e7%94%a8%e8%ae%b0%e5%bd%95.md" title="编辑此页" class="link-to-edit">编辑此页</a></span><span><a href="YiuTerran/blog/issues/new?title=[BUG]%20linux%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95&amp;body=%7cField%7cValue%7c%0A%7c-%7c-%7c%0A%7cTitle%7clinux%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95%7c%0A%7cURL%7chttps://yiuterran.github.io/blogs/posts/linux%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/%7c%0A%7cFilename%7cYiuTerran/blog/blob/monolingual/content/posts/linux%e6%97%a5%e5%b8%b8%e4%bd%bf%e7%94%a8%e8%ae%b0%e5%bd%95.md?plain=1%7c" title="报告问题" class="link-to-report">报告问题</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://yiuterran.github.io/blogs/posts/linux%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/" data-title="linux日常使用记录" data-hashtags="linux"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://yiuterran.github.io/blogs/posts/linux%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/" data-hashtag="linux"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://yiuterran.github.io/blogs/posts/linux%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/" data-title="linux日常使用记录"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
 
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/blogs/tags/linux/" class="post-tag" title="标签 - Linux">Linux</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blogs/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/blogs/posts/es%E5%92%8Ckibana%E7%AE%80%E8%A6%81%E7%AC%94%E8%AE%B0/" class="post-nav-item" rel="prev" title="ES和kibana简要笔记"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>ES和kibana简要笔记</a><a href="/blogs/posts/jsonnet%E8%AF%95%E7%94%A8/" class="post-nav-item" rel="next" title="Jsonnet试用">Jsonnet试用<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
 </article>
 
-
-      
-        <div class="my-4">
-    
-    <a href="https://yiuterran.github.io/blog/tags/linux/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#linux</a>
-    
-</div>
-      
-
-      
-
-
-
-      
-        <div class="py-2">
-  
-    <div class="my-8 flex flex-col items-center md:flex-row">
-      <a href="https://yiuterran.github.io/blog/authors/tryao/" class="md:me-4 text-primary-text h-24 w-24">
-        
-        
-          <img
-            src="https://yiuterran.github.io/blog/images/avatar.png"
-            class="bg-primary-bg w-full rounded-full"
-            alt="Avatar"
-          />
-        
-      </a>
-      <div class="mt-4 w-full md:mt-0 md:w-auto">
-        <a
-          href="https://yiuterran.github.io/blog/authors/tryao/"
-          class="mb-2 block border-b pb-1 text-lg font-bold"
-        >
-          <h3>个人介绍</h3>
-        </a>
-        <span class="block pb-2">兴趣使然的程序员，博而不精，乐学不倦</span>
-        
-          
-          
-          
-          
-          <a href="mailto:yaotairan@gmail.com" class="me-2">
-            <i class="fas fa-envelope"></i>
-          </a>
-        
-          
-          
-          
-          
-          <a href="https://github.com/YiuTerran" class="me-2">
-            <i class="fab fa-github"></i>
-          </a>
-        
-      </div>
-    </div>
-  
-</div>
-
-      
-
-      
-  <div
-    class="-mx-2 mt-4 flex flex-col border-t px-2 pt-4 md:flex-row md:justify-between"
-  >
-    <div>
-      
-        <span class="text-primary-text block font-bold"
-          >上一页</span
-        >
-        <a href="https://yiuterran.github.io/blog/posts/jsonnet%E8%AF%95%E7%94%A8/" class="block">Jsonnet试用</a>
-      
-    </div>
-    <div class="mt-4 md:mt-0 md:text-right">
-      
-        <span class="text-primary-text block font-bold">下一页</span>
-        <a href="https://yiuterran.github.io/blog/posts/es%E5%92%8Ckibana%E7%AE%80%E8%A6%81%E7%AC%94%E8%AE%B0/" class="block">ES和kibana简要笔记</a>
-      
-    </div>
-  </div>
-
-
-      
-
-
-
-  <script id="utterances" src="https://utteranc.es/client.js"
-            issue-term=title
-            repo=YiuTerran/blog-comment
-              theme=preferred-color-scheme
-        crossorigin="anonymous"
-        async>
-</script>
-<script>
-    if (storageColorScheme == "Light") {
-      document.getElementById('utterances').setAttribute('theme', 'github-light')
-    } else if (storageColorScheme == "Dark") {
-      document.getElementById('utterances').setAttribute('theme', 'github-dark')
-    }
-</script>
-
-    </div>
-    
-      <div class="col-span-2">
-        
-        
-          <div
-  class="
-    bg-primary-bg
-   prose sticky top-16 z-10 hidden px-6 py-4 lg:block"
->
-  <h3>本页内容</h3>
-</div>
-<div
-  class="sticky-toc  hidden px-6 pb-6 lg:block"
->
-  <nav id="TableOfContents">
-  <ul>
-    <li><a href="#发行版选择">发行版选择</a></li>
-    <li><a href="#软件源">软件源</a></li>
-    <li><a href="#字体">字体</a></li>
-    <li><a href="#wezterm配置">WezTerm配置</a></li>
-    <li><a href="#ssh参考配置">SSH参考配置</a></li>
-    <li><a href="#输入法">输入法</a></li>
-    <li><a href="#键盘映射">键盘映射</a></li>
-    <li><a href="#其他">其他</a></li>
-  </ul>
-</nav>
-</div>
-<script>
-  window.addEventListener("DOMContentLoaded", () => {
-    enableStickyToc();
-  });
-</script>
-
-        
-      </div>
-    
-
-    
-    
-  </div>
-
-  
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        hljs.highlightAll();
-      });
-    </script>
-
-          </div>
-        </div>
-      
-    </main>
-    <footer class="pl-scrollbar">
-      <div class="mx-auto w-full max-w-screen-xl"><div class="text-center p-6 pin-b">
-    <p class="text-sm text-tertiary-text">&copy; 2021 <a href="https://github.com/YiuTerran">tryao</a>
- &middot;  Powered by the <a href="https://github.com/wangchucheng/hugo-eureka" class="hover:text-eureka">Eureka</a> theme for <a href="https://gohugo.io" class="hover:text-eureka">Hugo</a></p>
-</div></div>
-    </footer>
-  </body>
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.151.0"><img class="hugo-icon" src="/blogs/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.4.0-alpha.2-20251014082535-5c74d431"><img class="fixit-icon" src="/blogs/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2025</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://gravatar.com/afxmessagebox"target="_blank" rel="external nofollow noopener noreferrer">tryao</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/blogs/lib/cookieconsent/cookieconsent.min.css"><script src="/blogs/lib/autocomplete/autocomplete.min.js" defer></script><script src="/blogs/lib/fuse/fuse.min.js" defer></script><script src="/blogs/lib/sharer/sharer.min.js" async defer></script><script src="/blogs/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/blogs/posts/linux%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95/config/page.js" defer></script><script src="/blogs/js/theme.min.js" defer></script><script>
+      window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
+      gtag('config', 'G-C0R8DENDJ0', { 'anonymize_ip': true });
+    </script><script src="https://www.googletagmanager.com/gtag/js?id=G-C0R8DENDJ0" async></script></body>
 </html>

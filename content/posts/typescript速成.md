@@ -7,7 +7,6 @@ tags: ["frontend"]
 categories: []
 series: []
 date: 2024-11-11T14:56:12+08:00
-lastmod: 2024-11-11T14:56:12+08:00
 featuredVideo:
 featuredImage:
 draft: false

@@ -7,7 +7,6 @@ tags: ["sre", "devops"]
 categories: []
 series: []
 date: 2022-09-22T10:01:11+08:00
-lastmod: 2022-09-22T10:01:11+08:00
 featuredVideo:
 featuredImage:
 draft: false

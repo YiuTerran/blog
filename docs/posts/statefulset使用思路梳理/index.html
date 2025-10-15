@@ -1,292 +1,150 @@
 <!DOCTYPE html>
-<html
-  lang="zh"
-  dir="ltr"
-  
-><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>StatefulSet使用思路梳理 - 思海沉钩</title><meta name="author" content="tryao">
+<meta name="description" content="一般服务都是使用deployment部署，deploy的使用非常简单，无状态，随意调度。但是各种需要持久化数据的中间件都需要使用StatefulSet来部署，这个玩意儿实际上有点复杂。
+"><meta name="keywords" content='k8s'>
+  <meta itemprop="name" content="StatefulSet使用思路梳理">
+  <meta itemprop="description" content="一般服务都是使用deployment部署，deploy的使用非常简单，无状态，随意调度。但是各种需要持久化数据的中间件都需要使用StatefulSet来部署，这个玩意儿实际上有点复杂。">
+  <meta itemprop="datePublished" content="2023-09-15T14:57:05+08:00">
+  <meta itemprop="dateModified" content="2024-10-24T14:59:34+08:00">
+  <meta itemprop="wordCount" content="1916">
+  <meta itemprop="keywords" content="K8s"><meta property="og:url" content="https://yiuterran.github.io/blogs/posts/statefulset%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86/">
+  <meta property="og:site_name" content="思海沉钩">
+  <meta property="og:title" content="StatefulSet使用思路梳理">
+  <meta property="og:description" content="一般服务都是使用deployment部署，deploy的使用非常简单，无状态，随意调度。但是各种需要持久化数据的中间件都需要使用StatefulSet来部署，这个玩意儿实际上有点复杂。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2023-09-15T14:57:05+08:00">
+    <meta property="article:modified_time" content="2024-10-24T14:59:34+08:00">
+    <meta property="article:tag" content="K8s">
 
-
-<title>StatefulSet使用思路梳理 | 应许之地</title>
-
-<meta name="generator" content="Hugo Eureka 0.9.3" />
-<link rel="stylesheet" href="https://yiuterran.github.io/blog/css/eureka.min.30cfa2a7d2b5754cd246875caad26d69af1d8567ea53339f6729fe1d0ceee8917d33fcd191d4284da2a5da6359d79cb7.css">
-<script defer src="https://yiuterran.github.io/blog/js/eureka.min.e8043b71b627e3cfd9b2a5de56adf007f5af83dee672ca0c186aa2e29a10d6f648632064d0c00b2fa4d1b11e0f196af3.js"></script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload"
-  href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&amp;family=Noto&#43;Serif&#43;SC:wght@400;600;700&amp;display=swap"
-  as="style" onload="this.onload=null;this.rel='stylesheet'">
-
-
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.4.0/build/styles/solarized-light.min.css"
-   media="print"
-  onload="this.media='all';this.onload=null" crossorigin>
-<script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.4.0/build/highlight.min.js"
-   crossorigin></script>
-  <script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.4.0/build/languages/dart.min.js"
-     crossorigin></script>
-<link rel="stylesheet" href="https://yiuterran.github.io/blog/css/highlightjs.min.2958991528e43eb6fc9b8c4f2b8e052f79c4010718e1d1e888a777620e9ee63021c2c57ec7417a3108019bb8c41943e6.css" media="print" onload="this.media='all';this.onload=null">
-
-
-<script defer type="text/javascript" src="https://yiuterran.github.io/blog/js/fontawesome.min.8c77c7521b1f95ec2031c2a79f5c6a698aa4a0dba5ba649dfbc7f73994cddf3f494be6aac7e5724f35cbf72cfde09703.js"></script>
-
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"
-   integrity="sha384-MlJdn/WNKDGXveldHDdyRP1R4CTHr3FeuDNfhsLPYrq2t0UBkUdK2jyTnXPEK1NQ"  media="print"
-  onload="this.media='all';this.onload=null" crossorigin>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js" 
-  integrity="sha384-VQ8d8WVFw0yHhCk5E8I86oOhv48xLpnDZx5T9GogA/Y84DcCKWXDmSDfn13bzFZY"  crossorigin></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js"
-   integrity="sha384-&#43;XBljXPPiv&#43;OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR"  crossorigin></script>
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    renderMathInElement(document.body, {
-      delimiters: [
-        { left: "$$", right: "$$", display: true },
-        { left: "$", right: "$", display: false },
-        { left: "\\(", right: "\\)", display: false },
-        { left: "\\[", right: "\\]", display: true }
-      ],
-    });
-  });
-</script>
-
-
-<script defer src="https://cdn.jsdelivr.net/npm/mermaid@8.14.0/dist/mermaid.min.js" 
-  integrity="sha384-atOyb0FxAgN9LyAc6PEf9BjgwLISyansgdH8/VXQH8p2o5vfrRgmGIJ2Sg22L0A0"  crossorigin></script>
-
-
-<link rel="icon" type="image/png" sizes="32x32" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_32x32_fill_box_center_3.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://yiuterran.github.io/blog/images/icon_hu64421c6c7700f606f0ad45d807017b09_5843_180x180_fill_box_center_3.png">
-
-<meta name="description"
-  content="一般服务都是使用deployment部署，deploy的使用非常简单，无状态，随意调度。但是各种需要持久化数据的中间件都需要使用StatefulSet">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [{
-      "@type": "ListItem",
-      "position": 1 ,
-      "name":"文章列表",
-      "item":"https://yiuterran.github.io/blog/posts/"},{
-      "@type": "ListItem",
-      "position": 2 ,
-      "name":"StatefulSet使用思路梳理",
-      "item":"https://yiuterran.github.io/blog/posts/statefulset%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86/"}]
-}
-</script>
-
-
-
-<script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "Article",
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="StatefulSet使用思路梳理">
+  <meta name="twitter:description" content="一般服务都是使用deployment部署，deploy的使用非常简单，无状态，随意调度。但是各种需要持久化数据的中间件都需要使用StatefulSet来部署，这个玩意儿实际上有点复杂。">
+<meta name="application-name" content="思海沉钩">
+<meta name="apple-mobile-web-app-title" content="思海沉钩"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/blogs/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/blogs/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/blogs/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/blogs/apple-touch-icon.png"><link rel="mask-icon" href="/blogs/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="https://yiuterran.github.io/blogs/posts/statefulset%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86/" title="StatefulSet使用思路梳理 - 思海沉钩" /><link rel="prev" type="text/html" href="https://yiuterran.github.io/blogs/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/" title="Configmap挂载的几种情况" /><link rel="next" type="text/html" href="https://yiuterran.github.io/blogs/posts/es%E5%92%8Ckibana%E7%AE%80%E8%A6%81%E7%AC%94%E8%AE%B0/" title="ES和kibana简要笔记" /><link rel="alternate" type="text/markdown" href="https://yiuterran.github.io/blogs/posts/statefulset%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86/index.md" title="StatefulSet使用思路梳理 - 思海沉钩"><link rel="stylesheet" href="/blogs/css/config.min.css"><link rel="stylesheet" href="/blogs/css/style.min.css"><link rel="preload" href="/blogs/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/blogs/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/blogs/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/blogs/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "StatefulSet使用思路梳理",
+    "inLanguage": "zh-CN",
     "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "https://yiuterran.github.io/blog/posts/statefulset%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86/"
-    },
-    "headline": "StatefulSet使用思路梳理 | 应许之地","datePublished": "2023-09-15T14:57:05+08:00",
-    "dateModified": "2023-09-15T14:57:05+08:00",
-    "wordCount":  1916 ,
-    "author": {
+      "@type": "WebPage",
+      "@id": "https:\/\/yiuterran.github.io\/blogs\/posts\/statefulset%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86\/"
+    },"genre": "posts","keywords": "k8s","wordcount":  1916 ,
+    "url": "https:\/\/yiuterran.github.io\/blogs\/posts\/statefulset%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86\/","datePublished": "2023-09-15T14:57:05+08:00","dateModified": "2024-10-24T14:59:34+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
         "@type": "Person",
-        "name": ["“tryao\""]
-    },
-    "publisher": {
-        "@type": "Person",
-        "name": "C. Wang",
-        "logo": {
-            "@type": "ImageObject",
-            "url": "https://yiuterran.github.io/blog/images/icon.png"
-        }
-        },
-    "description": "一般服务都是使用deployment部署，deploy的使用非常简单，无状态，随意调度。但是各种需要持久化数据的中间件都需要使用StatefulSet"
-}
-</script><meta property="og:title" content="StatefulSet使用思路梳理 | 应许之地" />
-<meta property="og:type" content="article" />
-
-
-<meta property="og:image" content="https://yiuterran.github.io/blog/images/icon.png">
-
-
-<meta property="og:url" content="https://yiuterran.github.io/blog/posts/statefulset%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86/" />
-
-
-
-
-<meta property="og:description" content="一般服务都是使用deployment部署，deploy的使用非常简单，无状态，随意调度。但是各种需要持久化数据的中间件都需要使用StatefulSet" />
-
-
-
-
-<meta property="og:locale" content="zh" />
-
-
-
-
-<meta property="og:site_name" content="应许之地" />
-
-
-
-
-
-
-<meta property="article:published_time" content="2023-09-15T14:57:05&#43;08:00" />
-
-
-<meta property="article:modified_time" content="2023-09-15T14:57:05&#43;08:00" />
-
-
-
-<meta property="article:section" content="posts" />
-
-
-<meta property="article:tag" content="k8s" />
-
-
-
-
-
-<meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/" />
-
-<meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/promql%E7%AC%94%E8%AE%B0/" />
-
-<meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/" />
-
-<meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/kubeedge%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/" />
-
-<meta property="og:see_also" content="https://yiuterran.github.io/blog/posts/k8s%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/" />
-
-
-
-
-  <body class="flex min-h-screen flex-col">
-    <header
-      class="min-h-16 pl-scrollbar bg-secondary-bg fixed z-50 flex w-full items-center shadow-sm"
-    >
-      <div class="mx-auto w-full max-w-screen-xl"><script>
-    let storageColorScheme = localStorage.getItem("lightDarkMode")
-    if (((storageColorScheme == 'Auto' || storageColorScheme == null) && window.matchMedia("(prefers-color-scheme: dark)").matches) || storageColorScheme == "Dark") {
-        document.getElementsByTagName('html')[0].classList.add('dark')
-    }
-</script>
-<nav class="flex items-center justify-between flex-wrap px-4 py-4 md:py-0">
-    <a href="https://yiuterran.github.io/blog/" class="me-6 text-primary-text text-xl font-bold">应许之地</a>
-    <button id="navbar-btn" class="md:hidden flex items-center px-3 py-2" aria-label="Open Navbar">
-        <i class="fas fa-bars"></i>
-    </button>
-
-    <div id="target"
-        class="hidden block md:flex md:grow md:justify-between md:items-center w-full md:w-auto text-primary-text z-20">
-        <div class="md:flex md:h-16 text-sm md:grow pb-4 md:pb-0 border-b md:border-b-0">
-            <a href="https://yiuterran.github.io/blog/authors/tryao/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  border-transparent  me-4">作者</a>
-            <a href="https://yiuterran.github.io/blog/posts/" class="block mt-4 md:inline-block md:mt-0 md:h-(16-4px) md:leading-(16-4px) box-border md:border-t-2 md:border-b-2  selected-menu-item  me-4">文章</a>
-        </div>
-
-        <div class="flex">
-            <div class="relative pt-4 md:pt-0">
-                <div class="cursor-pointer hover:text-eureka" id="lightDarkMode">
-                    <i class="fas fa-adjust"></i>
-                </div>
-                <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-30" id="is-open">
-                </div>
-                <div class="absolute flex flex-col start-0 md:start-auto end-auto md:end-0 hidden bg-secondary-bg w-48 rounded py-2 border border-tertiary-bg cursor-pointer z-40"
-                    id='lightDarkOptions'>
-                    <span class="px-4 py-1 hover:text-eureka" name="Light">浅色</span>
-                    <span class="px-4 py-1 hover:text-eureka" name="Dark">深色</span>
-                    <span class="px-4 py-1 hover:text-eureka" name="Auto">自动</span>
-                </div>
+        "name": "tryao"
+      },"description": ""
+  }
+  </script><script src="/blogs/js/head/color-scheme.min.js"></script></head>
+  <body data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/blogs/" title="思海沉钩"><span class="header-title-text">思海沉钩</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/blogs/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item">
+              <a class="menu-link" href="/blogs/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item">
+              <a class="menu-link" href="/blogs/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+              <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch" title="切换主题">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/blogs/" title="思海沉钩"><span class="header-title-text">思海沉钩</span></a><span class="header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+              </span>
             </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li class="menu-item"><a class="menu-link" href="/blogs/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item"><a class="menu-link" href="/blogs/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item"><a class="menu-link" href="/blogs/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item menu-system">
+          <span class="menu-system-item theme-switch" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
+      </ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>StatefulSet使用思路梳理</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://gravatar.com/afxmessagebox" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img class="avatar" src='https://avatars.githubusercontent.com/u/5930695?v=4' alt="tryao" height="16" width="16">&nbsp;tryao</a></span></div><div class="post-meta-line"><span title="发布于 2023-09-15 14:57:05"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2023-09-15">2023-09-15</time></span>&nbsp;<span title="更新于 2024-10-24 14:59:34"><i class="fa-regular fa-calendar-check fa-fw me-1" aria-hidden="true"></i><time datetime="2024-10-24">2024-10-24</time></span>&nbsp;<span title="1916 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 2000 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 4 分钟</span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
         </div>
-    </div>
-
-    <div class="fixed hidden inset-0 opacity-0 h-full w-full cursor-default z-0" id="is-open-mobile">
-    </div>
-
-</nav>
-<script>
-    
-    let element = document.getElementById('lightDarkMode')
-    if (storageColorScheme == null || storageColorScheme == 'Auto') {
-        document.addEventListener('DOMContentLoaded', () => {
-            window.matchMedia("(prefers-color-scheme: dark)").addEventListener('change', switchDarkMode)
-        })
-    } else if (storageColorScheme == "Light") {
-        element.firstElementChild.classList.remove('fa-adjust')
-        element.firstElementChild.setAttribute("data-icon", 'sun')
-        element.firstElementChild.classList.add('fa-sun')
-    } else if (storageColorScheme == "Dark") {
-        element.firstElementChild.classList.remove('fa-adjust')
-        element.firstElementChild.setAttribute("data-icon", 'moon')
-        element.firstElementChild.classList.add('fa-moon')
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        getcolorscheme();
-        switchBurger();
-    });
-</script>
-</div>
-    </header>
-    <main class="grow pt-16">
-        <div class="pl-scrollbar">
-          <div class="mx-auto w-full max-w-screen-xl lg:px-4 xl:px-8">
-  
-  
-  <div class="grid grid-cols-2 gap-4 lg:grid-cols-8 lg:pt-12">
-    <div
-      class=" bg-secondary-bg col-span-2 rounded px-6 py-8 lg:col-span-6"
-    >
-      <article class="prose">
-  <h1 class="mb-4">StatefulSet使用思路梳理</h1>
-
-  <div
-  class="text-tertiary-text not-prose mt-2 flex flex-row flex-wrap items-center"
->
-  <div class="me-6 my-2">
-    <i class="fas fa-calendar me-1"></i>
-    <span
-      >2023-09-15</span
-    >
-  </div>
-  <div class="me-6 my-2">
-    <i class="fas fa-clock me-1"></i>
-    <span>4分钟阅读时长</span>
-  </div>
-
-  
-
-  
-</div>
-
-
-  
-  
-
-  <p>一般服务都是使用deployment部署，deploy的使用非常简单，无状态，随意调度。但是各种需要持久化数据的中间件都需要使用StatefulSet来部署，这个玩意儿实际上有点复杂。</p>
-<h2 id="最简单的方法不要使用k8s来部署有状态应用">最简单的方法：不要使用k8s来部署有状态应用</h2>
-<p>比如在部署kafka集群、MySQL集群时，你会发现直接用docker分别在选定节点部署，是最简单的。和传统的物理机部署并无什么区别，你要做的仅仅是将配置文件和宿主机目录挂载到容器里。</p>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#最简单的方法不要使用k8s来部署有状态应用">最简单的方法：不要使用k8s来部署有状态应用</a></li>
+        <li><a href="#不要太依赖分布式存储">不要太依赖分布式存储</a></li>
+        <li><a href="#利用亲和性来部署statefulset">利用亲和性来部署StatefulSet</a></li>
+        <li><a href="#使用localpv">使用LocalPV</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p>一般服务都是使用deployment部署，deploy的使用非常简单，无状态，随意调度。但是各种需要持久化数据的中间件都需要使用StatefulSet来部署，这个玩意儿实际上有点复杂。</p>
+<h2 class="heading-element" id="最简单的方法不要使用k8s来部署有状态应用"><span>最简单的方法：不要使用k8s来部署有状态应用</span>
+  <a href="#%e6%9c%80%e7%ae%80%e5%8d%95%e7%9a%84%e6%96%b9%e6%b3%95%e4%b8%8d%e8%a6%81%e4%bd%bf%e7%94%a8k8s%e6%9d%a5%e9%83%a8%e7%bd%b2%e6%9c%89%e7%8a%b6%e6%80%81%e5%ba%94%e7%94%a8" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>比如在部署kafka集群、MySQL集群时，你会发现直接用docker分别在选定节点部署，是最简单的。和传统的物理机部署并无什么区别，你要做的仅仅是将配置文件和宿主机目录挂载到容器里。</p>
 <p>如果想要自动化，就写bash脚本，分别在各个主机运行即可，也并没有那么复杂。</p>
 <p>容器内的服务访问容器外的服务也很简单：直接用网卡的内网ip就行。</p>
-<h2 id="不要太依赖分布式存储">不要太依赖分布式存储</h2>
-<p>第一次接触Ceph或者longhorn的时候，很容易会错误的认为分布式存储本身就可以解决高可用的问题。</p>
+<h2 class="heading-element" id="不要太依赖分布式存储"><span>不要太依赖分布式存储</span>
+  <a href="#%e4%b8%8d%e8%a6%81%e5%a4%aa%e4%be%9d%e8%b5%96%e5%88%86%e5%b8%83%e5%bc%8f%e5%ad%98%e5%82%a8" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>第一次接触Ceph或者longhorn的时候，很容易会错误的认为分布式存储本身就可以解决高可用的问题。</p>
 <p>比如sqlite，将它放在longhorn里，理论上pod在任意节点，都可以访问到这块pv.  longhorn自带的多副本策略也可以保证数据不丢失。如果宿主机节点挂掉，k8s自动调度pod到其他结点，原来的pv也依然可用。</p>
 <p>这一切很美好，但是有两个问题：</p>
 <ul>
@@ -299,195 +157,59 @@
 <p>另外，longhorn支持s3/minio/nfs二次备份，这个卷备份可以实现完全备份。当出现宕机等问题时，你可以向前回溯这个备份，总能找到可用的完整数据。当然，这个回档的时间可能有点长。</p>
 <p>所以，对于MySQL这种数据库，还是使用<strong>应用层自带的副本方案</strong>更靠谱。分布式存储只能用来存放一些不太重要的东西：比如文件之类的。甚至于，这个需求也可以使用minio之类的中间件来解决。可能像日志之类的数据比较适合使用，搞一块RWM的PV，所有应用都往里面写日志，方便集中查看应用日志，而且日志丢了一般影响也不大。</p>
 <p>当然，如果你是在云端，使用云厂商提供的分布式存储，一般并不需要关心这个问题，我们这里主要还是讨论边缘端这种不稳定的场景。</p>
-<h2 id="利用亲和性来部署statefulset">利用亲和性来部署StatefulSet</h2>
-<p>如果回到应用程序本身的副本方案——比如MySQL主从——那么就需要手动干涉k8s的调度。使其最终和你手动在各个节点部署的结果一致（也就是你自己用docker部署）。</p>
+<h2 class="heading-element" id="利用亲和性来部署statefulset"><span>利用亲和性来部署StatefulSet</span>
+  <a href="#%e5%88%a9%e7%94%a8%e4%ba%b2%e5%92%8c%e6%80%a7%e6%9d%a5%e9%83%a8%e7%bd%b2statefulset" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>如果回到应用程序本身的副本方案——比如MySQL主从——那么就需要手动干涉k8s的调度。使其最终和你手动在各个节点部署的结果一致（也就是你自己用docker部署）。</p>
 <p>首先，主从应当尽量在不同的宿主机上：如果你有两台以上宿主机的话。这个主要通过Pod反亲和性来实现：如果这个节点已经有匹配的Pod，则尽量不要还在这个节点上部署第二个sts.</p>
 <p>其次，利用节点亲和性来选择宿主机：假设你手头的宿主机配置不太一样，那就在高配置的node上加上label，然后在sts的pod上加上节点亲和，选择匹配的标签。</p>
 <p>利用这两个方法，你可以决定pod最终被调度到哪个节点上。当然至于哪个是主哪个是从，这个仍然是随机的。如果你想保证主在某个节点，从在某个节点，那只能写两个sts，直接指定nodeName。一个sts配置2个replia，是无法实现这种需求的。</p>
-<h2 id="使用localpv">使用LocalPV</h2>
-<p>不使用分布式存储，那就只能用LocalPV了。如果使用k3s，使用自带的local-path就行。</p>
+<h2 class="heading-element" id="使用localpv"><span>使用LocalPV</span>
+  <a href="#%e4%bd%bf%e7%94%a8localpv" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>不使用分布式存储，那就只能用LocalPV了。如果使用k3s，使用自带的local-path就行。</p>
 <p>在sts里面指定VolumeClaimTemplate，k8s会延迟绑定PV直到Pod被调度。</p>
 <p>对于LocalPV，k8s在调度时就会考虑到Pod和PV必须在同一个节点，这是因为StorageClass的配置里有<code>volumeBindingMode: WaitForFirstConsumer</code>，这是LocalPV的标记。在第一次创建sts时，PV还不存在，这个流程是反过来的：k8s先根据亲和性和资源需求来决定Pod在哪个节点，然后再根据PVC来动态创建PV，将PVC绑定PV，在同一个节点创建Pod然后完成挂载。</p>
 <p>在第二次以及之后创建sts时，此时PVC/PV都已经存在，所以k8s在调度的时候就会自动将POD创建到对应的节点了。</p>
 <p>如果是直接用k8s，那可能没有支持动态创建PV的StorageClass. 此时需要手动创建PV，其他的流程是一样的。当然最终节点只会被调度到有PV的节点：换句话说，你无须在POD中指定节点亲和性，而是在创建PV时指定节点亲和性。</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2024-10-24 14:59:34">更新于 2024-10-24&nbsp;<a class="git-hash" href="YiuTerran/blog/commit/d53aa065fc27c2e9ace75d495c03ed1f3c0deb29" rel="external nofollow noopener noreferrer" target="_blank" title="rule engine design&#10&#10Commit: d53aa065fc27c2e9ace75d495c03ed1f3c0deb29 [d53aa06]&#10Author: 姚泰然&#10Date: 2024-10-24 14:59:34&#10Commit Date: 2024-10-24 17:38:18"><i class="fa-solid fa-hashtag fa-fw" aria-hidden="true"></i>d53aa06</a></span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="/blogs/posts/statefulset%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="YiuTerran/blog/blob/monolingual/content/posts/StatefulSet%e4%bd%bf%e7%94%a8%e6%80%9d%e8%b7%af%e6%a2%b3%e7%90%86.md?plain=1" title="查看源码" class="link-to-source">查看源码</a></span><span><a href="YiuTerran/blog/edit/monolingual/content/posts/StatefulSet%e4%bd%bf%e7%94%a8%e6%80%9d%e8%b7%af%e6%a2%b3%e7%90%86.md" title="编辑此页" class="link-to-edit">编辑此页</a></span><span><a href="YiuTerran/blog/issues/new?title=[BUG]%20StatefulSet%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86&amp;body=%7cField%7cValue%7c%0A%7c-%7c-%7c%0A%7cTitle%7cStatefulSet%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86%7c%0A%7cURL%7chttps://yiuterran.github.io/blogs/posts/statefulset%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86/%7c%0A%7cFilename%7cYiuTerran/blog/blob/monolingual/content/posts/StatefulSet%e4%bd%bf%e7%94%a8%e6%80%9d%e8%b7%af%e6%a2%b3%e7%90%86.md?plain=1%7c" title="报告问题" class="link-to-report">报告问题</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="https://yiuterran.github.io/blogs/posts/statefulset%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86/" data-title="StatefulSet使用思路梳理" data-hashtags="k8s"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://yiuterran.github.io/blogs/posts/statefulset%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86/" data-hashtag="k8s"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://yiuterran.github.io/blogs/posts/statefulset%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86/" data-title="StatefulSet使用思路梳理"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
 
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/blogs/tags/k8s/" class="post-tag" title="标签 - K8s">K8s</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blogs/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/blogs/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/" class="post-nav-item" rel="prev" title="Configmap挂载的几种情况"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>Configmap挂载的几种情况</a><a href="/blogs/posts/es%E5%92%8Ckibana%E7%AE%80%E8%A6%81%E7%AC%94%E8%AE%B0/" class="post-nav-item" rel="next" title="ES和kibana简要笔记">ES和kibana简要笔记<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
 </article>
 
-
-      
-        <div class="my-4">
-    
-    <a href="https://yiuterran.github.io/blog/tags/k8s/" class="inline-block bg-tertiary-bg text-sm rounded px-3 py-1 my-1 me-2 hover:text-eureka">#k8s</a>
-    
-</div>
-      
-
-      
-
-
-
-      
-        <div class="py-2">
-  
-    <div class="my-8 flex flex-col items-center md:flex-row">
-      <a href="https://yiuterran.github.io/blog/authors/tryao/" class="md:me-4 text-primary-text h-24 w-24">
-        
-        
-          <img
-            src="https://yiuterran.github.io/blog/images/avatar.png"
-            class="bg-primary-bg w-full rounded-full"
-            alt="Avatar"
-          />
-        
-      </a>
-      <div class="mt-4 w-full md:mt-0 md:w-auto">
-        <a
-          href="https://yiuterran.github.io/blog/authors/tryao/"
-          class="mb-2 block border-b pb-1 text-lg font-bold"
-        >
-          <h3>个人介绍</h3>
-        </a>
-        <span class="block pb-2">兴趣使然的程序员，博而不精，乐学不倦</span>
-        
-          
-          
-          
-          
-          <a href="mailto:yaotairan@gmail.com" class="me-2">
-            <i class="fas fa-envelope"></i>
-          </a>
-        
-          
-          
-          
-          
-          <a href="https://github.com/YiuTerran" class="me-2">
-            <i class="fab fa-github"></i>
-          </a>
-        
-      </div>
-    </div>
-  
-</div>
-
-      
-
-      
-  <div
-    class="-mx-2 mt-4 flex flex-col border-t px-2 pt-4 md:flex-row md:justify-between"
-  >
-    <div>
-      
-        <span class="text-primary-text block font-bold"
-          >上一页</span
-        >
-        <a href="https://yiuterran.github.io/blog/posts/es%E5%92%8Ckibana%E7%AE%80%E8%A6%81%E7%AC%94%E8%AE%B0/" class="block">ES和kibana简要笔记</a>
-      
-    </div>
-    <div class="mt-4 md:mt-0 md:text-right">
-      
-        <span class="text-primary-text block font-bold">下一页</span>
-        <a href="https://yiuterran.github.io/blog/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/" class="block">Configmap挂载的几种情况</a>
-      
-    </div>
-  </div>
-
-
-      
-
-
-
-  <script id="utterances" src="https://utteranc.es/client.js"
-            issue-term=title
-            repo=YiuTerran/blog-comment
-              theme=preferred-color-scheme
-        crossorigin="anonymous"
-        async>
-</script>
-<script>
-    if (storageColorScheme == "Light") {
-      document.getElementById('utterances').setAttribute('theme', 'github-light')
-    } else if (storageColorScheme == "Dark") {
-      document.getElementById('utterances').setAttribute('theme', 'github-dark')
-    }
-</script>
-
-    </div>
-    
-      <div class="col-span-2">
-        
-        
-          <div
-  class="
-    bg-primary-bg
-   prose sticky top-16 z-10 hidden px-6 py-4 lg:block"
->
-  <h3>本页内容</h3>
-</div>
-<div
-  class="sticky-toc  hidden px-6 pb-6 lg:block"
->
-  <nav id="TableOfContents">
-  <ul>
-    <li><a href="#最简单的方法不要使用k8s来部署有状态应用">最简单的方法：不要使用k8s来部署有状态应用</a></li>
-    <li><a href="#不要太依赖分布式存储">不要太依赖分布式存储</a></li>
-    <li><a href="#利用亲和性来部署statefulset">利用亲和性来部署StatefulSet</a></li>
-    <li><a href="#使用localpv">使用LocalPV</a></li>
-  </ul>
-</nav>
-</div>
-<script>
-  window.addEventListener("DOMContentLoaded", () => {
-    enableStickyToc();
-  });
-</script>
-
-        
-      </div>
-    
-
-    
-    
-      <div
-        class=" bg-secondary-bg prose col-span-2 rounded p-6 lg:col-span-6"
-      >
-        <h3>相关</h3>
-        
-          <a href="https://yiuterran.github.io/blog/posts/configmap%E6%8C%82%E8%BD%BD%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5/" class="no-underline">Configmap挂载的几种情况</a>
-          <br />
-        
-          <a href="https://yiuterran.github.io/blog/posts/promql%E7%AC%94%E8%AE%B0/" class="no-underline">PromQL笔记</a>
-          <br />
-        
-          <a href="https://yiuterran.github.io/blog/posts/k3s%E5%AD%98%E5%82%A8%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/" class="no-underline">K3s存储插件使用笔记</a>
-          <br />
-        
-          <a href="https://yiuterran.github.io/blog/posts/kubeedge%E8%A6%81%E7%82%B9%E7%AC%94%E8%AE%B0/" class="no-underline">KubeEdge要点笔记</a>
-          <br />
-        
-          <a href="https://yiuterran.github.io/blog/posts/k8s%E8%A6%81%E7%82%B9%E7%AE%80%E8%AE%B0/" class="no-underline">K8s要点简记</a>
-          <br />
-        
-      </div>
-    
-  </div>
-
-  
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        hljs.highlightAll();
-      });
-    </script>
-
-          </div>
-        </div>
-      
-    </main>
-    <footer class="pl-scrollbar">
-      <div class="mx-auto w-full max-w-screen-xl"><div class="text-center p-6 pin-b">
-    <p class="text-sm text-tertiary-text">&copy; 2021 <a href="https://github.com/YiuTerran">tryao</a>
- &middot;  Powered by the <a href="https://github.com/wangchucheng/hugo-eureka" class="hover:text-eureka">Eureka</a> theme for <a href="https://gohugo.io" class="hover:text-eureka">Hugo</a></p>
-</div></div>
-    </footer>
-  </body>
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.151.0"><img class="hugo-icon" src="/blogs/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.4.0-alpha.2-20251014082535-5c74d431"><img class="fixit-icon" src="/blogs/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2025</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://gravatar.com/afxmessagebox"target="_blank" rel="external nofollow noopener noreferrer">tryao</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/blogs/lib/cookieconsent/cookieconsent.min.css"><script src="/blogs/lib/autocomplete/autocomplete.min.js" defer></script><script src="/blogs/lib/fuse/fuse.min.js" defer></script><script src="/blogs/lib/sharer/sharer.min.js" async defer></script><script src="/blogs/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/blogs/posts/statefulset%E4%BD%BF%E7%94%A8%E6%80%9D%E8%B7%AF%E6%A2%B3%E7%90%86/config/page.js" defer></script><script src="/blogs/js/theme.min.js" defer></script><script>
+      window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
+      gtag('config', 'G-C0R8DENDJ0', { 'anonymize_ip': true });
+    </script><script src="https://www.googletagmanager.com/gtag/js?id=G-C0R8DENDJ0" async></script></body>
 </html>

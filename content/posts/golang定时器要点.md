@@ -7,7 +7,6 @@ tags: ["golang", "timer"]
 categories: []
 series: []
 date: 2022-04-07T09:35:13+08:00
-lastmod: 2022-04-07T09:35:13+08:00
 featuredVideo:
 featuredImage:
 draft: false

@@ -7,7 +7,6 @@ tags: []
 categories: []
 series: []
 date: 2025-09-29T11:56:08+08:00
-lastmod: 2025-09-29T11:56:08+08:00
 featuredVideo:
 featuredImage:
 draft: false
