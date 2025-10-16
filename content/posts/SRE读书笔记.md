@@ -3,7 +3,7 @@ title: SRE读书笔记
 description:
 toc: true
 authors: ["tryao"]
-tags: ["sre", "devops"]
+tags: ["devops"]
 categories: []
 collections: []
 date: 2022-09-22T10:01:11+08:00

@@ -2,8 +2,8 @@
 title: Modbus要点
 description:
 toc: true
-authors: []
-tags: []
+authors: ["tryao"]
+tags: ["iot"]
 categories: []
 collections: []
 date: 2025-02-08T09:13:17+08:00

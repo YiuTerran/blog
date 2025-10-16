@@ -3,7 +3,7 @@ title: Python技术栈更新
 description:
 toc: true
 authors: ["tryao"]
-tags: ["python", "web", "crawler"]
+tags: ["python", "web"]
 categories: []
 collections: []
 date: 2024-01-09T09:35:01+08:00

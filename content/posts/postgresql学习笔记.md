@@ -2,8 +2,8 @@
 title: Postgresql学习笔记
 description:
 toc: true
-authors: []
-tags: []
+authors: ["tryao"]
+tags: ["db", "pg"]
 categories: []
 collections: []
 date: 2024-12-23T11:04:29+08:00

@@ -3,7 +3,7 @@ title: 解决k8s的javaSDK与jackson不兼容问题
 description:
 toc: true
 authors: ["tryao"]
-tags: []
+tags: ["java"]
 categories: []
 collections: []
 date: 2023-07-10T12:29:45+08:00
@@ -199,7 +199,7 @@ private static void configObjectMapper(ObjectMapper mapper) {
 ```
 
 ```java
-public static final String ACCEPT_YAML = "application/x-yaml"; 
+public static final String ACCEPT_YAML = "application/x-yaml";
 @SneakyThrows
 public ResponseEntity<String> jsonOrYaml(Object data, boolean yaml) {
     String body = null;

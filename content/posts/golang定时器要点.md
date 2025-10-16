@@ -3,7 +3,7 @@ title: Golang定时器要点
 description:
 toc: true
 authors: ["tryao"]
-tags: ["golang", "timer"]
+tags: ["golang"]
 categories: []
 collections: []
 date: 2022-04-07T09:35:13+08:00

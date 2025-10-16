@@ -3,7 +3,7 @@ title: Configmap挂载的几种情况
 description:
 toc: true
 authors: [“tryao"]
-tags: ["k8s"]
+tags: ["k8s", "devops"]
 categories: []
 collections: []
 date: 2023-09-15T09:33:41+08:00

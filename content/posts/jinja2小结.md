@@ -13,7 +13,6 @@ draft: false
 ---
 
 
-
 之前写Python的时候其实有接触过一些jinja2，不过没有怎么用过实际上。毕竟前后端分离之后，这些模板语言在web开发上用处并不大。不过`ansible`选用了它做渲染模板，所以还是需要深入学习一下。比较蛋疼的是，k8s这边因为都是golang生态，所以用的是`go template`，那就是另外一套东西了。
 
 ## 基础
@@ -48,7 +47,7 @@ raw字符串，即类似`r`前缀的：`{% raw %}...{% endraw %}`
 
 ```jinja2
 {% macro input(name, value='', type='text') -%}
-	
+
 {%- endmacro %}
 ```
 

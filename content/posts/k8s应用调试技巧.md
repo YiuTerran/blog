@@ -2,8 +2,8 @@
 title: K8s应用调试技巧
 description:
 toc: true
-authors: []
-tags: []
+authors: ["tryao"]
+tags: ["devops", "debug"]
 categories: []
 collections: []
 date: 2024-03-05T14:09:31+08:00

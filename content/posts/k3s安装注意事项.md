@@ -2,8 +2,8 @@
 title: K3s安装注意事项
 description:
 toc: true
-authors: []
-tags: []
+authors: ["tryao"]
+tags: ["devops","k3s"]
 categories: []
 collections: []
 date: 2024-02-19T09:08:10+08:00

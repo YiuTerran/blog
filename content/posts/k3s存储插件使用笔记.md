@@ -3,7 +3,7 @@ title: K3s存储插件使用笔记
 description:
 toc: true
 authors: ["tryao"]
-tags: ["k8s"]
+tags: ["k3s", "devops"]
 categories: []
 collections: []
 date: 2023-06-12T09:20:20+08:00

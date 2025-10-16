@@ -3,7 +3,7 @@ title: PromQL笔记
 description:
 toc: true
 authors: [“tryao"]
-tags: ["prometheus","k8s"]
+tags: ["prometheus","k8s", "devops"]
 categories: []
 collections: []
 date: 2023-07-24T11:21:33+08:00

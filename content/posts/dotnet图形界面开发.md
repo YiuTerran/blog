@@ -3,7 +3,7 @@ title: Dotnet GUI开发
 description:
 toc: true
 authors: ["tryao"]
-tags: []
+tags: ["gui"]
 categories: []
 collections: []
 date: 2024-02-01T11:35:06+08:00

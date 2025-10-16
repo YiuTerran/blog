@@ -2,8 +2,8 @@
 title: Elastic Observability系统搭建
 description:
 toc: true
-authors: []
-tags: []
+authors: ["tryao"]
+tags: ["devops"]
 categories: []
 collections: []
 date: 2022-10-12T17:52:42+08:00

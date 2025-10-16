@@ -3,9 +3,9 @@ title: Ytt试用
 description:
 toc: true
 authors: ["tryao"]
-tags: ["json", "yaml", "ytt"]
+tags: ["devops", "yaml"]
 categories: []
-collections: []
+collections: ["配置编程"]
 date: 2023-12-29T16:13:12+08:00
 featuredVideo:
 featuredImage:

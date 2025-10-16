@@ -3,7 +3,7 @@ title: Golang服务接入OpenTelemetry
 description:
 toc: true
 authors: []
-tags: []
+tags: ["golang", "devops"]
 categories: []
 collections: []
 date: 2022-12-05T11:12:41+08:00
