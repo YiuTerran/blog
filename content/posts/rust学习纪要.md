@@ -9,7 +9,7 @@ collections: []
 date: 2023-02-10T09:50:48+08:00
 featuredVideo:
 featuredImage:
-draft: true
+draft: false
 ---
 
 我大概学了3次rust, 之前基本都是半途而废。第一次是卡在生命周期那里，第二次是卡在智能指针那里。

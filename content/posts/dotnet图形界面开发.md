@@ -9,7 +9,7 @@ collections: []
 date: 2024-02-01T11:35:06+08:00
 featuredVideo:
 featuredImage:
-draft: true
+draft: false
 ---
 
 微软官方的跨平台GUI框架MAUI不支持linux，一般还是使用`Avalonia`，此外还有一个`UNO Platform`框架，对比可见[此文](https://zhuanlan.zhihu.com/p/638115608).

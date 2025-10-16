@@ -9,7 +9,7 @@ collections: []
 date: 2023-01-25T16:15:52+08:00
 featuredVideo:
 featuredImage:
-draft: true
+draft: false
 ---
 
 春节休息了几天，正式开始看srs的源码了，流媒体领域估计我也没时间深入研究，只求能理解一个大概逻辑。之前有大略看过ffmpeg的代码，感觉不追求细节的话，还是能看懂大概的。

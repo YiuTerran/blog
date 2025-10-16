@@ -9,7 +9,7 @@ collections: []
 date: 2023-11-29T11:23:08+08:00
 featuredVideo:
 featuredImage:
-draft: true
+draft: false
 ---
 
 最近公司要求后端统一学习前端，乘机复习一下前端知识。上次写前端还是vue1的时候，已经有6、7年没碰前端了吧。
