@@ -5,7 +5,7 @@ toc: true
 authors: ["tryao"]
 tags: []
 categories: []
-series: []
+collections: []
 date: 2023-07-10T12:29:45+08:00
 featuredVideo:
 featuredImage:

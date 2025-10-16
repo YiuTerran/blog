@@ -5,7 +5,7 @@ toc: true
 authors: ["tryao"]
 tags: ["devops"]
 categories: []
-series: []
+collections: []
 date: 2024-01-05T08:55:48+08:00
 featuredVideo:
 featuredImage:

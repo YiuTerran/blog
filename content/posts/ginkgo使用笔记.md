@@ -5,7 +5,7 @@ toc: true
 authors: ["tryao"]
 tags: ["golang", "test"]
 categories: []
-series: []
+collections: []
 date: 2022-09-05T18:10:06+08:00
 featuredVideo:
 featuredImage:

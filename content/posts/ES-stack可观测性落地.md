@@ -5,7 +5,7 @@ toc: true
 authors: []
 tags: []
 categories: []
-series: []
+collections: []
 date: 2022-10-12T17:52:42+08:00
 featuredVideo:
 featuredImage:

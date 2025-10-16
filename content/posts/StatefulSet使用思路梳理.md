@@ -5,7 +5,7 @@ toc: true
 authors: [“tryao"]
 tags: ["k8s"]
 categories: []
-series: []
+collections: []
 date: 2023-09-15T14:57:05+08:00
 featuredVideo:
 featuredImage:

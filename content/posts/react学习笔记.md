@@ -5,7 +5,7 @@ toc: true
 authors: ["tryao"]
 tags: ["frontend","react"]
 categories: []
-series: []
+collections: []
 date: 2023-11-29T11:23:08+08:00
 featuredVideo:
 featuredImage:

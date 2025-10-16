@@ -5,7 +5,7 @@ toc: true
 authors: ["tryao"]
 tags: ["make","gnu","cpp"]
 categories: []
-series: []
+collections: []
 date: 2023-01-25T16:49:11+08:00
 featuredVideo:
 featuredImage:

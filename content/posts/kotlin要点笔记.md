@@ -5,7 +5,7 @@ toc: true
 authors: ["tryao"]
 tags: ["kotlin"]
 categories: []
-series: []
+collections: []
 date: 2023-03-05T12:58:37+08:00
 featuredVideo:
 featuredImage:

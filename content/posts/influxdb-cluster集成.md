@@ -5,7 +5,7 @@ toc: true
 authors: ["tryao"]
 tags: ["influxdb", "tsdb", "golang"]
 categories: []
-series: []
+collections: []
 date: 2022-09-01T15:47:56+08:00
 featuredVideo:
 featuredImage:
@@ -75,7 +75,7 @@ tag和field的key是字符串，value默认为float，其他的的格式约定�
 
 如果measurement、tag_set和timestamp都相同，则视为同一个点位。此时field_set会尝试合并，如果新的key与旧的重复，则使用新的覆盖旧的。
 
-### series
+### collections
 
 即同一个measurement+tag_set
 

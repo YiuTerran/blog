@@ -5,7 +5,7 @@ toc: true
 authors: ["tryao"]
 tags: ["zabbix", "devops"]
 categories: []
-series: []
+collections: []
 date: 2022-07-13T12:21:28+08:00
 featuredVideo:
 featuredImage:

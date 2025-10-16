@@ -5,7 +5,7 @@ toc: true
 authors: ["tryao"]
 tags: ["golang", "timer"]
 categories: []
-series: []
+collections: []
 date: 2022-04-07T09:35:13+08:00
 featuredVideo:
 featuredImage:

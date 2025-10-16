@@ -5,7 +5,7 @@ toc: true
 authors: ["tryao"]
 tags: ["devops", "ansible"]
 categories: []
-series: []
+collections: []
 date: 2024-01-04T14:00:55+08:00
 featuredVideo:
 featuredImage:

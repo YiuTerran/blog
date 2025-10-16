@@ -5,7 +5,7 @@ toc: true
 authors: ["tryao"]
 tags: ["golang", "im", "tinode"]
 categories: []
-series: []
+collections: []
 date: 2022-11-14T19:21:38+08:00
 featuredVideo:
 featuredImage:

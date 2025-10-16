@@ -5,7 +5,7 @@ toc: true
 authors: ["tryao"]
 tags: ["jsonnet", "json"]
 categories: []
-series: []
+collections: []
 date: 2023-12-29T10:21:59+08:00
 featuredVideo:
 featuredImage:

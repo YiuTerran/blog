@@ -3,9 +3,9 @@ title: Cicd搭建笔记
 description:
 toc: true
 authors: ["tryao"]
-tags: []
+tags: ["devops"]
 categories: []
-series: []
+collections: []
 date: 2025-09-29T11:56:08+08:00
 featuredVideo:
 featuredImage:

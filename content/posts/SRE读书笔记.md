@@ -5,7 +5,7 @@ toc: true
 authors: ["tryao"]
 tags: ["sre", "devops"]
 categories: []
-series: []
+collections: []
 date: 2022-09-22T10:01:11+08:00
 featuredVideo:
 featuredImage:

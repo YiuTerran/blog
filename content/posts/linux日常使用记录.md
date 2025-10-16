@@ -5,7 +5,7 @@ toc: true
 authors: ["tryao"]
 tags: ["linux"]
 categories: []
-series: []
+collections: []
 date: 2023-11-24T10:51:31+08:00
 featuredVideo:
 featuredImage:

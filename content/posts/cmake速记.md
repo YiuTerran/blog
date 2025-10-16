@@ -5,7 +5,7 @@ toc: true
 authors: ["tryao"]
 tags: ["cmake", "c++"]
 categories: []
-series: []
+collections: []
 date: 2023-01-09T16:42:44+08:00
 featuredVideo:
 featuredImage:

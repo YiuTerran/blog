@@ -5,7 +5,7 @@ toc: true
 authors: [“tryao"]
 tags: ["golang","sqlx"]
 categories: []
-series: []
+collections: []
 date: 2023-09-12T15:22:00+08:00
 featuredVideo:
 featuredImage:

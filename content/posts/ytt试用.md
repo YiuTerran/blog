@@ -5,7 +5,7 @@ toc: true
 authors: ["tryao"]
 tags: ["json", "yaml", "ytt"]
 categories: []
-series: []
+collections: []
 date: 2023-12-29T16:13:12+08:00
 featuredVideo:
 featuredImage:

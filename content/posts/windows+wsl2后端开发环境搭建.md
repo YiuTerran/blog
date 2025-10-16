@@ -5,7 +5,7 @@ toc: true
 authors: ["tryao"]
 tags: ["wsl"]
 categories: ["瞎折腾"]
-series: []
+collections: []
 date: 2022-03-04T20:54:01+08:00
 featuredVideo:
 featuredImage:

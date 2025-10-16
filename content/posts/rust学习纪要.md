@@ -5,7 +5,7 @@ toc: true
 authors: ["tryao"]
 tags: ["rust"]
 categories: []
-series: []
+collections: []
 date: 2023-02-10T09:50:48+08:00
 featuredVideo:
 featuredImage:

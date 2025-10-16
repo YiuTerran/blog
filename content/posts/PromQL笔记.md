@@ -5,7 +5,7 @@ toc: true
 authors: [“tryao"]
 tags: ["prometheus","k8s"]
 categories: []
-series: []
+collections: []
 date: 2023-07-24T11:21:33+08:00
 featuredVideo:
 featuredImage:

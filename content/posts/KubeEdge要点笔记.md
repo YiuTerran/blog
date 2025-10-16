@@ -5,7 +5,7 @@ toc: true
 authors: ["tryao"]
 tags: ["k8s","edge"]
 categories: []
-series: []
+collections: []
 date: 2023-02-21T15:07:54+08:00
 featuredVideo:
 featuredImage:
