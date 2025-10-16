@@ -446,11 +446,11 @@ orderby = "name"
 
 
 [params.home.profile]
-enable = false
-gravatarEmail = ""
+enable = true
+gravatarEmail = "yaotairan@gmail.com"
 avatarURL = ""
 avatarMenu = ""
-title = ""
+title = "不为无益之事，何遣有涯之生"
 subtitle = ""
 typeit = true
 social = true
