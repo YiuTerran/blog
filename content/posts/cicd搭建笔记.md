@@ -343,6 +343,12 @@ trivy:
   offline_scan: true
   security_check: vuln
   insecure: false
+log:
+  level: info
+  local:
+    rotate_count: 10
+    rotate_size: 20M
+    location: /data/harbor/log
 ```
 
 **注意**：harbor会启动多个容器，其中redis和postgresql的名字可能会和已有的容器冲突，可以使用docker rename修改已有容器的名字。
