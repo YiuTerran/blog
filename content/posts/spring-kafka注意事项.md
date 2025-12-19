@@ -1,7 +1,7 @@
 ---
 title: Spring Kafka注意事项
 date: 2025-09-14
-lastmod: 2024-09-14
+lastmod: 2025-12-18
 slug: 5d8324b
 draft: false
 author:
@@ -87,7 +87,7 @@ props.put(JsonDeserializer.TYPE_MAPPINGS, KafkaUtils.genTypeMappingString(consum
 private String genTypeMappingString(Map<String, Class<?>> map) {
   List<String> parts = new ArrayList<>();
   for (Map.Entry<String, Class<?>> entry : map.entrySet()) {
-    parts.add(String.format("%s:%s", entry.getKey(), 
+    parts.add(String.format("%s:%s", entry.getKey(),
                             entry.getValue().getCanonicalName()));
   }
   return Joiner.on(",").join(parts);
@@ -136,6 +136,84 @@ public void onEvent(List<Object> records, Acknowledgment ack) {
 如果部分topic需要打开batchListener，部分又不需要。可以建立多个返回`ConcurrentKafkaListenerContainerFactory<String, Object>`的bean，然后再`@KafkaListener`里面手动指定`containerFactory`对应的bean名字。
 
 一般情况下，只有吞吐量特别大、且不在意处理顺序的topic才需要打开batchListener，普通的topic只要消费结点数匹配分区数就行。如果消息顺序很重要的话，即使打开批量，也是要逐个处理消息，跟逐条poll没啥区别。
+
+## 密码
+kafka默认是没有密码的，需要在安装的时候指定密码，参考docker compose配置如下：
+```yaml
+services:
+  kafka:
+    image: apache/kafka:latest
+    container_name: kafka
+    hostname: kafka
+    restart: always
+    ports:
+      - "9092:9092"
+    environment:
+      # --- KRaft 基本配置 ---
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      # --- 性能参数 ---
+      KAFKA_NUM_PARTITIONS: 3
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+
+      # --- 监听器配置 ---
+      # CONTROLLER: 集群内部控制器通信 (9093)
+      # SASL_PLAINTEXT: 外部客户端连接，带认证 (9092)
+      KAFKA_LISTENERS: CONTROLLER://:9093,SASL_PLAINTEXT://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: SASL_PLAINTEXT://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,SASL_PLAINTEXT:SASL_PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_INTER_BROKER_LISTENER_NAME: SASL_PLAINTEXT
+
+      # --- 认证配置 (SASL/PLAIN) ---
+      KAFKA_SASL_ENABLED_MECHANISMS: PLAIN
+      KAFKA_SASL_MECHANISM_INTER_BROKER_PROTOCOL: PLAIN
+
+      # --- 关键：指向 JAAS 配置文件 ---
+      # 通过 JVM 参数告诉 Kafka 使用哪个文件进行认证
+      KAFKA_OPTS: "-Djava.security.auth.login.config=/etc/kafka/secrets/kafka_server_jaas.conf"
+
+    volumes:
+      # 将本地的认证文件挂载到容器内
+      - ./kafka_server_jaas.conf:/etc/kafka/secrets/kafka_server_jaas.conf
+      # 持久化数据（可选）
+      - kafka_data:/var/lib/kafka/data
+
+volumes:
+  kafka_data:
+```
+
+kafka_server_jaas.conf内容如下：
+
+```
+KafkaServer {
+   org.apache.kafka.common.security.plain.PlainLoginModule required
+   username="admin"
+   password="123456"
+   user_admin="123456";
+}
+```
+
+在java配置中，需要包含以下部分才能连接：
+
+```yaml
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    properties:
+      security.protocol: SASL_PLAINTEXT
+      sasl.mechanism: SCRAM-SHA-256
+      sasl.jaas.config: >-
+        org.apache.kafka.common.security.scram.ScramLoginModule required
+        username="admin"
+        password="123456";
+```
+设置了密码之后，所有相关工具都需要密码才能连接了，建议使用[kafkactl](https://github.com/deviceinsight/kafkactl)。
 
 ## 其他
 

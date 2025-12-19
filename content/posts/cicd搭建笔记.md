@@ -187,7 +187,7 @@ shutdown_timeout = 0
 
 由于CI进程里面一般需要使用docker进行镜像打包，而runner本身也要运行在docker里面。所以需要调用宿主机的docker来创建容器，从而避免docker in docker问题，因此需要再volumes里面做一层映射。当然还有个方案是使用其他工具打包（下面会讲）。
 
-这里[runners.docker]里面的image可以随便写，因为ci文件那边可以覆盖掉。extra_hosts里面主要需要讲harbor镜像仓库的域名映射成内网地址，加快拉取速度。concurrent根据机器cpu核数适当挑战。
+这里[runners.docker]里面的image可以随便写，因为ci文件那边可以覆盖掉。extra_hosts里面主要需要讲harbor镜像仓库的域名映射成内网地址，加快拉取速度。concurrent根据机器cpu核数适当调整。
 
 启动Runner的compose文件参考：
 
