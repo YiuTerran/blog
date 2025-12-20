@@ -457,9 +457,15 @@ services:
       retries: 10
 ```
 
-唯一需要注意的是参数里面jvm的内存分配，这玩意儿里面有es，内存建议不低于4g。
+注意点：
+
+1. chown -R 200 <本地nexus-data目录>
+
+2. 参数里面jvm的内存分配，这玩意儿里面有es，内存建议不低于4g。
 
 登录nexus，在settings-repositories里面手动创建npm的代理(proxy)和托管(hosted)。maven可以将中央仓库改为阿里源，增加google等常用proxy。
+
+创建pypi代理时注意，remote url不加路径(https://pypi.tuna.tsinghua.edu.cn/)，但是设置pip代理时，需要加路径(http://zop-tools.cscec3b-iti.com:7442/repository/pypi-tsinghua/simple)，其中pypi-tsinghua是你仓库的名字，后面的simple需要手动加上。
 
 修改~/.m2/settings.xml，将仓库加到配置里，ci的时候也要将这个文件放到对应的位置。
 
@@ -511,6 +517,15 @@ server {
 这里`/v2`是给docker仓库用的，如果不想安装harbor，而是用nexus托管docker镜像，可以创建对应的仓库（这里叫zop-image），然后配置上去。
 
 但是，nexus的docker托管不支持按aritifact清理镜像，也不支持trivis集成，不如harbor成熟。
+
+注意nexus和harbor都要配置清理策略，不然硬盘容易耗尽。
+
+开发者账号需要的权限：
+
+* `nx-component-upload`
+
+* `nx-repository-view-*-*-*`
+* `nx-search-read`
 
 # 安装SonarQube
 
@@ -590,6 +605,70 @@ networks:
 然后重启容器就会变成中文界面。
 
 将sonar关联到gitlab也比较简单，在gitlab用户那边创建访问令牌，授权gitlab read相关api就可以了。
+
+# 安装bytebase
+
+```yaml
+services:
+  bytebase:
+    image: bytebase/bytebase:latest # Use the latest image or a specific version
+    container_name: bytebase
+    restart: unless-stopped
+    ports:
+      - "7444:8080"
+    volumes:
+      - ./bytebase-data:/var/opt/bytebase
+    command: 
+      [
+        "--data", "/var/opt/bytebase", 
+        "--port", "8080", 
+        "--external-url", "https://dev.chuyuwater.cn:32004"
+      ]
+```
+
+对应nginx:
+
+```
+upstream bytebase {
+        server 172.21.0.6:7444;
+}
+
+map $http_upgrade $connection_upgrade {
+    default upgrade;
+    '' close;
+}
+
+server {
+        server_name dev.chuyuwater.cn 172.21.0.6;
+        listen 32004 ssl;
+
+        ssl_certificate /etc/nginx/certs/fullchain.cer;
+        ssl_certificate_key /etc/nginx/certs/private.key;
+        ssl_protocols TLSv1.1 TLSv1.2;
+        ssl_session_cache shared:BYTEBASE:10m;
+        ssl_ciphers HIGH:!aNULL:!MD5;
+        ssl_prefer_server_ciphers on;
+
+       location ~ ^/(v1:adminExecute|lsp) {
+            # Point to the actual Bytebase service, NOT the nginx domain
+            proxy_pass http://bytebase;  # If Bytebase runs on the same host
+            proxy_http_version 1.1;
+            # Enables WebSocket which is required for SQL Editor autocomplete
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection $connection_upgrade;
+        }
+
+        location / {
+            # Point to the actual Bytebase service, NOT the nginx domain
+            proxy_pass http://bytebase;  # If Bytebase runs on the same host
+        }
+
+        proxy_read_timeout 3600;
+        proxy_send_timeout 3600;
+}
+```
+
+
 
 # 配置CI/CD
 
