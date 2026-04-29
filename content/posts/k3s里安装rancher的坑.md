@@ -31,6 +31,7 @@ INSTALL_K3S_MIRROR=cn \
 INSTALL_K3S_VERSION=v1.34.6+k3s1 \
 sh -s - server \
   --docker \
+  --cluster-init \
   --default-local-storage-path=/data/k3s
 ```
 
