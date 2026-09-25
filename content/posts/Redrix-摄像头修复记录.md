@@ -1,8 +1,22 @@
-# Deepin 25 上 Intel IPU6 / hi556 摄像头修复与按需虚拟摄像头指南
+---
+title: Deepin 25 上 Intel IPU6 / hi556 摄像头修复与按需虚拟摄像头指南
+date: 2026-09-25T00:00:00+08:00
+slug: 3797d98
+draft: false
+author:
+  name: tryao
+tags: ["linux", "deepin", "Redrix", "IPU6", "libcamera"]
+collections: []
+toc: true
+math: true
+lightgallery: false
+---
 
 > 最后验证日期：2026-09-25  
 > 本机环境：Deepin 25（crimson）、Linux `6.18.48-amd64-desktop-rolling`、Intel Alder Lake IPU6 `8086:465d`、hi556 MIPI 摄像头。  
 > 最终效果：应用可在 `IPU6 Camera 360p`（`/dev/video42`，640×360）和 `IPU6 Camera 720p`（`/dev/video43`，1280×720）之间手动选择；空闲时不打开物理摄像头，停止取流 3 秒后自动释放。
+
+<!--more-->
 
 ## 1. 问题与最终架构
 

@@ -1,10 +1,24 @@
-# Redrix 指纹模块修复记录
+---
+title: Redrix 指纹模块修复记录
+date: 2026-09-25T00:00:00+08:00
+slug: 0e27c68
+draft: false
+author:
+  name: tryao
+tags: ["linux", "deepin", "Redrix", "指纹识别"]
+collections: []
+toc: true
+math: true
+lightgallery: false
+---
 
 > 记录日期：2026-09-25  
 > 适用机器：HP Elite Dragonfly Chromebook / Google Redrix  
 > 固件：MrChromebox `2603.1`  
 > 当时系统：Deepin 25，内核 `6.18.48-amd64-desktop-rolling`  
 > 驱动方案：实验性 `libfprint crfpmoc`，固定提交 `4df0591`
+
+<!--more-->
 
 ## 1. 故障现象与结论
 
@@ -249,4 +263,3 @@ Edge 可以使用 WebAuthn，但不像 Chrome 那样提供 Google 密码管理�
 - GitHub Passkey 说明：<https://docs.github.com/en/authentication/authenticating-with-a-passkey/about-passkeys>
 - GitHub 添加 Passkey：<https://docs.github.com/en/authentication/authenticating-with-a-passkey/managing-your-passkeys>
 - Chrome/Linux Passkey 与 Google 密码管理工具：<https://developers.google.com/identity/passkeys/supported-environments?hl=zh-cn>
-

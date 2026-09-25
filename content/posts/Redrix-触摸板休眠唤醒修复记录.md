@@ -1,10 +1,24 @@
-# Redrix 触摸板休眠唤醒修复记录
+---
+title: Redrix 触摸板休眠唤醒修复记录
+date: 2026-09-25T00:00:00+08:00
+slug: 139b72c
+draft: false
+author:
+  name: tryao
+tags: ["linux", "deepin", "Redrix", "触摸板", "休眠"]
+collections: []
+toc: true
+math: true
+lightgallery: false
+---
 
 > 记录日期：2026-09-25  
 > 适用机器：HP Elite Dragonfly Chromebook / Google Redrix  
 > 当时系统：Deepin 25，X11，内核 `6.18.48-amd64-desktop-rolling`  
 > 触摸板：`ELAN2703:00 04F3:323B Touchpad`  
 > 触摸屏：`ELAN2513:00 04F3:2F71`（不要误操作）
+
+<!--more-->
 
 ## 1. 故障现象
 
@@ -211,4 +225,3 @@ fi
 - Redrix 同型号问题与 `ELAN2703` 设备级重置说明：<https://www.cnblogs.com/acd407/articles/19669407>
 - Redrix 的 libinput 参数记录：<https://github.com/chrultrabook/docs/issues/72>
 - HID haptic 设备解绑生命周期问题报告（2026-07）：<https://lists.openwall.net/linux-kernel/2026/07/24/2274>
-
